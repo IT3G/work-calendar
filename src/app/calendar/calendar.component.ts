@@ -1,7 +1,8 @@
-import { StateService } from './../state.service';
 import { Component, OnInit } from '@angular/core';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-
+import * as moment from 'moment';
+import { CurrentDateService } from 'src/app/store/current-date.service';
+import { StateService } from './../state.service';
 const now = new Date();
 
 @Component({
@@ -10,7 +11,7 @@ const now = new Date();
     styleUrls: ['./calendar.component.css'],
 })
 export class CalendarComponent implements OnInit {
-    constructor() {}
+    constructor(private currentDateService: CurrentDateService) {}
 
     model: NgbDateStruct;
 
@@ -18,7 +19,7 @@ export class CalendarComponent implements OnInit {
 
     ngOnInit() {}
 
-    selectToday() {
+    public selectToday() {
         this.model = {
             year: now.getFullYear(),
             month: now.getMonth() + 1,
@@ -45,6 +46,17 @@ export class CalendarComponent implements OnInit {
             alert(date.day);
             // this.stateService.currentDate = date;
         }
+    }
+
+    public selectDate(date: NgbDateStruct) {
+        const momentDate: NgbDateStruct = {
+            day: date.day,
+            month: date.month - 1,
+            year: date.year,
+        };
+        const obj = moment(momentDate);
+
+        this.currentDateService.setCurrentDate(obj);
     }
 
     dateHasTask(date: NgbDateStruct): boolean {

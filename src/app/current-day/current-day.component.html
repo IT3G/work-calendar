@@ -1,4 +1,4 @@
 <p>
-    Присутствие на 6 февраля 2019 г.
-    <!-- {{stateService.currentDate}} -->
+  Присутствие на {{currentDate$ | async | datePipe:'D MMMM YYYY'}}
+  <!-- {{stateService.currentDate}} -->
 </p>
