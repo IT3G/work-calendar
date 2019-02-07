@@ -1,0 +1,11 @@
+div {
+    border: 1px aliceblue solid;
+}
+
+select {
+    width: 160px;
+}
+
+textarea {
+    width: 400px;
+}
