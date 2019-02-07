@@ -2,9 +2,7 @@
 
 ![](https://img.shields.io/github/last-commit/enrey/work-calendar.svg?style=flat)
 ![](https://travis-ci.org/enrey/work-calendar.svg?branch=master)
-
 ![](https://img.shields.io/badge/Angular-7.1-red.svg)
-![](https://badges.frapsoft.com/typescript/code/typescript.svg?v=101)
 ![](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)
 
 Worktime planning tool.
