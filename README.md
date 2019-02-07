@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/enrey/work-calendar.svg?branch=master)](https://travis-ci.org/enrey/work-calendar)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+
 # Work Calendar
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.1.2.
@@ -25,5 +28,3 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
-
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
