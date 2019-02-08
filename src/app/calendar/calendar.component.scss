@@ -1,0 +1,42 @@
+:host /deep/ ngb-datepicker {
+  .custom-day {
+    text-align: center;
+    padding: 0.185rem 0.25rem;
+    display: inline-block;
+    height: 2rem;
+    width: 2rem;
+  }
+  .custom-day.selected {
+    border: 1px solid black;
+    border-radius: 5px;
+    outline: none;
+  }
+  .custom-day.hasTask {
+    outline: none;
+    background-color: blue;
+    color: white;
+  }
+  .custom-day {
+    &.type_1 {
+      background-color: white;
+    }
+    &.type_2 {
+      background-color: cyan;
+    }
+    &.type_3 {
+      background-color: red;
+      color: white;
+    }
+    &.type_4 {
+      background-color: green;
+      color: white;
+    }
+    &.type_5 {
+      background-color: yellow;
+    }
+  }
+}
+.date-picker {
+  transform: scale(1.2);
+  margin: 11px 53px;
+}

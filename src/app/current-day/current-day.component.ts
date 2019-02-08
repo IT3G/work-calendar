@@ -1,15 +1,20 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { DatesStoreService } from 'src/app/store/dates-store.service';
 import { StateService } from '../state.service';
 
 @Component({
-    selector: 'app-current-day',
-    templateUrl: './current-day.component.html',
-    styleUrls: ['./current-day.component.css'],
+  selector: 'app-current-day',
+  templateUrl: './current-day.component.html',
+  styleUrls: ['./current-day.component.scss']
 })
 export class CurrentDayComponent implements OnInit {
-    stateService: StateService;
+  stateService: StateService;
+  currentDate$: Observable<any>;
 
-    constructor() {}
+  constructor(private datesStoreService: DatesStoreService) {}
 
-    ngOnInit() {}
+  ngOnInit() {
+    this.currentDate$ = this.datesStoreService.getDateStart();
+  }
 }

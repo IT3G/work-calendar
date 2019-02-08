@@ -1,63 +1,94 @@
-import { StateService } from './../state.service';
 import { Component, OnInit } from '@angular/core';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-
-const now = new Date();
+import { NgbCalendar, NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import * as moment from 'moment';
+import { Observable } from 'rxjs';
+import { TasksModel } from 'src/app/models/tasks.models';
+import { DateConvertService } from 'src/app/shared/services/date-convert.service';
+import { DatesStoreService } from 'src/app/store/dates-store.service';
+import { StateService } from './../state.service';
 
 @Component({
-    selector: 'app-calendar',
-    templateUrl: './calendar.component.html',
-    styleUrls: ['./calendar.component.css'],
+  selector: 'app-calendar',
+  templateUrl: './calendar.component.html',
+  styleUrls: ['./calendar.component.scss']
 })
 export class CalendarComponent implements OnInit {
-    constructor() {}
+  constructor(
+    private datesStoreService: DatesStoreService,
+    private calendar: NgbCalendar,
+    private dateConvertService: DateConvertService
+  ) {}
 
-    model: NgbDateStruct;
+  public model: NgbDateStruct;
+  public tasks: TasksModel[];
+  public stateService: StateService;
 
-    stateService: StateService;
+  public hoveredDate: NgbDate;
 
-    ngOnInit() {}
+  public fromDate: NgbDate;
+  public toDate: NgbDate;
+  getCurrentDate$: Observable<any>;
+  now = new Date();
+  ngOnInit() {
+    this.selectToday();
+    this.getCurrentDate$ = this.datesStoreService.getDateStart();
+    this.getInfoFromStore();
+  }
 
-    selectToday() {
-        this.model = {
-            year: now.getFullYear(),
-            month: now.getMonth() + 1,
-            day: now.getDate(),
-        };
+  private getInfoFromStore() {
+    this.getCurrentDate$.subscribe(res => (this.model = this.dateConvertService.convertMomentToNgbDate(res)));
+
+    this.datesStoreService.getTasks().subscribe(res => (this.tasks = res));
+  }
+
+  public selectToday() {
+    this.model = {
+      year: this.now.getFullYear(),
+      month: this.now.getMonth() + 1,
+      day: this.now.getDate()
+    };
+  }
+
+  public isWeekend(date: NgbDateStruct) {
+    const d = new Date(date.year, date.month - 1, date.day);
+    return d.getDay() === 0 || d.getDay() === 6;
+  }
+
+  public isDisabled(date: NgbDateStruct, current: { month: number }) {
+    return date.month !== current.month;
+  }
+
+  public hasTask(date: NgbDateStruct) {
+    return this.dateHasTask(date);
+  }
+
+  public showTasks(date: NgbDateStruct) {
+    if (this.dateHasTask(date)) {
+      // TODO show popup
+      alert(date.day);
+      // this.stateService.currentDate = date;
     }
+  }
 
-    isWeekend(date: NgbDateStruct) {
-        const d = new Date(date.year, date.month - 1, date.day);
-        return d.getDay() === 0 || d.getDay() === 6;
-    }
+  public onDateSelect(date: NgbDateStruct) {
+    this.model = date;
 
-    isDisabled(date: NgbDateStruct, current: { month: number }) {
-        return date.month !== current.month;
-    }
+    this.datesStoreService.setDateStart(this.dateConvertService.convertNgbDateToMoment(date));
+  }
 
-    hasTask(date: NgbDateStruct) {
-        return this.dateHasTask(date);
-    }
+  dateHasTask(date: NgbDateStruct): boolean {
+    const result = this.tasks.find(i =>
+      moment(i.dateStart).isSame(this.dateConvertService.convertNgbDateToMoment(date))
+    );
+    return !!result;
+  }
 
-    showTasks(date: NgbDateStruct) {
-        if (this.dateHasTask(date)) {
-            // TODO show popup
-            alert(date.day);
-            // this.stateService.currentDate = date;
-        }
-    }
+  chooseClass(date: NgbDateStruct): string {
+    const result = this.tasks.find(i =>
+      moment(i.dateStart).isSame(this.dateConvertService.convertNgbDateToMoment(date))
+    );
 
-    dateHasTask(date: NgbDateStruct): boolean {
-        return true;
-        // for (var i = 0; i < this.userService.user.tasks.length; i++) {
-        //   var taskDate = new Date(this.userService.user.tasks[i].date);
-        //   var day: number = taskDate.getDate();
-        //   var month: number = taskDate.getMonth() + 1;
-        //   var year: number = taskDate.getFullYear();
-
-        //   if (day === date.day && month === date.month && year === date.year) {
-        //     return true;
-        //   }
-        //  }
-    }
+    const styleClass = result ? `type_${result.id}` : '';
+    return styleClass;
+  }
 }

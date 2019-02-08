@@ -1,19 +1,28 @@
 <div>
-    <p>Присутствие</p>
-    <p>С <input /> По <input /></p>
-    <p>
-        Вид
-        <select>
-            <option value="standart">Стандартно</option>
-            <option value="custom">Особое</option>
-            <option value="miss">Отсутствие</option>
-            <option value="vacation">Отпуск</option>
-            <option value="ill">sickness</option>
-        </select>
-    </p>
+  <p>Присутствие</p>
+  <div class="date__wrapper">
+    <div class="date_row">
+      <div class="title">С</div>
+      <app-datepicker (onChangeDateEmit)="changeDateStart($event)"
+        [model]="dateStart"></app-datepicker>
+    </div>
+    <div class="date_row">
+      <div class="title">По</div>
+      <app-datepicker (onChangeDateEmit)="changeDateEnd($event)"
+        [model]="dateEnd"></app-datepicker>
+    </div>
+  </div>
+  <app-select [options]="options"
+    [control]="optionControl"
+    label="Вид"></app-select>
+  <p>Комментарий:</p>
+  <textarea></textarea>
 
-    <p>Комментарий:</p>
-    <textarea></textarea>
+  <p><button (click)="addTask()">Сохранить</button></p>
 
-    <p><button>Сохранить</button></p>
+
+  <div *ngFor="let task of (tasks$ | async)">
+    <div class="date">Дата {{task.dateStart | datePipe:'D MMMM YYYY'}} <span> до {{task.dateEnd | datePipe:'D MMMM YYYY'}}</span> </div>
+    <div class="type">Тип {{task.id}}</div>
+  </div>
 </div>

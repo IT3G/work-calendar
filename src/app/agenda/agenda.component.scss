@@ -1,0 +1,12 @@
+.label {
+  width: 25px;
+  height: 25px;
+  border: 1px solid;
+  display: block;
+  margin: 5px;
+}
+.item,
+.title {
+  display: flex;
+  align-items: center;
+}
