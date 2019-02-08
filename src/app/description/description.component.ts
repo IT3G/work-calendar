@@ -31,6 +31,10 @@ export class DescriptionComponent implements OnInit {
   }
 
   public addTask(): void {
+    if (!this.optionControl.value.id) {
+      alert('Заполните Вид');
+      return;
+    }
     this.datesStoreService.addTask({
       id: this.optionControl.value.id,
       dateStart: this.dateConvertService.convertNgbDateToMoment(this.dateStart),

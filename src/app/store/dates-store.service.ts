@@ -24,8 +24,33 @@ export class DatesStoreService {
     return this.dateEnd;
   }
   public addTask(task: TasksModel) {
+    this.checkRepeatElement(task);
+    if (task.dateEnd) {
+      const lastDay = task.dateEnd;
+      let dateStart = task.dateStart;
+
+      while (dateStart.isBefore(lastDay)) {
+        const obj = {
+          dateStart: moment(dateStart),
+          dateEnd: null,
+          id: task.id
+        };
+        console.log(obj);
+        dateStart = dateStart.add(1, 'd');
+        this.checkRepeatElement(task);
+        this.tasks.next(this.tasks.getValue().concat([obj]));
+      }
+    }
     this.tasks.next(this.tasks.getValue().concat([task]));
   }
+  private checkRepeatElement(task: TasksModel) {
+    const repeatElement = this.tasks.getValue().find(i => i.dateStart.isSame(task.dateStart));
+    if (repeatElement) {
+      const index = this.tasks.getValue().indexOf(repeatElement);
+      this.tasks.getValue().splice(index, 1);
+    }
+  }
+
   public getTasks(): Observable<TasksModel[]> {
     return this.tasks;
   }
