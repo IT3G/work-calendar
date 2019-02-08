@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbCalendar, NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
-import { CurrentDateService } from 'src/app/store/current-date.service';
+import { Observable } from 'rxjs';
+import { TasksModel } from 'src/app/models/tasks.models';
+import { DateConvertService } from 'src/app/shared/services/date-convert.service';
+import { DatesStoreService } from 'src/app/store/dates-store.service';
 import { StateService } from './../state.service';
-const now = new Date();
 
 @Component({
   selector: 'app-calendar',
@@ -11,19 +13,39 @@ const now = new Date();
   styleUrls: ['./calendar.component.scss']
 })
 export class CalendarComponent implements OnInit {
-  constructor(private currentDateService: CurrentDateService) {}
+  constructor(
+    private datesStoreService: DatesStoreService,
+    private calendar: NgbCalendar,
+    private dateConvertService: DateConvertService
+  ) {}
 
   public model: NgbDateStruct;
-
+  public tasks: TasksModel[];
   public stateService: StateService;
 
-  ngOnInit() {}
+  public hoveredDate: NgbDate;
+
+  public fromDate: NgbDate;
+  public toDate: NgbDate;
+  getCurrentDate$: Observable<any>;
+  now = new Date();
+  ngOnInit() {
+    this.selectToday();
+    this.getCurrentDate$ = this.datesStoreService.getDateStart();
+    this.getInfoFromStore();
+  }
+
+  private getInfoFromStore() {
+    this.getCurrentDate$.subscribe(res => (this.model = this.dateConvertService.convertMomentToNgbDate(res)));
+
+    this.datesStoreService.getTasks().subscribe(res => (this.tasks = res));
+  }
 
   public selectToday() {
     this.model = {
-      year: now.getFullYear(),
-      month: now.getMonth() + 1,
-      day: now.getDate()
+      year: this.now.getFullYear(),
+      month: this.now.getMonth() + 1,
+      day: this.now.getDate()
     };
   }
 
@@ -48,28 +70,16 @@ export class CalendarComponent implements OnInit {
     }
   }
 
-  public selectDate(date: NgbDateStruct) {
-    const momentDate: NgbDateStruct = {
-      day: date.day,
-      month: date.month - 1,
-      year: date.year
-    };
-    const obj = moment(momentDate);
+  public onDateSelect(date: NgbDateStruct) {
+    this.model = date;
 
-    this.currentDateService.setCurrentDate(obj);
+    this.datesStoreService.setDateStart(this.dateConvertService.convertNgbDateToMoment(date));
   }
 
   dateHasTask(date: NgbDateStruct): boolean {
-    return true;
-    // for (var i = 0; i < this.userService.user.tasks.length; i++) {
-    //   var taskDate = new Date(this.userService.user.tasks[i].date);
-    //   var day: number = taskDate.getDate();
-    //   var month: number = taskDate.getMonth() + 1;
-    //   var year: number = taskDate.getFullYear();
-
-    //   if (day === date.day && month === date.month && year === date.year) {
-    //     return true;
-    //   }
-    //  }
+    const result = this.tasks.find(i =>
+      moment(i.dateStart).isSame(this.dateConvertService.convertNgbDateToMoment(date))
+    );
+    return !!result;
   }
 }

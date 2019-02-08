@@ -1,11 +1,21 @@
-div {
-    border: 1px aliceblue solid;
+.date__wrapper {
+  display: flex;
+  margin-bottom: 20px;
 }
-
 select {
-    width: 160px;
+  width: 160px;
+}
+.date_row {
+  display: flex;
+  margin-right: 10px;
+  align-content: center;
 }
 
 textarea {
-    width: 400px;
+  width: 400px;
+}
+.title {
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
 }

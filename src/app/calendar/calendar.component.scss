@@ -1,0 +1,19 @@
+:host /deep/ ngb-datepicker {
+  .custom-day {
+    text-align: center;
+    padding: 0.185rem 0.25rem;
+    display: inline-block;
+    height: 2rem;
+    width: 2rem;
+  }
+  .custom-day.selected {
+    border: 1px solid black;
+    border-radius: 5px;
+    outline: none;
+  }
+  .custom-day.hasTask {
+    outline: none;
+    background-color: blue;
+    color: white;
+  }
+}

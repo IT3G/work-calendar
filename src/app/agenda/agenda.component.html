@@ -1,9 +1,8 @@
 <div>
-    <ul>
-        <li><span style="background-color:white;"></span>Стандартно</li>
-        <li><span style="background-color:cyan;"></span>Особое</li>
-        <li><span style="background-color:red;"></span>Отсутствие</li>
-        <li><span style="background-color:green;"></span>Отпуск</li>
-        <li><span style="background-color:yellow;"></span>Болезнь</li>
-    </ul>
+  <div class="item"
+    *ngFor="let item of options">
+    <div class="label"
+      [style.backgroundColor]="item.color"></div>
+    <div class="title">{{item.title}}</div>
+  </div>
 </div>

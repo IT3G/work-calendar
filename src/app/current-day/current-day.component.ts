@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CurrentDateService } from 'src/app/store/current-date.service';
+import { DatesStoreService } from 'src/app/store/dates-store.service';
 import { StateService } from '../state.service';
 
 @Component({
@@ -12,9 +12,9 @@ export class CurrentDayComponent implements OnInit {
   stateService: StateService;
   currentDate$: Observable<any>;
 
-  constructor(private currentDateService: CurrentDateService) {}
+  constructor(private datesStoreService: DatesStoreService) {}
 
   ngOnInit() {
-    this.currentDate$ = this.currentDateService.getDate();
+    this.currentDate$ = this.datesStoreService.getDateStart();
   }
 }
