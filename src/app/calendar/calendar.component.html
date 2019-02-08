@@ -12,7 +12,7 @@
   <span class="custom-day"
     [class.selected]="selected"
     [class.focused]="focused"
-    [class.hasTask]="hasTask(date)"
+    [ngClass]="chooseClass(date)"
     (mouseenter)="hoveredDate = date"
     (mouseleave)="hoveredDate = null">
     {{ date.day }}

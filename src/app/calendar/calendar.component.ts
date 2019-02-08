@@ -82,4 +82,13 @@ export class CalendarComponent implements OnInit {
     );
     return !!result;
   }
+
+  chooseClass(date: NgbDateStruct): string {
+    const result = this.tasks.find(i =>
+      moment(i.dateStart).isSame(this.dateConvertService.convertNgbDateToMoment(date))
+    );
+
+    const styleClass = result ? `type_${result.id}` : '';
+    return styleClass;
+  }
 }

@@ -16,4 +16,23 @@
     background-color: blue;
     color: white;
   }
+  .custom-day {
+    &.type_1 {
+      background-color: white;
+    }
+    &.type_2 {
+      background-color: cyan;
+    }
+    &.type_3 {
+      background-color: red;
+      color: white;
+    }
+    &.type_4 {
+      background-color: green;
+      color: white;
+    }
+    &.type_5 {
+      background-color: yellow;
+    }
+  }
 }
