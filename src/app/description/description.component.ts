@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { Moment } from 'moment';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { TasksModel } from 'src/app/models/tasks.models';
@@ -15,32 +14,37 @@ import { DatesStoreService } from 'src/app/store/dates-store.service';
   styleUrls: ['./description.component.scss']
 })
 export class DescriptionComponent implements OnInit {
-  dateStart$: Observable<Moment>;
-  dateEnd$: Observable<Moment>;
-  dateStart: NgbDateStruct;
-  dateEnd: NgbDateStruct;
+  form: FormGroup;
   options: any[];
   tasks$: Observable<TasksModel[]>;
-  optionControl = new FormControl(null);
-  constructor(private datesStoreService: DatesStoreService, private dateConvertService: DateConvertService) {}
+
+  constructor(
+    private datesStoreService: DatesStoreService,
+    private dateConvertService: DateConvertService,
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit() {
-    this.optionControl.valueChanges.subscribe(res => console.log(res));
+    this.form = this.fb.group({
+      dateStart: [null, [Validators.required]],
+      dateEnd: [null, [Validators.required]],
+      type: [null, [Validators.required]],
+      comment: []
+    });
     this.getInfoFromStore();
     this.options = AgendaColors;
   }
 
   public addTask(): void {
-    if (!this.optionControl.value.id) {
-      alert('Заполните Вид');
+    if (!this.form.invalid) {
+      alert('Заполните форму');
       return;
     }
+
     this.datesStoreService.addTask({
-      id: this.optionControl.value.id,
-      dateStart: this.dateConvertService.convertNgbDateToMoment(this.dateStart),
-      dateEnd: this.dateEnd ? this.dateConvertService.convertNgbDateToMoment(this.dateEnd) : null
+      ...this.form.value
     });
-    console.log(this.dateStart, this.dateEnd);
+    console.log(this.form.value);
   }
 
   public changeDateStart(date: NgbDateStruct): void {
@@ -56,13 +60,7 @@ export class DescriptionComponent implements OnInit {
       .getDateStart()
       .pipe(filter(i => !!i))
       .subscribe(res => {
-        this.dateStart = this.dateConvertService.convertMomentToNgbDate(res);
-      });
-    this.datesStoreService
-      .getDateEnd()
-      .pipe(filter(i => !!i))
-      .subscribe(res => {
-        this.dateEnd = this.dateConvertService.convertMomentToNgbDate(res);
+        this.form.patchValue({ dateStart: res.toDate() });
       });
 
     this.tasks$ = this.datesStoreService.getTasks();

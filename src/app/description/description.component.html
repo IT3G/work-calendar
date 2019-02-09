@@ -1,8 +1,10 @@
-<div>
+<form class="form-container"
+  [formGroup]="form">
   <p>Присутствие</p>
 
   <mat-form-field class="control">
     <input matInput
+      formControlName="dateStart"
       [matDatepicker]="picker"
       placeholder="с">
     <mat-datepicker-toggle matSuffix
@@ -12,6 +14,7 @@
 
   <mat-form-field class="control">
     <input matInput
+      formControlName="dateEnd"
       [matDatepicker]="pickerTo"
       placeholder="по">
     <mat-datepicker-toggle matSuffix
@@ -21,7 +24,7 @@
 
   <mat-form-field class="control">
     <mat-select placeholder="вид"
-      [formControl]="optionControl">
+      formControlName="type">
       <mat-option *ngFor="let item of options"
         [value]="item">
         {{item.title}}
@@ -31,6 +34,7 @@
 
   <mat-form-field class="control">
     <textarea matInput
+      formControlName="comment"
       placeholder="Комментарий"></textarea>
   </mat-form-field>
 
@@ -39,9 +43,9 @@
     color="primary"
     (click)="addTask()">Сохранить</button>
 
+</form>
 
-  <div *ngFor="let task of (tasks$ | async)">
-    <div class="date">Дата {{task.dateStart | datePipe:'D MMMM YYYY'}} <span> до {{task.dateEnd | datePipe:'D MMMM YYYY'}}</span> </div>
-    <div class="type">Тип {{task.id}}</div>
-  </div>
+<div *ngFor="let task of (tasks$ | async)">
+  <div class="date">Дата {{task.dateStart | datePipe:'D MMMM YYYY'}} <span> до {{task.dateEnd | datePipe:'D MMMM YYYY'}}</span> </div>
+  <div class="type">Тип {{task.id}}</div>
 </div>
