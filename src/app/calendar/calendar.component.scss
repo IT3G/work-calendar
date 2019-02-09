@@ -1,6 +1,7 @@
 :host {
   display: block;
   text-align: center;
+  height: 350px;
 }
 
 :host /deep/ ngb-datepicker {
@@ -42,5 +43,5 @@
   }
 }
 .date-picker {
-  transform: scale(1.3) translateY(35px);
+  transform: scale(1.25) translateY(30px);
 }

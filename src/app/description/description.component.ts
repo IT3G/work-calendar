@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
 import { TasksModel } from 'src/app/models/tasks.models';
 import { AgendaColors } from 'src/app/shared/const/agenda-colors.const';
 import { DateConvertService } from 'src/app/shared/services/date-convert.service';
@@ -62,13 +61,6 @@ export class DescriptionComponent implements OnInit {
   }
 
   private getInfoFromStore() {
-    this.datesStoreService
-      .getDateStart()
-      .pipe(filter(i => !!i))
-      .subscribe(res => {
-        this.form.patchValue({ dateStart: res.toDate() });
-      });
-
     this.tasks$ = this.datesStoreService.getTasks();
   }
 }
