@@ -1,24 +1,43 @@
 <div>
   <p>Присутствие</p>
-  <div class="date__wrapper">
-    <div class="date_row">
-      <div class="title">С</div>
-      <app-datepicker (onChangeDateEmit)="changeDateStart($event)"
-        [model]="dateStart"></app-datepicker>
-    </div>
-    <div class="date_row">
-      <div class="title">По</div>
-      <app-datepicker (onChangeDateEmit)="changeDateEnd($event)"
-        [model]="dateEnd"></app-datepicker>
-    </div>
-  </div>
-  <app-select [options]="options"
-    [control]="optionControl"
-    label="Вид"></app-select>
-  <p>Комментарий:</p>
-  <textarea></textarea>
 
-  <p><button (click)="addTask()">Сохранить</button></p>
+  <mat-form-field class="control">
+    <input matInput
+      [matDatepicker]="picker"
+      placeholder="с">
+    <mat-datepicker-toggle matSuffix
+      [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field class="control">
+    <input matInput
+      [matDatepicker]="pickerTo"
+      placeholder="по">
+    <mat-datepicker-toggle matSuffix
+      [for]="pickerTo"></mat-datepicker-toggle>
+    <mat-datepicker #pickerTo></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field class="control">
+    <mat-select placeholder="вид"
+      [formControl]="optionControl">
+      <mat-option *ngFor="let item of options"
+        [value]="item">
+        {{item.title}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="control">
+    <textarea matInput
+      placeholder="Комментарий"></textarea>
+  </mat-form-field>
+
+  <button mat-raised-button
+    class="control"
+    color="primary"
+    (click)="addTask()">Сохранить</button>
 
 
   <div *ngFor="let task of (tasks$ | async)">

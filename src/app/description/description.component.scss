@@ -11,11 +11,12 @@ select {
   align-content: center;
 }
 
-textarea {
-  width: 400px;
-}
 .title {
   margin-right: 10px;
   display: flex;
   align-items: center;
+}
+
+.control {
+  width: 100%;
 }
