@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { TasksModel } from 'src/app/models/tasks.models';
@@ -36,14 +37,19 @@ export class DescriptionComponent implements OnInit {
   }
 
   public addTask(): void {
-    if (!this.form.invalid) {
+    if (this.form.invalid) {
       alert('Заполните форму');
       return;
     }
 
+    const val = this.form.value;
+
     this.datesStoreService.addTask({
-      ...this.form.value
+      id: val.type.id,
+      dateStart: moment(val.dateStart),
+      dateEnd: moment(val.dateEnd)
     });
+
     console.log(this.form.value);
   }
 
