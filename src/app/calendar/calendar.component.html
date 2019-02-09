@@ -1,29 +1,34 @@
-<ngb-datepicker
-    [(ngModel)]="model"
-    [dayTemplate]="customDay"
-    style="min-width:150px;"
-></ngb-datepicker>
+<ngb-datepicker [(ngModel)]="model"
+  [dayTemplate]="customDay"
+  class="date-picker"
+  (select)="onDateSelect($event)"
+  outsideDays="hidden"></ngb-datepicker>
 
-<ng-template
-    #customDay
-    let-date="date"
-    let-currentMonth="currentMonth"
-    let-selected="selected"
-    let-disabled="disabled"
-    let-focused="focused"
->
-    <span
-        class="custom-day lol"
-        [class.weekend]="isWeekend(date)"
-        [class.focused]="focused"
-        [class.bg-primary]="selected"
-        [class.hidden]="date.month !== currentMonth"
-        [class.text-muted]="disabled"
-        [class.has-task]="hasTask(date)"
-        (click)="showTasks(date)"
-    >
-        <span style="background-color: aliceblue; width: 100%;">{{
-            date.day
-        }}</span>
-    </span>
+<ng-template #customDay
+  let-date="date"
+  let-currentMonth="currentMonth"
+  let-selected="selected"
+  let-focused="focused">
+  <span class="custom-day"
+    [class.selected]="selected"
+    [class.focused]="focused"
+    [ngClass]="chooseClass(date)"
+    (mouseenter)="hoveredDate = date"
+    (mouseleave)="hoveredDate = null">
+    {{ date.day }}
+  </span>
 </ng-template>
+
+
+
+<!-- 
+<div class="custom-day lol"
+  [class.weekend]="isWeekend(date)"
+  [class.focused]="focused"
+  [class.bg-primary]="selected"
+  [class.hidden]="date.month !== currentMonth"
+  [class.text-muted]="disabled"
+  [class.has-task]="hasTask(date)"
+  (click)="selectDate(date)">
+  {{date.day}}
+</div> -->
