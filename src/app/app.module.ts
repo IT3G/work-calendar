@@ -3,9 +3,11 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ServiceWorkerModule } from '@angular/service-worker';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from 'src/app/shared/pipes/date.pipe';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { environment } from '../environments/environment';
 import { AgendaComponent } from './agenda/agenda.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -36,7 +38,8 @@ import { HeaderComponent } from './header/header.component';
     SharedModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbModule
+    NgbModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   exports: [],
   providers: [DatePipe],
