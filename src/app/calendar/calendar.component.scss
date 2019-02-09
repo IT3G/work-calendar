@@ -1,3 +1,9 @@
+:host {
+  display: block;
+  text-align: center;
+  height: 350px;
+}
+
 :host /deep/ ngb-datepicker {
   .custom-day {
     text-align: center;
@@ -37,6 +43,5 @@
   }
 }
 .date-picker {
-  transform: scale(1.2);
-  margin: 11px 53px;
+  transform: scale(1.25) translateY(30px);
 }
