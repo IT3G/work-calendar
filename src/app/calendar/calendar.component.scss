@@ -22,22 +22,22 @@
     color: white;
   }
   .custom-day {
-    &.type_1 {
-      background-color: white;
+    &.type_COMMON {
+      background-color: #ffffff;
     }
-    &.type_2 {
-      background-color: cyan;
+    &.type_CUSTOM {
+      background-color: #90caf9;
     }
-    &.type_3 {
-      background-color: red;
+    &.type_LEFT {
+      background-color: #ef9a9a;
       color: white;
     }
-    &.type_4 {
-      background-color: green;
+    &.type_VACATION {
+      background-color: #c5e1a5;
       color: white;
     }
-    &.type_5 {
-      background-color: yellow;
+    &.type_SICK {
+      background-color: #ffe082;
     }
   }
 }

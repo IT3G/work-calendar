@@ -1,27 +1,27 @@
 export const AgendaColors = [
   {
     title: 'Стандартно',
-    id: 1,
+    id: 'COMMON',
     color: '#FFFFFF'
   },
   {
     title: 'Особое',
-    id: 2,
+    id: 'CUSTOM',
     color: '#90CAF9'
   },
   {
     title: 'Отсутствие',
-    id: 3,
+    id: 'LEFT',
     color: '#EF9A9A'
   },
   {
     title: 'Отпуск',
-    id: 4,
+    id: 'VACATION',
     color: '#C5E1A5'
   },
   {
     title: 'Болезнь',
-    id: 5,
+    id: 'SICK',
     color: '#FFE082'
   }
 ];
