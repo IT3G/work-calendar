@@ -1,3 +1,4 @@
+import { AgendaColors } from './../shared/const/agenda-colors.const';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,35 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AgendaComponent implements OnInit {
   public options: any[];
+
   constructor() {}
 
   ngOnInit() {
-    this.options = [
-      {
-        title: 'Стандартно',
-        id: 1,
-        color: 'white'
-      },
-      {
-        title: 'Особое',
-        id: 2,
-        color: 'cyan'
-      },
-      {
-        title: 'Отсутствие',
-        id: 3,
-        color: 'red'
-      },
-      {
-        title: 'Отпуск',
-        id: 4,
-        color: 'green'
-      },
-      {
-        title: 'Болезнь',
-        id: 5,
-        color: 'yellow'
-      }
-    ];
+    this.options = AgendaColors;
   }
 }

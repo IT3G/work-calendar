@@ -29,6 +29,7 @@ export class CalendarComponent implements OnInit {
   public toDate: NgbDate;
   getCurrentDate$: Observable<any>;
   now = new Date();
+
   ngOnInit() {
     this.selectToday();
     this.getCurrentDate$ = this.datesStoreService.getDateStart();
@@ -62,18 +63,10 @@ export class CalendarComponent implements OnInit {
     return this.dateHasTask(date);
   }
 
-  public showTasks(date: NgbDateStruct) {
-    if (this.dateHasTask(date)) {
-      // TODO show popup
-      alert(date.day);
-      // this.stateService.currentDate = date;
-    }
-  }
-
   public onDateSelect(date: NgbDateStruct) {
     this.model = date;
-
     this.datesStoreService.setDateStart(this.dateConvertService.convertNgbDateToMoment(date));
+    this.datesStoreService.setDateEnd(null);
   }
 
   dateHasTask(date: NgbDateStruct): boolean {
