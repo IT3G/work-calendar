@@ -20,7 +20,7 @@ export class DescriptionComponent implements OnInit {
   tasks$: Observable<TasksModel[]>;
   optionControl = new FormControl(null);
   displayedColumns: string[] = ['dateStart', 'id', 'timeStamp'];
-  public tasks: any[];
+  public tasks: TasksModel[];
   constructor(
     private datesStoreService: DatesStoreService,
     private dateConvertService: DateConvertService,
@@ -74,7 +74,7 @@ export class DescriptionComponent implements OnInit {
     return object.title;
   }
 
-  private getInfoFromStore() {
+  private getInfoFromStore(): void {
     this.tasks$ = this.datesStoreService.getTasks();
 
     this.datesStoreService

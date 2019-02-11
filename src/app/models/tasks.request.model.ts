@@ -1,6 +1,6 @@
 export class TasksRequestModel {
   $key?: string;
-  id: number;
+  id: string;
   dateStart: string;
   dateEnd: string;
   timeStamp: string;
