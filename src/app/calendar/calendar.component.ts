@@ -78,7 +78,7 @@ export class CalendarComponent implements OnInit {
 
   chooseClass(date: NgbDateStruct): string {
     const result = this.tasks.find(i =>
-      moment(i.dateStart).isSame(this.dateConvertService.convertNgbDateToMoment(date))
+      moment(i.dateStart).isSame(this.dateConvertService.convertNgbDateToMoment(date), 'day')
     );
 
     const styleClass = result ? `type_${result.id}` : '';

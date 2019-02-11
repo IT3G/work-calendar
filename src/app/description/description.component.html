@@ -44,7 +44,42 @@
     (click)="addTask()">Сохранить</button>
 
 </form>
-<div *ngFor="let task of (tasks$ | async)">
-  <div class="date">Дата {{task.dateStart | datePipe:'D MMMM YYYY'}} <span> до {{task.dateEnd | datePipe:'D MMMM YYYY'}}</span> </div>
-  <div class="type">Тип {{task.id}}</div>
+
+
+<div class="wrapper">
+  <table mat-table
+    [dataSource]="(tasks$ | async)"
+    class="mat-elevation-z8">
+
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="dateStart">
+      <th mat-header-cell
+        *matHeaderCellDef>Дата</th>
+      <td mat-cell
+        *matCellDef="let element"> {{element.dateStart | datePipe:'D MMMM YYYY'}} </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="id">
+      <th mat-header-cell
+        *matHeaderCellDef>Причина отсутствия</th>
+      <td mat-cell
+        *matCellDef="let element"> {{getTitle(element.id)}} </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="timeStamp">
+      <th mat-header-cell
+        *matHeaderCellDef>Дата записи</th>
+      <td mat-cell
+        *matCellDef="let element"> {{element.timeStamp| datePipe:'D MMMM YYYY'}} </td>
+    </ng-container>
+
+
+    <tr mat-header-row
+      *matHeaderRowDef="displayedColumns ;sticky: true"></tr>
+    <tr mat-row
+      *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
 </div>

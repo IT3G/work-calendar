@@ -25,3 +25,16 @@ select {
 .control {
   width: 100%;
 }
+.cdk-column-id {
+  padding-right: 40px;
+}
+.mat-table {
+  width: calc(100% - 20px);
+  margin-left: 20px;
+}
+
+.wrapper {
+  height: 400px;
+  overflow: auto;
+  margin-top: 20px;
+}

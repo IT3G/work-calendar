@@ -1,6 +1,8 @@
 import { CommonModule, registerLocaleData } from '@angular/common';
 import localeRu from '@angular/common/locales/ru';
 import { LOCALE_ID, NgModule } from '@angular/core';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DATE_LOCALE } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
@@ -9,7 +11,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DatePipe } from 'src/app/shared/pipes/date.pipe';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { environment } from '../environments/environment';
+import { environment, fireBaseConfig } from '../environments/environment';
 import { AgendaComponent } from './agenda/agenda.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -43,10 +45,9 @@ registerLocaleData(localeRu);
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
-    // AngularFireModule.initializeApp(environment.firebaseConfig), // Main Angular fire module
-    // AngularFireDatabaseModule,
-    // AngularFirestoreModule
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    AngularFireModule.initializeApp(fireBaseConfig.firebaseConfig),
+    AngularFirestoreModule
   ],
   exports: [],
   providers: [DatePipe, { provide: MAT_DATE_LOCALE, useValue: 'ru-RU' }, { provide: LOCALE_ID, useValue: 'ru' }],
