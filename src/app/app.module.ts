@@ -1,6 +1,8 @@
 import { CommonModule, registerLocaleData } from '@angular/common';
-import { NgModule } from '@angular/core';
+import localeRu from '@angular/common/locales/ru';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MAT_DATE_LOCALE } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -16,9 +18,6 @@ import { CurrentDayComponent } from './current-day/current-day.component';
 import { DescriptionComponent } from './description/description.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
-import { MAT_DATE_LOCALE } from '@angular/material';
-import { LOCALE_ID } from '@angular/core';
-import localeRu from '@angular/common/locales/ru';
 
 registerLocaleData(localeRu);
 
@@ -45,6 +44,9 @@ registerLocaleData(localeRu);
     ReactiveFormsModule,
     NgbModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    // AngularFireModule.initializeApp(environment.firebaseConfig), // Main Angular fire module
+    // AngularFireDatabaseModule,
+    // AngularFirestoreModule
   ],
   exports: [],
   providers: [DatePipe, { provide: MAT_DATE_LOCALE, useValue: 'ru-RU' }, { provide: LOCALE_ID, useValue: 'ru' }],

@@ -11,6 +11,9 @@ export class DatesStoreService {
   private tasks = new BehaviorSubject<TasksModel[]>([]);
   constructor() {}
 
+  public setTasks(tasks: TasksModel[]) {
+    this.tasks.next(tasks);
+  }
   public setDateStart(date: Moment) {
     this.currentDate.next(date);
   }
@@ -35,7 +38,6 @@ export class DatesStoreService {
           dateEnd: null,
           id: task.id
         };
-        console.log(obj);
         dateStart = dateStart.add(1, 'd');
         this.checkRepeatElement(task);
         this.tasks.next(this.tasks.getValue().concat([obj]));

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
@@ -17,10 +17,13 @@ export class DescriptionComponent implements OnInit {
   form: FormGroup;
   options: any[];
   tasks$: Observable<TasksModel[]>;
+  optionControl = new FormControl(null);
 
+  public tasks: any[];
   constructor(
     private datesStoreService: DatesStoreService,
     private dateConvertService: DateConvertService,
+    private crudService: CrudService,
     private fb: FormBuilder
   ) {}
 
@@ -43,13 +46,15 @@ export class DescriptionComponent implements OnInit {
 
     const val = this.form.value;
 
-    this.datesStoreService.addTask({
+    const object = {
       id: val.type.id,
       dateStart: moment(val.dateStart),
       dateEnd: moment(val.dateEnd)
-    });
+    };
 
     console.log(this.form.value);
+
+    this.crudService.addTask(object).then(() => {});
   }
 
   public changeDateStart(date: NgbDateStruct): void {
