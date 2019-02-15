@@ -1,7 +1,8 @@
 import { Moment } from 'moment';
+import { DayType } from '../shared/const/day-type.const';
 
-export class TasksModel {
+export class TaskModel {
   id: number;
-  dateStart: Moment;
-  dateEnd: Moment;
+  type: DayType;
+  date: Moment;
 }
