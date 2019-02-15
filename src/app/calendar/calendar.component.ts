@@ -26,7 +26,7 @@ export class CalendarComponent implements OnInit {
   @Input() task: TaskModel;
   @Output() selected = new EventEmitter<Moment>();
 
-  private selectedDate: NgbDateStruct;
+  selectedDate: NgbDateStruct;
   public tasks: TaskModel[];
 
   public hoveredDate: NgbDate;

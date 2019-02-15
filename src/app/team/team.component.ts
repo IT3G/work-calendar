@@ -12,7 +12,7 @@ export class TeamComponent implements OnInit {
   // employees$: Observable<Employee[]>;
   // employees: Employee[];
 
-  constructor(private employeeStoreService: EmployeeStoreService) {}
+  constructor(public employeeStoreService: EmployeeStoreService) {}
 
   ngOnInit() {
     //   this.employees$ = this.stateService.getEmployees();
