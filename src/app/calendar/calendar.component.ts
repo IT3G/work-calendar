@@ -1,15 +1,12 @@
-import { DayType } from './../shared/const/day-type.const';
-import { AgendaColors } from 'src/app/shared/const/agenda-colors.const';
-import { TasksStoreService } from './../store/tasks-store.service';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { NgbCalendar, NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { Moment } from 'moment';
 import { Observable } from 'rxjs';
 import { TaskModel } from 'src/app/models/tasks.models';
 import { DateConvertService } from 'src/app/shared/services/date-convert.service';
 import { ContextStoreService } from 'src/app/store/context-store.service';
-import * as moment from 'moment';
-import _ from 'lodash';
-import { Moment } from 'moment';
+import { DayType } from './../shared/const/day-type.const';
+import { TasksStoreService } from './../store/tasks-store.service';
 
 @Component({
   selector: 'app-calendar',
@@ -49,9 +46,9 @@ export class CalendarComponent implements OnInit {
   public onDateSelect(date: NgbDateStruct) {
     this.selectedDate = date;
     const dt = this.dateConvertService.convertNgbDateToMoment(date);
-    this.contextStoreService.setDateStart(dt);
+    this.contextStoreService.setCurrentDate(dt);
     console.log('setting type ' + this.getDayType(dt));
-    this.contextStoreService.setDateType(this.getDayType(dt));
+    this.contextStoreService.setDayType(this.getDayType(dt));
   }
 
   dateHasTask(date: NgbDateStruct): boolean {

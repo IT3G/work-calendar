@@ -3,11 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { TaskModel } from 'src/app/models/tasks.models';
 import { AgendaColors } from 'src/app/shared/const/agenda-colors.const';
-import { DateConvertService } from 'src/app/shared/services/date-convert.service';
 import { ContextStoreService } from 'src/app/store/context-store.service';
-import { filter } from 'rxjs/operators';
+import { TasksService } from '../shared/services/tasks.service';
 import { TasksStoreService } from '../store/tasks-store.service';
 
 @Component({
@@ -22,7 +22,7 @@ export class DescriptionComponent implements OnInit {
 
   constructor(
     private contextStoreService: ContextStoreService,
-    private dateConvertService: DateConvertService,
+    private tasksService: TasksService,
     private tasksStoreService: TasksStoreService,
     private fb: FormBuilder
   ) {}
@@ -47,7 +47,7 @@ export class DescriptionComponent implements OnInit {
     const val = this.form.getRawValue();
     const dateStart = moment(val.dateStart);
 
-    this.tasksStoreService.addTasks(val.type.id, dateStart);
+    this.tasksService.addTask(val.type.id, dateStart);
 
     if (val.dateEnd) {
       const lastDay = moment(val.dateEnd);
@@ -56,13 +56,13 @@ export class DescriptionComponent implements OnInit {
       while (nextDate.isBefore(lastDay)) {
         nextDate = nextDate.clone().add(1, 'd');
         console.log(nextDate);
-        this.tasksStoreService.addTasks(val.type.id, nextDate);
+        this.tasksService.addTask(val.type.id, nextDate);
       }
     }
   }
 
   public changeDateStart(date: NgbDateStruct): void {
-    this.contextStoreService.setDateStart(moment(date));
+    this.contextStoreService.setCurrentDate(moment(date));
   }
 
   public changeDateEnd(date: NgbDateStruct): void {

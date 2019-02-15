@@ -1,8 +1,7 @@
-import { employeeList } from './test-data';
-import { shareReplay } from 'rxjs/operators';
-import { BehaviorSubject } from 'rxjs';
-import { Employee } from './../models/employee.model';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { shareReplay } from 'rxjs/operators';
+import { Employee } from './../models/employee.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,15 +11,13 @@ export class EmployeeStoreService {
 
   readonly employees$ = this._employees.asObservable().pipe(shareReplay(1));
 
-  constructor() {
-    this._employees.next(employeeList);
-  }
+  constructor() {}
 
-  get employees(): Employee[] {
+  public getEmployees(): Employee[] {
     return this._employees.getValue();
   }
 
-  set employees(val: Employee[]) {
+  public addEmployees(val: Employee[]) {
     this._employees.next(val);
   }
 }

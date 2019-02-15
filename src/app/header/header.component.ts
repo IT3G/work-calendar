@@ -1,6 +1,8 @@
-import { AppRoutingModule } from './../app-routing.module';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { ContextStoreService } from '../store/context-store.service';
+import { AppRoutingModule } from './../app-routing.module';
 
 @Component({
   selector: 'app-header',
@@ -8,9 +10,13 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  constructor(private router: Router) {}
+  currentUser$: Observable<string>;
 
-  ngOnInit() {}
+  constructor(private router: Router, private contextStoreService: ContextStoreService) {}
+
+  ngOnInit() {
+    this.currentUser$ = this.contextStoreService.getCurrentUser();
+  }
 
   onSwipe(evt) {
     const toRight = Math.abs(evt.deltaX) > 40 && evt.deltaX > 0;
