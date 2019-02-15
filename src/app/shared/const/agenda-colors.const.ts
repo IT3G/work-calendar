@@ -1,27 +1,29 @@
+import { DayType } from './day-type.const';
+
 export const AgendaColors = [
   {
+    id: DayType.COMMON,
     title: 'Стандартно',
-    id: 'COMMON',
     color: '#FFFFFF'
   },
   {
+    id: DayType.CUSTOM,
     title: 'Особое',
-    id: 'CUSTOM',
     color: '#90CAF9'
   },
   {
+    id: DayType.LEFT,
     title: 'Отсутствие',
-    id: 'LEFT',
     color: '#EF9A9A'
   },
   {
+    id: DayType.VACATION,
     title: 'Отпуск',
-    id: 'VACATION',
     color: '#C5E1A5'
   },
   {
+    id: DayType.SICK,
     title: 'Болезнь',
-    id: 'SICK',
     color: '#FFE082'
   }
 ];

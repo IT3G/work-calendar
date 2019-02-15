@@ -1,0 +1,5 @@
+<mat-nav-list>
+  <a mat-list-item href="..." *ngFor="let employee of (employeeStoreService.employees$ | async)">
+    {{ employee.name }} {{ employee.surname }}
+  </a>
+</mat-nav-list>

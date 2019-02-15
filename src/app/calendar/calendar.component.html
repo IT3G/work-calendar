@@ -1,25 +1,23 @@
-<ngb-datepicker [(ngModel)]="model"
+<ngb-datepicker
+  [(ngModel)]="selectedDate"
   [dayTemplate]="customDay"
   class="date-picker"
   (select)="onDateSelect($event)"
-  outsideDays="hidden"></ngb-datepicker>
+  outsideDays="hidden"
+></ngb-datepicker>
 
-<ng-template #customDay
-  let-date="date"
-  let-currentMonth="currentMonth"
-  let-selected="selected"
-  let-focused="focused">
-  <span class="custom-day"
+<ng-template #customDay let-date="date" let-currentMonth="currentMonth" let-selected="selected" let-focused="focused">
+  <span
+    class="custom-day"
     [class.selected]="selected"
     [class.focused]="focused"
     [ngClass]="chooseClass(date)"
     (mouseenter)="hoveredDate = date"
-    (mouseleave)="hoveredDate = null">
+    (mouseleave)="hoveredDate = null"
+  >
     {{ date.day }}
   </span>
 </ng-template>
-
-
 
 <!-- 
 <div class="custom-day lol"

@@ -1,3 +1,4 @@
+import { RouterModule } from '@angular/router';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -19,8 +20,12 @@ import { HeaderComponent } from './header/header.component';
 import { MAT_DATE_LOCALE } from '@angular/material';
 import { LOCALE_ID } from '@angular/core';
 import localeRu from '@angular/common/locales/ru';
+import { TeamComponent } from './team/team.component';
+import { PresenceComponent } from './presence/presence.component';
+import * as moment from 'moment';
 
 registerLocaleData(localeRu);
+moment.locale('ru');
 
 @NgModule({
   declarations: [
@@ -30,7 +35,9 @@ registerLocaleData(localeRu);
     DescriptionComponent,
     HeaderComponent,
     FooterComponent,
-    CurrentDayComponent
+    CurrentDayComponent,
+    TeamComponent,
+    PresenceComponent
   ],
   imports: [
     BrowserModule,
@@ -44,7 +51,8 @@ registerLocaleData(localeRu);
     FormsModule,
     ReactiveFormsModule,
     NgbModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    RouterModule
   ],
   exports: [],
   providers: [DatePipe, { provide: MAT_DATE_LOCALE, useValue: 'ru-RU' }, { provide: LOCALE_ID, useValue: 'ru' }],

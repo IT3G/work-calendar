@@ -1,48 +1,31 @@
-<form class="form-container"
-  [formGroup]="form">
+<form class="form-container" [formGroup]="form">
   <p>Присутствие</p>
 
   <mat-form-field class="control">
-    <input matInput
-      formControlName="dateStart"
-      [matDatepicker]="picker"
-      placeholder="с">
-    <mat-datepicker-toggle matSuffix
-      [for]="picker"></mat-datepicker-toggle>
+    <input matInput formControlName="dateStart" [matDatepicker]="picker" placeholder="с" />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 
   <mat-form-field class="control">
-    <input matInput
-      formControlName="dateEnd"
-      [matDatepicker]="pickerTo"
-      placeholder="по">
-    <mat-datepicker-toggle matSuffix
-      [for]="pickerTo"></mat-datepicker-toggle>
+    <input matInput formControlName="dateEnd" [matDatepicker]="pickerTo" placeholder="по" />
+    <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
     <mat-datepicker #pickerTo></mat-datepicker>
   </mat-form-field>
 
   <mat-form-field class="control">
-    <mat-select placeholder="вид"
-      formControlName="type">
-      <mat-option *ngFor="let item of options"
-        [value]="item">
-        {{item.title}}
+    <mat-select placeholder="вид" formControlName="type">
+      <mat-option *ngFor="let item of options" [value]="item">
+        {{ item.title }}
       </mat-option>
     </mat-select>
   </mat-form-field>
 
   <mat-form-field class="control">
-    <textarea matInput
-      formControlName="comment"
-      placeholder="Комментарий"></textarea>
+    <textarea matInput formControlName="comment" placeholder="Комментарий"></textarea>
   </mat-form-field>
 
-  <button mat-raised-button
-    class="control"
-    color="primary"
-    (click)="addTask()">Сохранить</button>
-
+  <button mat-raised-button class="control" color="primary" (click)="addTask()">Сохранить</button>
 </form>
 <!-- 
 <div *ngFor="let task of (tasks$ | async)">
