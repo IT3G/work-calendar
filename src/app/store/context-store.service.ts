@@ -3,16 +3,19 @@ import * as moment from 'moment';
 import { Moment } from 'moment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { DayType } from './../shared/const/day-type.const';
+import { employeeList } from '../test-data';
+import { Employee } from '../models/employee.model';
 
 @Injectable({ providedIn: 'root' })
 export class ContextStoreService {
   private currentUser = new BehaviorSubject<string>('Друг');
-  private currentDate = new BehaviorSubject<Moment>(moment());
+  private selectedUser = new BehaviorSubject<Employee>(employeeList[0]);
+  private currentDate = new BehaviorSubject<Moment>(moment().startOf('day'));
   private dayType = new BehaviorSubject<DayType>(DayType.COMMON);
 
   constructor() {}
 
-  public getCurrentDate(): Observable<Moment> {
+  public getCurrentDate$(): Observable<Moment> {
     return this.currentDate;
   }
 
@@ -20,7 +23,7 @@ export class ContextStoreService {
     this.currentDate.next(date);
   }
 
-  public getDayType(): Observable<DayType> {
+  public getDayType$(): Observable<DayType> {
     return this.dayType;
   }
 
@@ -28,11 +31,27 @@ export class ContextStoreService {
     this.dayType.next(dayType);
   }
 
-  public getCurrentUser(): Observable<string> {
+  public getCurrentUser$(): Observable<string> {
     return this.currentUser;
+  }
+
+  public getCurrentUser(): string {
+    return this.currentUser.getValue();
   }
 
   public setCurrentUser(user: string) {
     this.currentUser.next(user);
+  }
+
+  public getSelectedUser$(): Observable<Employee> {
+    return this.selectedUser;
+  }
+
+  public getSelectedUser(): Employee {
+    return this.selectedUser.getValue();
+  }
+
+  public setSelectedUser(user: Employee) {
+    this.selectedUser.next(user);
   }
 }

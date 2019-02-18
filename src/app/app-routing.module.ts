@@ -8,6 +8,7 @@ const swipebleRoutes: string[] = ['/presence', '/team'];
 const routes: Routes = [
   { path: 'team', component: TeamComponent },
   { path: 'presence', component: PresenceComponent },
+  { path: 'presence/:id', component: PresenceComponent },
   { path: '', redirectTo: 'presence', pathMatch: 'full' }
 ];
 

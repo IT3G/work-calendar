@@ -7,6 +7,7 @@ import { DateConvertService } from 'src/app/shared/services/date-convert.service
 import { ContextStoreService } from 'src/app/store/context-store.service';
 import { DayType } from './../shared/const/day-type.const';
 import { TasksStoreService } from './../store/tasks-store.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-calendar',
@@ -34,9 +35,16 @@ export class CalendarComponent implements OnInit {
   currentDate$: Observable<Moment>;
 
   ngOnInit() {
-    // this.currentDate$ = this.contextStoreService.getCurrentDate();
+    // TODO: Add Init per user
+    // this.tasksStoreService.addTasks([
+    //   {
+    //     id: 1,
+    //     type: DayType.SICK,
+    //     date: moment().startOf('day')
+    //   }
+    // ]);
     this.contextStoreService
-      .getCurrentDate()
+      .getCurrentDate$()
       .subscribe(res => (this.selectedDate = this.dateConvertService.convertMomentToNgbDate(res)));
     this.tasksStoreService.tasks$.subscribe(res => {
       this.tasks = res;

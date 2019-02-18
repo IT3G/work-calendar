@@ -70,22 +70,16 @@ export class DescriptionComponent implements OnInit {
   }
 
   private getInfoFromStore() {
-    // this.tasks$ = this.datesStoreService.getTasks();
     this.contextStoreService
-      .getCurrentDate()
+      .getCurrentDate$()
       .pipe(filter(i => !!i))
       .subscribe(res => {
         this.form.get('dateStart').setValue(res.toDate(), { emitEvent: false });
         this.form.get('dateEnd').setValue(null, { emitEvent: false });
-
-        // const agenda = AgendaColors.find(o => o.id === DayType.COMMON);
-        // this.form.get('type').setValue(agenda, { emitEvent: false });
-
-        // TODO: брать тип и описание из Tasks
       });
 
     this.contextStoreService
-      .getDayType()
+      .getDayType$()
       .pipe(filter(i => !!i))
       .subscribe(res => {
         // this.form.get('dateStart').setValue(res.toDate(), { emitEvent: false });
