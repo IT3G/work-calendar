@@ -1,15 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { TaskModel } from 'src/app/models/tasks.models';
 import { AgendaColors } from 'src/app/shared/const/agenda-colors.const';
-import { CrudService } from 'src/app/shared/services/crud.service';
-import { DateConvertService } from 'src/app/shared/services/date-convert.service';
 import { ContextStoreService } from 'src/app/store/context-store.service';
-import { DatesStoreService } from 'src/app/store/dates-store.service';
 import { TasksService } from '../shared/services/tasks.service';
 import { TasksStoreService } from '../store/tasks-store.service';
 
@@ -22,18 +19,12 @@ export class DescriptionComponent implements OnInit {
   form: FormGroup;
   options: any[];
   tasks$: Observable<TaskModel[]>;
-  optionControl = new FormControl(null);
-  displayedColumns: string[] = ['dateStart', 'id', 'timeStamp'];
-  public tasks: TaskModel[];
 
   constructor(
     private contextStoreService: ContextStoreService,
     private tasksService: TasksService,
     private tasksStoreService: TasksStoreService,
-    private fb: FormBuilder,
-    private datesStoreService: DatesStoreService,
-    private dateConvertService: DateConvertService,
-    private crudService: CrudService
+    private fb: FormBuilder
   ) {}
 
   ngOnInit() {
@@ -45,24 +36,6 @@ export class DescriptionComponent implements OnInit {
     });
     this.getInfoFromStore();
     this.options = AgendaColors;
-    this.subscribeToValueChanges();
-  }
-
-  private subscribeToValueChanges(): void {
-    //this.form.get('dateStart').valueChanges.subscribe(res => this.changeDateStart(res.dateStart));
-  }
-
-  public changeDateStart(date: NgbDateStruct): void {
-    this.contextStoreService.setCurrentDate(moment(date));
-  }
-
-  public changeDateEnd(date: NgbDateStruct): void {
-    // this.datesStoreService.setDateEnd(moment(date));
-  }
-
-  public getTitle(type: string): string {
-    const object = this.options.find(i => i.id === type);
-    return object.title;
   }
 
   public addTask(): void {
@@ -73,14 +46,6 @@ export class DescriptionComponent implements OnInit {
 
     const val = this.form.getRawValue();
     const dateStart = moment(val.dateStart);
-
-    const object = {
-      id: val.type.id,
-      dateStart: moment(val.dateStart),
-      dateEnd: moment(val.dateEnd)
-    };
-
-    // this.crudService.addTask(object).then(() => {});
 
     this.tasksService.addTask(this.contextStoreService.getSelectedUser(), val.type.id, dateStart);
 
@@ -93,6 +58,14 @@ export class DescriptionComponent implements OnInit {
         this.tasksService.addTask(this.contextStoreService.getSelectedUser(), val.type.id, nextDate);
       }
     }
+  }
+
+  public changeDateStart(date: NgbDateStruct): void {
+    this.contextStoreService.setCurrentDate(moment(date));
+  }
+
+  public changeDateEnd(date: NgbDateStruct): void {
+    // this.datesStoreService.setDateEnd(moment(date));
   }
 
   private getInfoFromStore() {
@@ -117,19 +90,18 @@ export class DescriptionComponent implements OnInit {
         // TODO: брать тип и описание из Tasks
       });
 
-    this.tasks$ = this.datesStoreService.getTasks();
-
-    this.datesStoreService
-      .getDateStart()
-      .pipe(filter(i => !!i))
-      .subscribe(res => {
-        this.form.get('dateStart').setValue(res.toDate(), { emitEvent: false });
-      });
-    this.datesStoreService
-      .getDateEnd()
-      .pipe(filter(i => !!i))
-      .subscribe(res => {
-        this.form.get('dateEnd').setValue(res.toDate(), { emitEvent: false });
-      });
+    // this.contextStoreService
+    //   .getDayType()
+    //   .pipe(filter(i => !!i))
+    //   .subscribe(res => {
+    //     const selected = AgendaColors.find(i => i.id === res);
+    //     this.form.get('type').setValue(selected, { emitEvent: false });
+    //   });
+    // this.datesStoreService
+    //   .getDateEnd()
+    //   .pipe(filter(i => !!i))
+    //   .subscribe(res => {
+    //     this.form.get('dateEnd').setValue(res.toDate(), { emitEvent: false });
+    //   });
   }
 }
