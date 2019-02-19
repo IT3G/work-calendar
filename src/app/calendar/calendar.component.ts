@@ -1,11 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { NgbCalendar, NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import * as moment from 'moment';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
+import { NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { Moment } from 'moment';
 import { Observable } from 'rxjs';
-import { TasksModel } from 'src/app/models/tasks.models';
+import { TaskModel } from 'src/app/models/tasks.models';
 import { DateConvertService } from 'src/app/shared/services/date-convert.service';
-import { DatesStoreService } from 'src/app/store/dates-store.service';
-import { StateService } from './../state.service';
+import { ContextStoreService } from 'src/app/store/context-store.service';
+import { AppRoutingModule } from '../app-routing.module';
+import { TaskRepositoryService } from '../task-repository.service';
+import { DayType } from './../shared/const/day-type.const';
+import { TasksService } from './../shared/services/tasks.service';
+import { TasksStoreService } from './../store/tasks-store.service';
 
 @Component({
   selector: 'app-calendar',
@@ -14,74 +19,86 @@ import { StateService } from './../state.service';
 })
 export class CalendarComponent implements OnInit {
   constructor(
-    private datesStoreService: DatesStoreService,
-    private calendar: NgbCalendar,
-    private dateConvertService: DateConvertService
+    private contextStoreService: ContextStoreService,
+    private dateConvertService: DateConvertService,
+    private tasksStoreService: TasksStoreService,
+    private router: Router,
+    private teaksService: TasksService,
+    private taskRepositoryService: TaskRepositoryService
   ) {}
 
-  public model: NgbDateStruct;
-  public tasks: TasksModel[];
-  public stateService: StateService;
+  @Input() task: TaskModel;
+  @Output() selected = new EventEmitter<Moment>();
+
+  selectedDate: NgbDateStruct;
+  public tasks: TaskModel[];
 
   public hoveredDate: NgbDate;
 
   public fromDate: NgbDate;
   public toDate: NgbDate;
-  getCurrentDate$: Observable<any>;
-  now = new Date();
+
+  currentDate$: Observable<Moment>;
 
   ngOnInit() {
-    this.selectToday();
-    this.getCurrentDate$ = this.datesStoreService.getDateStart();
-    this.getInfoFromStore();
+    // TODO: Add Init per user
+    // this.tasksStoreService.addTasks([
+    //   {
+    //     id: 1,
+    //     type: DayType.SICK,
+    //     date: moment().startOf('day')
+    //   }
+    // ]);
+
+    this.taskRepositoryService.loadTasks(this.contextStoreService.getSelectedUser());
+
+    this.contextStoreService
+      .getCurrentDate$()
+      .subscribe(res => (this.selectedDate = this.dateConvertService.convertMomentToNgbDate(res)));
+
+    this.tasksStoreService.getTasks$().subscribe(res => {
+      this.tasks = res;
+    });
   }
 
-  private getInfoFromStore() {
-    this.getCurrentDate$.subscribe(res => (this.model = this.dateConvertService.convertMomentToNgbDate(res)));
+  onSwipe(evt) {
+    const toRight = Math.abs(evt.deltaX) > 40 && evt.deltaX > 0;
+    const increment = toRight === true ? -1 : 1;
 
-    this.datesStoreService.getTasks().subscribe(res => (this.tasks = res));
-  }
-
-  public selectToday() {
-    this.model = {
-      year: this.now.getFullYear(),
-      month: this.now.getMonth() + 1,
-      day: this.now.getDate()
-    };
-  }
-
-  public isWeekend(date: NgbDateStruct) {
-    const d = new Date(date.year, date.month - 1, date.day);
-    return d.getDay() === 0 || d.getDay() === 6;
-  }
-
-  public isDisabled(date: NgbDateStruct, current: { month: number }) {
-    return date.month !== current.month;
-  }
-
-  public hasTask(date: NgbDateStruct) {
-    return this.dateHasTask(date);
+    const nextRoute = AppRoutingModule.getNext(this.router, increment);
+    this.router.navigate([nextRoute]);
   }
 
   public onDateSelect(date: NgbDateStruct) {
-    this.model = date;
-    this.datesStoreService.setDateStart(this.dateConvertService.convertNgbDateToMoment(date));
-    this.datesStoreService.setDateEnd(null);
+    this.selectedDate = date;
+    const dt = this.dateConvertService.convertNgbDateToMoment(date);
+    this.contextStoreService.setCurrentDate(dt);
+    console.log('setting type ' + this.getDayType(dt));
+    this.contextStoreService.setDayType(this.getDayType(dt));
   }
 
   dateHasTask(date: NgbDateStruct): boolean {
-    const result = this.tasks.find(i =>
-      moment(i.dateStart).isSame(this.dateConvertService.convertNgbDateToMoment(date))
-    );
+    const result = this.tasks.find(i => i.date.isSame(this.dateConvertService.convertNgbDateToMoment(date)));
     return !!result;
   }
 
-  chooseClass(date: NgbDateStruct): string {
-    const result = this.tasks.find(i =>
-      moment(i.dateStart).isSame(this.dateConvertService.convertNgbDateToMoment(date), 'day')
-    );
+  getDayType(dt: Moment): DayType {
+    const existedTask = this.tasks.find(i => i.date.isSame(dt));
 
-    const styleClass = result ? `type_${result.id}` : '';
-    return styleClass;
+    let dayType = DayType.COMMON;
+
+    if (existedTask) {
+      dayType = existedTask.type;
+    } else if (dt.weekday() === 5 || dt.weekday() === 6) {
+      dayType = DayType.LEFT;
+    }
+
+    return dayType;
+  }
+
+  chooseClass(date: NgbDateStruct): string {
+    const dt = this.dateConvertService.convertNgbDateToMoment(date);
+    const dayType = DayType[this.getDayType(dt)];
+    return `type_${dayType}`;
   }
 }

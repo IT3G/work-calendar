@@ -1,8 +1,9 @@
 import { Moment } from 'moment';
+import { DayType } from '../shared/const/day-type.const';
 
-export class TasksModel {
-  $key?: string;
-  id: string;
-  dateStart: Moment;
-  dateEnd: Moment;
+export class TaskModel {
+  id: number;
+  type: DayType;
+  date: Moment;
+  employeeId: number;
 }

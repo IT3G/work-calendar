@@ -7,8 +7,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DATE_LOCALE } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import * as moment from 'moment';
 import { DatePipe } from 'src/app/shared/pipes/date.pipe';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { environment, fireBaseConfig } from '../environments/environment';
@@ -20,8 +22,11 @@ import { CurrentDayComponent } from './current-day/current-day.component';
 import { DescriptionComponent } from './description/description.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
+import { PresenceComponent } from './presence/presence.component';
+import { TeamComponent } from './team/team.component';
 
 registerLocaleData(localeRu);
+moment.locale('ru');
 
 @NgModule({
   declarations: [
@@ -31,7 +36,9 @@ registerLocaleData(localeRu);
     DescriptionComponent,
     HeaderComponent,
     FooterComponent,
-    CurrentDayComponent
+    CurrentDayComponent,
+    TeamComponent,
+    PresenceComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +54,8 @@ registerLocaleData(localeRu);
     NgbModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     AngularFireModule.initializeApp(fireBaseConfig.firebaseConfig),
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    RouterModule
   ],
   exports: [],
   providers: [DatePipe, { provide: MAT_DATE_LOCALE, useValue: 'ru-RU' }, { provide: LOCALE_ID, useValue: 'ru' }],

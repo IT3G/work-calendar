@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
-import * as moment from 'moment';
-import { TasksModel } from 'src/app/models/tasks.models';
-import { TasksRequestModel } from 'src/app/models/tasks.request.model';
+import { TaskModel } from 'src/app/models/tasks.models';
 
 @Injectable({
   providedIn: 'root'
@@ -12,17 +10,17 @@ export class CrudService {
 
   constructor(private db: AngularFirestore) {}
 
-  public addTask(task: TasksModel) {
+  public addTask(task: TaskModel) {
     this.tasksRef = this.db.collection('tasks');
 
-    const object: TasksRequestModel = {
-      dateEnd: moment(task.dateEnd).format(),
-      dateStart: moment(task.dateStart).format(),
-      id: task.id,
-      timeStamp: moment().format()
-    };
+    // const object: TasksRequestModel = {
+    //   dateEnd: moment(task.dateEnd).format(),
+    //   dateStart: moment(task.dateStart).format(),
+    //   id: task.id,
+    //   timeStamp: moment().format()
+    // };
 
-    return this.tasksRef.add(object);
+    // return this.tasksRef.add(object);
   }
 
   public getTasks() {
