@@ -13,7 +13,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { DatePipe } from 'src/app/shared/pipes/date.pipe';
 import { SharedModule } from 'src/app/shared/shared.module';
-import { environment, fireBaseConfig } from '../environments/environment';
+import { fireBaseConfigEnvironment } from 'src/environments/firebaseConfig';
+import { environment } from '../environments/environment';
 import { AgendaComponent } from './agenda/agenda.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -53,7 +54,7 @@ moment.locale('ru');
     ReactiveFormsModule,
     NgbModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
-    AngularFireModule.initializeApp(fireBaseConfig.firebaseConfig),
+    AngularFireModule.initializeApp(fireBaseConfigEnvironment.firebaseConfig),
     AngularFirestoreModule,
     RouterModule
   ],
