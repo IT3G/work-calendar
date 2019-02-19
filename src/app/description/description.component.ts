@@ -47,7 +47,7 @@ export class DescriptionComponent implements OnInit {
     const val = this.form.getRawValue();
     const dateStart = moment(val.dateStart);
 
-    this.tasksService.addTask(val.type.id, dateStart);
+    this.tasksService.addTask(this.contextStoreService.getSelectedUser(), val.type.id, dateStart);
 
     if (val.dateEnd) {
       const lastDay = moment(val.dateEnd);
@@ -55,8 +55,7 @@ export class DescriptionComponent implements OnInit {
       let nextDate = dateStart;
       while (nextDate.isBefore(lastDay)) {
         nextDate = nextDate.clone().add(1, 'd');
-        console.log(nextDate);
-        this.tasksService.addTask(val.type.id, nextDate);
+        this.tasksService.addTask(this.contextStoreService.getSelectedUser(), val.type.id, nextDate);
       }
     }
   }

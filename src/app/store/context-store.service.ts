@@ -8,7 +8,7 @@ import { Employee } from '../models/employee.model';
 
 @Injectable({ providedIn: 'root' })
 export class ContextStoreService {
-  private currentUser = new BehaviorSubject<string>('Друг');
+  private currentUser = new BehaviorSubject<Employee>(employeeList[0]);
   private selectedUser = new BehaviorSubject<Employee>(employeeList[0]);
   private currentDate = new BehaviorSubject<Moment>(moment().startOf('day'));
   private dayType = new BehaviorSubject<DayType>(DayType.COMMON);
@@ -31,15 +31,15 @@ export class ContextStoreService {
     this.dayType.next(dayType);
   }
 
-  public getCurrentUser$(): Observable<string> {
+  public getCurrentUser$(): Observable<Employee> {
     return this.currentUser;
   }
 
-  public getCurrentUser(): string {
+  public getCurrentUser(): Employee {
     return this.currentUser.getValue();
   }
 
-  public setCurrentUser(user: string) {
+  public setCurrentUser(user: Employee) {
     this.currentUser.next(user);
   }
 
