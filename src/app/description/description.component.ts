@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { TaskModel } from 'src/app/models/tasks.models';
 import { AgendaColors } from 'src/app/shared/const/agenda-colors.const';
+import { CrudService } from 'src/app/shared/services/crud.service';
 import { ContextStoreService } from 'src/app/store/context-store.service';
 import { TasksService } from '../shared/services/tasks.service';
 import { TasksStoreService } from '../store/tasks-store.service';
@@ -19,12 +20,14 @@ export class DescriptionComponent implements OnInit {
   form: FormGroup;
   options: any[];
   tasks$: Observable<TaskModel[]>;
+  displayedColumns: string[];
 
   constructor(
     private contextStoreService: ContextStoreService,
     private tasksService: TasksService,
     private tasksStoreService: TasksStoreService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private crudService: CrudService
   ) {}
 
   ngOnInit() {
@@ -36,6 +39,8 @@ export class DescriptionComponent implements OnInit {
     });
     this.getInfoFromStore();
     this.options = AgendaColors;
+    this.displayedColumns = ['dateStart', 'id', 'timeStamp'];
+    this.tasks$ = this.crudService.getTasks();
   }
 
   public addTask(): void {
