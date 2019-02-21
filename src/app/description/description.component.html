@@ -45,41 +45,4 @@
 
 </form>
 
-
-<div class="wrapper">
-  <table mat-table
-    [dataSource]="(tasks$ | async)"
-    class="mat-elevation-z8">
-
-
-    <!-- Position Column -->
-    <ng-container matColumnDef="dateStart">
-      <th mat-header-cell
-        *matHeaderCellDef>Дата</th>
-      <td mat-cell
-        *matCellDef="let element"> {{element.dateStart | datePipe:'D MMMM YYYY'}} </td>
-    </ng-container>
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="id">
-      <th mat-header-cell
-        *matHeaderCellDef>Причина отсутствия</th>
-      <td mat-cell
-        *matCellDef="let element"> {{element.id}} </td>
-    </ng-container>
-
-    <!-- Name Column -->
-    <ng-container matColumnDef="timeStamp">
-      <th mat-header-cell
-        *matHeaderCellDef>Дата записи</th>
-      <td mat-cell
-        *matCellDef="let element"> {{element.timeStamp| datePipe:'D MMMM YYYY'}} </td>
-    </ng-container>
-
-
-    <tr mat-header-row
-      *matHeaderRowDef="displayedColumns ;sticky: true"></tr>
-    <tr mat-row
-      *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
-</div>
+<app-description-table></app-description-table>

@@ -25,6 +25,7 @@ import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { PresenceComponent } from './presence/presence.component';
 import { TeamComponent } from './team/team.component';
+import { DescriptionTableComponent } from './description/description-table/description-table.component';
 
 registerLocaleData(localeRu);
 moment.locale('ru');
@@ -39,7 +40,8 @@ moment.locale('ru');
     FooterComponent,
     CurrentDayComponent,
     TeamComponent,
-    PresenceComponent
+    PresenceComponent,
+    DescriptionTableComponent
   ],
   imports: [
     BrowserModule,
