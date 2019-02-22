@@ -20,12 +20,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CalendarComponent } from './calendar/calendar.component';
 import { CurrentDayComponent } from './current-day/current-day.component';
+import { DescriptionTableComponent } from './description/description-table/description-table.component';
 import { DescriptionComponent } from './description/description.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { PresenceComponent } from './presence/presence.component';
+import { TaskApiInMemoryService } from './services/impl/task-api-in-memory.service';
+import { TaskApiService } from './services/task-api.service';
 import { TeamComponent } from './team/team.component';
-import { DescriptionTableComponent } from './description/description-table/description-table.component';
 
 registerLocaleData(localeRu);
 moment.locale('ru');
@@ -61,7 +63,12 @@ moment.locale('ru');
     RouterModule
   ],
   exports: [],
-  providers: [DatePipe, { provide: MAT_DATE_LOCALE, useValue: 'ru-RU' }, { provide: LOCALE_ID, useValue: 'ru' }],
+  providers: [
+    DatePipe,
+    { provide: MAT_DATE_LOCALE, useValue: 'ru-RU' },
+    { provide: LOCALE_ID, useValue: 'ru' },
+    { provide: TaskApiService, useClass: TaskApiInMemoryService }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

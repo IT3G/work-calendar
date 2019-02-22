@@ -4,13 +4,13 @@ import { NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Moment } from 'moment';
 import { Observable } from 'rxjs';
 import { TaskModel } from 'src/app/models/tasks.models';
+import { TaskApiService } from 'src/app/services/task-api.service';
+import { DayType } from 'src/app/shared/const/day-type.const';
 import { DateConvertService } from 'src/app/shared/services/date-convert.service';
+import { TasksService } from 'src/app/shared/services/tasks.service';
 import { ContextStoreService } from 'src/app/store/context-store.service';
+import { TasksStoreService } from 'src/app/store/tasks-store.service';
 import { AppRoutingModule } from '../app-routing.module';
-import { TaskRepositoryService } from '../task-repository.service';
-import { DayType } from './../shared/const/day-type.const';
-import { TasksService } from './../shared/services/tasks.service';
-import { TasksStoreService } from './../store/tasks-store.service';
 
 @Component({
   selector: 'app-calendar',
@@ -24,7 +24,7 @@ export class CalendarComponent implements OnInit {
     private tasksStoreService: TasksStoreService,
     private router: Router,
     private teaksService: TasksService,
-    private taskRepositoryService: TaskRepositoryService
+    private taskApiService: TaskApiService
   ) {}
 
   @Input() task: TaskModel;
@@ -50,7 +50,7 @@ export class CalendarComponent implements OnInit {
     //   }
     // ]);
 
-    this.taskRepositoryService.loadTasks(this.contextStoreService.getSelectedUser());
+    this.taskApiService.loadTasks(this.contextStoreService.getSelectedUser());
 
     this.contextStoreService
       .getCurrentDate$()

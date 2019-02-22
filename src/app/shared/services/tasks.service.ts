@@ -5,13 +5,13 @@ import { TasksStoreService } from 'src/app/store/tasks-store.service';
 import { DayType } from '../const/day-type.const';
 import { Employee } from 'src/app/models/employee.model';
 import * as moment from 'moment';
-import { TaskRepositoryService } from 'src/app/task-repository.service';
+import { TaskApiService } from 'src/app/services/task-api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TasksService {
-  constructor(private tasksStoreService: TasksStoreService, private taskRepositoryService: TaskRepositoryService) {}
+  constructor(private tasksStoreService: TasksStoreService, private taskApiService: TaskApiService) {}
 
   addTask(employee: Employee, type: DayType, date: Moment) {
     // const dtStr = date.format('L');
@@ -30,12 +30,12 @@ export class TasksService {
       employeeId: employee.id
     };
 
-    this.taskRepositoryService.addOrUpdateTask(newTask);
+    this.taskApiService.addOrUpdateTask(newTask);
 
     // if (found) {
-    //   this.taskRepositoryService.updateTask(found, newTask);
+    //   this.taskApiService.updateTask(found, newTask);
     // } else {
-    //   this.taskRepositoryService.saveTask(newTask);
+    //   this.taskApiService.saveTask(newTask);
     // }
 
     // this.tasksStoreService.addTasks([...newTasks, newTask]);

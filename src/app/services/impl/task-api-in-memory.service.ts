@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { TaskModel } from './models/tasks.models';
-import { Employee } from './models/employee.model';
-import { TasksStoreService } from './store/tasks-store.service';
-import { DayType } from './shared/const/day-type.const';
 import * as moment from 'moment';
+import { TaskApiService } from '../task-api.service';
+import { TaskModel } from 'src/app/models/tasks.models';
+import { TasksStoreService } from 'src/app/store/tasks-store.service';
+import { Employee } from 'src/app/models/employee.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TaskRepositoryService {
+export class TaskApiInMemoryService implements TaskApiService {
   private _tasks: TaskModel[] = [];
 
   constructor(private tasksStoreService: TasksStoreService) {}
