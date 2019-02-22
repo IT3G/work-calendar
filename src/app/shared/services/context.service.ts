@@ -7,7 +7,5 @@ import { ContextStoreService } from 'src/app/store/context-store.service';
 export class ContextService {
   constructor(private contextStoreService: ContextStoreService) {}
 
-  public initDefault() {
-    //this.contextStoreService.
-  }
+  public initDefault() {}
 }

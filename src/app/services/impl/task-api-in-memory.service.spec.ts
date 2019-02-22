@@ -1,12 +1,11 @@
 import { TestBed } from '@angular/core/testing';
-
-import { TaskRepositoryService } from './task-repository.service';
+import { TaskApiInMemoryService } from './task-api-in-memory.service';
 
 describe('TaskDataserviceService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: TaskRepositoryService = TestBed.get(TaskRepositoryService);
+    const service: TaskApiInMemoryService = TestBed.get(TaskApiInMemoryService);
     expect(service).toBeTruthy();
   });
 });

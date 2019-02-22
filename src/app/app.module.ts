@@ -23,6 +23,8 @@ import localeRu from '@angular/common/locales/ru';
 import { TeamComponent } from './team/team.component';
 import { PresenceComponent } from './presence/presence.component';
 import * as moment from 'moment';
+import { TaskApiInMemoryService } from './services/impl/task-api-in-memory.service';
+import { TaskApiService } from './services/task-api.service';
 
 registerLocaleData(localeRu);
 moment.locale('ru');
@@ -55,7 +57,12 @@ moment.locale('ru');
     RouterModule
   ],
   exports: [],
-  providers: [DatePipe, { provide: MAT_DATE_LOCALE, useValue: 'ru-RU' }, { provide: LOCALE_ID, useValue: 'ru' }],
+  providers: [
+    DatePipe,
+    { provide: MAT_DATE_LOCALE, useValue: 'ru-RU' },
+    { provide: LOCALE_ID, useValue: 'ru' },
+    { provide: TaskApiService, useClass: TaskApiInMemoryService }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

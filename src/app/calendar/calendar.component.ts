@@ -12,7 +12,7 @@ import * as moment from 'moment';
 import { Router } from '@angular/router';
 import { AppRoutingModule } from '../app-routing.module';
 import { Employee } from '../models/employee.model';
-import { TaskRepositoryService } from '../task-repository.service';
+import { TaskApiService } from '../services/task-api.service';
 
 @Component({
   selector: 'app-calendar',
@@ -26,7 +26,7 @@ export class CalendarComponent implements OnInit {
     private tasksStoreService: TasksStoreService,
     private router: Router,
     private teaksService: TasksService,
-    private taskRepositoryService: TaskRepositoryService
+    private taskApiService: TaskApiService
   ) {}
 
   @Input() task: TaskModel;
@@ -52,7 +52,7 @@ export class CalendarComponent implements OnInit {
     //   }
     // ]);
 
-    this.taskRepositoryService.loadTasks(this.contextStoreService.getSelectedUser());
+    this.taskApiService.loadTasks(this.contextStoreService.getSelectedUser());
 
     this.contextStoreService
       .getCurrentDate$()
