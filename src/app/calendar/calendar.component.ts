@@ -83,6 +83,8 @@ export class CalendarComponent implements OnInit {
   }
 
   getDayType(dt: Moment): DayType {
+    if (this.tasks.length) {
+    }
     const existedTask = this.tasks.find(i => i.date.isSame(dt));
 
     let dayType = DayType.COMMON;

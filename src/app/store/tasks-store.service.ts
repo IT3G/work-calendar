@@ -1,8 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { shareReplay, filter } from 'rxjs/operators';
+import { shareReplay } from 'rxjs/operators';
 import { TaskModel } from '../models/tasks.models';
-import { Employee } from '../models/employee.model';
 
 @Injectable({
   providedIn: 'root'

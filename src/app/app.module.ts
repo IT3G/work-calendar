@@ -2,6 +2,7 @@ import { CommonModule, registerLocaleData } from '@angular/common';
 import localeRu from '@angular/common/locales/ru';
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
+import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DATE_LOCALE } from '@angular/material';
@@ -11,6 +12,7 @@ import { RouterModule } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
+import { TaskApiInFireBaseService } from 'src/app/services/impl/task-api-in-firebase.service';
 import { DatePipe } from 'src/app/shared/pipes/date.pipe';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { fireBaseConfigEnvironment } from 'src/environments/firebaseConfig';
@@ -25,7 +27,6 @@ import { DescriptionComponent } from './description/description.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { PresenceComponent } from './presence/presence.component';
-import { TaskApiInMemoryService } from './services/impl/task-api-in-memory.service';
 import { TaskApiService } from './services/task-api.service';
 import { TeamComponent } from './team/team.component';
 
@@ -60,6 +61,7 @@ moment.locale('ru');
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     AngularFireModule.initializeApp(fireBaseConfigEnvironment.firebaseConfig),
     AngularFirestoreModule,
+    AngularFireDatabaseModule,
     RouterModule
   ],
   exports: [],
@@ -67,7 +69,7 @@ moment.locale('ru');
     DatePipe,
     { provide: MAT_DATE_LOCALE, useValue: 'ru-RU' },
     { provide: LOCALE_ID, useValue: 'ru' },
-    { provide: TaskApiService, useClass: TaskApiInMemoryService }
+    { provide: TaskApiService, useClass: TaskApiInFireBaseService }
   ],
   bootstrap: [AppComponent]
 })

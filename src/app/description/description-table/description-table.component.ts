@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { TaskModel } from 'src/app/models/tasks.models';
-import { CrudService } from 'src/app/shared/services/crud.service';
+import { DayType } from 'src/app/shared/const/day-type.const';
+import { TasksStoreService } from 'src/app/store/tasks-store.service';
 
 @Component({
   selector: 'app-description-table',
@@ -11,10 +12,14 @@ import { CrudService } from 'src/app/shared/services/crud.service';
 export class DescriptionTableComponent implements OnInit {
   tasks$: Observable<TaskModel[]>;
   displayedColumns: string[];
-  constructor(private crudService: CrudService) {}
+  constructor(private tasksStoreService: TasksStoreService) {}
 
   ngOnInit() {
-    this.displayedColumns = ['dateStart', 'id', 'timeStamp'];
-    this.tasks$ = this.crudService.getTasks();
+    this.displayedColumns = ['date', 'type'];
+    this.tasks$ = this.tasksStoreService.getTasks$();
+  }
+
+  public getTitle(id: number): string {
+    return DayType[id];
   }
 }
