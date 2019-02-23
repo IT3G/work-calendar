@@ -1,18 +1,16 @@
-import { TasksService } from './../shared/services/tasks.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Moment } from 'moment';
 import { Observable } from 'rxjs';
 import { TaskModel } from 'src/app/models/tasks.models';
+import { TaskApiService } from 'src/app/services/task-api.service';
+import { DayType } from 'src/app/shared/const/day-type.const';
 import { DateConvertService } from 'src/app/shared/services/date-convert.service';
+import { TasksService } from 'src/app/shared/services/tasks.service';
 import { ContextStoreService } from 'src/app/store/context-store.service';
-import { DayType } from './../shared/const/day-type.const';
-import { TasksStoreService } from './../store/tasks-store.service';
-import * as moment from 'moment';
-import { Router } from '@angular/router';
+import { TasksStoreService } from 'src/app/store/tasks-store.service';
 import { AppRoutingModule } from '../app-routing.module';
-import { Employee } from '../models/employee.model';
-import { TaskApiService } from '../services/task-api.service';
 
 @Component({
   selector: 'app-calendar',
@@ -85,6 +83,8 @@ export class CalendarComponent implements OnInit {
   }
 
   getDayType(dt: Moment): DayType {
+    if (this.tasks.length) {
+    }
     const existedTask = this.tasks.find(i => i.date.isSame(dt));
 
     let dayType = DayType.COMMON;
@@ -101,7 +101,6 @@ export class CalendarComponent implements OnInit {
   chooseClass(date: NgbDateStruct): string {
     const dt = this.dateConvertService.convertNgbDateToMoment(date);
     const dayType = DayType[this.getDayType(dt)];
-
     return `type_${dayType}`;
   }
 }

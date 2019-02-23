@@ -7,10 +7,8 @@ import { TestDataService } from './test-data.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  title = 'work-calendar';
-
   constructor(private testDataService: TestDataService) {}
-
+  title = 'work-calendar';
   ngOnInit(): void {
     this.testDataService.initTestData();
   }
