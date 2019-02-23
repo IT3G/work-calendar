@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, NavigationStart } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -6,7 +8,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  constructor() {}
+  constructor(private router: Router) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log('constructed');
+    this.router.events.pipe(filter(event => event instanceof NavigationStart)).subscribe((
+      event /*: NavigationStart*/
+    ) => {
+      // You only receive NavigationStart events
+      console.log(event);
+    });
+  }
 }

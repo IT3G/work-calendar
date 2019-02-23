@@ -19,6 +19,6 @@ export class TeamComponent implements OnInit {
   }
 
   public selectMember(employee: Employee) {
-    this.contextStoreService.setSelectedUser(employee);
+    // this.contextStoreService.setSelectedUser(employee);
   }
 }

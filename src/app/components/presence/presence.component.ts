@@ -1,6 +1,7 @@
 import { ContextStoreService } from './../../store/context-store.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ContextService } from 'src/app/services/context.service';
 
 @Component({
   selector: 'app-presence',
@@ -8,15 +9,29 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./presence.component.scss']
 })
 export class PresenceComponent implements OnInit, OnDestroy {
-  constructor(private route: ActivatedRoute, private contextStoreService: ContextStoreService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private contextStoreService: ContextStoreService,
+    private contextService: ContextService
+  ) {}
 
   id: string;
   private sub: any;
 
   ngOnInit() {
-    this.id = this.route.snapshot.params.id
-      ? this.route.snapshot.params.id
-      : this.contextStoreService.getSelectedUser();
+    if (this.route.snapshot.params.id) {
+      this.id = this.route.snapshot.params.id;
+      this.contextService.selectUser(Number(this.id));
+    } else {
+      this.id = this.contextStoreService.getSelectedUser().id.toString();
+    }
+
+    // this.id = this.route.snapshot.params.id
+    //   ? this.route.snapshot.params.id
+    //   : this.contextStoreService.getSelectedUser();
+
+    //      contextStoreService
+
     // this.sub = this.route.params.subscribe(params => {
     //   this.id = +params['id']; // (+) converts string 'id' to a number
     //   alert(this.id);

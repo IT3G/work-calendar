@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { EmployeeApiService } from './services/employee-api.service';
 import { ContextStoreService } from './store/context-store.service';
 import { EmployeeStoreService } from './store/employee-store.service';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AppLoadService {
@@ -14,19 +15,20 @@ export class AppLoadService {
   initializeApp(): Promise<any> {
     return new Promise((resolve, reject) => {
       console.log(`initializeApp:: inside promise`);
+
+      // TODO: Observable pipe
       this.employeeApiService.load();
       this.contextStoreService.setCurrentUser(this.employeeStoreService.getEmployees()[0]);
       this.contextStoreService.setSelectedUser(this.employeeStoreService.getEmployees()[0]);
 
       // APP_SETTINGS.connectionString = settings[0].value;
 
-      resolve();
+      // resolve();
 
-      // setTimeout(() => {
-      //   console.log(`initializeApp:: inside setTimeout`);
-
-      //   resolve();
-      // }, 3000);
+      setTimeout(() => {
+        console.log(`initializeApp:: inside setTimeout`);
+        resolve();
+      }, 1000);
     });
   }
 }
