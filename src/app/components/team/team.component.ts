@@ -1,9 +1,8 @@
-import { Employee } from './../models/employee.model';
+import { Employee } from './../../models/employee.model';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { EmployeeStoreService } from '../store/employee-store.service';
-import { Router } from '@angular/router';
-import { ContextStoreService } from '../store/context-store.service';
+import { EmployeeStoreService } from '../../store/employee-store.service';
+import { ContextStoreService } from '../../store/context-store.service';
 
 @Component({
   selector: 'app-team',

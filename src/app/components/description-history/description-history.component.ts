@@ -5,11 +5,11 @@ import { DayType } from 'src/app/shared/const/day-type.const';
 import { TasksStoreService } from 'src/app/store/tasks-store.service';
 
 @Component({
-  selector: 'app-description-table',
-  templateUrl: './description-table.component.html',
-  styleUrls: ['./description-table.component.scss']
+  selector: 'app-description-history',
+  templateUrl: './description-history.component.html',
+  styleUrls: ['./description-history.component.scss']
 })
-export class DescriptionTableComponent implements OnInit {
+export class DescriptionHistoryComponent implements OnInit {
   tasks$: Observable<TaskModel[]>;
   displayedColumns: string[];
   constructor(private tasksStoreService: TasksStoreService) {}

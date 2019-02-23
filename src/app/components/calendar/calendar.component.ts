@@ -10,7 +10,7 @@ import { DateConvertService } from 'src/app/shared/services/date-convert.service
 import { TasksService } from 'src/app/shared/services/tasks.service';
 import { ContextStoreService } from 'src/app/store/context-store.service';
 import { TasksStoreService } from 'src/app/store/tasks-store.service';
-import { AppRoutingModule } from '../app-routing.module';
+import { AppRoutingModule } from '../../app-routing.module';
 
 @Component({
   selector: 'app-calendar',

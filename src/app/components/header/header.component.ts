@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { ContextStoreService } from '../store/context-store.service';
-import { AppRoutingModule } from '../app-routing.module';
-import { Employee } from '../models/employee.model';
+import { ContextStoreService } from '../../store/context-store.service';
+import { AppRoutingModule } from '../../app-routing.module';
+import { Employee } from '../../models/employee.model';
 
 @Component({
   selector: 'app-header',

@@ -5,8 +5,8 @@ import * as moment from 'moment';
 import { filter } from 'rxjs/operators';
 import { AgendaColors } from 'src/app/shared/const/agenda-colors.const';
 import { ContextStoreService } from 'src/app/store/context-store.service';
-import { TasksService } from '../shared/services/tasks.service';
-import { TasksStoreService } from '../store/tasks-store.service';
+import { TasksService } from '../../shared/services/tasks.service';
+import { TasksStoreService } from '../../store/tasks-store.service';
 
 @Component({
   selector: 'app-description',

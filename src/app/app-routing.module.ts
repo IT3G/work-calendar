@@ -1,7 +1,7 @@
-import { PresenceComponent } from './presence/presence.component';
+import { PresenceComponent } from './components/presence/presence.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, Router } from '@angular/router';
-import { TeamComponent } from './team/team.component';
+import { TeamComponent } from './components/team/team.component';
 
 const swipebleRoutes: string[] = ['/presence', '/team'];
 

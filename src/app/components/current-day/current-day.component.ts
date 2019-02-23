@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ContextStoreService } from 'src/app/store/context-store.service';
-import { Employee } from '../models/employee.model';
+import { Employee } from '../../models/employee.model';
 
 @Component({
   selector: 'app-current-day',

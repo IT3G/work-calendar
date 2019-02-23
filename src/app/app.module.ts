@@ -17,18 +17,18 @@ import { DatePipe } from 'src/app/shared/pipes/date.pipe';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { fireBaseConfigEnvironment } from 'src/environments/firebaseConfig';
 import { environment } from '../environments/environment';
-import { AgendaComponent } from './agenda/agenda.component';
+import { AgendaComponent } from './components/agenda/agenda.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { CalendarComponent } from './calendar/calendar.component';
-import { CurrentDayComponent } from './current-day/current-day.component';
-import { DescriptionTableComponent } from './description/description-table/description-table.component';
-import { DescriptionComponent } from './description/description.component';
-import { FooterComponent } from './footer/footer.component';
-import { HeaderComponent } from './header/header.component';
-import { PresenceComponent } from './presence/presence.component';
+import { CalendarComponent } from './components/calendar/calendar.component';
+import { CurrentDayComponent } from './components/current-day/current-day.component';
+import { DescriptionHistoryComponent } from './components/description-history/description-history.component';
+import { DescriptionComponent } from './components/description/description.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { HeaderComponent } from './components/header/header.component';
+import { PresenceComponent } from './components/presence/presence.component';
 import { TaskApiService } from './services/task-api.service';
-import { TeamComponent } from './team/team.component';
+import { TeamComponent } from './components/team/team.component';
 import { EmployeeApiInMemoryService } from './services/impl/employee-api-in-memory.service';
 import { EmployeeApiService } from './services/employee-api.service';
 import { AppLoadService } from './app-load.service';
@@ -51,7 +51,7 @@ function onInit(appLoadService: AppLoadService) {
     CurrentDayComponent,
     TeamComponent,
     PresenceComponent,
-    DescriptionTableComponent
+    DescriptionHistoryComponent
   ],
   imports: [
     BrowserModule,
