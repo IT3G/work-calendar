@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { TestDataService } from './test-data.service';
 
 @Component({
   selector: 'app-root',
@@ -7,9 +6,7 @@ import { TestDataService } from './test-data.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  constructor(private testDataService: TestDataService) {}
-  title = 'work-calendar';
-  ngOnInit(): void {
-    this.testDataService.initTestData();
-  }
+  constructor() {}
+
+  ngOnInit(): void {}
 }

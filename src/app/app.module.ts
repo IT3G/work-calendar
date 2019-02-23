@@ -1,9 +1,9 @@
 import { CommonModule, registerLocaleData } from '@angular/common';
 import localeRu from '@angular/common/locales/ru';
-import { LOCALE_ID, NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule, APP_INITIALIZER } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFirestoreModule, FirestoreSettingsToken } from '@angular/fire/firestore';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DATE_LOCALE } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
@@ -29,9 +29,16 @@ import { HeaderComponent } from './header/header.component';
 import { PresenceComponent } from './presence/presence.component';
 import { TaskApiService } from './services/task-api.service';
 import { TeamComponent } from './team/team.component';
+import { EmployeeApiInMemoryService } from './services/impl/employee-api-in-memory.service';
+import { EmployeeApiService } from './services/employee-api.service';
+import { AppLoadService } from './app-load.service';
 
 registerLocaleData(localeRu);
 moment.locale('ru');
+
+function onInit(appLoadService: AppLoadService) {
+  return () => appLoadService.initializeApp();
+}
 
 @NgModule({
   declarations: [
@@ -69,7 +76,11 @@ moment.locale('ru');
     DatePipe,
     { provide: MAT_DATE_LOCALE, useValue: 'ru-RU' },
     { provide: LOCALE_ID, useValue: 'ru' },
-    { provide: TaskApiService, useClass: TaskApiInFireBaseService }
+    { provide: TaskApiService, useClass: TaskApiInFireBaseService },
+    { provide: FirestoreSettingsToken, useValue: {} },
+    { provide: EmployeeApiService, useClass: EmployeeApiInMemoryService },
+    AppLoadService,
+    { provide: APP_INITIALIZER, useFactory: onInit, deps: [AppLoadService], multi: true }
   ],
   bootstrap: [AppComponent]
 })
