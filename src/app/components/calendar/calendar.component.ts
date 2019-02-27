@@ -61,14 +61,6 @@ export class CalendarComponent implements OnInit {
     });
   }
 
-  onSwipe(evt) {
-    const toRight = Math.abs(evt.deltaX) > 40 && evt.deltaX > 0;
-    const increment = toRight === true ? -1 : 1;
-
-    const nextRoute = AppRoutingModule.getNext(this.router, increment);
-    this.router.navigate([nextRoute]);
-  }
-
   public onDateSelect(date: NgbDateStruct) {
     this.selectedDate = date;
     const dt = this.dateConvertService.convertNgbDateToMoment(date);

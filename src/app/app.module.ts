@@ -36,7 +36,7 @@ import { AppLoadService } from './app-load.service';
 registerLocaleData(localeRu);
 moment.locale('ru');
 
-function onInit(appLoadService: AppLoadService) {
+export function onInit(appLoadService: AppLoadService) {
   return () => appLoadService.initializeApp();
 }
 
