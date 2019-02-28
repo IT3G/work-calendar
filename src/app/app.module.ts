@@ -1,7 +1,8 @@
 import { CommonModule, registerLocaleData } from '@angular/common';
 import localeRu from '@angular/common/locales/ru';
-import { LOCALE_ID, NgModule, APP_INITIALIZER } from '@angular/core';
+import { APP_INITIALIZER, LOCALE_ID, NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFirestoreModule, FirestoreSettingsToken } from '@angular/fire/firestore';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -12,14 +13,16 @@ import { RouterModule } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
+import { RegistryPageComponent } from 'src/app/components/registry-page/registry-page.component';
 import { TaskApiInFireBaseService } from 'src/app/services/impl/task-api-in-firebase.service';
 import { DatePipe } from 'src/app/shared/pipes/date.pipe';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { fireBaseConfigEnvironment } from 'src/environments/firebaseConfig';
 import { environment } from '../environments/environment';
-import { AgendaComponent } from './components/agenda/agenda.component';
+import { AppLoadService } from './app-load.service';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { AgendaComponent } from './components/agenda/agenda.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { CurrentDayComponent } from './components/current-day/current-day.component';
 import { DescriptionHistoryComponent } from './components/description-history/description-history.component';
@@ -27,11 +30,11 @@ import { DescriptionComponent } from './components/description/description.compo
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import { PresenceComponent } from './components/presence/presence.component';
-import { TaskApiService } from './services/task-api.service';
 import { TeamComponent } from './components/team/team.component';
-import { EmployeeApiInMemoryService } from './services/impl/employee-api-in-memory.service';
 import { EmployeeApiService } from './services/employee-api.service';
-import { AppLoadService } from './app-load.service';
+import { EmployeeApiInMemoryService } from './services/impl/employee-api-in-memory.service';
+import { TaskApiService } from './services/task-api.service';
+import { LoginPageComponent } from './components/login-page/login-page.component';
 
 registerLocaleData(localeRu);
 moment.locale('ru');
@@ -51,7 +54,9 @@ export function onInit(appLoadService: AppLoadService) {
     CurrentDayComponent,
     TeamComponent,
     PresenceComponent,
-    DescriptionHistoryComponent
+    DescriptionHistoryComponent,
+    RegistryPageComponent,
+    LoginPageComponent
   ],
   imports: [
     BrowserModule,
@@ -69,6 +74,7 @@ export function onInit(appLoadService: AppLoadService) {
     AngularFireModule.initializeApp(fireBaseConfigEnvironment.firebaseConfig),
     AngularFirestoreModule,
     AngularFireDatabaseModule,
+    AngularFireAuthModule,
     RouterModule
   ],
   exports: [],

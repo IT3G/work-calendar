@@ -1,0 +1,10 @@
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 90px);
+  transform: translateY(-20px);
+}
+.login-form {
+  text-align: center;
+}
