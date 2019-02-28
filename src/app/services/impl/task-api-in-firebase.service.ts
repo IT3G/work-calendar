@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase } from '@angular/fire/database';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import * as moment from 'moment';
 import { Employee } from 'src/app/models/employee.model';
@@ -7,85 +6,63 @@ import { TaskModel } from 'src/app/models/tasks.models';
 import { ContextStoreService } from 'src/app/store/context-store.service';
 import { TasksStoreService } from 'src/app/store/tasks-store.service';
 import { TaskApiService } from '../task-api.service';
+import * as firebase from 'firebase';
+import * as _ from 'lodash';
+import { DayType } from 'src/app/shared/const/day-type.const';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TaskApiInFireBaseService implements TaskApiService {
-  private _tasks: TaskModel[] = [];
-  private tasksRef: AngularFirestoreCollection<any>;
   constructor(
     private tasksStoreService: TasksStoreService,
     private db: AngularFirestore,
-    private contextStoreService: ContextStoreService,
-    private db1: AngularFireDatabase
+    private contextStoreService: ContextStoreService
   ) {}
 
-  public addOrUpdateTask(task: TaskModel) {
-    const dtStr = task.date.format('L');
-    const found = this._tasks.find(o => o.date.format('L') === dtStr && o.employeeId === task.employeeId);
+  public addTask(task: TaskModel) {
+    const obj = {
+      date: new Date(task.date.toDate()),
+      type: DayType[task.type],
+      id: task.id,
+      comment: task.comment,
+      employeeId: task.employeeId,
+      dtCreated: firebase.firestore.FieldValue.serverTimestamp(),
+      userCreated: this.contextStoreService.getCurrentUser().id
+    };
 
-    let newTasks: TaskModel[] = this._tasks;
-
-    if (found) {
-      newTasks = this._tasks.filter(o => o !== found);
-      // debugger;
-      // this.addTaskOrUpdate(found, true).then(res => console.log(res));
-    }
-
-    this._tasks = [...newTasks, task];
-    this.addTaskOrUpdate(task).then(res => console.log(res));
+    this.db.collection<any>('tasks').add(obj); // .then(res => console.log(res));
   }
 
   public loadTasks(employee: Employee) {
-    this.getTasks().subscribe(res => {
-      const result = res.map(i => {
-        return {
-          ...i,
-          date: moment(i.date)
-        };
+    this.db
+      .collection('tasks', ref => ref.where('employeeId', '==', this.contextStoreService.getSelectedUser().id))
+      .valueChanges()
+      .subscribe(res => {
+        const result = this.mapToTaskModel(res);
+        this.tasksStoreService.addTasks(result);
       });
-      this.tasksStoreService.addTasks(result);
-    });
   }
 
   public loadAllTasks() {
-    this.getAllTasks().subscribe(res => {
-      const result = res.map(i => {
-        return {
-          ...i,
-          date: moment(i.date)
-        };
+    this.db
+      .collection('tasks')
+      .valueChanges()
+      .subscribe(res => {
+        const result = this.mapToTaskModel(res);
+        this.tasksStoreService.addTasks(result);
       });
-      this.tasksStoreService.addTasks(result);
+  }
+
+  private mapToTaskModel(res: any[]) {
+    const result = res.map(i => {
+      return {
+        ...i,
+        date: moment.unix(i.date.seconds),
+        type: DayType[i.type]
+      };
     });
-  }
-  private addTaskOrUpdate(task: TaskModel, isUpdate?: boolean) {
-    this.tasksRef = this.db.collection('tasks');
-    // if (isUpdate) {
-    //   const itemsRef = this.db1.list('tasks');
-    //   // this.tasksRef = this.db.collection('tasks', ref => ref.where('date', '==', task.date.format()));
-    //   itemsRef.update(task.date.toString(), { displayName: 'New trainer' });
-    // }
-    const obj = {
-      date: task.date.format(),
-      type: task.type,
-      id: task.id,
-      employeeId: task.employeeId
-    };
-
-    return this.tasksRef.add(obj);
-  }
-
-  public getTasks() {
-    this.tasksRef = this.db.collection('tasks', ref =>
-      ref.where('employeeId', '==', this.contextStoreService.getSelectedUser().id)
-    );
-    return this.tasksRef.valueChanges();
-  }
-
-  public getAllTasks() {
-    this.tasksRef = this.db.collection('tasks');
-    return this.tasksRef.valueChanges();
+    const sorted = _.orderBy(result, ['dtCreated'], ['desc']); // most fresh at the end -> can overwrite values from ui multiple times
+    return sorted;
   }
 }

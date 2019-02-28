@@ -13,7 +13,7 @@ import { TaskApiService } from 'src/app/services/task-api.service';
 export class TasksService {
   constructor(private tasksStoreService: TasksStoreService, private taskApiService: TaskApiService) {}
 
-  addTask(employee: Employee, type: DayType, date: Moment) {
+  addTask(employee: Employee, type: DayType, date: Moment, comment: string) {
     // const dtStr = date.format('L');
     // const found = this.tasksStoreService.getTasks().find(o => o.date.format('L') === dtStr);
 
@@ -27,10 +27,11 @@ export class TasksService {
       id: this.tasksStoreService.getTasks().length + 1,
       type: type,
       date: date,
+      comment: comment,
       employeeId: employee.id
     };
 
-    this.taskApiService.addOrUpdateTask(newTask);
+    this.taskApiService.addTask(newTask);
 
     // if (found) {
     //   this.taskApiService.updateTask(found, newTask);

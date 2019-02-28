@@ -18,7 +18,7 @@ export class TaskApiInMemoryService implements TaskApiService {
   //   this.tasksStoreService.addTasks(this._tasks.filter(i => i.employeeId === taskModel.employeeId));
   // }
 
-  public addOrUpdateTask(task: TaskModel) {
+  public addTask(task: TaskModel) {
     const dtStr = task.date.format('L');
     const found = this._tasks.find(o => o.date.format('L') === dtStr && o.employeeId === task.employeeId);
 

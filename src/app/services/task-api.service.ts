@@ -8,7 +8,7 @@ import { TaskModel } from '../models/tasks.models';
 export abstract class TaskApiService {
   constructor() {}
 
-  abstract addOrUpdateTask(task: TaskModel);
+  abstract addTask(task: TaskModel);
 
   abstract loadTasks(employee: Employee);
 
