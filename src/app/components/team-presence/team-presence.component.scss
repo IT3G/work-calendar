@@ -1,0 +1,70 @@
+.days_wrapper {
+  display: flex;
+  border-bottom: 2px solid black;
+}
+.employee_header {
+  width: 120px;
+}
+.day {
+  width: 30px;
+  text-align: center;
+  border-right: 1px solid black;
+}
+.table {
+  width: min-content;
+  margin-top: 40px;
+}
+.month_title {
+  text-align: center;
+}
+.wrapper {
+  width: 100%;
+  padding: 0 20px;
+}
+.buttons__wrapper {
+  display: flex;
+  align-items: center;
+}
+.current-month {
+  margin: 0 15px;
+}
+.row-item {
+  display: flex;
+}
+.title {
+  width: 120px;
+}
+.days_header__wrapper {
+  display: flex;
+}
+.title {
+  border-right: 1px solid black;
+  border-bottom: 1px solid black;
+}
+.days_wrapper-table {
+  display: flex;
+  border-bottom: 1px solid black;
+}
+
+.type_COMMON {
+  background-color: #ffffff;
+}
+.type_CUSTOM {
+  background-color: rgb(144, 202, 249);
+}
+.type_LEFT {
+  background-color: #ef9a9a;
+  color: white;
+}
+.type_VACATION {
+  background-color: #c5e1a5;
+  color: white;
+}
+.type_SICK {
+  background-color: #ffe082;
+}
+.agenda__wrapper {
+  margin-top: 70px;
+  display: flex;
+  justify-content: center;
+}

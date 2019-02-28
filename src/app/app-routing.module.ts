@@ -1,6 +1,7 @@
-import { PresenceComponent } from './components/presence/presence.component';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule, Router } from '@angular/router';
+import { Router, RouterModule, Routes } from '@angular/router';
+import { TeamPresenceComponent } from 'src/app/components/team-presence/team-presence.component';
+import { PresenceComponent } from './components/presence/presence.component';
 import { TeamComponent } from './components/team/team.component';
 
 const swipebleRoutes: string[] = ['/presence', '/team'];
@@ -8,6 +9,7 @@ const swipebleRoutes: string[] = ['/presence', '/team'];
 const routes: Routes = [
   { path: 'team', component: TeamComponent },
   { path: 'presence', component: PresenceComponent },
+  { path: 'team-presence', component: TeamPresenceComponent },
   { path: 'presence/:id', component: PresenceComponent },
   { path: '', redirectTo: 'presence', pathMatch: 'full' }
 ];

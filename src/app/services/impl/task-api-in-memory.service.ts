@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import * as moment from 'moment';
-import { TaskApiService } from '../task-api.service';
+import { Employee } from 'src/app/models/employee.model';
 import { TaskModel } from 'src/app/models/tasks.models';
 import { TasksStoreService } from 'src/app/store/tasks-store.service';
-import { Employee } from 'src/app/models/employee.model';
+import { TaskApiService } from '../task-api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -43,4 +42,6 @@ export class TaskApiInMemoryService implements TaskApiService {
 
     this.tasksStoreService.addTasks(this._tasks.filter(i => i.employeeId === employee.id));
   }
+
+  public loadAllTasks() {}
 }
