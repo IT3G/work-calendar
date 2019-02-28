@@ -49,6 +49,17 @@ export class TaskApiInFireBaseService implements TaskApiService {
     });
   }
 
+  public loadAllTasks() {
+    this.getAllTasks().subscribe(res => {
+      const result = res.map(i => {
+        return {
+          ...i,
+          date: moment(i.date)
+        };
+      });
+      this.tasksStoreService.addTasks(result);
+    });
+  }
   private addTaskOrUpdate(task: TaskModel, isUpdate?: boolean) {
     this.tasksRef = this.db.collection('tasks');
     // if (isUpdate) {
@@ -70,6 +81,11 @@ export class TaskApiInFireBaseService implements TaskApiService {
     this.tasksRef = this.db.collection('tasks', ref =>
       ref.where('employeeId', '==', this.contextStoreService.getSelectedUser().id)
     );
+    return this.tasksRef.valueChanges();
+  }
+
+  public getAllTasks() {
+    this.tasksRef = this.db.collection('tasks');
     return this.tasksRef.valueChanges();
   }
 }

@@ -11,4 +11,6 @@ export abstract class TaskApiService {
   abstract addOrUpdateTask(task: TaskModel);
 
   abstract loadTasks(employee: Employee);
+
+  abstract loadAllTasks();
 }
