@@ -14,6 +14,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { RegistryPageComponent } from 'src/app/components/registry-page/registry-page.component';
+import { TeamPresenceComponent } from 'src/app/components/team-presence/team-presence.component';
 import { TaskApiInFireBaseService } from 'src/app/services/impl/task-api-in-firebase.service';
 import { DatePipe } from 'src/app/shared/pipes/date.pipe';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -29,12 +30,12 @@ import { DescriptionHistoryComponent } from './components/description-history/de
 import { DescriptionComponent } from './components/description/description.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
+import { LoginPageComponent } from './components/login-page/login-page.component';
 import { PresenceComponent } from './components/presence/presence.component';
 import { TeamComponent } from './components/team/team.component';
 import { EmployeeApiService } from './services/employee-api.service';
 import { EmployeeApiInMemoryService } from './services/impl/employee-api-in-memory.service';
 import { TaskApiService } from './services/task-api.service';
-import { LoginPageComponent } from './components/login-page/login-page.component';
 
 registerLocaleData(localeRu);
 moment.locale('ru');
@@ -56,7 +57,8 @@ export function onInit(appLoadService: AppLoadService) {
     PresenceComponent,
     DescriptionHistoryComponent,
     RegistryPageComponent,
-    LoginPageComponent
+    LoginPageComponent,
+    TeamPresenceComponent
   ],
   imports: [
     BrowserModule,

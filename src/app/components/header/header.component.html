@@ -12,6 +12,9 @@
       *ngIf="authService.user | async"
       (click)="selectCurrentUser()">Мое присутствие</a>
     <a class="p-2 text-dark"
+      routerLink="/team-presence"
+      routerLinkActive="active">Присутствие команды</a>
+    <a class="p-2 text-dark"
       routerLink="/team"
       *ngIf="authService.user | async"
       routerLinkActive="active">Команда</a><a class="p-2 text-dark"
@@ -22,8 +25,8 @@
       routerLink="/login"
       *ngIf="!(authService.user | async)"
       routerLinkActive="active">Авторизация</a>
+    <a class="btn btn-outline-primary"
+      routerLink="/login"
+      (click)="logout()">Выйти</a>
   </nav>
-  <a class="btn btn-outline-primary"
-    routerLink="/login"
-    (click)="logout()">Выйти</a>
 </div>

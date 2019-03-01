@@ -6,4 +6,5 @@ export class TaskModel {
   type: DayType;
   date: Moment;
   employeeId: number;
+  comment: string;
 }
