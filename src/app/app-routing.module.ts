@@ -13,7 +13,7 @@ const routes: Routes = [
   { path: 'presence', component: PresenceComponent },
   { path: 'team-presence', component: TeamPresenceComponent },
   { path: 'presence/:id', component: PresenceComponent },
-  { path: 'registry', component: RegistryPageComponent },
+  { path: 'register', component: RegistryPageComponent },
   { path: 'login', component: LoginPageComponent },
   { path: '', redirectTo: 'presence', pathMatch: 'full' }
 ];

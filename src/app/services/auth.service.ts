@@ -20,6 +20,7 @@ export class AuthService {
         .then(
           res => {
             resolve(res);
+            this.router.navigateByUrl('/presence');
           },
           err => reject(err)
         );

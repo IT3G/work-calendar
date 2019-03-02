@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { TaskModel } from 'src/app/models/tasks.models';
 import { DayType } from 'src/app/shared/const/day-type.const';
 import { TasksStoreService } from 'src/app/store/tasks-store.service';
+import { AgendaColors } from 'src/app/shared/const/agenda-colors.const';
 
 @Component({
   selector: 'app-description-history',
@@ -15,11 +16,11 @@ export class DescriptionHistoryComponent implements OnInit {
   constructor(private tasksStoreService: TasksStoreService) {}
 
   ngOnInit() {
-    this.displayedColumns = ['date', 'type'];
+    this.displayedColumns = ['date', 'type', 'comment'];
     this.tasks$ = this.tasksStoreService.getTasks$();
   }
 
   public getTitle(id: number): string {
-    return DayType[id];
+    return AgendaColors.find(o => o.id === id).title;
   }
 }
