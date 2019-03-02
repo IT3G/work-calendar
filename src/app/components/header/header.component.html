@@ -1,18 +1,32 @@
 <div (swipe)="onSwipe($event)"
   class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-  <h5 class="my-0 mr-md-auto font-weight-normal">Привет, {{ (currentUser$ | async).name }}!</h5>
+  <!-- <h5 class="my-0 mr-md-auto font-weight-normal">Привет, {{ (currentUser$ | async).name }}!</h5> -->
+  <h5 class="my-0 mr-md-auto font-weight-normal"
+    *ngIf="authService.user | async">Welcome {{ (authService.user | async)?.email }}!</h5>
+  <h5 class="my-0 mr-md-auto font-weight-normal"
+    *ngIf="!(authService.user | async)">Требуется авторизация</h5>
   <nav class="my-2 my-md-0 mr-md-3">
     <a class="p-2 text-dark"
       routerLink="/presence"
       routerLinkActive="active"
+      *ngIf="authService.user | async"
       (click)="selectCurrentUser()">Мое присутствие</a>
     <a class="p-2 text-dark"
       routerLink="/team-presence"
       routerLinkActive="active">Присутствие команды</a>
     <a class="p-2 text-dark"
       routerLink="/team"
-      routerLinkActive="active">Команда</a>
+      *ngIf="authService.user | async"
+      routerLinkActive="active">Команда</a><a class="p-2 text-dark"
+      routerLink="/registry"
+      *ngIf="!(authService.user | async)"
+      routerLinkActive="active">Регистрация</a>
+    <a class="p-2 text-dark"
+      routerLink="/login"
+      *ngIf="!(authService.user | async)"
+      routerLinkActive="active">Авторизация</a>
+    <a class="btn btn-outline-primary"
+      routerLink="/login"
+      (click)="logout()">Выйти</a>
   </nav>
-  <a class="btn btn-outline-primary"
-    href="#">Выйти</a>
 </div>

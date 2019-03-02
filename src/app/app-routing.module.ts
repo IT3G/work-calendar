@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Router, RouterModule, Routes } from '@angular/router';
+import { LoginPageComponent } from 'src/app/components/login-page/login-page.component';
+import { RegistryPageComponent } from 'src/app/components/registry-page/registry-page.component';
 import { TeamPresenceComponent } from 'src/app/components/team-presence/team-presence.component';
 import { PresenceComponent } from './components/presence/presence.component';
 import { TeamComponent } from './components/team/team.component';
@@ -11,6 +13,8 @@ const routes: Routes = [
   { path: 'presence', component: PresenceComponent },
   { path: 'team-presence', component: TeamPresenceComponent },
   { path: 'presence/:id', component: PresenceComponent },
+  { path: 'registry', component: RegistryPageComponent },
+  { path: 'login', component: LoginPageComponent },
   { path: '', redirectTo: 'presence', pathMatch: 'full' }
 ];
 

@@ -2,6 +2,7 @@ import { CommonModule, registerLocaleData } from '@angular/common';
 import localeRu from '@angular/common/locales/ru';
 import { APP_INITIALIZER, LOCALE_ID, NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFirestoreModule, FirestoreSettingsToken } from '@angular/fire/firestore';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -12,6 +13,7 @@ import { RouterModule } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
+import { RegistryPageComponent } from 'src/app/components/registry-page/registry-page.component';
 import { TeamPresenceComponent } from 'src/app/components/team-presence/team-presence.component';
 import { TaskApiInFireBaseService } from 'src/app/services/impl/task-api-in-firebase.service';
 import { DatePipe } from 'src/app/shared/pipes/date.pipe';
@@ -28,6 +30,7 @@ import { DescriptionHistoryComponent } from './components/description-history/de
 import { DescriptionComponent } from './components/description/description.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
+import { LoginPageComponent } from './components/login-page/login-page.component';
 import { PresenceComponent } from './components/presence/presence.component';
 import { TeamComponent } from './components/team/team.component';
 import { EmployeeApiService } from './services/employee-api.service';
@@ -53,6 +56,8 @@ export function onInit(appLoadService: AppLoadService) {
     TeamComponent,
     PresenceComponent,
     DescriptionHistoryComponent,
+    RegistryPageComponent,
+    LoginPageComponent,
     TeamPresenceComponent
   ],
   imports: [
@@ -71,6 +76,7 @@ export function onInit(appLoadService: AppLoadService) {
     AngularFireModule.initializeApp(fireBaseConfigEnvironment.firebaseConfig),
     AngularFirestoreModule,
     AngularFireDatabaseModule,
+    AngularFireAuthModule,
     RouterModule
   ],
   exports: [],
