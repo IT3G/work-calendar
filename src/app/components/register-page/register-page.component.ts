@@ -4,10 +4,10 @@ import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-registry-page',
-  templateUrl: './registry-page.component.html',
-  styleUrls: ['./registry-page.component.scss']
+  templateUrl: './register-page.component.html',
+  styleUrls: ['./register-page.component.scss']
 })
-export class RegistryPageComponent implements OnInit {
+export class RegisterPageComponent implements OnInit {
   errorMessage: string;
   successMessage: string;
   registryForm = new FormGroup({

@@ -1,18 +1,18 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { PresenceComponent } from './presence.component';
+import { PresencePageComponent } from './presence-page.component';
 
 describe('MyPresenceComponent', () => {
-  let component: PresenceComponent;
-  let fixture: ComponentFixture<PresenceComponent>;
+  let component: PresencePageComponent;
+  let fixture: ComponentFixture<PresencePageComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [PresenceComponent]
+      declarations: [PresencePageComponent]
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PresenceComponent);
+    fixture = TestBed.createComponent(PresencePageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

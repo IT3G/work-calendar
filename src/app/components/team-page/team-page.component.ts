@@ -6,10 +6,10 @@ import { ContextStoreService } from '../../store/context-store.service';
 
 @Component({
   selector: 'app-team',
-  templateUrl: './team.component.html',
-  styleUrls: ['./team.component.scss']
+  templateUrl: './team-page.component.html',
+  styleUrls: ['./team-page.component.scss']
 })
-export class TeamComponent implements OnInit {
+export class TeamPageComponent implements OnInit {
   employees$: Observable<Employee[]>;
 
   constructor(private employeeStoreService: EmployeeStoreService, private contextStoreService: ContextStoreService) {}

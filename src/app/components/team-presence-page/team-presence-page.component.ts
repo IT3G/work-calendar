@@ -12,10 +12,10 @@ import { EmployeeStoreService } from 'src/app/store/employee-store.service';
 import { TasksStoreService } from 'src/app/store/tasks-store.service';
 @Component({
   selector: 'app-team-presence',
-  templateUrl: './team-presence.component.html',
-  styleUrls: ['./team-presence.component.scss']
+  templateUrl: './team-presence-page.component.html',
+  styleUrls: ['./team-presence-page.component.scss']
 })
-export class TeamPresenceComponent implements OnInit {
+export class TeamPresencePageComponent implements OnInit {
   currentMonth: Moment;
   form: FormArray;
   days: Date[];

@@ -13,8 +13,8 @@ import { RouterModule } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
-import { RegistryPageComponent } from 'src/app/components/registry-page/registry-page.component';
-import { TeamPresenceComponent } from 'src/app/components/team-presence/team-presence.component';
+import { RegisterPageComponent } from 'src/app/components/register-page/register-page.component';
+import { TeamPresencePageComponent } from 'src/app/components/team-presence-page/team-presence-page.component';
 import { TaskApiInFireBaseService } from 'src/app/services/impl/task-api-in-firebase.service';
 import { DatePipe } from 'src/app/shared/pipes/date.pipe';
 import { SharedModule } from 'src/app/shared/shared.module';
@@ -31,8 +31,8 @@ import { DescriptionComponent } from './components/description/description.compo
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import { LoginPageComponent } from './components/login-page/login-page.component';
-import { PresenceComponent } from './components/presence/presence.component';
-import { TeamComponent } from './components/team/team.component';
+import { PresencePageComponent } from './components/presence-page/presence-page.component';
+import { TeamPageComponent } from './components/team-page/team-page.component';
 import { EmployeeApiService } from './services/employee-api.service';
 import { EmployeeApiInMemoryService } from './services/impl/employee-api-in-memory.service';
 import { TaskApiService } from './services/task-api.service';
@@ -53,12 +53,12 @@ export function onInit(appLoadService: AppLoadService) {
     HeaderComponent,
     FooterComponent,
     CurrentDayComponent,
-    TeamComponent,
-    PresenceComponent,
+    TeamPageComponent,
+    PresencePageComponent,
     DescriptionHistoryComponent,
-    RegistryPageComponent,
+    RegisterPageComponent,
     LoginPageComponent,
-    TeamPresenceComponent
+    TeamPresencePageComponent
   ],
   imports: [
     BrowserModule,

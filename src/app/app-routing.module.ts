@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { Router, RouterModule, Routes } from '@angular/router';
 import { LoginPageComponent } from 'src/app/components/login-page/login-page.component';
-import { RegistryPageComponent } from 'src/app/components/registry-page/registry-page.component';
-import { TeamPresenceComponent } from 'src/app/components/team-presence/team-presence.component';
-import { PresenceComponent } from './components/presence/presence.component';
-import { TeamComponent } from './components/team/team.component';
+import { RegisterPageComponent } from 'src/app/components/register-page/register-page.component';
+import { TeamPresencePageComponent } from 'src/app/components/team-presence-page/team-presence-page.component';
+import { PresencePageComponent } from './components/presence-page/presence-page.component';
+import { TeamPageComponent } from './components/team-page/team-page.component';
 
 const swipebleRoutes: string[] = ['/presence', '/team'];
 
 const routes: Routes = [
-  { path: 'team', component: TeamComponent },
-  { path: 'presence', component: PresenceComponent },
-  { path: 'team-presence', component: TeamPresenceComponent },
-  { path: 'presence/:id', component: PresenceComponent },
-  { path: 'register', component: RegistryPageComponent },
+  { path: 'team', component: TeamPageComponent },
+  { path: 'presence', component: PresencePageComponent },
+  { path: 'team-presence', component: TeamPresencePageComponent },
+  { path: 'presence/:id', component: PresencePageComponent },
+  { path: 'register', component: RegisterPageComponent },
   { path: 'login', component: LoginPageComponent },
   { path: '', redirectTo: 'presence', pathMatch: 'full' }
 ];

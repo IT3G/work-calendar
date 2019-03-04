@@ -5,10 +5,10 @@ import { ContextService } from 'src/app/services/context.service';
 
 @Component({
   selector: 'app-presence',
-  templateUrl: './presence.component.html',
-  styleUrls: ['./presence.component.scss']
+  templateUrl: './presence-page.component.html',
+  styleUrls: ['./presence-page.component.scss']
 })
-export class PresenceComponent implements OnInit, OnDestroy {
+export class PresencePageComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private contextStoreService: ContextStoreService,
