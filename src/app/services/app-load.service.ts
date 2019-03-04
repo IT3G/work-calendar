@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { EmployeeApiService } from './services/employee-api.service';
-import { ContextStoreService } from './store/context-store.service';
-import { EmployeeStoreService } from './store/employee-store.service';
-import { Router } from '@angular/router';
+import { ContextStoreService } from '../store/context-store.service';
+import { EmployeeStoreService } from '../store/employee-store.service';
+import { EmployeeApiService } from './api/employee-api.service';
 
 @Injectable()
 export class AppLoadService {
@@ -28,7 +27,7 @@ export class AppLoadService {
       setTimeout(() => {
         console.log(`initializeApp:: inside setTimeout`);
         resolve();
-      }, 1000);
+      }, 100);
     });
   }
 }

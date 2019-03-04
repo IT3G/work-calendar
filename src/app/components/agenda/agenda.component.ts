@@ -1,5 +1,5 @@
-import { AgendaColors } from './../../shared/const/agenda-colors.const';
 import { Component, OnInit } from '@angular/core';
+import { AgendaColors } from 'src/app/const/agenda-colors.const';
 
 @Component({
   selector: 'app-agenda',

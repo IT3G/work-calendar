@@ -12,7 +12,7 @@ export class AuthService {
     this.user = afAuth.authState;
   }
 
-  doRegister(value) {
+  register(value) {
     return new Promise<any>((resolve, reject) => {
       firebase
         .auth()

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { EmployeeApiService } from '../employee-api.service';
+import { EmployeeApiService } from '../../employee-api.service';
 import { Employee } from 'src/app/models/employee.model';
 import { EmployeeStoreService } from 'src/app/store/employee-store.service';
 import { ContextStoreService } from 'src/app/store/context-store.service';

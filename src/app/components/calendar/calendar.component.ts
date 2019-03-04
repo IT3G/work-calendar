@@ -4,13 +4,13 @@ import { NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Moment } from 'moment';
 import { Observable } from 'rxjs';
 import { TaskModel } from 'src/app/models/tasks.models';
-import { TaskApiService } from 'src/app/services/task-api.service';
-import { DayType } from 'src/app/shared/const/day-type.const';
-import { DateConvertService } from 'src/app/shared/services/date-convert.service';
-import { TasksService } from 'src/app/shared/services/tasks.service';
+import { TaskApiService } from 'src/app/services/api/task-api.service';
+import { DateConvertService } from 'src/app/services/date-convert.service';
+import { TasksService } from 'src/app/services/tasks.service';
 import { ContextStoreService } from 'src/app/store/context-store.service';
 import { TasksStoreService } from 'src/app/store/tasks-store.service';
 import { AppRoutingModule } from '../../app-routing.module';
+import { DayType } from 'src/app/const/day-type.const';
 
 @Component({
   selector: 'app-calendar',

@@ -1,5 +1,6 @@
 import { Moment } from 'moment';
-import { DayType } from '../shared/const/day-type.const';
+import { Employee } from './employee.model';
+import { DayType } from '../const/day-type.const';
 
 export class TaskModel {
   id: number;
@@ -7,4 +8,6 @@ export class TaskModel {
   date: Moment;
   employeeId: number;
   comment: string;
+  dtCreated: Moment;
+  userCreated: Employee;
 }

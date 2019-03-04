@@ -6,10 +6,10 @@ import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { Employee } from 'src/app/models/employee.model';
 import { TaskModel } from 'src/app/models/tasks.models';
-import { TaskApiService } from 'src/app/services/task-api.service';
-import { DayType } from 'src/app/shared/const/day-type.const';
+import { TaskApiService } from 'src/app/services/api/task-api.service';
 import { EmployeeStoreService } from 'src/app/store/employee-store.service';
 import { TasksStoreService } from 'src/app/store/tasks-store.service';
+import { DayType } from 'src/app/const/day-type.const';
 @Component({
   selector: 'app-team-presence',
   templateUrl: './team-presence-page.component.html',

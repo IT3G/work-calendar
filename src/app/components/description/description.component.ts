@@ -3,10 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { filter } from 'rxjs/operators';
-import { AgendaColors } from 'src/app/shared/const/agenda-colors.const';
 import { ContextStoreService } from 'src/app/store/context-store.service';
-import { TasksService } from '../../shared/services/tasks.service';
+import { TasksService } from '../../services/tasks.service';
 import { TasksStoreService } from '../../store/tasks-store.service';
+import { AgendaColors } from 'src/app/const/agenda-colors.const';
 
 @Component({
   selector: 'app-description',

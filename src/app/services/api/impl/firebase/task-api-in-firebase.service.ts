@@ -5,10 +5,10 @@ import { Employee } from 'src/app/models/employee.model';
 import { TaskModel } from 'src/app/models/tasks.models';
 import { ContextStoreService } from 'src/app/store/context-store.service';
 import { TasksStoreService } from 'src/app/store/tasks-store.service';
-import { TaskApiService } from '../task-api.service';
+import { TaskApiService } from '../../task-api.service';
 import * as firebase from 'firebase';
 import * as _ from 'lodash';
-import { DayType } from 'src/app/shared/const/day-type.const';
+import { DayType } from 'src/app/const/day-type.const';
 
 @Injectable({
   providedIn: 'root'

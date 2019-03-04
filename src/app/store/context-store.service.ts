@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { DayType } from './../shared/const/day-type.const';
 import { Employee } from '../models/employee.model';
+import { DayType } from '../const/day-type.const';
 
 @Injectable({ providedIn: 'root' })
 export class ContextStoreService {
@@ -16,6 +16,10 @@ export class ContextStoreService {
 
   public getCurrentDate$(): Observable<Moment> {
     return this.currentDate;
+  }
+
+  public getCurrentDate(): Moment {
+    return this.currentDate.getValue();
   }
 
   public setCurrentDate(date: Moment) {

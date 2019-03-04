@@ -5,13 +5,18 @@ import { TasksStoreService } from 'src/app/store/tasks-store.service';
 import { DayType } from '../const/day-type.const';
 import { Employee } from 'src/app/models/employee.model';
 import * as moment from 'moment';
-import { TaskApiService } from 'src/app/services/task-api.service';
+import { TaskApiService } from 'src/app/services/api/task-api.service';
+import { ContextStoreService } from 'src/app/store/context-store.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TasksService {
-  constructor(private tasksStoreService: TasksStoreService, private taskApiService: TaskApiService) {}
+  constructor(
+    private tasksStoreService: TasksStoreService,
+    private taskApiService: TaskApiService,
+    private contextStoreService: ContextStoreService
+  ) {}
 
   addTask(employee: Employee, type: DayType, date: Moment, comment: string) {
     // const dtStr = date.format('L');
@@ -28,7 +33,9 @@ export class TasksService {
       type: type,
       date: date,
       comment: comment,
-      employeeId: employee.id
+      employeeId: employee.id,
+      dtCreated: moment(),
+      userCreated: this.contextStoreService.getCurrentUser()
     };
 
     this.taskApiService.addTask(newTask);

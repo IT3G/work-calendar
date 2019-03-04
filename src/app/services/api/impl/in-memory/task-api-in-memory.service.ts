@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Employee } from 'src/app/models/employee.model';
 import { TaskModel } from 'src/app/models/tasks.models';
 import { TasksStoreService } from 'src/app/store/tasks-store.service';
-import { TaskApiService } from '../task-api.service';
+import { TaskApiService } from '../../task-api.service';
 
 @Injectable({
   providedIn: 'root'

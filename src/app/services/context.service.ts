@@ -1,8 +1,8 @@
 import { EmployeeStoreService } from './../store/employee-store.service';
 import { ContextStoreService } from 'src/app/store/context-store.service';
-import { EmployeeService } from './../shared/services/employee.service';
+import { EmployeeService } from './employee.service';
 import { Injectable } from '@angular/core';
-import { EmployeeApiService } from './employee-api.service';
+import { EmployeeApiService } from './api/employee-api.service';
 import { Router, NavigationStart } from '@angular/router';
 
 @Injectable({

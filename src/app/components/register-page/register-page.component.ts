@@ -20,7 +20,7 @@ export class RegisterPageComponent implements OnInit {
   ngOnInit() {}
   tryRegister() {
     const value = this.registryForm.value;
-    this.authService.doRegister(value).then(
+    this.authService.register(value).then(
       res => {
         console.log(res);
         this.errorMessage = '';
