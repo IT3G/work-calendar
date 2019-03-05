@@ -24,7 +24,7 @@
             *ngIf="employeeForm">
             <div *ngFor="let employee of employeeForm.controls"
               class="row-item">
-              <div class="title">{{employee.get('title').value.surname}} {{employee.get('title').value.name[0]}}</div>
+              <a class="title" [routerLink]="['/presence', employee.get('title').value.id]">{{employee.get('title').value.surname}} {{employee.get('title').value.name[0]}}</a>
               <div class="days_wrapper-table">
                 <div class="day"
                   [ngClass]="chooseClass(day.get('type').value)"

@@ -35,7 +35,7 @@ export class TasksService {
       comment: comment,
       employeeId: employee.id,
       dtCreated: moment(),
-      userCreated: this.contextStoreService.getCurrentUser()
+      userCreated: this.contextStoreService.getCurrentUser().id
     };
 
     this.taskApiService.addTask(newTask);

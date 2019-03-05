@@ -9,8 +9,9 @@ import { DayType } from '../const/day-type.const';
 export class ContextStoreService {
   private currentUser = new BehaviorSubject<Employee>(null);
   private selectedUser = new BehaviorSubject<Employee>(null);
-  private currentDate = new BehaviorSubject<Moment>(moment().startOf('day'));
-  private dayType = new BehaviorSubject<DayType>(DayType.COMMON);
+  private currentDate = new BehaviorSubject<Moment>(null);
+  private dayType = new BehaviorSubject<DayType>(null);
+  private comment = new BehaviorSubject<string>(null);
 
   constructor() {}
 
@@ -32,6 +33,14 @@ export class ContextStoreService {
 
   public setDayType(dayType: DayType) {
     this.dayType.next(dayType);
+  }
+
+  public getComment$(): Observable<string> {
+    return this.comment;
+  }
+
+  public setComment(comment: string) {
+    this.comment.next(comment);
   }
 
   public getCurrentUser$(): Observable<Employee> {

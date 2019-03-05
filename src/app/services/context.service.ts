@@ -14,20 +14,10 @@ export class ContextService {
     private router: Router,
     private contextStoreService: ContextStoreService,
     private employeeStoreService: EmployeeStoreService
-  ) {
-    // console.log('constructed');
-    // router.events.pipe(/*filter(event => event instanceof NavigationStart)*/).subscribe((
-    //   event /*: NavigationStart*/
-    // ) => {
-    //   // You only receive NavigationStart events
-    //   console.log(event);
-    // });
-  }
+  ) {}
 
   public selectUser(id: number) {
     const user = this.employeeStoreService.getEmployees().find(i => i.id === id);
-    console.log('fond');
-    console.log(typeof id);
     this.contextStoreService.setSelectedUser(user);
   }
 }

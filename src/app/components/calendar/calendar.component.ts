@@ -11,6 +11,7 @@ import { ContextStoreService } from 'src/app/store/context-store.service';
 import { TasksStoreService } from 'src/app/store/tasks-store.service';
 import { AppRoutingModule } from '../../app-routing.module';
 import { DayType } from 'src/app/const/day-type.const';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-calendar',
@@ -41,23 +42,11 @@ export class CalendarComponent implements OnInit {
   currentDate$: Observable<Moment>;
 
   ngOnInit() {
-    // TODO: Add Init per user
-    // this.tasksStoreService.addTasks([
-    //   {
-    //     id: 1,
-    //     type: DayType.SICK,
-    //     date: moment().startOf('day')
-    //   }
-    // ]);
-
     this.taskApiService.loadTasks(this.contextStoreService.getSelectedUser());
-
-    this.contextStoreService
-      .getCurrentDate$()
-      .subscribe(res => (this.selectedDate = this.dateConvertService.convertMomentToNgbDate(res)));
 
     this.tasksStoreService.getTasks$().subscribe(res => {
       this.tasks = res;
+      this.onDateSelect(this.dateConvertService.convertMomentToNgbDate(this.contextStoreService.getCurrentDate()));
     });
   }
 
@@ -65,8 +54,14 @@ export class CalendarComponent implements OnInit {
     this.selectedDate = date;
     const dt = this.dateConvertService.convertNgbDateToMoment(date);
     this.contextStoreService.setCurrentDate(dt);
-    console.log('setting type ' + this.getDayType(dt));
     this.contextStoreService.setDayType(this.getDayType(dt));
+
+    const existedTask = this.tasks.find(i => i.date.isSame(dt));
+    if (existedTask) {
+      this.contextStoreService.setComment(existedTask.comment);
+    } else {
+      this.contextStoreService.setComment(null);
+    }
   }
 
   dateHasTask(date: NgbDateStruct): boolean {

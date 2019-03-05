@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ContextStoreService } from '../store/context-store.service';
 import { EmployeeStoreService } from '../store/employee-store.service';
 import { EmployeeApiService } from './api/employee-api.service';
+import * as moment from 'moment';
 
 @Injectable()
 export class AppLoadService {
@@ -19,7 +20,7 @@ export class AppLoadService {
       this.employeeApiService.load();
       this.contextStoreService.setCurrentUser(this.employeeStoreService.getEmployees()[0]);
       this.contextStoreService.setSelectedUser(this.employeeStoreService.getEmployees()[0]);
-
+      this.contextStoreService.setCurrentDate(moment().startOf('day'));
       // APP_SETTINGS.connectionString = settings[0].value;
 
       // resolve();

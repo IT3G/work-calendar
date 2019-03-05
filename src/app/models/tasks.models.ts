@@ -9,5 +9,5 @@ export class TaskModel {
   employeeId: number;
   comment: string;
   dtCreated: Moment;
-  userCreated: Employee;
+  userCreated: number;
 }
