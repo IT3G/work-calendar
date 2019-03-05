@@ -4,7 +4,14 @@ import { Employee } from 'src/app/models/employee.model';
 import { EmployeeStoreService } from 'src/app/store/employee-store.service';
 import { ContextStoreService } from 'src/app/store/context-store.service';
 
+const guestUser: Employee = {
+  id: 0,
+  name: 'Г',
+  surname: 'Гость'
+};
+
 const employeeList: Employee[] = [
+  guestUser,
   {
     id: 1,
     name: 'Андрей',
