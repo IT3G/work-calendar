@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { shareReplay, filter } from 'rxjs/operators';
+import { shareReplay } from 'rxjs/operators';
 import { TaskModel } from '../models/tasks.models';
 
 @Injectable({
@@ -16,7 +16,6 @@ export class TasksStoreService implements OnInit {
   }
 
   public getTasks$(): Observable<TaskModel[]> {
-    //return this.tasks$.pipe(filter(i => !!i));
     return this.tasks$;
   }
 
