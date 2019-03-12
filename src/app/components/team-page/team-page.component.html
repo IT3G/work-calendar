@@ -1,0 +1,10 @@
+<mat-nav-list>
+  <a
+    mat-list-item
+    [routerLink]="['/presence', employee.id]"
+    *ngFor="let employee of (employees$ | async)"
+    (click)="selectMember(employee)"
+  >
+    {{ employee.name }} {{ employee.surname }}
+  </a>
+</mat-nav-list>

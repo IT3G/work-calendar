@@ -1,10 +1,31 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Router, RouterModule, Routes } from '@angular/router';
+import { LoginPageComponent } from 'src/app/components/login-page/login-page.component';
+import { RegisterPageComponent } from 'src/app/components/register-page/register-page.component';
+import { TeamPresencePageComponent } from 'src/app/components/team-presence-page/team-presence-page.component';
+import { PresencePageComponent } from './components/presence-page/presence-page.component';
+import { TeamPageComponent } from './components/team-page/team-page.component';
 
-const routes: Routes = [];
+const swipebleRoutes: string[] = ['/presence', '/team'];
+
+const routes: Routes = [
+  { path: 'team', component: TeamPageComponent },
+  { path: 'presence', component: PresencePageComponent },
+  { path: 'team-presence', component: TeamPresencePageComponent },
+  { path: 'presence/:id', component: PresencePageComponent },
+  { path: 'register', component: RegisterPageComponent },
+  { path: 'login', component: LoginPageComponent },
+  { path: '', redirectTo: 'presence', pathMatch: 'full' }
+];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes)],
-    exports: [RouterModule],
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
+  exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+  public static getNext(router: Router, increment: number): string {
+    const current = router.url; // '/presence'
+    const idx = Math.abs(swipebleRoutes.indexOf(current) + increment) % swipebleRoutes.length;
+    return swipebleRoutes[idx];
+  }
+}

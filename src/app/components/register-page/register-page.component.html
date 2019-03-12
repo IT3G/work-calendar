@@ -1,0 +1,26 @@
+<div class="wrapper">
+  <div class="login-form">
+    <div class="form-group">
+      <mat-form-field class="example-full-width">
+        <input matInput
+          placeholder="email"
+          autocomplete="off"
+          [formControl]="registryForm.get('email')">
+      </mat-form-field>
+    </div>
+    <div class="form-group">
+      <mat-form-field class="example-full-width">
+        <input matInput
+          placeholder="password"
+          type="password"
+          autocomplete="off"
+          [formControl]="registryForm.get('password')">
+      </mat-form-field>
+    </div>
+
+    <button type="submit"
+      (click)="tryRegister()"
+      [disabled]="registryForm.invalid"
+      class="btn btn-default">Зарегистрироваться</button>
+  </div>
+</div>

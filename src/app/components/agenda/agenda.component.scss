@@ -1,0 +1,23 @@
+:host {
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 45px 0 45px;
+}
+
+.label {
+  width: 25px;
+  height: 25px;
+  border: 1px solid;
+  margin: 5px;
+}
+
+.item {
+  width: 50%;
+  display: flex;
+  align-items: center;
+}
+
+.title {
+}

@@ -1,7 +1,13 @@
 import { Moment } from 'moment';
+import { Employee } from './employee.model';
+import { DayType } from '../const/day-type.const';
 
-export class TasksModel {
+export class TaskModel {
   id: number;
-  dateStart: Moment;
-  dateEnd: Moment;
+  type: DayType;
+  date: Moment;
+  employeeId: number;
+  comment: string;
+  dtCreated: Moment;
+  userCreated: number;
 }

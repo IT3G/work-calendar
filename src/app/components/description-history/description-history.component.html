@@ -1,0 +1,26 @@
+<div class="wrapper" *ngIf="tasks.length">
+  <table mat-table [dataSource]="tasks" class="mat-elevation-z8">
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef>Когда</th>
+      <td mat-cell *matCellDef="let element">{{ element.dtCreated | datePipe: 'DD MMMM, HH:mm' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="who">
+      <th mat-header-cell *matHeaderCellDef>Кем</th>
+      <td mat-cell *matCellDef="let element">{{ getEmployee(element) }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="type">
+      <th mat-header-cell *matHeaderCellDef>Вид</th>
+      <td mat-cell *matCellDef="let element">{{ getTitle(element.type) }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="comment">
+      <th mat-header-cell *matHeaderCellDef>Комментарий</th>
+      <td mat-cell *matCellDef="let element">{{ element.comment }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>

@@ -1,0 +1,30 @@
+.form-container {
+  max-width: 350px;
+  margin: 0 auto 10px;
+}
+.title {
+  font-size: 19px;
+}
+
+.date__wrapper {
+  display: flex;
+  margin-bottom: 20px;
+}
+select {
+  width: 160px;
+}
+.date_row {
+  display: flex;
+  margin-right: 10px;
+  align-content: center;
+}
+
+.title {
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.control {
+  width: 100%;
+}

@@ -1,0 +1,32 @@
+<div class="wrapper">
+  <div class="login-form">
+
+    <div class="form-group">
+      <mat-form-field class="example-full-width">
+        <input matInput
+          placeholder="email"
+          autocomplete="off"
+          [formControl]="loginForm.get('email')">
+      </mat-form-field>
+    </div>
+    <div class="form-group">
+      <mat-form-field class="example-full-width">
+        <input matInput
+          placeholder="password"
+          type="password"
+          autocomplete="off"
+          [formControl]="loginForm.get('password')">
+      </mat-form-field>
+      <label class="error">{{errorMessage}}</label>
+      <label class="success">{{successMessage}}</label>
+    </div>
+
+    <button type="submit"
+      (click)="login()"
+      [disabled]="loginForm.invalid"
+      class="btn btn-default">Войти</button>
+
+    <a class="p-2 text-dark" routerLink="/register">Регистрация</a>
+
+    </div>
+</div>
