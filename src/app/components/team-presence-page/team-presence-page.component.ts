@@ -1,139 +1,91 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import * as moment from 'moment';
 import { Moment } from 'moment';
-import { Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+import { DayType } from 'src/app/const/day-type.const';
 import { Employee } from 'src/app/models/employee.model';
+import { PresenceModel } from 'src/app/models/presence-page.model';
 import { TaskModel } from 'src/app/models/tasks.models';
 import { TaskApiService } from 'src/app/services/api/task-api.service';
 import { EmployeeStoreService } from 'src/app/store/employee-store.service';
 import { TasksStoreService } from 'src/app/store/tasks-store.service';
-import { DayType } from 'src/app/const/day-type.const';
 @Component({
   selector: 'app-team-presence',
   templateUrl: './team-presence-page.component.html',
   styleUrls: ['./team-presence-page.component.scss']
 })
 export class TeamPresencePageComponent implements OnInit {
-  currentMonth: Moment;
-  form: FormArray;
-  days: Date[];
-  employeeForm: FormArray;
+  date$ = new BehaviorSubject<Moment>(moment());
   employees$: Observable<Employee[]>;
-  employees: Employee[];
-  getEmployees$: Observable<any>;
-  getTasks$: Observable<any>;
+  tasks$: Observable<TaskModel[]>;
+  monthData$: Observable<PresenceModel[]>;
+  monthDays$: Observable<Moment[]>;
+  dayType = DayType;
 
-  public tasks: TaskModel[];
   constructor(
-    private fb: FormBuilder,
     private employeeStoreService: EmployeeStoreService,
     private tasksStoreService: TasksStoreService,
     private taskApiService: TaskApiService
   ) {}
 
   ngOnInit() {
+    this.taskApiService.loadAllTasks();
     this.employees$ = this.employeeStoreService.employees$;
-    this.currentMonth = moment();
-    this.getRangeArray();
-    this.initForm();
-    this.loadTasksFromStore();
-  }
-
-  public employeeArray(employee: FormGroup): FormArray {
-    const control = employee.get('days') as FormArray;
-    return control;
-  }
-
-  public chooseClass(id: number): string {
-    const dayType = DayType[id];
-    return `type_${dayType}`;
+    this.tasks$ = this.tasksStoreService.getTasks$();
+    this.monthData$ = this.updateTaskData();
+    this.monthDays$ = this.getMonthDays();
   }
 
   public prevMonth(): void {
-    this.currentMonth = moment(this.currentMonth).subtract(1, 'months');
-    this.initForm();
-    this.initEmployeeForm();
+    this.date$.next(moment(this.date$.value).subtract(1, 'months'));
   }
 
   public nextMonth(): void {
-    this.currentMonth = moment(this.currentMonth).add(1, 'months');
-    this.initForm();
-    this.initEmployeeForm();
+    this.date$.next(moment(this.date$.value).add(1, 'months'));
   }
 
-  public initForm(): void {
-    const array: Date[] = this.getRangeArray();
-    this.form = this.fb.array(
-      array.map(i => {
-        return this.fb.control(i);
+  private getMonthDays() {
+    return this.date$.pipe(
+      map(date => {
+        const startOfMonth = date.clone().startOf('month');
+        const endOfMonth = date.clone().endOf('month');
+
+        const res = [];
+
+        const day = startOfMonth;
+        while (day.isBefore(endOfMonth)) {
+          res.push(day.clone());
+          day.add(1, 'd');
+        }
+
+        return res;
       })
     );
   }
 
-  private loadTasksFromStore() {
-    this.taskApiService.loadAllTasks();
-    this.tasksStoreService
-      .getTasks$()
-      .pipe(filter(i => !!i.length))
-      .subscribe(res => {
-        this.tasks = res;
-        this.employees$.pipe(filter(i => !!i.length)).subscribe(employees => {
-          this.employees = employees;
-          this.initEmployeeForm();
-        });
-      });
-  }
+  private updateTaskData() {
+    return combineLatest(this.date$, this.employees$, this.tasks$).pipe(
+      filter(([date, employees, tasks]) => !!(employees && employees.length && tasks)),
+      map(([date, employees, tasks]) =>
+        employees.map(e => {
+          const startOfMonth = date.clone().startOf('month');
+          const endOfMonth = date.clone().endOf('month');
 
-  private getRangeArray(): Date[] {
-    const currentMonth = this.currentMonth;
+          const res = {
+            employee: e,
+            tasks: []
+          };
 
-    const startOfMonth = moment(currentMonth).startOf('month');
-    const endOfMonth = moment(currentMonth).endOf('month');
+          const day = startOfMonth;
+          while (day.isBefore(endOfMonth)) {
+            res.tasks.push(tasks.find(i => i.employeeId === e.id && moment(day).isSame(i.date, 'day')));
+            day.add(1, 'd');
+          }
 
-    const days = [];
-    let day: Moment = startOfMonth;
-
-    while (day <= endOfMonth) {
-      days.push(day.toDate());
-      day = day.clone().add(1, 'd');
-    }
-    this.days = days;
-    return days;
-  }
-
-  private initEmployeeForm(): void {
-    this.employeeForm = this.fb.array(
-      this.employees.map(employee => {
-        return this.createEmployeeFormGroup(employee);
-      })
-    );
-  }
-
-  private createEmployeeFormGroup(employee: Employee): FormGroup {
-    return this.fb.group({
-      title: employee,
-      days: this.fb.array(
-        this.days.map(day => {
-          return this.createDayFormGroup(day, employee);
+          return res;
         })
       )
-    });
-  }
-
-  private createDayFormGroup(day: Date, employee: Employee): FormGroup {
-    return this.fb.group({
-      dayTitle: day,
-      type: this.getType(employee, day)
-    });
-  }
-
-  private getType(employee: Employee, day: Date): number {
-    const task = this.tasks.find(i => i.employeeId === employee.id && moment(day).isSame(i.date, 'day'));
-    if (task) {
-      return task.type;
-    }
-    return null;
+    );
   }
 }
