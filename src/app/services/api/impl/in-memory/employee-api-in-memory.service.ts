@@ -6,8 +6,8 @@ import { ContextStoreService } from 'src/app/store/context-store.service';
 
 const guestUser: Employee = {
   id: 0,
-  name: 'Г',
-  surname: 'Гость'
+  name: 'Гость',
+  surname: 'Гостев'
 };
 
 const employeeList: Employee[] = [

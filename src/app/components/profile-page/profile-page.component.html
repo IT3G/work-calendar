@@ -1,0 +1,4 @@
+<h3>Фамилия: {{ (selectedUser$ | async).surname }} </h3>
+<h3>Имя: {{ (selectedUser$ | async).name }}</h3>
+<h3>E-Mail: {{ (authService.user | async)?.email }}!</h3>
+

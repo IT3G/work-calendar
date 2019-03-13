@@ -15,15 +15,15 @@ export class PresencePageComponent implements OnInit, OnDestroy {
     private contextService: ContextService
   ) {}
 
-  id: string;
+  id: number;
   private sub: any;
 
   ngOnInit() {
     if (this.route.snapshot.params.id) {
-      this.id = this.route.snapshot.params.id;
-      this.contextService.selectUser(Number(this.id));
+      this.id = Number(this.route.snapshot.params.id);
+      this.contextService.selectUser(this.id);
     } else {
-      this.id = this.contextStoreService.getSelectedUser().id.toString();
+      this.id = this.contextStoreService.getSelectedUser().id;
     }
 
     // this.id = this.route.snapshot.params.id
