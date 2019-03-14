@@ -1,0 +1,22 @@
+.nav-item {
+  color: #333;
+  text-decoration: underline;
+  padding: 10px 25px;
+  display: flex;
+  align-items: center;
+}
+.active {
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.btn {
+  margin: 10px 25px;
+}
+
+@media (max-width: 600px) {
+  .nav {
+    display: flex;
+    flex-direction: column;
+  }
+}

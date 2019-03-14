@@ -13,14 +13,15 @@ import { RouterModule } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
+import { AvatarModule } from 'ngx-avatar';
+import { NavigationMenuComponent } from 'src/app/components/navigation-menu/navigation-menu.component';
 import { RegisterPageComponent } from 'src/app/components/register-page/register-page.component';
 import { TeamPresencePageComponent } from 'src/app/components/team-presence-page/team-presence-page.component';
-import { TaskApiInFireBaseService } from 'src/app/services/api/impl/firebase/task-api-in-firebase.service';
 import { DatePipe } from 'src/app/pipes/date.pipe';
+import { TaskApiInFireBaseService } from 'src/app/services/api/impl/firebase/task-api-in-firebase.service';
 // import { SharedModule } from 'src/app/shared.module';
 import { fireBaseConfigEnvironment } from 'src/environments/firebaseConfig';
 import { environment } from '../environments/environment';
-import { AppLoadService } from './services/app-load.service';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AgendaComponent } from './components/agenda/agenda.component';
@@ -33,11 +34,11 @@ import { HeaderComponent } from './components/header/header.component';
 import { LoginPageComponent } from './components/login-page/login-page.component';
 import { PresencePageComponent } from './components/presence-page/presence-page.component';
 import { ProfilePageComponent } from './components/profile-page/profile-page.component';
+import { MaterialModule } from './material.module';
 import { EmployeeApiService } from './services/api/employee-api.service';
 import { EmployeeApiInMemoryService } from './services/api/impl/in-memory/employee-api-in-memory.service';
 import { TaskApiService } from './services/api/task-api.service';
-import { MaterialModule } from './material.module';
-import { AvatarModule } from 'ngx-avatar';
+import { AppLoadService } from './services/app-load.service';
 
 registerLocaleData(localeRu);
 moment.locale('ru');
@@ -61,6 +62,7 @@ export function onInit(appLoadService: AppLoadService) {
     RegisterPageComponent,
     LoginPageComponent,
     TeamPresencePageComponent,
+    NavigationMenuComponent,
     DatePipe
   ],
   imports: [

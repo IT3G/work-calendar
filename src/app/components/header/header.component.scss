@@ -1,7 +1,29 @@
-a {
-  text-decoration: underline;
+.contaienr {
+  display: flex;
+  align-items: center;
+  padding: 10px 30px;
 }
-.active {
-  text-decoration: none;
-  font-weight: 500;
+
+.avatar {
+  margin-right: 10px;
+}
+
+.user-info-container {
+  display: flex;
+  align-items: center;
+}
+
+.mobile-menu {
+  display: none;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .menu {
+    display: none;
+  }
+
+  .mobile-menu {
+    display: block;
+  }
 }
