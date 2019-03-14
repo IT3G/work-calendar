@@ -3,16 +3,25 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  user: Observable<firebase.User>;
+  private user: Observable<firebase.User>;
   constructor(public afAuth: AngularFireAuth, private router: Router) {
     this.user = afAuth.authState;
   }
 
-  register(value) {
+  getUser(): Observable<firebase.User> {
+    return this.user;
+  }
+
+  isAuth(): Observable<boolean> {
+    return this.user.pipe(map(u => !!u));
+  }
+
+  register(value: { email: string; password: string }) {
     return new Promise<any>((resolve, reject) => {
       firebase
         .auth()

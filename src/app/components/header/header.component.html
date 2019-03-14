@@ -5,38 +5,18 @@
       size="40"
       value="{{ (currentUser$ | async).name[0] + (currentUser$ | async).surname[0]}}"></ngx-avatar>&nbsp;
     <h5 class="my-0 mr-md-auto font-weight-normal"
-      *ngIf="(authService.user | async)">
+      *ngIf="(currentUser$ | async)">
       Привет, {{ (currentUser$ | async).name }}!
     </h5>
     <h5 class="my-0 mr-md-auto font-weight-normal"
-      *ngIf="!(authService.user | async)">
+      *ngIf="!(currentUser$ | async)">
       Привет, гость!
     </h5>
   </div>
 
   <div class="flex-1"></div>
 
-  <nav class="menu">
-    <a class="p-2 text-dark"
-      routerLink="/presence"
-      routerLinkActive="active"
-      (click)="selectCurrentUser()">Мое присутствие</a>
-    <a class="p-2 text-dark"
-      routerLink="/team-presence"
-      routerLinkActive="active">Команда</a>
-    <a class="p-2 text-dark"
-      routerLink="/profile"
-      routerLinkActive="active">Профиль</a>
-
-    <ng-template #noAuth>
-      <a class="btn btn-outline-primary"
-        routerLink="/login"
-        routerLinkActive="active">Войти</a>
-    </ng-template>
-    <a class="btn btn-outline-primary"
-      *ngIf="(authService.user | async); else noAuth"
-      (click)="logout()">Выйти</a>
-  </nav>
+  <app-navigation-menu class="menu"></app-navigation-menu>
 
   <div class="mobile-menu"
     (click)="mobileMenuClick.emit()">

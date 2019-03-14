@@ -1,7 +1,6 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AuthService } from 'src/app/services/auth.service';
 import { AppRoutingModule } from '../../app-routing.module';
 import { Employee } from '../../models/employee.model';
 import { ContextStoreService } from '../../store/context-store.service';
@@ -17,29 +16,17 @@ export class HeaderComponent implements OnInit {
 
   currentUser$: Observable<Employee>;
 
-  constructor(
-    private router: Router,
-    private contextStoreService: ContextStoreService,
-    public authService: AuthService
-  ) {}
+  constructor(private router: Router, private contextStoreService: ContextStoreService) {}
 
   ngOnInit() {
     this.currentUser$ = this.contextStoreService.getCurrentUser$();
   }
 
-  selectCurrentUser() {
-    this.contextStoreService.setSelectedUser(this.contextStoreService.getCurrentUser());
-  }
-
-  onSwipe(evt) {
+  onSwipe(evt: { deltaX: number }) {
     const toRight = Math.abs(evt.deltaX) > 40 && evt.deltaX > 0;
     const increment = toRight === true ? -1 : 1;
 
     const nextRoute = AppRoutingModule.getNext(this.router, increment);
     this.router.navigate([nextRoute]);
-  }
-
-  logout() {
-    this.authService.logout();
   }
 }

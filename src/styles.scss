@@ -1,5 +1,9 @@
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 
+*:focus {
+  outline: none;
+}
+
 button.calendar,
 button.calendar:active {
   width: 2.75rem;
