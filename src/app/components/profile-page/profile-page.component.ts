@@ -1,11 +1,11 @@
-import { AuthService } from 'src/app/services/auth.service';
-import { Employee } from './../../models/employee.model';
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { EmployeeStoreService } from '../../store/employee-store.service';
-import { ContextStoreService } from '../../store/context-store.service';
 import { ActivatedRoute } from '@angular/router';
-import { map, filter } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+import { AuthService } from 'src/app/services/auth.service';
+import { ContextStoreService } from '../../store/context-store.service';
+import { EmployeeStoreService } from '../../store/employee-store.service';
+import { Employee } from './../../models/employee.model';
 
 @Component({
   selector: 'app-team',
@@ -13,6 +13,7 @@ import { map, filter } from 'rxjs/operators';
   styleUrls: ['./profile-page.component.scss']
 })
 export class ProfilePageComponent implements OnInit {
+  authInfo$: Observable<any>;
   employees$: Observable<Employee[]>;
   selectedUser$: Observable<Employee>;
   id: number;
@@ -20,16 +21,14 @@ export class ProfilePageComponent implements OnInit {
   constructor(
     private employeeStoreService: EmployeeStoreService,
     private contextStoreService: ContextStoreService,
-    public authService: AuthService,
+    private authService: AuthService,
     private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
-    if (this.route.snapshot.params.id) {
-      this.id = Number(this.route.snapshot.params.id);
-    } else {
-      this.id = this.contextStoreService.getSelectedUser().id;
-    }
+    this.getId();
+
+    this.authInfo$ = this.authService.getUser();
 
     this.selectedUser$ = this.employeeStoreService.employees$.pipe(
       filter(i => !!i),
@@ -37,5 +36,13 @@ export class ProfilePageComponent implements OnInit {
         return o.find(i => i.id === this.id);
       })
     );
+  }
+
+  private getId() {
+    if (this.route.snapshot.params.id) {
+      this.id = Number(this.route.snapshot.params.id);
+    } else {
+      this.id = this.contextStoreService.getSelectedUser().id;
+    }
   }
 }
