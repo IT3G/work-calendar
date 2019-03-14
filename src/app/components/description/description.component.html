@@ -14,7 +14,7 @@
   </mat-form-field>
 
   <mat-form-field class="control">
-    <mat-select placeholder="вид" formControlName="type">
+    <mat-select placeholder="вид" formControlName="type" (selectionChange)="typeChanged($event)">
       <mat-option *ngFor="let item of options" [value]="item">
         {{ item.title }}
       </mat-option>

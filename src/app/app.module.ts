@@ -37,6 +37,7 @@ import { EmployeeApiService } from './services/api/employee-api.service';
 import { EmployeeApiInMemoryService } from './services/api/impl/in-memory/employee-api-in-memory.service';
 import { TaskApiService } from './services/api/task-api.service';
 import { MaterialModule } from './material.module';
+import { AvatarModule } from 'ngx-avatar';
 
 registerLocaleData(localeRu);
 moment.locale('ru');
@@ -79,7 +80,8 @@ export function onInit(appLoadService: AppLoadService) {
     AngularFirestoreModule,
     AngularFireDatabaseModule,
     AngularFireAuthModule,
-    RouterModule
+    RouterModule,
+    AvatarModule
   ],
   exports: [],
   providers: [

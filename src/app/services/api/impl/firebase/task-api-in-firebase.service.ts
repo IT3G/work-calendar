@@ -36,9 +36,10 @@ export class TaskApiInFireBaseService implements TaskApiService {
 
   public loadTasks(employee: Employee) {
     this.db
-      .collection('tasks', ref => ref.where('employeeId', '==', this.contextStoreService.getSelectedUser().id))
+      .collection('tasks', ref => ref.where('employeeId', '==', employee.id))
       .valueChanges()
       .subscribe(res => {
+        console.log('tasks loaded, count: ' + res.length);
         const result = this.mapToTaskModel(res);
         this.tasksStoreService.addTasks(result);
       });

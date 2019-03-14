@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Moment } from 'moment';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { TaskModel } from 'src/app/models/tasks.models';
 import { TaskApiService } from 'src/app/services/api/task-api.service';
 import { DateConvertService } from 'src/app/services/date-convert.service';
@@ -11,14 +11,14 @@ import { ContextStoreService } from 'src/app/store/context-store.service';
 import { TasksStoreService } from 'src/app/store/tasks-store.service';
 import { AppRoutingModule } from '../../app-routing.module';
 import { DayType } from 'src/app/const/day-type.const';
-import { filter } from 'rxjs/operators';
+import { filter, first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss']
 })
-export class CalendarComponent implements OnInit {
+export class CalendarComponent implements OnInit, OnDestroy {
   constructor(
     private contextStoreService: ContextStoreService,
     private dateConvertService: DateConvertService,
@@ -34,6 +34,8 @@ export class CalendarComponent implements OnInit {
   selectedDate: NgbDateStruct;
   public tasks: TaskModel[];
 
+  tasksSubscription: Subscription;
+
   public hoveredDate: NgbDate;
 
   public fromDate: NgbDate;
@@ -42,15 +44,21 @@ export class CalendarComponent implements OnInit {
   currentDate$: Observable<Moment>;
 
   ngOnInit() {
+    console.log('init ' + this.contextStoreService.getSelectedUser().name);
     this.taskApiService.loadTasks(this.contextStoreService.getSelectedUser());
 
-    this.tasksStoreService.getTasks$().subscribe(res => {
-      this.tasks = res;
-      this.onDateSelect(this.dateConvertService.convertMomentToNgbDate(this.contextStoreService.getCurrentDate()));
-    });
+    this.tasksSubscription = this.tasksStoreService
+      .getTasks$()
+      //.pipe(filter(i => !!i))
+      .subscribe(res => {
+        this.tasks = res;
+        console.log('data caame to calendar, tasks count ' + res.length);
+        this.onDateSelect(this.dateConvertService.convertMomentToNgbDate(this.contextStoreService.getCurrentDate()));
+      });
   }
 
   public onDateSelect(date: NgbDateStruct) {
+    console.log(date);
     this.selectedDate = date;
     const dt = this.dateConvertService.convertNgbDateToMoment(date);
     this.contextStoreService.setCurrentDate(dt);
@@ -89,5 +97,9 @@ export class CalendarComponent implements OnInit {
     const dt = this.dateConvertService.convertNgbDateToMoment(date);
     const dayType = DayType[this.getDayType(dt)];
     return `type_${dayType}`;
+  }
+
+  ngOnDestroy(): void {
+    this.tasksSubscription.unsubscribe();
   }
 }

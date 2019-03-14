@@ -64,6 +64,11 @@ export class DescriptionComponent implements OnInit {
 
   public changeDateEnd(date: NgbDateStruct): void {}
 
+  typeChanged(event: any) {
+    // Когда меняется тип - очищаем коммент для UX
+    this.form.get('comment').setValue(null, { emitEvent: false });
+  }
+
   private getInfoFromStore() {
     this.contextStoreService
       .getCurrentDate$()
