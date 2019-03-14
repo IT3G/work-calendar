@@ -9,7 +9,7 @@ import { Employee } from './../models/employee.model';
 export class EmployeeStoreService {
   private readonly _employees = new BehaviorSubject<Employee[]>([]);
 
-  readonly employees$ = this._employees.asObservable().pipe(shareReplay(1));
+  readonly employees$ = this._employees.asObservable(); //.pipe(shareReplay(1));
 
   constructor() {}
 

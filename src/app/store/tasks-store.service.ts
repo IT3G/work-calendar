@@ -9,7 +9,7 @@ import { TaskModel } from '../models/tasks.models';
 export class TasksStoreService implements OnInit {
   private readonly _tasks = new BehaviorSubject<TaskModel[]>([]);
 
-  private readonly tasks$ = this._tasks.asObservable().pipe(shareReplay(1));
+  private readonly tasks$ = this._tasks.asObservable(); //.pipe(shareReplay(1));
 
   public getTasks(): TaskModel[] {
     return this._tasks.getValue();

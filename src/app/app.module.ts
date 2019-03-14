@@ -32,11 +32,12 @@ import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import { LoginPageComponent } from './components/login-page/login-page.component';
 import { PresencePageComponent } from './components/presence-page/presence-page.component';
-import { TeamPageComponent } from './components/team-page/team-page.component';
+import { ProfilePageComponent } from './components/profile-page/profile-page.component';
 import { EmployeeApiService } from './services/api/employee-api.service';
 import { EmployeeApiInMemoryService } from './services/api/impl/in-memory/employee-api-in-memory.service';
 import { TaskApiService } from './services/api/task-api.service';
 import { MaterialModule } from './material.module';
+import { AvatarModule } from 'ngx-avatar';
 
 registerLocaleData(localeRu);
 moment.locale('ru');
@@ -54,7 +55,7 @@ export function onInit(appLoadService: AppLoadService) {
     HeaderComponent,
     FooterComponent,
     CurrentDayComponent,
-    TeamPageComponent,
+    ProfilePageComponent,
     PresencePageComponent,
     DescriptionHistoryComponent,
     RegisterPageComponent,
@@ -79,7 +80,8 @@ export function onInit(appLoadService: AppLoadService) {
     AngularFirestoreModule,
     AngularFireDatabaseModule,
     AngularFireAuthModule,
-    RouterModule
+    RouterModule,
+    AvatarModule
   ],
   exports: [],
   providers: [

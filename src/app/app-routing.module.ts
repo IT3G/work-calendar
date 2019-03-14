@@ -4,12 +4,13 @@ import { LoginPageComponent } from 'src/app/components/login-page/login-page.com
 import { RegisterPageComponent } from 'src/app/components/register-page/register-page.component';
 import { TeamPresencePageComponent } from 'src/app/components/team-presence-page/team-presence-page.component';
 import { PresencePageComponent } from './components/presence-page/presence-page.component';
-import { TeamPageComponent } from './components/team-page/team-page.component';
+import { ProfilePageComponent } from './components/profile-page/profile-page.component';
 
 const swipebleRoutes: string[] = ['/presence', '/team'];
 
 const routes: Routes = [
-  { path: 'team', component: TeamPageComponent },
+  { path: 'profile', component: ProfilePageComponent },
+  { path: 'profile/:id', component: ProfilePageComponent },
   { path: 'presence', component: PresencePageComponent },
   { path: 'team-presence', component: TeamPresencePageComponent },
   { path: 'presence/:id', component: PresencePageComponent },

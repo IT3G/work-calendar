@@ -1,6 +1,6 @@
 import { filter, map } from 'rxjs/operators';
-import { Component, OnInit } from '@angular/core';
-import { Observable, combineLatest } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable, combineLatest, Subscription } from 'rxjs';
 import { TaskModel } from 'src/app/models/tasks.models';
 import { TasksStoreService } from 'src/app/store/tasks-store.service';
 import { AgendaColors } from 'src/app/const/agenda-colors.const';
@@ -14,9 +14,11 @@ import { EmployeeStoreService } from 'src/app/store/employee-store.service';
   templateUrl: './description-history.component.html',
   styleUrls: ['./description-history.component.scss']
 })
-export class DescriptionHistoryComponent implements OnInit {
+export class DescriptionHistoryComponent implements OnInit, OnDestroy {
   tasks: TaskModel[];
   displayedColumns: string[];
+  tasksSubscription: Subscription;
+
   constructor(
     private tasksStoreService: TasksStoreService,
     private contextStoreService: ContextStoreService,
@@ -28,7 +30,8 @@ export class DescriptionHistoryComponent implements OnInit {
 
     const combined = combineLatest(this.tasksStoreService.getTasks$(), this.contextStoreService.getCurrentDate$());
 
-    combined.subscribe(([one, two]) => {
+    this.tasksSubscription = combined.subscribe(([one, two]) => {
+      console.log('data came to description history');
       this.tasks = one.filter(el => {
         return el.date.isSame(two);
       });
@@ -42,5 +45,9 @@ export class DescriptionHistoryComponent implements OnInit {
   public getEmployee(model: TaskModel): string {
     const employee = this.employeeStoreService.getEmployees().find(o => o.id === model.userCreated);
     return employee.surname + ' ' + employee.name.substr(0, 1) + '.';
+  }
+
+  ngOnDestroy(): void {
+    this.tasksSubscription.unsubscribe();
   }
 }
