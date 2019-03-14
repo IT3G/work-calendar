@@ -1,2 +1,10 @@
-<app-header></app-header>
-<router-outlet></router-outlet>
+<app-header (mobileMenuClick)="drawer.toggle()"></app-header>
+<mat-drawer-container class="example-container">
+  <router-outlet></router-outlet>
+
+  <mat-drawer #drawer
+    mode="over">
+    <p>Auto-resizing sidenav</p>
+  </mat-drawer>
+
+</mat-drawer-container>

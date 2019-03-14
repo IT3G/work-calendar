@@ -1,7 +1,5 @@
-.container {
-  max-width: 1000px;
-}
-
-.ngb-dp-week {
-  padding: 0;
+:host {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }

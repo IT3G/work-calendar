@@ -1,4 +1,5 @@
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
 button.calendar,
 button.calendar:active {
   width: 2.75rem;
@@ -6,4 +7,8 @@ button.calendar:active {
   background-repeat: no-repeat;
   background-size: 23px;
   background-position: center;
+}
+
+.flex-1 {
+  flex: 1;
 }

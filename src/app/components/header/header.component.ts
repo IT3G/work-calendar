@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
@@ -12,6 +12,9 @@ import { ContextStoreService } from '../../store/context-store.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
+  @Output()
+  mobileMenuClick = new EventEmitter<void>();
+
   currentUser$: Observable<Employee>;
 
   constructor(
