@@ -1,16 +1,18 @@
-<div (swipe)="onSwipe($event)"
-  class="contaienr shadow-sm">
+<div (swipe)="onSwipe($event)" class="contaienr shadow-sm">
   <div class="user-info-container">
-    <div class="mobile-menu"
-    (click)="mobileMenuClick.emit()">
-    <i class="fa fa-bars"></i>
+    <ngx-avatar
+      class="menu"
+      size="40"
+      value="{{ (currentUser$ | async).name[0] + (currentUser$ | async).surname[0] }}"
+    ></ngx-avatar
+    >&nbsp;
+    <div class="mobile-menu" (click)="mobileMenuClick.emit()">
+      <i class="fa fa-bars"></i>
     </div>
-    <h5 class="my-0 mr-md-auto font-weight-normal"
-      *ngIf="(currentUser$ | async)">
+    <h5 class="my-0 mr-md-auto font-weight-normal" *ngIf="(currentUser$ | async)">
       Привет, {{ (currentUser$ | async).name }}!
     </h5>
-    <h5 class="my-0 mr-md-auto font-weight-normal"
-      *ngIf="!(currentUser$ | async)">
+    <h5 class="my-0 mr-md-auto font-weight-normal" *ngIf="!(currentUser$ | async)">
       Привет, гость!
     </h5>
   </div>
@@ -18,5 +20,4 @@
   <div class="flex-1"></div>
 
   <app-navigation-menu class="menu"></app-navigation-menu>
-
 </div>
