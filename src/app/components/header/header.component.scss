@@ -1,7 +1,7 @@
 .contaienr {
   display: flex;
   align-items: center;
-  padding: 10px 30px;
+  padding: 10px 20px;
 }
 
 .avatar {
@@ -25,5 +25,6 @@
 
   .mobile-menu {
     display: block;
+    padding-right: 14px;
   }
 }
