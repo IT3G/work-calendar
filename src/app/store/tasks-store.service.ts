@@ -9,7 +9,7 @@ export class TasksStoreService {
   private tasks$ = new BehaviorSubject<TaskModel[]>([]);
 
   public getTasksSnapshot(): TaskModel[] {
-    return this.tasks$.getValue();
+    return this.tasks$.value;
   }
 
   public getTasks(): Observable<TaskModel[]> {

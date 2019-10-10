@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import * as moment from 'moment';
 import { Moment } from 'moment';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Employee } from '../models/employee.model';
 import { DayType } from '../const/day-type.const';
+import { Employee } from '../models/employee.model';
 
 @Injectable({ providedIn: 'root' })
 export class ContextStoreService {
@@ -20,7 +19,7 @@ export class ContextStoreService {
   }
 
   public getCurrentDate(): Moment {
-    return this.currentDate.getValue();
+    return this.currentDate.value;
   }
 
   public setCurrentDate(date: Moment) {
@@ -48,7 +47,7 @@ export class ContextStoreService {
   }
 
   public getCurrentUser(): Employee {
-    return this.currentUser.getValue();
+    return this.currentUser.value;
   }
 
   public setCurrentUser(user: Employee) {
@@ -60,7 +59,7 @@ export class ContextStoreService {
   }
 
   public getSelectedUser(): Employee {
-    return this.selectedUser.getValue();
+    return this.selectedUser.value;
   }
 
   public setSelectedUser(user: Employee) {

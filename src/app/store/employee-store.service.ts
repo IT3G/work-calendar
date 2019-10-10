@@ -9,7 +9,7 @@ export class EmployeeStoreService {
   private readonly employees$ = new BehaviorSubject<Employee[]>([]);
 
   public getEmployeesSnapshot(): Employee[] {
-    return this.employees$.getValue();
+    return this.employees$.value;
   }
 
   public addEmployees(val: Employee[]): void {
