@@ -1,29 +1,22 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { shareReplay } from 'rxjs/operators';
 import { TaskModel } from '../models/tasks.models';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TasksStoreService implements OnInit {
-  private readonly _tasks = new BehaviorSubject<TaskModel[]>([]);
+export class TasksStoreService {
+  private tasks$ = new BehaviorSubject<TaskModel[]>([]);
 
-  private readonly tasks$ = this._tasks.asObservable(); //.pipe(shareReplay(1));
-
-  public getTasks(): TaskModel[] {
-    return this._tasks.getValue();
+  public getTasksSnapshot(): TaskModel[] {
+    return this.tasks$.value;
   }
 
-  public getTasks$(): Observable<TaskModel[]> {
+  public getTasks(): Observable<TaskModel[]> {
     return this.tasks$;
   }
 
-  public addTasks(val: TaskModel[]) {
-    this._tasks.next(val);
+  public addTasks(val: TaskModel[]): void {
+    this.tasks$.next(val);
   }
-
-  constructor() {}
-
-  ngOnInit() {}
 }

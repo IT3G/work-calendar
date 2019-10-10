@@ -1,13 +1,10 @@
-import { filter, map } from 'rxjs/operators';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, combineLatest, Subscription } from 'rxjs';
-import { TaskModel } from 'src/app/models/tasks.models';
-import { TasksStoreService } from 'src/app/store/tasks-store.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { combineLatest, Subscription } from 'rxjs';
 import { AgendaColors } from 'src/app/const/agenda-colors.const';
-import { DayType } from 'src/app/const/day-type.const';
-import * as moment from 'moment';
+import { TaskModel } from 'src/app/models/tasks.models';
 import { ContextStoreService } from 'src/app/store/context-store.service';
 import { EmployeeStoreService } from 'src/app/store/employee-store.service';
+import { TasksStoreService } from 'src/app/store/tasks-store.service';
 
 @Component({
   selector: 'app-description-history',
@@ -28,7 +25,7 @@ export class DescriptionHistoryComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.displayedColumns = ['date', 'who', 'type', 'comment'];
 
-    const combined = combineLatest(this.tasksStoreService.getTasks$(), this.contextStoreService.getCurrentDate$());
+    const combined = combineLatest(this.tasksStoreService.getTasks(), this.contextStoreService.getCurrentDate$());
 
     this.tasksSubscription = combined.subscribe(([one, two]) => {
       console.log('data came to description history');
@@ -43,7 +40,7 @@ export class DescriptionHistoryComponent implements OnInit, OnDestroy {
   }
 
   public getEmployee(model: TaskModel): string {
-    const employee = this.employeeStoreService.getEmployees().find(o => o.id === model.userCreated);
+    const employee = this.employeeStoreService.getEmployeesSnapshot().find(o => o.id === model.userCreated);
     return employee.surname + ' ' + employee.name.substr(0, 1) + '.';
   }
 

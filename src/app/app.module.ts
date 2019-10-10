@@ -35,7 +35,9 @@ import { LoginPageComponent } from './components/login-page/login-page.component
 import { PresencePageComponent } from './components/presence-page/presence-page.component';
 import { ProfilePageComponent } from './components/profile-page/profile-page.component';
 import { MaterialModule } from './material.module';
+import { AuthApiService } from './services/api/auth-api.service';
 import { EmployeeApiService } from './services/api/employee-api.service';
+import { AuthApiInBackendService } from './services/api/impl/backend/auth-api-in-backend.service';
 import { EmployeeApiInMemoryService } from './services/api/impl/in-memory/employee-api-in-memory.service';
 import { TaskApiService } from './services/api/task-api.service';
 import { AppLoadService } from './services/app-load.service';
@@ -93,6 +95,7 @@ export function onInit(appLoadService: AppLoadService) {
     { provide: TaskApiService, useClass: TaskApiInFireBaseService },
     { provide: FirestoreSettingsToken, useValue: {} },
     { provide: EmployeeApiService, useClass: EmployeeApiInMemoryService },
+    { provide: AuthApiService, useClass: AuthApiInBackendService },
     AppLoadService,
     { provide: APP_INITIALIZER, useFactory: onInit, deps: [AppLoadService], multi: true }
   ],
