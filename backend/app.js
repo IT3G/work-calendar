@@ -47,12 +47,15 @@ app.post('/ldap', (req, res) => {
 
     // var filter = `(uid=${req.body.username})`;
 
-    var filter = `(&(userPrincipalName=${req.body.username})(objectClass=user)(objectCategory=person)(!(userAccountControl:1.2.840.113556.1.4.803:=2)))`;
+    var filter = `(&(userPrincipalName=${
+      req.body.username
+    })(objectClass=user)(objectCategory=person)(!(userAccountControl:1.2.840.113556.1.4.803:=2)))`;
 
     result += `LDAP filter: ${filter}\n`;
 
     client.search(
-      config.suffix, {
+      config.suffix,
+      {
         filter: filter,
         scope: 'sub'
       },
@@ -61,7 +64,7 @@ app.post('/ldap', (req, res) => {
 
         if (err) {
           result += 'Search failed ' + err;
-          res.status(403).send(result);
+          res.status(404).send(result);
           return;
         }
 
@@ -72,7 +75,7 @@ app.post('/ldap', (req, res) => {
 
         searchRes.on('error', err => {
           result += 'Search failed with ' + err;
-          res.status(403).send(result);
+          res.status(404).send(result);
         });
 
         searchRes.on('end', retVal => {
@@ -84,7 +87,7 @@ app.post('/ldap', (req, res) => {
             client.bind(searchList[0].objectName, req.body.password, err => {
               if (err) {
                 result += 'Bind with real credential error: ' + err;
-                res.status(200).send('User not found');
+                res.status(404).send(result);
               } else {
                 res.status(200).send({
                   username: searchList[0].objectName
@@ -93,7 +96,7 @@ app.post('/ldap', (req, res) => {
             }); // client.bind (real credential)
           } else {
             result += 'No unique user to bind';
-            res.status(200).send(result);
+            res.status(404).send(result);
           }
         });
       }
