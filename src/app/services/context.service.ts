@@ -1,9 +1,8 @@
-import { EmployeeStoreService } from './../store/employee-store.service';
-import { ContextStoreService } from 'src/app/store/context-store.service';
-import { EmployeeService } from './employee.service';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { ContextStoreService } from 'src/app/store/context-store.service';
+import { EmployeeStoreService } from './../store/employee-store.service';
 import { EmployeeApiService } from './api/employee-api.service';
-import { Router, NavigationStart } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +16,7 @@ export class ContextService {
   ) {}
 
   public selectUser(id: number) {
-    const user = this.employeeStoreService.getEmployees().find(i => i.id === id);
+    const user = this.employeeStoreService.getEmployeesSnapshot().find(i => i.id === id);
     this.contextStoreService.setSelectedUser(user);
   }
 }

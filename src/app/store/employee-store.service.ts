@@ -1,23 +1,22 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { shareReplay } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Employee } from './../models/employee.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EmployeeStoreService {
-  private readonly _employees = new BehaviorSubject<Employee[]>([]);
+  private readonly employees$ = new BehaviorSubject<Employee[]>([]);
 
-  readonly employees$ = this._employees.asObservable(); //.pipe(shareReplay(1));
-
-  constructor() {}
-
-  public getEmployees(): Employee[] {
-    return this._employees.getValue();
+  public getEmployeesSnapshot(): Employee[] {
+    return this.employees$.getValue();
   }
 
-  public addEmployees(val: Employee[]) {
-    this._employees.next(val);
+  public addEmployees(val: Employee[]): void {
+    this.employees$.next(val);
+  }
+
+  public getEmployees(): Observable<Employee[]> {
+    return this.employees$;
   }
 }

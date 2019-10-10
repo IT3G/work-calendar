@@ -20,13 +20,11 @@
       <label class="error">{{errorMessage}}</label>
       <label class="success">{{successMessage}}</label>
     </div>
-
     <button type="submit"
       (click)="login()"
       [disabled]="loginForm.invalid"
       class="btn btn-default">Войти</button>
-
-    <a class="p-2 text-dark" routerLink="/register">Регистрация</a>
-
-    </div>
+    <a class="p-2 text-dark"
+      routerLink="/register">Регистрация</a>
+  </div>
 </div>

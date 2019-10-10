@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/services/auth.service';
+import { AuthApiService } from 'src/app/services/api/auth-api.service';
 
 @Component({
   selector: 'app-login-page',
@@ -10,15 +10,19 @@ import { AuthService } from 'src/app/services/auth.service';
 export class LoginPageComponent implements OnInit {
   errorMessage: string;
   successMessage: string;
-  loginForm = new FormGroup({
-    email: new FormControl(null, Validators.required),
-    password: new FormControl(null, Validators.required)
-  });
-  constructor(private authService: AuthService) {}
+  loginForm: FormGroup;
+  constructor(private authService: AuthApiService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.initForm();
+  }
 
-  login() {
-    this.authService.login(this.loginForm.value.email, this.loginForm.value.password);
+  login() {}
+
+  private initForm() {
+    this.loginForm = new FormGroup({
+      email: new FormControl(null, Validators.required),
+      password: new FormControl(null, Validators.required)
+    });
   }
 }

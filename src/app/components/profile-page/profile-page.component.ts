@@ -30,7 +30,7 @@ export class ProfilePageComponent implements OnInit {
 
     this.authInfo$ = this.authService.getUser();
 
-    this.selectedUser$ = this.employeeStoreService.employees$.pipe(
+    this.selectedUser$ = this.employeeStoreService.getEmployees().pipe(
       filter(i => !!i),
       map(o => {
         return o.find(i => i.id === this.id);

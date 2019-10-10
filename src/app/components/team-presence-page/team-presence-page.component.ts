@@ -31,8 +31,8 @@ export class TeamPresencePageComponent implements OnInit {
 
   ngOnInit() {
     this.taskApiService.loadAllTasks();
-    this.employees$ = this.employeeStoreService.employees$;
-    this.tasks$ = this.tasksStoreService.getTasks$();
+    this.employees$ = this.employeeStoreService.getEmployees();
+    this.tasks$ = this.tasksStoreService.getTasks();
     this.monthData$ = this.updateTaskData();
     this.monthDays$ = this.getMonthDays();
   }
