@@ -54,8 +54,7 @@ app.post('/ldap', (req, res) => {
     result += `LDAP filter: ${filter}\n`;
 
     client.search(
-      config.suffix,
-      {
+      config.suffix, {
         filter: filter,
         scope: 'sub'
       },
