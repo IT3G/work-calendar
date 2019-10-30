@@ -4,21 +4,14 @@ import { LoginResponseModel } from 'src/auth/models/login.response.model';
 const ldap = require('ldapjs');
 @Injectable()
 export class LdapService {
-  config = {
-    readerDn: 'CN=ldap_sync,OU=ServiceUsers,OU=MADI,DC=it2g,DC=ru',
-    readerPwd: 'ab38A@f4172fed79',
-    serverUrl: 'ldap://dc01.it2g.ru',
-    suffix: 'OU=Users,OU=MADI,DC=it2g,DC=ru',
-  };
+  config = {};
 
   client = ldap.createClient({
     url: this.config.serverUrl,
-    reconnect: true,
+    reconnect: true
   });
 
-  public async auth(
-    credentials: LoginRequestModel,
-  ): Promise<LoginResponseModel> {
+  public async auth(credentials: LoginRequestModel): Promise<LoginResponseModel> {
     this.client.on('error', err => {
       console.log(err);
     });
@@ -27,38 +20,26 @@ export class LdapService {
     const result = user[0];
     result.attributes = result.attributes.map(el => ({
       type: el.type,
-      data: this.stringFromUTF8Array(el._vals[0]),
+      data: this.stringFromUTF8Array(el._vals[0])
     }));
 
     const data: LoginResponseModel = this.mapToSendOnClient(result.attributes);
     return data;
   }
 
-  private mapToSendOnClient(
-    attributes: { type: string; data: string }[],
-  ): LoginResponseModel {
+  private mapToSendOnClient(attributes: { type: string; data: string }[]): LoginResponseModel {
     return {
-      username: attributes.find(el => el.type === 'cn')
-        ? attributes.find(el => el.type === 'cn').data
-        : null,
-      location: attributes.find(el => el.type === 'l')
-        ? attributes.find(el => el.type === 'l').data
-        : null,
-      position: attributes.find(el => el.type === 'title')
-        ? attributes.find(el => el.type === 'title').data
-        : null,
+      username: attributes.find(el => el.type === 'cn') ? attributes.find(el => el.type === 'cn').data : null,
+      location: attributes.find(el => el.type === 'l') ? attributes.find(el => el.type === 'l').data : null,
+      position: attributes.find(el => el.type === 'title') ? attributes.find(el => el.type === 'title').data : null,
       whenCreated: attributes.find(el => el.type === 'whenCreated')
         ? attributes.find(el => el.type === 'whenCreated').data
         : null,
       email: attributes.find(el => el.type === 'userPrincipalName')
         ? attributes.find(el => el.type === 'userPrincipalName').data
         : null,
-      telNumber: attributes.find(el => el.type === 'mobile')
-        ? attributes.find(el => el.type === 'mobile').data
-        : null,
-      physicalDeliveryOfficeName: attributes.find(
-        el => el.type === 'physicalDeliveryOfficeName',
-      )
+      telNumber: attributes.find(el => el.type === 'mobile') ? attributes.find(el => el.type === 'mobile').data : null,
+      physicalDeliveryOfficeName: attributes.find(el => el.type === 'physicalDeliveryOfficeName')
         ? attributes.find(el => el.type === 'physicalDeliveryOfficeName').data
         : null,
       mailNickname: attributes.find(el => el.type === 'mailNickname')
@@ -66,7 +47,7 @@ export class LdapService {
         : null,
       projects: '',
       isAdmin: false,
-      hasMailing: true,
+      hasMailing: true
     };
   }
 
@@ -79,7 +60,7 @@ export class LdapService {
           return;
         }
         resolve(
-          `(&(userPrincipalName=${login})(objectClass=user)(objectCategory=person)(!(userAccountControl:1.2.840.113556.1.4.803:=2)))`,
+          `(&(userPrincipalName=${login})(objectClass=user)(objectCategory=person)(!(userAccountControl:1.2.840.113556.1.4.803:=2)))`
         );
       });
     });
@@ -91,7 +72,7 @@ export class LdapService {
         this.config.suffix,
         {
           filter,
-          scope: 'sub',
+          scope: 'sub'
         },
         (err, searchRes) => {
           var searchList = [];
@@ -118,7 +99,7 @@ export class LdapService {
                 }
               });
           });
-        },
+        }
       );
     });
   }
