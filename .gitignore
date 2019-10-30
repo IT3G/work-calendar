@@ -1,12 +1,12 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/dist
+**/dist
 /tmp
 /out-tsc
 
 # dependencies
-/node_modules
+**/node_modules
 
 # profiling files
 chrome-profiler-events.json
@@ -33,8 +33,8 @@ speed-measure-plugin.json
 /connect.lock
 /coverage
 /libpeerconnection.log
-npm-debug.log
-yarn-error.log
+**/npm-debug.log
+**/yarn-error.log
 testem.log
 /typings
 
