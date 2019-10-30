@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Employee } from 'src/app/models/employee.model';
-import { AuthService } from 'src/app/services/auth.service';
 import { ContextStoreService } from 'src/app/store/context-store.service';
 
 @Component({
@@ -12,19 +13,23 @@ import { ContextStoreService } from 'src/app/store/context-store.service';
 export class NavigationMenuComponent implements OnInit {
   currentUser$: Observable<Employee>;
   isAuth$: Observable<boolean>;
+  isAdmin$: Observable<boolean>;
 
-  constructor(private contextStoreService: ContextStoreService, private authService: AuthService) {}
+  constructor(private contextStoreService: ContextStoreService, private router: Router) {}
 
   ngOnInit() {
     this.currentUser$ = this.contextStoreService.getCurrentUser$();
-    this.isAuth$ = this.authService.isAuth();
+    this.isAuth$ = this.contextStoreService.getCurrentUser$().pipe(map(user => !!user));
+    this.isAdmin$ = this.contextStoreService.isCurrentUserAdmin$();
   }
 
-  selectCurrentUser() {
-    this.contextStoreService.setSelectedUser(this.contextStoreService.getCurrentUser());
+  public selectCurrentUser() {
+    this.contextStoreService.getCurrentUser();
   }
 
-  logout() {
-    this.authService.logout();
+  public logout() {
+    localStorage.removeItem('userSession');
+    this.contextStoreService.setCurrentUser(null);
+    this.router.navigate(['team-presence']);
   }
 }

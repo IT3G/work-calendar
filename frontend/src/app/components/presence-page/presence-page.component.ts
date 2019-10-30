@@ -1,46 +1,45 @@
-import { ContextStoreService } from './../../store/context-store.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ContextService } from 'src/app/services/context.service';
+import { Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Employee } from 'src/app/models/employee.model';
+import { TaskModel } from 'src/app/models/tasks.models';
+import { EmployeeApiService } from 'src/app/services/api/employee-api.service';
+import { ContextStoreService } from 'src/app/store/context-store.service';
+import { TasksStoreService } from 'src/app/store/tasks-store.service';
 
 @Component({
   selector: 'app-presence',
   templateUrl: './presence-page.component.html',
   styleUrls: ['./presence-page.component.scss']
 })
-export class PresencePageComponent implements OnInit, OnDestroy {
+export class PresencePageComponent implements OnInit {
+  selectedUser: Employee;
+  tasks$: Observable<TaskModel[]>;
+  employeeApiSub: Subscription;
+
   constructor(
     private route: ActivatedRoute,
     private contextStoreService: ContextStoreService,
-    private contextService: ContextService
+    private tasksStoreService: TasksStoreService,
+    private employeeApiService: EmployeeApiService
   ) {}
-
-  id: number;
-  private sub: any;
 
   ngOnInit() {
     if (this.route.snapshot.params.id) {
-      this.id = Number(this.route.snapshot.params.id);
-      this.contextService.selectUser(this.id);
+      this.employeeApiService.searchUserByLogin(this.route.snapshot.params.id).subscribe((res: Employee[]) => {
+        this.selectedUser = res[0];
+        this.tasks$ = this.searchTasksByUserNickname(res[0].mailNickname);
+      });
     } else {
-      this.id = this.contextStoreService.getSelectedUser().id;
+      this.selectedUser = this.contextStoreService.getCurrentUser();
+      this.tasks$ = this.searchTasksByUserNickname(this.selectedUser.mailNickname);
     }
-
-    // this.id = this.route.snapshot.params.id
-    //   ? this.route.snapshot.params.id
-    //   : this.contextStoreService.getSelectedUser();
-
-    //      contextStoreService
-
-    // this.sub = this.route.params.subscribe(params => {
-    //   this.id = +params['id']; // (+) converts string 'id' to a number
-    //   alert(this.id);
-
-    //   // In a real app: dispatch action to load the details here.
-    // });
   }
 
-  ngOnDestroy() {
-    // this.sub.unsubscribe();
+  private searchTasksByUserNickname(mailNickname: string): Observable<TaskModel[]> {
+    return this.tasksStoreService
+      .getTasks()
+      .pipe(map((tasksArr: TaskModel[]) => tasksArr.filter(task => task.employee === mailNickname)));
   }
 }

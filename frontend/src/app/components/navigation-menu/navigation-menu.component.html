@@ -1,14 +1,20 @@
 <nav class="nav">
   <a class="nav-item"
+    *ngIf="(isAuth$ | async)"
     routerLink="/presence"
-    routerLinkActive="active"
-    (click)="selectCurrentUser()">Мое присутствие</a>
+    routerLinkActive="active">Мое присутствие</a>
   <a class="nav-item"
     routerLink="/team-presence"
     routerLinkActive="active">Команда</a>
   <a class="nav-item"
+    *ngIf="(isAuth$ | async)"
     routerLink="/profile"
     routerLinkActive="active">Профиль</a>
+
+  <a class="nav-item"
+    *ngIf="(isAuth$ | async) && (isAdmin$ | async)"
+    routerLink="/employee-list"
+    routerLinkActive="active">Сотрудники</a>
 
   <ng-template #noAuth>
     <a class="btn btn-outline-primary"

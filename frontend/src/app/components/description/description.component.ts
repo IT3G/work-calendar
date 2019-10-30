@@ -1,71 +1,75 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { filter } from 'rxjs/operators';
-import { ContextStoreService } from 'src/app/store/context-store.service';
-import { TasksService } from '../../services/tasks.service';
-import { TasksStoreService } from '../../store/tasks-store.service';
 import { AgendaColors } from 'src/app/const/agenda-colors.const';
+import { AgendaColorsModel } from 'src/app/models/agenda.colors.model';
+import { Employee } from 'src/app/models/employee.model';
+import { TaskModel } from 'src/app/models/tasks.models';
+import { MailApiInBackendService } from 'src/app/services/api/impl/backend/mail-api-in-backend.service';
 import { TaskApiService } from 'src/app/services/api/task-api.service';
+import { ContextStoreService } from 'src/app/store/context-store.service';
+import { TasksStoreService } from 'src/app/store/tasks-store.service';
 
 @Component({
   selector: 'app-description',
   templateUrl: './description.component.html',
   styleUrls: ['./description.component.scss']
 })
-export class DescriptionComponent implements OnInit {
+export class DescriptionComponent implements OnInit, OnDestroy {
   form: FormGroup;
-  options: any[];
+  options: AgendaColorsModel[];
+
+  @Input() selectedUser: Employee;
 
   constructor(
     private contextStoreService: ContextStoreService,
-    private tasksService: TasksService,
-    private tasksStoreService: TasksStoreService,
     private taskApiService: TaskApiService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private mailApiInBackendService: MailApiInBackendService,
+    private tasksStoreService: TasksStoreService
   ) {}
 
   ngOnInit() {
     this.form = this.fb.group({
-      dateStart: [{ value: null /*, disabled: true */ }, Validators.required],
+      dateStart: [null, Validators.required],
       dateEnd: [null],
-      type: [null, [Validators.required]],
-      comment: []
+      type: [null, Validators.required],
+      comment: [null]
     });
     this.getInfoFromStore();
     this.options = AgendaColors;
   }
 
+  ngOnDestroy() {}
+
   public addTask(): void {
+    const val = this.form.getRawValue();
+    const task: TaskModel = {
+      type: val.type.id,
+      dateStart: moment(val.dateStart),
+      dateEnd: val.dateEnd ? moment(val.dateEnd) : moment(val.dateStart),
+      employee: this.selectedUser.mailNickname,
+      comment: val.comment,
+      dtCreated: moment()
+    };
+
     if (this.form.invalid) {
       alert('Заполните форму');
       return;
     }
-    const val = this.form.getRawValue();
-    const dateStart = moment(val.dateStart);
 
-    this.tasksService.addTask(this.contextStoreService.getSelectedUser(), val.type.id, dateStart, val.comment);
+    this.taskApiService.addTask(task).subscribe(() => this.tasksStoreService.update());
 
-    if (val.dateEnd) {
-      const lastDay = moment(val.dateEnd);
-
-      let nextDate = dateStart;
-      while (nextDate.isBefore(lastDay)) {
-        nextDate = nextDate.clone().add(1, 'd');
-        this.tasksService.addTask(this.contextStoreService.getSelectedUser(), val.type.id, nextDate, val.comment);
-      }
-    }
+    // this.mailApiInBackendService.sendMail().subscribe(key => console.log(key));
   }
 
   public changeDateStart(date: NgbDateStruct): void {
     this.contextStoreService.setCurrentDate(moment(date));
   }
 
-  public changeDateEnd(date: NgbDateStruct): void {}
-
-  typeChanged(event: any) {
-    // Когда меняется тип - очищаем коммент для UX
+  public typeChanged() {
     this.form.get('comment').setValue(null, { emitEvent: false });
   }
 

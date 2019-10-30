@@ -1,11 +1,14 @@
 export class Employee {
-  id: number;
-  name: string;
-  surname: string;
+  _id: string;
+  username: string;
+  location: string;
+  position: string;
+  whenCreated: string;
+  email: string;
+  telNumber: string;
+  physicalDeliveryOfficeName: string;
+  mailNickname: string;
 
-  // constructor(id: number, name: string, surname: string) {}
-
-  // public getInitials(): string {
-  //   return this.name[0] + this.surname[0];
-  // }
+  projects?: string[];
+  isAdmin?: boolean;
 }

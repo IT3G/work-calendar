@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Moment } from 'moment';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { DayType } from '../const/day-type.const';
 import { Employee } from '../models/employee.model';
 
@@ -50,19 +51,26 @@ export class ContextStoreService {
     return this.currentUser.value;
   }
 
+  public isCurrentUserAdmin$(): Observable<boolean> {
+    return this.currentUser.pipe(
+      filter(user => !!user),
+      map((user: Employee) => user.isAdmin)
+    );
+  }
+
   public setCurrentUser(user: Employee) {
     this.currentUser.next(user);
   }
 
-  public getSelectedUser$(): Observable<Employee> {
-    return this.selectedUser;
-  }
+  // public getSelectedUser$(): Observable<Employee> {
+  //   return this.selectedUser;
+  // }
 
-  public getSelectedUser(): Employee {
-    return this.selectedUser.value;
-  }
+  // public getSelectedUser(): Employee {
+  //   return this.selectedUser.value;
+  // }
 
-  public setSelectedUser(user: Employee) {
-    this.selectedUser.next(user);
-  }
+  // public setSelectedUser(user: Employee) {
+  //   this.selectedUser.next(user);
+  // }
 }

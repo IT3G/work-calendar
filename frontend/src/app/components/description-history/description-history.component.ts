@@ -1,10 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { combineLatest, Subscription } from 'rxjs';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { combineLatest, Observable, Subscription } from 'rxjs';
 import { AgendaColors } from 'src/app/const/agenda-colors.const';
+import { Employee } from 'src/app/models/employee.model';
 import { TaskModel } from 'src/app/models/tasks.models';
 import { ContextStoreService } from 'src/app/store/context-store.service';
 import { EmployeeStoreService } from 'src/app/store/employee-store.service';
-import { TasksStoreService } from 'src/app/store/tasks-store.service';
 
 @Component({
   selector: 'app-description-history',
@@ -16,21 +16,18 @@ export class DescriptionHistoryComponent implements OnInit, OnDestroy {
   displayedColumns: string[];
   tasksSubscription: Subscription;
 
-  constructor(
-    private tasksStoreService: TasksStoreService,
-    private contextStoreService: ContextStoreService,
-    private employeeStoreService: EmployeeStoreService
-  ) {}
+  @Input() tasks$: Observable<TaskModel[]>;
+
+  constructor(private contextStoreService: ContextStoreService, private employeeStoreService: EmployeeStoreService) {}
 
   ngOnInit() {
     this.displayedColumns = ['date', 'who', 'type', 'comment'];
 
-    const combined = combineLatest(this.tasksStoreService.getTasks(), this.contextStoreService.getCurrentDate$());
+    const combined = combineLatest(this.tasks$, this.contextStoreService.getCurrentDate$());
 
     this.tasksSubscription = combined.subscribe(([one, two]) => {
-      console.log('data came to description history');
       this.tasks = one.filter(el => {
-        return el.date.isSame(two);
+        return el.dateStart.isSame(two);
       });
     });
   }
@@ -40,8 +37,10 @@ export class DescriptionHistoryComponent implements OnInit, OnDestroy {
   }
 
   public getEmployee(model: TaskModel): string {
-    const employee = this.employeeStoreService.getEmployeesSnapshot().find(o => o.id === model.userCreated);
-    return employee.surname + ' ' + employee.name.substr(0, 1) + '.';
+    const employee = this.employeeStoreService
+      .getEmployeesSnapshot()
+      .find((o: Employee) => o.mailNickname === model.employeeCreated);
+    return employee.username.split(' ')[0] + ' ' + employee.username.split(' ')[1].substr(0, 1) + '.';
   }
 
   ngOnDestroy(): void {

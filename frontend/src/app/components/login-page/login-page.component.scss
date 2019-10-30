@@ -6,5 +6,28 @@
   transform: translateY(-20px);
 }
 .login-form {
+  position: relative;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.input-login__suffix {
+  position: absolute;
+  right: -60px;
+  bottom: -4px;
+}
+.response-message {
+  display: block;
+  position: absolute;
+  bottom: 45px;
+}
+.form-footer {
+  margin-top: 10px;
+  width: 100px;
+  display: flex;
+  justify-content: center;
+}
+button {
+  width: 100%;
 }

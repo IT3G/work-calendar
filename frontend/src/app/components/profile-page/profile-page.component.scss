@@ -1,0 +1,23 @@
+.container {
+  margin-top: 35px;
+}
+.text-right {
+  color: rgb(148, 148, 148);
+}
+.profile-form {
+  margin-top: -10px;
+}
+.form-group {
+  margin-bottom: -16px;
+}
+.checkbox {
+  margin-top: 10px;
+}
+.form-footer {
+  margin-top: 36px;
+}
+@media (max-width: 767px) {
+  .text-right {
+    display: none;
+  }
+}

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Employee } from '../../models/employee.model';
+import { Observable } from 'rxjs';
 import { TaskModel } from '../../models/tasks.models';
 
 @Injectable({
@@ -8,9 +8,9 @@ import { TaskModel } from '../../models/tasks.models';
 export abstract class TaskApiService {
   constructor() {}
 
-  abstract addTask(task: TaskModel);
+  abstract addTask(task: TaskModel): Observable<Object>;
 
-  abstract loadTasks(employee: Employee);
+  abstract loadAllTasks(): Observable<Object>;
 
-  abstract loadAllTasks();
+  abstract mapToTaskModel(task: TaskModel[]): TaskModel[];
 }

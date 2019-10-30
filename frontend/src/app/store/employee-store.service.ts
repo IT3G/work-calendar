@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Employee } from './../models/employee.model';
 
 @Injectable({
@@ -7,6 +7,7 @@ import { Employee } from './../models/employee.model';
 })
 export class EmployeeStoreService {
   private readonly employees$ = new BehaviorSubject<Employee[]>([]);
+  private updateEmitter$ = new Subject();
 
   public getEmployeesSnapshot(): Employee[] {
     return this.employees$.value;
@@ -18,5 +19,13 @@ export class EmployeeStoreService {
 
   public getEmployees(): Observable<Employee[]> {
     return this.employees$;
+  }
+
+  public update(): void {
+    this.updateEmitter$.next();
+  }
+
+  public updater(): Subject<any> {
+    return this.updateEmitter$;
   }
 }

@@ -1,4 +1,5 @@
 import { CommonModule, registerLocaleData } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import localeRu from '@angular/common/locales/ru';
 import { APP_INITIALIZER, LOCALE_ID, NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire';
@@ -15,10 +16,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { AvatarModule } from 'ngx-avatar';
 import { NavigationMenuComponent } from 'src/app/components/navigation-menu/navigation-menu.component';
-import { RegisterPageComponent } from 'src/app/components/register-page/register-page.component';
 import { TeamPresencePageComponent } from 'src/app/components/team-presence-page/team-presence-page.component';
 import { DatePipe } from 'src/app/pipes/date.pipe';
-import { TaskApiInFireBaseService } from 'src/app/services/api/impl/firebase/task-api-in-firebase.service';
 // import { SharedModule } from 'src/app/shared.module';
 import { fireBaseConfigEnvironment } from 'src/environments/firebaseConfig';
 import { environment } from '../environments/environment';
@@ -29,16 +28,18 @@ import { CalendarComponent } from './components/calendar/calendar.component';
 import { CurrentDayComponent } from './components/current-day/current-day.component';
 import { DescriptionHistoryComponent } from './components/description-history/description-history.component';
 import { DescriptionComponent } from './components/description/description.component';
-import { FooterComponent } from './components/footer/footer.component';
+import { EmployeeListComponent } from './components/employee-list/employee-list.component';
 import { HeaderComponent } from './components/header/header.component';
 import { LoginPageComponent } from './components/login-page/login-page.component';
 import { PresencePageComponent } from './components/presence-page/presence-page.component';
 import { ProfilePageComponent } from './components/profile-page/profile-page.component';
 import { MaterialModule } from './material.module';
+import { UsernamePipe } from './pipes/username.pipe';
 import { AuthApiService } from './services/api/auth-api.service';
 import { EmployeeApiService } from './services/api/employee-api.service';
 import { AuthApiInBackendService } from './services/api/impl/backend/auth-api-in-backend.service';
-import { EmployeeApiInMemoryService } from './services/api/impl/in-memory/employee-api-in-memory.service';
+import { EmployeeApiInBackendService } from './services/api/impl/backend/employee-api-in-backend.service';
+import { TaskApiInBackendService } from './services/api/impl/backend/task-api-in-backend.service';
 import { TaskApiService } from './services/api/task-api.service';
 import { AppLoadService } from './services/app-load.service';
 
@@ -56,25 +57,23 @@ export function onInit(appLoadService: AppLoadService) {
     AgendaComponent,
     DescriptionComponent,
     HeaderComponent,
-    FooterComponent,
     CurrentDayComponent,
     ProfilePageComponent,
     PresencePageComponent,
     DescriptionHistoryComponent,
-    RegisterPageComponent,
     LoginPageComponent,
     TeamPresencePageComponent,
     NavigationMenuComponent,
-    DatePipe
+    EmployeeListComponent,
+    DatePipe,
+    UsernamePipe
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     CommonModule,
     AppRoutingModule,
-    FormsModule,
-    BrowserModule,
     BrowserAnimationsModule,
-    NgbModule,
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
@@ -92,9 +91,9 @@ export function onInit(appLoadService: AppLoadService) {
     DatePipe,
     { provide: MAT_DATE_LOCALE, useValue: 'ru-RU' },
     { provide: LOCALE_ID, useValue: 'ru' },
-    { provide: TaskApiService, useClass: TaskApiInFireBaseService },
+    { provide: TaskApiService, useClass: TaskApiInBackendService },
     { provide: FirestoreSettingsToken, useValue: {} },
-    { provide: EmployeeApiService, useClass: EmployeeApiInMemoryService },
+    { provide: EmployeeApiService, useClass: EmployeeApiInBackendService },
     { provide: AuthApiService, useClass: AuthApiInBackendService },
     AppLoadService,
     { provide: APP_INITIALIZER, useFactory: onInit, deps: [AppLoadService], multi: true }
