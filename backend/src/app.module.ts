@@ -1,25 +1,25 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { Config, getConfig } from './config/config';
 import { MailModule } from './mail/mail.module';
 import { TasksModule } from './tasks/tasks.module';
 import { UsersModule } from './users/users.module';
+
+const config = getConfig();
+
+const url = `mongodb+srv://${config['DATABASE_USER']}:${config['DATABASE_PASSWORD']}@${config['DATABASE_URL']}`;
+
 @Module({
   imports: [
     AuthModule,
     MailModule,
     UsersModule,
     TasksModule,
-    MongooseModule.forRoot(
-      'mongodb+srv://root:root@cluster0-uvelp.mongodb.net/test?retryWrites=true&w=majority',
-      {
-        useNewUrlParser: true,
-      },
-    ),
+    MongooseModule.forRoot(url, {
+      useNewUrlParser: true
+    })
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  providers: [{ provide: Config, useValue: config }]
 })
 export class AppModule {}

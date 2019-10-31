@@ -1,10 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { LoginRequestModel } from 'src/auth/models/login.request.model';
 import { LoginResponseModel } from 'src/auth/models/login.response.model';
+import { Config } from '../../config/config';
 const ldap = require('ldapjs');
 @Injectable()
 export class LdapService {
-  config = {};
+  constructor(private configService: Config) {}
+  config = {
+    readerDn: this.configService.READER_DOMAIN_NAME,
+    readerPwd: this.configService.READER_PASSWORD,
+    serverUrl: this.configService.SERVER_URL,
+    suffix: this.configService.SUFFIX
+  };
 
   client = ldap.createClient({
     url: this.config.serverUrl,
@@ -52,7 +59,7 @@ export class LdapService {
   }
 
   private getFilter(username: string): Promise<string> {
-    const login = `${username}@it2g.ru`;
+    const login = `${username}${this.configService.MAIL_PREFIX}`;
     return new Promise((resolve, reject) => {
       this.client.bind(this.config.readerDn, this.config.readerPwd, err => {
         if (err) {
