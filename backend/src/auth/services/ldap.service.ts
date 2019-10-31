@@ -66,9 +66,10 @@ export class LdapService {
           reject('Reader bind failed ' + err);
           return;
         }
-        resolve(
-          `(&(userPrincipalName=${login})(objectClass=user)(objectCategory=person)(!(userAccountControl:1.2.840.113556.1.4.803:=2)))`
-        );
+
+        const filter = this.configService.LDAP_FILTER.replace(/@login@/g, login);
+
+        resolve(filter);
       });
     });
   }
