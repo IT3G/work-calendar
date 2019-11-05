@@ -1,18 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Moment } from 'moment';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { DayType } from '../const/day-type.const';
 import { Employee } from '../models/employee.model';
 
 @Injectable({ providedIn: 'root' })
 export class ContextStoreService {
   private currentUser = new BehaviorSubject<Employee>(null);
-  private selectedUser = new BehaviorSubject<Employee>(null);
   private currentDate = new BehaviorSubject<Moment>(null);
   private dayType = new BehaviorSubject<DayType>(null);
   private comment = new BehaviorSubject<string>(null);
-
-  constructor() {}
+  private updateEmitter$ = new Subject();
 
   public getCurrentDate$(): Observable<Moment> {
     return this.currentDate;
@@ -50,19 +49,22 @@ export class ContextStoreService {
     return this.currentUser.value;
   }
 
-  public setCurrentUser(user: Employee) {
+  public isCurrentUserAdmin$(): Observable<boolean> {
+    return this.currentUser.pipe(
+      filter(user => !!user),
+      map((user: Employee) => user.isAdmin)
+    );
+  }
+
+  public setCurrentUser(user: Employee): void {
     this.currentUser.next(user);
   }
 
-  public getSelectedUser$(): Observable<Employee> {
-    return this.selectedUser;
+  public update(): void {
+    this.updateEmitter$.next();
   }
 
-  public getSelectedUser(): Employee {
-    return this.selectedUser.value;
-  }
-
-  public setSelectedUser(user: Employee) {
-    this.selectedUser.next(user);
+  public updater(): Subject<any> {
+    return this.updateEmitter$;
   }
 }

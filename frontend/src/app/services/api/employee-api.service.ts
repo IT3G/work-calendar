@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Employee } from '../../models/employee.model';
+import { Observable } from 'rxjs';
+import { Employee } from 'src/app/models/employee.model';
 
 @Injectable({
   providedIn: 'root'
@@ -7,5 +8,11 @@ import { Employee } from '../../models/employee.model';
 export abstract class EmployeeApiService {
   constructor() {}
 
-  abstract load();
+  abstract loadAllEmployees(): Observable<Employee[]>;
+
+  abstract searchUserByLogin(usernameString: string): Observable<Employee[]>;
+
+  abstract searchUserById(id: string): Observable<Employee>;
+
+  abstract updateUserInfo(login: string, data: Employee): Observable<Object>;
 }

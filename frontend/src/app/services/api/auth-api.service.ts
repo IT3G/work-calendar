@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { AuthRequestModel } from 'src/app/models/auth.request.model';
+import { Employee } from 'src/app/models/employee.model';
 
 @Injectable({
   providedIn: 'root'
@@ -6,5 +9,5 @@ import { Injectable } from '@angular/core';
 export abstract class AuthApiService {
   constructor() {}
 
-  abstract login();
+  public abstract login(req: AuthRequestModel): Observable<Employee>;
 }

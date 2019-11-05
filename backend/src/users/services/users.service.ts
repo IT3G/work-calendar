@@ -5,9 +5,7 @@ import { LoginResponseModel } from 'src/auth/models/login.response.model';
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectModel('Users') private readonly userModel: Model<LoginResponseModel>,
-  ) {}
+  constructor(@InjectModel('Users') private readonly userModel: Model<LoginResponseModel>) {}
 
   async getUsers(): Promise<LoginResponseModel[]> {
     const users = await this.userModel.find().exec();
@@ -15,9 +13,7 @@ export class UsersService {
   }
 
   async getUserByLogin(mailNickname: string): Promise<LoginResponseModel[]> {
-    const user = await this.userModel
-      .find({ mailNickname: mailNickname })
-      .exec();
+    const user = await this.userModel.find({ mailNickname: mailNickname }).exec();
     return user;
   }
 
@@ -31,11 +27,8 @@ export class UsersService {
     return newUser.save();
   }
 
-  async updateUserById(
-    id: string,
-    data: LoginResponseModel,
-  ): Promise<LoginResponseModel> {
-    const result = await this.userModel.findByIdAndUpdate(id, { ...data });
+  async updateUserByLogin(login: string, data: LoginResponseModel): Promise<LoginResponseModel> {
+    const result = await this.userModel.updateOne({ mailNickname: login }, { ...data });
     return result;
   }
 }

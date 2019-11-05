@@ -1,8 +1,12 @@
 <div class="day">
   <p>Присутствие на {{ currentDate$ | async | datePipe: 'D MMMM YYYY' }}</p>
   <div style="display: inline-flex">
-      <ngx-avatar size="28" value="{{ (selectedUser$ | async).name[0] + (selectedUser$ | async).surname[0]}}"></ngx-avatar>&nbsp;
-      <a [routerLink]="['/profile', (selectedUser$ | async).id]">
-    {{ (selectedUser$ | async).surname }} {{ (selectedUser$ | async).name }}</a>
-      </div>
+    <ngx-avatar size="28"
+      value="{{ selectedUser.username | usernamePipe }}">
+    </ngx-avatar>
+    &nbsp;
+    <a [routerLink]="['/profile', selectedUser.mailNickname]">
+      {{ selectedUser.username }}
+    </a>
+  </div>
 </div>

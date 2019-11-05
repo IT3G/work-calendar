@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { Moment } from 'moment';
 import { Observable } from 'rxjs';
 import { ContextStoreService } from 'src/app/store/context-store.service';
 import { Employee } from '../../models/employee.model';
@@ -9,14 +10,15 @@ import { Employee } from '../../models/employee.model';
   styleUrls: ['./current-day.component.scss']
 })
 export class CurrentDayComponent implements OnInit {
-  currentDate$: Observable<any>;
+  currentDate$: Observable<Moment>;
   currentUser$: Observable<string>;
-  selectedUser$: Observable<Employee>;
+
+  @Input()
+  selectedUser: Employee;
 
   constructor(private contextStoreService: ContextStoreService) {}
 
   ngOnInit() {
     this.currentDate$ = this.contextStoreService.getCurrentDate$();
-    this.selectedUser$ = this.contextStoreService.getSelectedUser$();
   }
 }

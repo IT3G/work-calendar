@@ -1,13 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpStatus,
-  NotFoundException,
-  Param,
-  Post,
-  Res,
-} from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, NotFoundException, Param, Post, Res } from '@nestjs/common';
 import { LoginResponseModel } from '../auth/models/login.response.model';
 import { UsersService } from './services/users.service';
 
@@ -35,13 +26,9 @@ export class UsersController {
     return res.status(HttpStatus.OK).json(user);
   }
 
-  @Post('/id/:id')
-  async editUserById(
-    @Res() res,
-    @Param('id') id,
-    @Body() data: LoginResponseModel,
-  ) {
-    const editedUser = await this.userService.updateUserById(id, data);
+  @Post('/login/:login')
+  async editUserByLogin(@Res() res, @Param('login') login, @Body() data: LoginResponseModel) {
+    const editedUser = await this.userService.updateUserByLogin(login, data);
     if (!editedUser) throw new NotFoundException('User does not exist!');
     return res.status(HttpStatus.OK).json(editedUser);
   }

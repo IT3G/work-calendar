@@ -1,40 +1,48 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 import { Moment } from 'moment';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { DayType } from 'src/app/const/day-type.const';
 import { Employee } from 'src/app/models/employee.model';
-import { PresenceModel } from 'src/app/models/presence-page.model';
+import { PresenceModel } from 'src/app/models/presence.page.model';
 import { TaskModel } from 'src/app/models/tasks.models';
-import { TaskApiService } from 'src/app/services/api/task-api.service';
 import { EmployeeStoreService } from 'src/app/store/employee-store.service';
 import { TasksStoreService } from 'src/app/store/tasks-store.service';
+
 @Component({
   selector: 'app-team-presence',
   templateUrl: './team-presence-page.component.html',
   styleUrls: ['./team-presence-page.component.scss']
 })
-export class TeamPresencePageComponent implements OnInit {
-  date$ = new BehaviorSubject<Moment>(moment());
-  employees$: Observable<Employee[]>;
-  tasks$: Observable<TaskModel[]>;
-  monthData$: Observable<PresenceModel[]>;
-  monthDays$: Observable<Moment[]>;
-  dayType = DayType;
+export class TeamPresencePageComponent implements OnInit, OnDestroy {
+  public monthData$: Observable<PresenceModel[]>;
+  public monthDays$: Observable<Moment[]>;
+  public dayType = DayType;
+  private qParamsSnpshotMonth = this.route.snapshot.queryParams.month;
+  public date$ = new BehaviorSubject<Moment>(this.qParamsSnpshotMonth ? moment(this.qParamsSnpshotMonth) : moment());
+  private employees$: Observable<Employee[]>;
+  private tasks$: Observable<TaskModel[]>;
+  private dateSub = new Subscription();
 
   constructor(
     private employeeStoreService: EmployeeStoreService,
     private tasksStoreService: TasksStoreService,
-    private taskApiService: TaskApiService
+    private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit() {
-    this.taskApiService.loadAllTasks();
     this.employees$ = this.employeeStoreService.getEmployees();
     this.tasks$ = this.tasksStoreService.getTasks();
-    this.monthData$ = this.updateTaskData();
     this.monthDays$ = this.getMonthDays();
+    this.updateTaskData();
+    this.getQueryParamsDate();
+  }
+
+  ngOnDestroy() {
+    this.dateSub.unsubscribe();
   }
 
   public prevMonth(): void {
@@ -45,41 +53,48 @@ export class TeamPresencePageComponent implements OnInit {
     this.date$.next(moment(this.date$.value).add(1, 'months'));
   }
 
-  private getMonthDays() {
+  private getQueryParamsDate() {
+    this.dateSub.add(
+      this.date$.subscribe(date => {
+        this.router.navigate([], { queryParams: { month: date.toISOString() } });
+      })
+    );
+  }
+
+  private getMonthDays(): Observable<Moment[]> {
     return this.date$.pipe(
       map(date => {
         const startOfMonth = date.clone().startOf('month');
         const endOfMonth = date.clone().endOf('month');
 
-        const res = [];
+        const res: Moment[] = [];
 
         const day = startOfMonth;
         while (day.isBefore(endOfMonth)) {
           res.push(day.clone());
           day.add(1, 'd');
         }
-
         return res;
       })
     );
   }
 
-  private updateTaskData() {
-    return combineLatest(this.date$, this.employees$, this.tasks$).pipe(
-      filter(([date, employees, tasks]) => !!(employees && employees.length && tasks)),
+  private updateTaskData(): void {
+    this.monthData$ = combineLatest(this.date$, this.employees$, this.tasks$).pipe(
+      filter(([_, employees, tasks]) => !!(employees && employees.length && tasks)),
       map(([date, employees, tasks]) =>
-        employees.map(e => {
+        employees.map(emp => {
           const startOfMonth = date.clone().startOf('month');
           const endOfMonth = date.clone().endOf('month');
 
           const res = {
-            employee: e,
+            employee: emp,
             tasks: []
           };
 
           const day = startOfMonth;
           while (day.isBefore(endOfMonth)) {
-            res.tasks.push(tasks.find(i => i.employeeId === e.id && moment(day).isSame(i.date, 'day')));
+            res.tasks.push(tasks.find(i => i.employee === emp.mailNickname && moment(day).isSame(i.dateStart, 'day')));
             day.add(1, 'd');
           }
 

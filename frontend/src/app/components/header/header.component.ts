@@ -11,10 +11,9 @@ import { ContextStoreService } from '../../store/context-store.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  @Output()
-  mobileMenuClick = new EventEmitter<void>();
+  @Output() mobileMenuClick = new EventEmitter<void>();
 
-  currentUser$: Observable<Employee>;
+  public currentUser$: Observable<Employee>;
 
   constructor(private router: Router, private contextStoreService: ContextStoreService) {}
 
@@ -22,7 +21,7 @@ export class HeaderComponent implements OnInit {
     this.currentUser$ = this.contextStoreService.getCurrentUser$();
   }
 
-  onSwipe(evt: { deltaX: number }) {
+  onSwipe(evt: { deltaX: number }): void {
     const toRight = Math.abs(evt.deltaX) > 40 && evt.deltaX > 0;
     const increment = toRight === true ? -1 : 1;
 
