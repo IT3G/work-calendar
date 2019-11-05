@@ -8,7 +8,8 @@ import { UsersModule } from './users/users.module';
 
 const config = getConfig();
 
-const url = `mongodb+srv://${config['DATABASE_USER']}:${config['DATABASE_PASSWORD']}@${config['DATABASE_URL']}`;
+const url = `mongodb://${config['DATABASE_USER']}:${config['DATABASE_PASSWORD']}@${config['DATABASE_URL']}`;
+
 @Module({
   imports: [
     AuthModule,
