@@ -8,7 +8,7 @@ import { UsersModule } from './users/users.module';
 
 const config = getConfig();
 
-const url = `mongodb://calendar:calendar@localhost:27017/calendar`;
+const url = `mongodb://${config['DATABASE_USER']}:${config['DATABASE_PASSWORD']}@${config['DATABASE_URL']}`;
 console.log(url);
 @Module({
   imports: [
