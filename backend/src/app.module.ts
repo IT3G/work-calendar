@@ -9,7 +9,7 @@ import { UsersModule } from './users/users.module';
 const config = getConfig();
 
 const url = `mongodb://${config['DATABASE_USER']}:${config['DATABASE_PASSWORD']}@${config['DATABASE_URL']}`;
-console.log(url);
+
 @Module({
   imports: [
     AuthModule,
