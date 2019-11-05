@@ -17,7 +17,7 @@ import { TasksStoreService } from './store/tasks-store.service';
 })
 export class AppComponent implements OnInit, OnDestroy {
   public userSession: string;
-  public subscription: Subscription;
+  public subscription = new Subscription();
   constructor(
     private contextStoreService: ContextStoreService,
     private taskApiService: TaskApiService,
