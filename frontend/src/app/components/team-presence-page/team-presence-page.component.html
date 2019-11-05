@@ -4,35 +4,40 @@
       <div class="buttons__wrapper">
         <button class="btn btn-outline-primary prev"
           (click)="prevMonth()">
-          <-</button> <div
-            class="current-month">{{date$ | async | datePipe: 'MMMM YYYY'}}</div>
-      <button class="btn btn-outline-primary next"
-        (click)="nextMonth()">-></button>
-    </div>
-
-    <div class="table"
-      *ngIf="monthData$|async as monthData">
-
-      <div class="row-item">
-        <div class="title header">Сотрудник</div>
-        <div class="day header"
-          *ngFor="let date of monthDays$|async">{{date | datePipe: 'D'}}</div>
-
+          &laquo;
+        </button>
+        <div class="current-month">{{date$ | async | datePipe: 'MMMM YYYY'}}</div>
+        <button class="btn btn-outline-primary next"
+          (click)="nextMonth()">
+          &raquo;
+        </button>
       </div>
 
-      <div *ngFor="let data of monthData"
-        class="row-item">
-        <a class="title"
-          [routerLink]="['/presence', data.employee.id]">{{ data.employee.surname}} {{ data.employee.name[0]}}</a>
-        <div *ngFor="let task of data.tasks"
-          class="day"
-          [ngClass]="task?.type ? dayType[task?.type]: ''"></div>
+      <div class="table"
+        *ngIf="monthData$ | async as monthData">
+
+        <div class="row-item">
+          <div class="title header">Сотрудник</div>
+          <div class="day header"
+            *ngFor="let date of monthDays$ | async">{{date | datePipe: 'D'}}
+          </div>
+        </div>
+
+        <div *ngFor="let data of monthData"
+          class="row-item">
+          <a class="title"
+            [routerLink]="['/presence', data.employee.mailNickname]">{{ data.employee.username.split(' ')[0]}} {{ data.employee.username.split(' ')[1][0]}}
+          </a>
+          <div *ngFor="let task of data.tasks"
+            class="day"
+            [ngClass]="task?.type ? dayType[task?.type]: ''">
+          </div>
+        </div>
 
       </div>
-    </div>
-    <div class="agenda__wrapper">
-      <app-agenda></app-agenda>
+      <div class="agenda__wrapper">
+        <app-agenda></app-agenda>
+      </div>
     </div>
   </div>
-</div>
 </div>

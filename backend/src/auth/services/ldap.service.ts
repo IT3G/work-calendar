@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnApplicationShutdown } from '@nestjs/common';
 import { LoginRequestModel } from 'src/auth/models/login.request.model';
 import { LoginResponseModel } from 'src/auth/models/login.response.model';
 import { Config } from '../../config/config';
 const ldap = require('ldapjs');
 @Injectable()
-export class LdapService {
+export class LdapService implements OnApplicationShutdown {
   constructor(private configService: Config) {}
   config = {
     readerDn: this.configService.READER_DOMAIN_NAME,
@@ -13,12 +13,18 @@ export class LdapService {
     suffix: this.configService.SUFFIX
   };
 
-  client = ldap.createClient({
-    url: this.config.serverUrl,
-    reconnect: true
-  });
+  client: any;
+
+  onApplicationShutdown() {
+    this.client.destroy();
+  }
 
   public async auth(credentials: LoginRequestModel): Promise<LoginResponseModel> {
+    this.client = ldap.createClient({
+      url: this.config.serverUrl,
+      reconnect: true
+    });
+
     this.client.on('error', err => {
       console.log(err);
     });
@@ -29,6 +35,8 @@ export class LdapService {
       type: el.type,
       data: this.stringFromUTF8Array(el._vals[0])
     }));
+
+    this.client.destroy();
 
     const data: LoginResponseModel = this.mapToSendOnClient(result.attributes);
     return data;

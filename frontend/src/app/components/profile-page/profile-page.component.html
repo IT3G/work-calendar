@@ -1,14 +1,120 @@
-<div class="container">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-2">
-        <ngx-avatar size="160"
-          value="{{ (selectedUser$ | async).name[0] + (selectedUser$ | async).surname[0]}}"> </ngx-avatar>
-      </div>
-      <div class="col-md-10">
-        <h3>{{ (selectedUser$ | async).surname }} </h3>
-        <h3>{{ (selectedUser$ | async).name }}</h3>
-        <h3>{{ (authInfo$ | async)?.email }}</h3>
+<div class="container"
+  *ngIf="selectedUser as user">
+  <div class="row">
+    <div class="col-md-2">
+      <ngx-avatar size="160"
+        value="{{ user.username | usernamePipe }}">
+      </ngx-avatar>
+    </div>
+    <div class="col-md-10">
+      <div class="profile-form col-md-7"
+        [formGroup]="profileForm"
+        (keydown)=onEnter($event)>
+        <div class="grid">
+
+          <div class='title'>фамилия, имя:</div>
+          <div class="form-group">
+            <mat-form-field>
+              <input matInput
+                value="{{ user.username }}"
+                autocomplete="off"
+                formControlName="username">
+            </mat-form-field>
+          </div>
+          <div class='title'>email:</div>
+          <div class="form-group">
+            <mat-form-field>
+              <input matInput
+                value="{{ user.email }}"
+                autocomplete="off"
+                formControlName="email">
+            </mat-form-field>
+          </div>
+          <div class='title'>проекты:</div>
+          <div class="form-group">
+            <mat-form-field>
+              <input matInput
+                value="{{ user.projects }}"
+                autocomplete="off"
+                formControlName="projects">
+            </mat-form-field>
+          </div>
+          <div class='title'>город:</div>
+          <div class="form-group">
+            <mat-form-field>
+              <input matInput
+                value="{{ user.location }}"
+                autocomplete="off"
+                formControlName="location">
+            </mat-form-field>
+          </div>
+          <div class='title'>номер:</div>
+          <div class="form-group">
+            <mat-form-field>
+              <input matInput
+                value="{{ user.telNumber }}"
+                autocomplete="off"
+                formControlName="telNumber">
+            </mat-form-field>
+          </div>
+          <div class='title'
+            *ngIf="isAdmin$ | async">админ:</div>
+          <div *ngIf="isAdmin$ | async"
+            class="form-group checkbox">
+            <mat-checkbox color="primary"
+              formControlName="isAdmin">
+            </mat-checkbox>
+          </div>
+          <div class='title'>в рассылке:</div>
+          <div class="form-group checkbox">
+            <mat-checkbox color="primary"
+              formControlName="hasMailing">
+            </mat-checkbox>
+          </div>
+          <div class="form-footer">
+            <button type="submit"
+              mat-raised-button
+              color="primary"
+              *ngIf='(!isEdit) && (canEdit || (isAdmin$ | async))'
+              (click)="editStart()">Редактировать
+            </button>
+            <button type="submit"
+              mat-raised-button
+              color="primary"
+              *ngIf='isEdit'
+              [disabled]="profileForm.invalid"
+              (click)="onUpdateProfile()">Сохранить
+            </button>
+            <button mat-raised-button
+              *ngIf="isEdit"
+              (click)="cancelEdit()">Отмена
+            </button>
+          </div>
+
+        </div>
+        <!-- <div class="col-md-7"
+          *ngIf="!isEdit">
+          <div>{{ user.username }}</div>
+          <div>
+            <a href="mailto:{{ user.email }}">{{ user.email }}</a>
+          </div>
+          <div>{{ user.projects? user.projects : "-" }}</div>
+          <div>
+            <a href="#">{{ user.location }}</a>
+          </div>
+          <div *ngIf="user.telNumber; else noTelNumber">
+            <a href="tel:{{ user.telNumber }}">{{ user.telNumber }}</a>
+          </div>
+          <ng-template #noTelNumber>
+            <div>-</div>
+          </ng-template>
+          <button color="primary"
+            mat-raised-button
+            *ngIf="isAdmin$ | async"
+            (click)="onEditProfile()">Редактировать
+          </button>
+        </div> -->
       </div>
     </div>
   </div>
+</div>

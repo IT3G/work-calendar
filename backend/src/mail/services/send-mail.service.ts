@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import nodemailer from 'nodemailer';
 import { Config } from '../../config/config';
 import { SendMailRequestModel } from '../models/send-mail.request.model';
-
+const nodemailer = require('nodemailer');
 @Injectable()
 export class SendMailService {
   constructor(private config: Config) {}
