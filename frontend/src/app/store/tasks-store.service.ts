@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { TaskModel } from '../models/tasks.models';
 
 @Injectable({
@@ -7,6 +7,7 @@ import { TaskModel } from '../models/tasks.models';
 })
 export class TasksStoreService {
   private tasks$ = new BehaviorSubject<TaskModel[]>([]);
+  private updateEmitter$ = new Subject();
 
   public getTasksSnapshot(): TaskModel[] {
     return this.tasks$.value;
@@ -18,5 +19,13 @@ export class TasksStoreService {
 
   public addTasks(val: TaskModel[]): void {
     this.tasks$.next(val);
+  }
+
+  public update(): void {
+    this.updateEmitter$.next();
+  }
+
+  public updater(): Subject<any> {
+    return this.updateEmitter$;
   }
 }

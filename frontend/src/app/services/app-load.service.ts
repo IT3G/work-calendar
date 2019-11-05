@@ -14,19 +14,20 @@ export class AppLoadService {
 
   initializeApp(): Promise<any> {
     return new Promise((resolve, reject) => {
-      console.log(`initializeApp:: inside promise`);
+      // console.log(`initializeApp:: inside promise`);
 
       // TODO: Observable pipe
-      this.employeeApiService.load();
-      this.contextStoreService.setCurrentUser(this.employeeStoreService.getEmployeesSnapshot()[0]);
-      this.contextStoreService.setSelectedUser(this.employeeStoreService.getEmployeesSnapshot()[0]);
+      // this.employeeApiService.loadAllEmployees();
+      // Две строчки ниже похоже можно удалять
+      // this.contextStoreService.setCurrentUser(this.employeeStoreService.getEmployeesSnapshot()[0]);
+      // this.contextStoreService.setSelectedUser(this.employeeStoreService.getEmployeesSnapshot()[0]);
       this.contextStoreService.setCurrentDate(moment().startOf('day'));
       // APP_SETTINGS.connectionString = settings[0].value;
 
       // resolve();
 
       setTimeout(() => {
-        console.log(`initializeApp:: inside setTimeout`);
+        // console.log(`initializeApp:: inside setTimeout`);
         resolve();
       }, 100);
     });

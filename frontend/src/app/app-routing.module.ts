@@ -1,20 +1,23 @@
 import { NgModule } from '@angular/core';
 import { Router, RouterModule, Routes } from '@angular/router';
 import { LoginPageComponent } from 'src/app/components/login-page/login-page.component';
-import { RegisterPageComponent } from 'src/app/components/register-page/register-page.component';
 import { TeamPresencePageComponent } from 'src/app/components/team-presence-page/team-presence-page.component';
+import { ConfigurationComponent } from './components/configuration/configuration.component';
+import { EmployeeListComponent } from './components/employee-list/employee-list.component';
 import { PresencePageComponent } from './components/presence-page/presence-page.component';
 import { ProfilePageComponent } from './components/profile-page/profile-page.component';
+import { AuthGuardService as AuthGuard } from './guards/auth-guard.service';
 
-const swipebleRoutes: string[] = ['/presence', '/team'];
+const swipebleRoutes: string[] = ['/presence', '/team-presence', '/profile'];
 
 const routes: Routes = [
-  { path: 'profile', component: ProfilePageComponent },
-  { path: 'profile/:id', component: ProfilePageComponent },
-  { path: 'presence', component: PresencePageComponent },
+  { path: 'profile', component: ProfilePageComponent, canActivate: [AuthGuard] },
+  { path: 'profile/:id', component: ProfilePageComponent, canActivate: [AuthGuard] },
+  { path: 'presence', component: PresencePageComponent, canActivate: [AuthGuard] },
+  { path: 'presence/:id', component: PresencePageComponent, canActivate: [AuthGuard] },
   { path: 'team-presence', component: TeamPresencePageComponent },
-  { path: 'presence/:id', component: PresencePageComponent },
-  { path: 'register', component: RegisterPageComponent },
+  { path: 'employee-list', component: EmployeeListComponent, canActivate: [AuthGuard] },
+  { path: 'app-configuration', component: ConfigurationComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginPageComponent },
   { path: '', redirectTo: 'presence', pathMatch: 'full' }
 ];
