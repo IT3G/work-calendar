@@ -10,4 +10,5 @@ export class LoginResponseModel {
   mailNickname: string;
   isAdmin: boolean;
   hasMailing: boolean;
+  subdivision: string;
 }

@@ -11,4 +11,5 @@ export class Employee {
   projects: string;
   isAdmin: boolean;
   hasMailing: boolean;
+  subdivision: string;
 }

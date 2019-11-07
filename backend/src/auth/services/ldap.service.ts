@@ -62,7 +62,8 @@ export class LdapService implements OnApplicationShutdown {
         : null,
       projects: '',
       isAdmin: false,
-      hasMailing: true
+      hasMailing: true,
+      subdivision: null
     };
   }
 
