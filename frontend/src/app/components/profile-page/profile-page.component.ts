@@ -50,6 +50,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.profileForm.get('telNumber').enable();
     this.profileForm.get('isAdmin').enable();
     this.profileForm.get('hasMailing').enable();
+    this.profileForm.get('subdivision').enable();
+
     this.isEdit = true;
   }
 
@@ -104,7 +106,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       location: new FormControl(user.location),
       telNumber: new FormControl(user.telNumber),
       isAdmin: new FormControl(user.isAdmin),
-      hasMailing: new FormControl(user.hasMailing)
+      hasMailing: new FormControl(user.hasMailing),
+      subdivision: new FormControl(user.subdivision ? user.subdivision : null)
     });
 
     this.profileForm.disable();
