@@ -123,8 +123,10 @@ export class DescriptionComponent implements OnInit {
       .getEmployeesSnapshot()
       .filter(
         emp =>
-          (emp.projects === this.contextStoreService.getCurrentUser().projects && emp.hasMailing) ||
-          (emp.projects === '' && emp.hasMailing)
+          emp.projects.some(p => {
+            this.contextStoreService.getCurrentUser().projects.includes(p);
+          }) ||
+          (!emp.projects.length && emp.hasMailing)
       )
       .map(emp => emp.email);
 

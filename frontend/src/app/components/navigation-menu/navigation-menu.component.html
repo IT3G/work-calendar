@@ -17,7 +17,7 @@
   <button mat-button
     class="nav-item"
     *ngIf="(isAuth$ | async) && (isAdmin$ | async)"
-    [ngClass]="{'active': (router.url === '/employee-list') || (router.url === '/app-configuration')}"
+    [ngClass]="{'active': (router.url === '/employee-list') || (router.url === '/app-configuration')  || (router.url === '/projects')}"
     [matMenuTriggerFor]="menu">Администр.
   </button>
   <mat-menu #menu="matMenu">
@@ -25,6 +25,11 @@
       class="nav-item"
       routerLink="/employee-list"
       routerLinkActive="active">Сотрудники
+    </a>
+    <a mat-menu-item
+      class="nav-item"
+      routerLink="/projects"
+      routerLinkActive="active">Проекты
     </a>
     <a mat-menu-item
       class="nav-item"

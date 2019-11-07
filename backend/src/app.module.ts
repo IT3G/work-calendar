@@ -3,9 +3,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
 import { Config, getConfig } from './config/config';
 import { MailModule } from './mail/mail.module';
+import { ProjectsModule } from './projects/projects.module';
 import { TasksModule } from './tasks/tasks.module';
 import { UsersModule } from './users/users.module';
-
 const config = getConfig();
 
 const url = `mongodb://${config['DATABASE_USER']}:${config['DATABASE_PASSWORD']}@${config['DATABASE_URL']}`;
@@ -16,6 +16,7 @@ const url = `mongodb://${config['DATABASE_USER']}:${config['DATABASE_PASSWORD']}
     MailModule,
     UsersModule,
     TasksModule,
+    ProjectsModule,
     MongooseModule.forRoot(url, {
       useNewUrlParser: true
     })

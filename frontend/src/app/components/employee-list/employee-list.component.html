@@ -1,7 +1,20 @@
 <div class="container"
-  *ngIf="employees$ | async as employees">
+  *ngIf="employees">
+
+  <mat-form-field>
+    <mat-label>Проект</mat-label>
+    <mat-select [formControl]='filter'>
+      <mat-option>Сбросить</mat-option>
+      <mat-option *ngFor="let project of projects$ | async"
+        [value]="project.title">
+        {{project.title}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
   <table mat-table
-    [dataSource]="employees"
+    [dataSource]="employees | filterEmployeePipe:filter.value"
     class="mat-elevation-z6">
 
     <ng-container matColumnDef="username">

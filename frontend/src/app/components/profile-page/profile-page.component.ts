@@ -5,6 +5,8 @@ import { Observable, Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { EmployeeApiService } from 'src/app/services/api/employee-api.service';
 import { EmployeeStoreService } from 'src/app/store/employee-store.service';
+import { ProjectModel } from '../../models/projects.model';
+import { ProjectsApiService } from '../../services/api/projects-api.service';
 import { ContextStoreService } from '../../store/context-store.service';
 import { Employee } from './../../models/employee.model';
 
@@ -22,17 +24,19 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   private login: string;
   private getCurrentUserSub = new Subscription();
   private searchUserByLoginSub = new Subscription();
-
+  public projects$: Observable<ProjectModel[]>;
   constructor(
     private contextStoreService: ContextStoreService,
     private employeeApiService: EmployeeApiService,
     private employeeStoreService: EmployeeStoreService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private projectsApi: ProjectsApiService
   ) {}
 
   ngOnInit() {
     this.getUserInfo();
     this.isAdmin$ = this.contextStoreService.isCurrentUserAdmin$();
+    this.projects$ = this.projectsApi.getProjects();
   }
 
   ngOnDestroy() {
@@ -109,7 +113,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       hasMailing: new FormControl(user.hasMailing),
       subdivision: new FormControl(user.subdivision ? user.subdivision : null)
     });
-
     this.profileForm.disable();
   }
 

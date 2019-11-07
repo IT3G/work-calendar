@@ -6,6 +6,7 @@ import { ConfigurationComponent } from './components/configuration/configuration
 import { EmployeeListComponent } from './components/employee-list/employee-list.component';
 import { PresencePageComponent } from './components/presence-page/presence-page.component';
 import { ProfilePageComponent } from './components/profile-page/profile-page.component';
+import { ProjectsComponent } from './components/projects/projects.component';
 import { AuthGuardService as AuthGuard } from './guards/auth-guard.service';
 
 const swipebleRoutes: string[] = ['/presence', '/team-presence', '/profile'];
@@ -17,13 +18,14 @@ const routes: Routes = [
   { path: 'presence/:id', component: PresencePageComponent, canActivate: [AuthGuard] },
   { path: 'team-presence', component: TeamPresencePageComponent },
   { path: 'employee-list', component: EmployeeListComponent, canActivate: [AuthGuard] },
+  { path: 'projects', component: ProjectsComponent, canActivate: [AuthGuard] },
   { path: 'app-configuration', component: ConfigurationComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginPageComponent },
   { path: '', redirectTo: 'presence', pathMatch: 'full' }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true })],
+  imports: [RouterModule.forRoot(routes, { useHash: false })],
   exports: [RouterModule]
 })
 export class AppRoutingModule {

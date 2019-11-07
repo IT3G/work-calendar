@@ -32,11 +32,17 @@
           </div>
           <div class='title'>проекты:</div>
           <div class="form-group">
-            <mat-form-field>
+            <!-- <mat-form-field>
               <input matInput
                 value="{{ user.projects }}"
-                autocomplete="off"
-                formControlName="projects">
+                autocomplete="off">
+            </mat-form-field> -->
+            <mat-form-field>
+              <mat-select formControlName="projects"
+                multiple>
+                <mat-option *ngFor="let project of projects$ | async"
+                  [value]="project.title">{{project.title}}</mat-option>
+              </mat-select>
             </mat-form-field>
           </div>
           <div class='title'>подразделение:</div>

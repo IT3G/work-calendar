@@ -8,7 +8,7 @@ export class Employee {
   telNumber: string;
   physicalDeliveryOfficeName: string;
   mailNickname: string;
-  projects: string;
+  projects: any[];
   isAdmin: boolean;
   hasMailing: boolean;
   subdivision: string;
