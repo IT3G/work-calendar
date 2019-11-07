@@ -34,10 +34,13 @@ import { HeaderComponent } from './components/header/header.component';
 import { LoginPageComponent } from './components/login-page/login-page.component';
 import { PresencePageComponent } from './components/presence-page/presence-page.component';
 import { ProfilePageComponent } from './components/profile-page/profile-page.component';
+import { ProjectAddComponent } from './components/projects/project-add/project-add.component';
+import { ProjectsComponent } from './components/projects/projects.component';
 import { MaterialModule } from './material.module';
 import { TransformTaskTypePipe } from './pipes/calendar/transform-task-type.pipe';
 import { CurrentEmployeePipe } from './pipes/description-history/current-employee.pipe';
 import { TaskTypePipe } from './pipes/description-history/task-type.pipe';
+import { FilterEmployeePipe } from './pipes/filter-employee';
 import { UsernamePipe } from './pipes/username.pipe';
 import { AuthApiService } from './services/api/auth-api.service';
 import { EmployeeApiService } from './services/api/employee-api.service';
@@ -70,14 +73,18 @@ export function onInit(appLoadService: AppLoadService) {
     LoginPageComponent,
     TeamPresencePageComponent,
     NavigationMenuComponent,
+    ProjectsComponent,
+    FilterEmployeePipe,
     EmployeeListComponent,
     ConfigurationComponent,
+    ProjectAddComponent,
     DatePipe,
     UsernamePipe,
     TaskTypePipe,
     CurrentEmployeePipe,
     TransformTaskTypePipe
   ],
+  entryComponents: [ProjectAddComponent],
   imports: [
     BrowserModule,
     HttpClientModule,

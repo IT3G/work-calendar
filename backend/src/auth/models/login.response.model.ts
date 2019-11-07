@@ -2,7 +2,7 @@ export class LoginResponseModel {
   username: string;
   location: string;
   position: string;
-  projects: string;
+  projects: string[];
   whenCreated: string;
   email: string;
   telNumber: string;

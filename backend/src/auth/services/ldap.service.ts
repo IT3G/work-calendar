@@ -60,7 +60,7 @@ export class LdapService implements OnApplicationShutdown {
       mailNickname: attributes.find(el => el.type === 'mailNickname')
         ? attributes.find(el => el.type === 'mailNickname').data
         : null,
-      projects: '',
+      projects: [],
       isAdmin: false,
       hasMailing: true,
       subdivision: null
