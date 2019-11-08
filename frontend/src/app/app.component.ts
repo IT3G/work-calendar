@@ -1,14 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { AuthGuardService } from './guards/auth-guard.service';
-import { Employee } from './models/employee.model';
-import { TaskModel } from './models/tasks.models';
-import { EmployeeApiService } from './services/api/employee-api.service';
-import { TaskApiService } from './services/api/task-api.service';
-import { TaskMapperService } from './services/mappers/task-mapper.service';
-import { ContextStoreService } from './store/context-store.service';
-import { EmployeeStoreService } from './store/employee-store.service';
-import { TasksStoreService } from './store/tasks-store.service';
+import { AuthGuardService } from './core/guards/auth-guard.service';
+import { EmployeeApiService } from './core/services/employee-api.service';
+import { TaskApiService } from './core/services/task-api.service';
+import { ContextStoreService } from './core/store/context-store.service';
+import { EmployeeStoreService } from './core/store/employee-store.service';
+import { TasksStoreService } from './core/store/tasks-store.service';
+import { Employee } from './shared/models/employee.model';
+import { TaskModel } from './shared/models/tasks.models';
+import { TaskMapperService } from './shared/services/task-mapper.service';
 
 @Component({
   selector: 'app-root',
