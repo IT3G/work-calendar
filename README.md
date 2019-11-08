@@ -11,6 +11,16 @@ Worktime planning tool.
 
 ## Developer
 
+1. Run '/frontend/yarn' and '/backend/yarn' to get dependencies
+
+2. Run '/database/docker-compose up --build' to start MongoDB
+
+3. !!! Check existence, or create correct '\backend\src\enviroments\dev.env' file !!!
+
+4. Run '/backend/npm run start:dev' to run Node backend
+
+5. Run '/frontend/yarn start' to run frontend
+
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
