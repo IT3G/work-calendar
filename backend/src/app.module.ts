@@ -8,7 +8,7 @@ import { TasksModule } from './tasks/tasks.module';
 import { UsersModule } from './users/users.module';
 const config = getConfig();
 
-const url = `mongodb+srv://root:root@cluster0-uvelp.mongodb.net/test?retryWrites=true&w=majority`;
+const url = `mongodb://${config['DATABASE_USER']}:${config['DATABASE_PASSWORD']}@${config['DATABASE_URL']}`;
 
 @Module({
   imports: [
