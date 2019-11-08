@@ -8,6 +8,6 @@ export class MailController {
   @Post()
   async sendMail(@Res() res, @Body() body: SendMailRequestModel) {
     const info = await this.sendMailService.sendMail(body);
-    res.status(202).send(info);
+    res.status(202).send({ id: info });
   }
 }

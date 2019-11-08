@@ -2,55 +2,26 @@ import { CommonModule, registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import localeRu from '@angular/common/locales/ru';
 import { APP_INITIALIZER, LOCALE_ID, NgModule } from '@angular/core';
-import { AngularFireModule } from '@angular/fire';
-import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFireDatabaseModule } from '@angular/fire/database';
-import { AngularFirestoreModule, FirestoreSettingsToken } from '@angular/fire/firestore';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DATE_LOCALE } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
-import { AvatarModule } from 'ngx-avatar';
-import { NavigationMenuComponent } from 'src/app/components/navigation-menu/navigation-menu.component';
-import { TeamPresencePageComponent } from 'src/app/components/team-presence-page/team-presence-page.component';
-import { DatePipe } from 'src/app/pipes/date.pipe';
-// import { SharedModule } from 'src/app/shared.module';
-import { fireBaseConfigEnvironment } from 'src/environments/firebaseConfig';
 import { environment } from '../environments/environment';
-import { AppRoutingModule } from './app-routing.module';
+import { AdminModule } from './admin/admin.module';
 import { AppComponent } from './app.component';
-import { AgendaComponent } from './components/agenda/agenda.component';
-import { CalendarComponent } from './components/calendar/calendar.component';
-import { ConfigurationComponent } from './components/configuration/configuration.component';
-import { CurrentDayComponent } from './components/current-day/current-day.component';
-import { DescriptionHistoryComponent } from './components/description-history/description-history.component';
-import { DescriptionComponent } from './components/description/description.component';
-import { EmployeeListComponent } from './components/employee-list/employee-list.component';
-import { HeaderComponent } from './components/header/header.component';
-import { LoginPageComponent } from './components/login-page/login-page.component';
-import { PresencePageComponent } from './components/presence-page/presence-page.component';
-import { ProfilePageComponent } from './components/profile-page/profile-page.component';
-import { ProjectAddComponent } from './components/projects/project-add/project-add.component';
-import { ProjectsComponent } from './components/projects/projects.component';
-import { MaterialModule } from './material.module';
-import { TransformTaskTypePipe } from './pipes/calendar/transform-task-type.pipe';
-import { CurrentEmployeePipe } from './pipes/description-history/current-employee.pipe';
-import { TaskTypePipe } from './pipes/description-history/task-type.pipe';
-import { FilterEmployeePipe } from './pipes/filter-employee';
-import { UsernamePipe } from './pipes/username.pipe';
-import { AuthApiService } from './services/api/auth-api.service';
-import { EmployeeApiService } from './services/api/employee-api.service';
-import { AuthApiInBackendService } from './services/api/impl/backend/auth-api-in-backend.service';
-import { EmployeeApiInBackendService } from './services/api/impl/backend/employee-api-in-backend.service';
-import { MailApiInBackendService } from './services/api/impl/backend/mail-api-in-backend.service';
-import { TaskApiInBackendService } from './services/api/impl/backend/task-api-in-backend.service';
-import { MailApiService } from './services/api/mail-api.service';
-import { TaskApiService } from './services/api/task-api.service';
-import { AppLoadService } from './services/app-load.service';
+import { CoreModule } from './core/core.module';
+import { AuthApiService } from './core/services/auth-api.service';
+import { AuthApiInBackendService } from './core/services/impl/backend/auth-api-in-backend.service';
+import { LoginModule } from './login/login.module';
+import { PresenseModule } from './presense/presense.module';
+import { ProfileModule } from './profile/profile.module';
+import { AppRoutingModule } from './routing/app-routing.module';
+import { AppLoadService } from './shared/services/app-load.service';
+import { SharedModule } from './shared/shared.module';
+import { TeamPresenseModule } from './team-presense/team-presense.module';
 
 registerLocaleData(localeRu);
 moment.locale('ru');
@@ -60,62 +31,32 @@ export function onInit(appLoadService: AppLoadService) {
 }
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    CalendarComponent,
-    AgendaComponent,
-    DescriptionComponent,
-    HeaderComponent,
-    CurrentDayComponent,
-    ProfilePageComponent,
-    PresencePageComponent,
-    DescriptionHistoryComponent,
-    LoginPageComponent,
-    TeamPresencePageComponent,
-    NavigationMenuComponent,
-    ProjectsComponent,
-    FilterEmployeePipe,
-    EmployeeListComponent,
-    ConfigurationComponent,
-    ProjectAddComponent,
-    DatePipe,
-    UsernamePipe,
-    TaskTypePipe,
-    CurrentEmployeePipe,
-    TransformTaskTypePipe
-  ],
-  entryComponents: [ProjectAddComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
+    AdminModule,
+    LoginModule,
+    CoreModule,
+    PresenseModule,
+    ProfileModule,
+    TeamPresenseModule,
     CommonModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
-    AngularFireModule.initializeApp(fireBaseConfigEnvironment.firebaseConfig),
-    AngularFirestoreModule,
-    AngularFireDatabaseModule,
-    AngularFireAuthModule,
+    SharedModule,
     RouterModule,
-    AvatarModule
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   exports: [],
   providers: [
-    DatePipe,
     { provide: MAT_DATE_LOCALE, useValue: 'ru-RU' },
     { provide: LOCALE_ID, useValue: 'ru' },
-    { provide: TaskApiService, useClass: TaskApiInBackendService },
-    { provide: FirestoreSettingsToken, useValue: {} },
-    { provide: EmployeeApiService, useClass: EmployeeApiInBackendService },
-    { provide: AuthApiService, useClass: AuthApiInBackendService },
-    { provide: MailApiService, useClass: MailApiInBackendService },
-
     AppLoadService,
-    { provide: APP_INITIALIZER, useFactory: onInit, deps: [AppLoadService], multi: true }
+    { provide: APP_INITIALIZER, useFactory: onInit, deps: [AppLoadService], multi: true },
+    { provide: AuthApiService, useClass: AuthApiInBackendService }
   ],
   bootstrap: [AppComponent]
 })
