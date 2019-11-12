@@ -18,4 +18,8 @@ export class TaskApiService {
   public loadAllTasks(): Observable<TaskModel[]> {
     return this.http.get<TaskModel[]>('/backend/tasks');
   }
+
+  public loadAllTasksByAuthor(author: string): Observable<TaskModel[]> {
+    return this.http.get<TaskModel[]>(`/backend/tasks/${author}`);
+  }
 }

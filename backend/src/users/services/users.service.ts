@@ -8,7 +8,10 @@ export class UsersService {
   constructor(@InjectModel('Users') private readonly userModel: Model<LoginResponseModel>) {}
 
   async getUsers(): Promise<LoginResponseModel[]> {
-    const users = await this.userModel.find().exec();
+    const users = await this.userModel
+      .find()
+      .sort({ username: 'asc' })
+      .exec();
     return users;
   }
 

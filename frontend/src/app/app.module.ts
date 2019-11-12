@@ -3,7 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import localeRu from '@angular/common/locales/ru';
 import { APP_INITIALIZER, LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MAT_DATE_LOCALE } from '@angular/material';
+import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -14,6 +14,7 @@ import { AdminModule } from './admin/admin.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { AuthApiService } from './core/services/auth-api.service';
+import { CustomDateAdapter } from './core/services/custom-date-adapter.service';
 import { AuthApiInBackendService } from './core/services/impl/backend/auth-api-in-backend.service';
 import { LoginModule } from './login/login.module';
 import { PresenseModule } from './presense/presense.module';
@@ -53,10 +54,11 @@ export function onInit(appLoadService: AppLoadService) {
   exports: [],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'ru-RU' },
-    { provide: LOCALE_ID, useValue: 'ru' },
+    { provide: LOCALE_ID, useValue: 'ru-RU' },
     AppLoadService,
     { provide: APP_INITIALIZER, useFactory: onInit, deps: [AppLoadService], multi: true },
-    { provide: AuthApiService, useClass: AuthApiInBackendService }
+    { provide: AuthApiService, useClass: AuthApiInBackendService },
+    { provide: DateAdapter, useClass: CustomDateAdapter }
   ],
   bootstrap: [AppComponent]
 })

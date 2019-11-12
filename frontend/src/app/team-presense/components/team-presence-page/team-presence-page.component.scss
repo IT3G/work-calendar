@@ -6,16 +6,20 @@
 .table {
   width: 100%;
   overflow: auto;
-  margin-top: 40px;
+  margin-top: 20px;
 }
 .month_title {
   text-align: center;
 }
 
+.weekend {
+  background-color: rgba(127, 140, 141, 0.2);
+}
+
 .buttons__wrapper {
-  margin-top: 35px;
   display: flex;
   align-items: center;
+  margin-right: 30px;
 }
 .current-month {
   margin: 0 15px;
@@ -61,4 +65,8 @@
   margin-top: 70px;
   display: flex;
   justify-content: center;
+}
+.filters_wrapper {
+  margin-top: 35px;
+  display: flex;
 }

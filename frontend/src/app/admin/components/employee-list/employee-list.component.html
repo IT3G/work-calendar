@@ -21,7 +21,7 @@
       <th mat-header-cell
         *matHeaderCellDef>Фамилия, имя</th>
       <td mat-cell
-        *matCellDef="let employee">{{ employee.username }}</td>
+        *matCellDef="let employee"> <a [routerLink]="['/profile', employee.mailNickname]">{{ employee.username }}</a></td>
     </ng-container>
 
     <ng-container matColumnDef="login">
@@ -29,7 +29,7 @@
         *matHeaderCellDef>Логин</th>
       <td mat-cell
         *matCellDef="let employee">
-        <a [routerLink]="['/profile', employee.mailNickname]">{{ employee.mailNickname }}</a>
+        {{ employee.mailNickname }}
       </td>
     </ng-container>
 

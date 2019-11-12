@@ -19,7 +19,7 @@ export class LdapService implements OnApplicationShutdown {
     this.client.destroy();
   }
 
-  public async auth(credentials: LoginRequestModel): Promise<LoginResponseModel> {
+  public async auth(credentials: LoginRequestModel, add?: boolean): Promise<LoginResponseModel> {
     this.client = ldap.createClient({
       url: this.config.serverUrl,
       reconnect: true
@@ -29,7 +29,7 @@ export class LdapService implements OnApplicationShutdown {
       console.log(err);
     });
     const filter = await this.getFilter(credentials.username);
-    const user = await this.search(filter, credentials.password);
+    const user = await this.search(filter, credentials.password, add);
     const result = user[0];
     result.attributes = result.attributes.map(el => ({
       type: el.type,
@@ -83,7 +83,7 @@ export class LdapService implements OnApplicationShutdown {
     });
   }
 
-  private search(filter: string, password: string): Promise<any> {
+  private search(filter: string, password: string, add: boolean): Promise<any> {
     return new Promise((resolve, reject) => {
       this.client.search(
         this.config.suffix,
@@ -109,6 +109,9 @@ export class LdapService implements OnApplicationShutdown {
 
             for (let i = 0; i < searchList.length; i++)
               this.client.bind(searchList[0].objectName, password, err => {
+                if (add && !err) {
+                  resolve(searchList);
+                }
                 if (err || !password) {
                   reject({ user: null });
                 } else {
