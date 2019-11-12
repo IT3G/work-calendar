@@ -19,5 +19,6 @@
   align-items: center;
 }
 
-.title {
+/deep/ .mat-tooltip {
+  font-size: 14px;
 }

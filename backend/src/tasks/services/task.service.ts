@@ -5,12 +5,15 @@ import { TaskResponseModel } from '../models/task.request.model';
 
 @Injectable()
 export class TaskService {
-  constructor(
-    @InjectModel('Tasks') private readonly taskModel: Model<TaskResponseModel>,
-  ) {}
+  constructor(@InjectModel('Tasks') private readonly taskModel: Model<TaskResponseModel>) {}
 
   async getTasks(): Promise<TaskResponseModel[]> {
     const users = await this.taskModel.find().exec();
+    return users;
+  }
+
+  async getTasksByAuthor(author: string): Promise<TaskResponseModel[]> {
+    const users = await this.taskModel.find({ employeeCreated: author }).exec();
     return users;
   }
 

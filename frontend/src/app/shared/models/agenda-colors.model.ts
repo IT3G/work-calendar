@@ -4,4 +4,5 @@ export class AgendaColorsModel {
   id: DayType;
   title: string;
   color: string;
+  tooltip: string;
 }

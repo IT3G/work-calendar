@@ -11,9 +11,18 @@ import { DatePipe } from './pipes/date.pipe';
 import { CurrentEmployeePipe } from './pipes/description-history/current-employee.pipe';
 import { TaskTypePipe } from './pipes/description-history/task-type.pipe';
 import { FilterEmployeePipe } from './pipes/filter-employee.pipe';
+import { FilterTeamEmployeePipe } from './pipes/filter-team-employee.pipe';
 import { UsernamePipe } from './pipes/username.pipe';
 
-const pipes = [UsernamePipe, DatePipe, TaskTypePipe, CurrentEmployeePipe, TransformTaskTypePipe, FilterEmployeePipe];
+const pipes = [
+  UsernamePipe,
+  DatePipe,
+  TaskTypePipe,
+  CurrentEmployeePipe,
+  TransformTaskTypePipe,
+  FilterEmployeePipe,
+  FilterTeamEmployeePipe
+];
 const modules = [MaterialModule, FormsModule, ReactiveFormsModule, AvatarModule, NgbModule, RouterModule];
 
 const components = [AgendaComponent];

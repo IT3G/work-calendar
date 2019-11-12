@@ -1,14 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { ProjectsApiService } from '../../../core/services/projects-api.service';
 import { EmployeeStoreService } from '../../../core/store/employee-store.service';
 import { TasksStoreService } from '../../../core/store/tasks-store.service';
 import { DayType } from '../../../shared/const/day-type.const';
 import { Employee } from '../../../shared/models/employee.model';
 import { PresenceModel } from '../../../shared/models/presence.page.model';
+import { ProjectModel } from '../../../shared/models/projects.model';
 import { TaskModel } from '../../../shared/models/tasks.models';
 
 @Component({
@@ -25,20 +28,24 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
   private employees$: Observable<Employee[]>;
   private tasks$: Observable<TaskModel[]>;
   private dateSub = new Subscription();
-
+  public filter: FormControl;
+  public projects$: Observable<ProjectModel[]>;
   constructor(
     private employeeStoreService: EmployeeStoreService,
     private tasksStoreService: TasksStoreService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private projectsApi: ProjectsApiService
   ) {}
 
   ngOnInit() {
+    this.filter = new FormControl();
     this.employees$ = this.employeeStoreService.getEmployees();
     this.tasks$ = this.tasksStoreService.getTasks();
     this.monthDays$ = this.getMonthDays();
     this.updateTaskData();
     this.getQueryParamsDate();
+    this.projects$ = this.projectsApi.getProjects();
   }
 
   ngOnDestroy() {
@@ -79,6 +86,9 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     );
   }
 
+  public isWeekend(task: TaskModel): string {
+    return task.dateStart.format('d') === '0' || task.dateStart.format('d') === '6' ? 'weekend' : '';
+  }
   private updateTaskData(): void {
     this.monthData$ = combineLatest(this.date$, this.employees$, this.tasks$).pipe(
       filter(([_, employees, tasks]) => !!(employees && employees.length && tasks)),
@@ -87,14 +97,22 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
           const startOfMonth = date.clone().startOf('month');
           const endOfMonth = date.clone().endOf('month');
 
-          const res = {
+          let res = {
             employee: emp,
             tasks: []
           };
 
           const day = startOfMonth;
           while (day.isBefore(endOfMonth)) {
-            res.tasks.push(tasks.find(i => i.employee === emp.mailNickname && moment(day).isSame(i.dateStart, 'day')));
+            const task = tasks.find(i => i.employee === emp.mailNickname && moment(day).isSame(i.dateStart, 'day'));
+            if (task) {
+              res.tasks.push(task);
+            } else {
+              res.tasks.push({
+                dateStart: moment(day)
+              });
+            }
+
             day.add(1, 'd');
           }
 

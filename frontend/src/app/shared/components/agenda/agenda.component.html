@@ -1,5 +1,6 @@
 <div class="item"
-  *ngFor="let item of options">
+  *ngFor="let item of options"
+  [matTooltip]="item.tooltip">
   <div class="label"
     [style.backgroundColor]="item.color"></div>
   <div class="title">{{item.title}}</div>

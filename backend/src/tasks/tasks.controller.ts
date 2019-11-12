@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, Post, Res } from '@nestjs/common';
 import { TaskResponseModel } from './models/task.request.model';
 import { TaskService } from './services/task.service';
 
@@ -9,6 +9,12 @@ export class TasksController {
   @Get()
   async getTasks(@Res() res) {
     const tasks = await this.taskService.getTasks();
+    return res.status(HttpStatus.OK).json(tasks);
+  }
+
+  @Get('/:author')
+  async getTasksByAuthor(@Res() res, @Param('author') author) {
+    const tasks = await this.taskService.getTasksByAuthor(author);
     return res.status(HttpStatus.OK).json(tasks);
   }
 

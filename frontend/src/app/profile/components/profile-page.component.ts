@@ -1,14 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import * as moment from 'moment';
+import { combineLatest, Observable, Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { EmployeeApiService } from '../../core/services/employee-api.service';
 import { ProjectsApiService } from '../../core/services/projects-api.service';
+import { TaskApiService } from '../../core/services/task-api.service';
 import { ContextStoreService } from '../../core/store/context-store.service';
 import { EmployeeStoreService } from '../../core/store/employee-store.service';
+import { DayType } from '../../shared/const/day-type.const';
 import { Employee } from '../../shared/models/employee.model';
 import { ProjectModel } from '../../shared/models/projects.model';
+import { TaskModel } from '../../shared/models/tasks.models';
 
 @Component({
   selector: 'app-team',
@@ -25,15 +29,23 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   private getCurrentUserSub = new Subscription();
   private searchUserByLoginSub = new Subscription();
   public projects$: Observable<ProjectModel[]>;
+  public taskHistory$: Observable<TaskModel[]>;
+  public activity: TaskModel[];
+  public dayType = DayType;
+  public displayedColumns: string[];
+  public users$: Observable<Employee[]>;
   constructor(
     private contextStoreService: ContextStoreService,
     private employeeApiService: EmployeeApiService,
     private employeeStoreService: EmployeeStoreService,
     private route: ActivatedRoute,
-    private projectsApi: ProjectsApiService
+    private projectsApi: ProjectsApiService,
+    private taskApi: TaskApiService
   ) {}
 
   ngOnInit() {
+    this.users$ = this.employeeApiService.loadAllEmployees();
+    this.displayedColumns = ['dateCreate', 'date', 'who', 'type', 'comment'];
     this.getUserInfo();
     this.isAdmin$ = this.contextStoreService.isCurrentUserAdmin$();
     this.projects$ = this.projectsApi.getProjects();
@@ -46,6 +58,10 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   public onEnter(e: KeyboardEvent): void {
     if (e.keyCode === 13) this.onUpdateProfile();
+  }
+
+  public hasDateRange(task: TaskModel): boolean {
+    return !moment(task.dateStart).isSame(moment(task.dateEnd));
   }
 
   public editStart(): void {
@@ -75,30 +91,52 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   private getUserInfo(): void {
     this.login = this.route.snapshot.params.id;
     if (!this.login) {
-      this.getCurrentUserSub.add(
-        this.contextStoreService
-          .getCurrentUser$()
-          .pipe(filter(user => !!user))
-          .subscribe(user => {
-            this.initForm(user);
-            this.setSelectedUser(user);
-            this.login = user.mailNickname;
-          })
-      );
-
-      return;
+      this.getUserFromStore();
     } else {
-      this.searchUserByLoginSub.add(
-        this.employeeApiService
-          .searchUserByLogin(this.login)
-          .pipe(map(users => users[0]))
-          .subscribe((user: Employee) => {
-            this.initForm(user);
-            this.setSelectedUser(user);
-            this.canEdit = false;
-          })
-      );
+      this.getUserFromApi();
     }
+  }
+
+  private getUserFromApi() {
+    this.searchUserByLoginSub.add(
+      this.employeeApiService
+        .searchUserByLogin(this.login)
+        .pipe(map(users => users[0]))
+        .subscribe((user: Employee) => {
+          this.initForm(user);
+          this.setSelectedUser(user);
+          this.canEdit = false;
+          this.loadTasks(user.mailNickname);
+        })
+    );
+  }
+
+  private getUserFromStore() {
+    this.getCurrentUserSub.add(
+      this.contextStoreService
+        .getCurrentUser$()
+        .pipe(filter(user => !!user))
+        .subscribe(user => {
+          this.initForm(user);
+          this.setSelectedUser(user);
+          this.login = user.mailNickname;
+          this.loadTasks(user.mailNickname);
+        })
+    );
+  }
+
+  public loadTasks(user: string): void {
+    this.taskHistory$ = this.taskApi.loadAllTasksByAuthor(user);
+    combineLatest(this.users$, this.taskHistory$)
+      .pipe(filter(([users, tasks]) => !!users.length && !!tasks.length))
+      .subscribe(
+        ([users, tasks]) =>
+          (this.activity = tasks.map(task => {
+            const user = users.find(user => user.mailNickname === task.employee);
+            task.employee = user.username;
+            return task;
+          }))
+      );
   }
 
   private initForm(user: Employee): void {
