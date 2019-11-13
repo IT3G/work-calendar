@@ -1,9 +1,11 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { EmployeeApiService } from 'src/app/core/services/employee-api.service';
+import { SnackbarService } from 'src/app/shared/services/snackbar.service';
 import { ProjectsApiService } from '../../../core/services/projects-api.service';
 import { EmployeeStoreService } from '../../../core/store/employee-store.service';
 import { Employee } from '../../../shared/models/employee.model';
@@ -28,6 +30,7 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
     private employeeStoreService: EmployeeStoreService,
     private projectsApi: ProjectsApiService,
     private employeeApi: EmployeeApiService,
+    private snackbar: SnackbarService,
     private ar: ActivatedRoute,
     public dialog: MatDialog
   ) {}
@@ -44,10 +47,6 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  private setDisplayedColumns(): void {
-    this.displayedColumns = ['username', 'login', 'projects', 'location', 'telNumber', 'isAdmin'];
-  }
-
   public openDialog(): void {
     const dialogRef = this.dialog.open(EmployeeAddComponent, {
       width: '250px',
@@ -57,7 +56,31 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if (!result) return;
 
-      this.employeeApi.addNewUser({ username: result }).subscribe(() => this.employeeStoreService.update());
+      this.employeeApi.addNewUser({ username: result }).subscribe(
+        () => {
+          this.employeeStoreService.update();
+          this.snackbar.showSuccessSnackBar('Пользователь успешно добавлен');
+        },
+        error => this.showErrorMessage(error)
+      );
     });
+  }
+
+  private setDisplayedColumns(): void {
+    this.displayedColumns = ['username', 'login', 'projects', 'location', 'telNumber', 'isAdmin'];
+  }
+
+  private showErrorMessage(res: HttpErrorResponse): void {
+    const error = res.error;
+
+    if (error === 'USER NOT FOUND') {
+      this.snackbar.showWarningSnackBar('Пользователь не найден');
+      return;
+    }
+
+    if (error === 'USER ALREADY EXIST') {
+      this.snackbar.showErrorSnackBar('Пользователь уже существует');
+      return;
+    }
   }
 }

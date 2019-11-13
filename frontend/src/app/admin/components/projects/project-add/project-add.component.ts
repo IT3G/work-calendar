@@ -11,7 +11,11 @@ export class ProjectAddComponent {
     @Inject(MAT_DIALOG_DATA) public data: { title: string }
   ) {}
 
-  onNoClick(): void {
+  public onNoClick(): void {
     this.dialogRef.close();
+  }
+
+  public onEnter(e: KeyboardEvent): void {
+    if (e.keyCode === 13) this.dialogRef.close(this.data.title);
   }
 }
