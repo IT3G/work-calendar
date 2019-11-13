@@ -3,8 +3,7 @@ import { MatSnackBarRef, MAT_SNACK_BAR_DATA } from '@angular/material';
 
 @Component({
   selector: 'app-snackbar',
-  templateUrl: './snackbar.component.html',
-  styleUrls: ['./snackbar.component.scss']
+  templateUrl: './snackbar.component.html'
 })
 export class SnackbarComponent {
   constructor(
@@ -13,8 +12,4 @@ export class SnackbarComponent {
     @Inject(MAT_SNACK_BAR_DATA)
     public data: any
   ) {}
-
-  public dismissSnackbar(): void {
-    this.snackBarRef.dismiss();
-  }
 }

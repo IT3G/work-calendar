@@ -74,7 +74,7 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
     const error = res.error;
 
     if (error === 'USER NOT FOUND') {
-      this.snackbar.showWarningSnackBar('Пользователь не найден');
+      this.snackbar.showErrorSnackBar('Пользователь не найден');
       return;
     }
 
