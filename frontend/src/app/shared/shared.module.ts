@@ -6,7 +6,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AvatarModule } from 'ngx-avatar';
 import { MaterialModule } from '../material.module';
 import { AgendaComponent } from './components/agenda/agenda.component';
-import { SnackbarComponent } from './components/snackbar/snackbar.component';
 import { TransformTaskTypePipe } from './pipes/calendar/transform-task-type.pipe';
 import { DatePipe } from './pipes/date.pipe';
 import { CurrentEmployeePipe } from './pipes/description-history/current-employee.pipe';
@@ -26,11 +25,10 @@ const pipes = [
 ];
 const modules = [MaterialModule, FormsModule, ReactiveFormsModule, AvatarModule, NgbModule, RouterModule];
 
-const components = [AgendaComponent, SnackbarComponent];
+const components = [AgendaComponent];
 @NgModule({
   declarations: [...pipes, ...components],
   imports: [CommonModule, ...modules],
-  exports: [...pipes, ...modules, ...components],
-  entryComponents: [SnackbarComponent]
+  exports: [...pipes, ...modules, ...components]
 })
 export class SharedModule {}

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material';
-import { SnackbarComponent } from '../components/snackbar/snackbar.component';
 
 @Injectable({
   providedIn: 'root'
@@ -14,26 +13,23 @@ export class SnackbarService {
   constructor(private snackBar: MatSnackBar) {}
 
   public showSuccessSnackBar(message?: string) {
-    this.snackBar.openFromComponent(SnackbarComponent, {
+    this.snackBar.open(message ? message : '', null, {
       ...this.snackBarConfig,
-      panelClass: 'successSnackBar',
-      data: message ? message : ''
+      panelClass: 'successSnackBar'
     });
   }
 
   public showErrorSnackBar(message?: string) {
-    this.snackBar.openFromComponent(SnackbarComponent, {
+    this.snackBar.open(message ? message : '', null, {
       ...this.snackBarConfig,
-      panelClass: 'errorSnackBar',
-      data: message ? message : ''
+      panelClass: 'errorSnackBar'
     });
   }
 
   public showWarningSnackBar(message?: string) {
-    this.snackBar.openFromComponent(SnackbarComponent, {
+    this.snackBar.open(message ? message : '', null, {
       ...this.snackBarConfig,
-      panelClass: 'warningSnackBar',
-      data: message ? message : ''
+      panelClass: 'warningSnackBar'
     });
   }
 }
