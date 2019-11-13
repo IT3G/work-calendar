@@ -20,7 +20,8 @@ export class Config {
 let config;
 
 export function getConfig() {
-  const configPath = `src/enviroments/${process.env.NODE_ENV || 'dev'}.env`;
+  const path = process.env.NODE_ENV === 'prod' ? '' : 'src/';
+  const configPath = `${path}enviroments/${process.env.NODE_ENV || 'dev'}.env`;
   if (!config) {
     config = dotenv.parse(fs.readFileSync(configPath));
   }
