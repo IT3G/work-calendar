@@ -7,7 +7,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
-    "postbuild": "node postbuild.js",
+    "postbuild": "cp -R src/enviroments/ dist/enviroments/",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "cross-env NODE_ENV=dev nest start --watch",
