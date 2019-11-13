@@ -24,4 +24,8 @@ export class EmployeeApiService {
   public updateUserInfo(login: string, data: Employee): Observable<Object> {
     return this.http.post<Object>(`backend/users/login/${login}`, data);
   }
+
+  public addNewUser(data: { username: string }): Observable<Object> {
+    return this.http.post<Object>('backend/auth/add', data);
+  }
 }

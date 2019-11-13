@@ -1,17 +1,17 @@
 <div mat-dialog-content>
-  <p>Введите название проекта</p>
+  <p>Введите логин сотрудника</p>
 
   <mat-form-field>
     <input matInput
       autocomplete="off"
-      [(ngModel)]="data.title"
+      [(ngModel)]="data.login"
       (keydown)="onEnter($event)">
   </mat-form-field>
 </div>
 
 <div mat-dialog-actions>
   <button mat-button
-    [mat-dialog-close]="data.title">Добавить
+    [mat-dialog-close]="data.login">Добавить
   </button>
 
   <button mat-button
