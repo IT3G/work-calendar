@@ -3,8 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 @Component({
   selector: 'app-project-add',
-  templateUrl: './project-add.component.html',
-  styleUrls: ['./project-add.component.scss']
+  templateUrl: './project-add.component.html'
 })
 export class ProjectAddComponent {
   constructor(

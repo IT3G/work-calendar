@@ -12,8 +12,9 @@ import { ProjectAddComponent } from './project-add/project-add.component';
 })
 export class ProjectsComponent implements OnInit {
   public projects$: Observable<ProjectModel[]>;
-  displayedColumns: string[];
-  title: string;
+  public displayedColumns: string[];
+  public title: string;
+
   constructor(private projectsApi: ProjectsApiService, public dialog: MatDialog) {}
 
   ngOnInit() {
@@ -25,7 +26,7 @@ export class ProjectsComponent implements OnInit {
     this.displayedColumns = ['title'];
   }
 
-  openDialog(): void {
+  public openDialog(): void {
     const dialogRef = this.dialog.open(ProjectAddComponent, {
       width: '250px',
       data: { title: this.title }
@@ -34,9 +35,7 @@ export class ProjectsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (!result) return;
 
-      this.projectsApi
-        .addProject({ title: result })
-        .subscribe(res => (this.projects$ = this.projectsApi.getProjects()));
+      this.projectsApi.addProject({ title: result }).subscribe(() => (this.projects$ = this.projectsApi.getProjects()));
     });
   }
 }
