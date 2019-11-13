@@ -12,21 +12,21 @@ export class SnackbarService {
 
   constructor(private snackBar: MatSnackBar) {}
 
-  public showSuccessSnackBar(message?: string) {
+  public showSuccessSnackBar(message?: string): void {
     this.snackBar.open(message ? message : '', null, {
       ...this.snackBarConfig,
       panelClass: 'successSnackBar'
     });
   }
 
-  public showErrorSnackBar(message?: string) {
+  public showErrorSnackBar(message?: string): void {
     this.snackBar.open(message ? message : '', null, {
       ...this.snackBarConfig,
       panelClass: 'errorSnackBar'
     });
   }
 
-  public showWarningSnackBar(message?: string) {
+  public showWarningSnackBar(message?: string): void {
     this.snackBar.open(message ? message : '', null, {
       ...this.snackBarConfig,
       panelClass: 'warningSnackBar'
