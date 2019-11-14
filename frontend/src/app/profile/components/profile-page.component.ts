@@ -76,7 +76,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   }
 
   public onUpdateProfile(): void {
-    this.profileForm.value.isAdmin = true;
     this.employeeApiService.updateUserInfo(this.login, this.profileForm.value).subscribe(() => {
       this.cancelEdit();
       this.contextStoreService.update();
