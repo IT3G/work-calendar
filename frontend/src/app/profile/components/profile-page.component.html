@@ -30,6 +30,15 @@
                 formControlName="email">
             </mat-form-field>
           </div>
+          <div class='title'>должность:</div>
+          <div class="form-group">
+            <mat-form-field>
+              <input matInput
+                value="{{ user.jobPosition }}"
+                autocomplete="off"
+                formControlName="jobPosition">
+            </mat-form-field>
+          </div>
           <div class='title'>проекты:</div>
           <div class="form-group">
             <!-- <mat-form-field>

@@ -63,7 +63,8 @@ export class LdapService implements OnApplicationShutdown {
       projects: [],
       isAdmin: false,
       hasMailing: true,
-      subdivision: null
+      subdivision: null,
+      jobPosition: attributes.find(el => el.type === 'title') ? attributes.find(el => el.type === 'title').data : null
     };
   }
 

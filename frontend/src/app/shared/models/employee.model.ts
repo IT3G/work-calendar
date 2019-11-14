@@ -12,4 +12,5 @@ export class Employee {
   isAdmin: boolean;
   hasMailing: boolean;
   subdivision: string;
+  jobPosition: string;
 }

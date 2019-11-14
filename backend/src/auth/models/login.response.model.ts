@@ -11,4 +11,5 @@ export class LoginResponseModel {
   isAdmin: boolean;
   hasMailing: boolean;
   subdivision: string;
+  jobPosition: string;
 }

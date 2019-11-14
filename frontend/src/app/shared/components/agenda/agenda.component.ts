@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AgendaColors } from '../../../shared/const/agenda-colors.const';
 import { AgendaColorsModel } from '../../../shared/models/agenda-colors.model';
 
@@ -9,7 +9,9 @@ import { AgendaColorsModel } from '../../../shared/models/agenda-colors.model';
 })
 export class AgendaComponent implements OnInit {
   public options: AgendaColorsModel[];
-
+  @Input()
+  public isLineView: boolean;
+  
   ngOnInit() {
     this.options = AgendaColors;
   }

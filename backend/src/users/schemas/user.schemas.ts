@@ -12,5 +12,6 @@ export const UserSchema = new mongoose.Schema({
   mailNickname: String,
   isAdmin: Boolean,
   hasMailing: Boolean,
-  subdivision: String
+  subdivision: String,
+  jobPosition: String
 });
