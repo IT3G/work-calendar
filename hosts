@@ -1,0 +1,10 @@
+# 1.Generate the ssh key on the master node: root@master:~# ssh-keygen -t rsa -C "name@example.org"
+# 2.Then copy your public key to the servers with ssh-copy-id: root@master:~# ssh-copy-id user@child1.dev
+
+all:
+  vars:
+    ansible_user: root  # Работаем на хостах под пользователем root
+
+application:
+  hosts:
+    172.17.21.94:
