@@ -137,15 +137,17 @@ export class DescriptionComponent implements OnInit {
             !emp.projects.length) &&
           emp.hasMailing
       )
-      .map(emp => emp.email)
-      .filter(emp => this.contextStoreService.getCurrentUser().username !== emp);
+      .filter(emp => this.contextStoreService.getCurrentUser().email !== emp.email)
+      .map(emp => emp.email);
 
     const obj = {
       adress: mailingAddresses,
       author: this.contextStoreService.getCurrentUser().username,
       date: moment(formValue.dateStart).format('DD.MM.YYYY'),
+      dateEnd: formValue.dateEnd ? moment(formValue.dateEnd).format('DD.MM.YYYY') : null,
       user: this.selectedUser.username,
-      status: this.getTitle(formValue.type.id)
+      status: this.getTitle(formValue.type.id),
+      comment: formValue.comment
     };
 
     return obj;

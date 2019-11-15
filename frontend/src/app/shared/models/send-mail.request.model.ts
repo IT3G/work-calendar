@@ -4,4 +4,6 @@ export class SendMailRequestModel {
   date: string;
   user: string;
   status: string;
+  dateEnd: string;
+  comment: string;
 }
