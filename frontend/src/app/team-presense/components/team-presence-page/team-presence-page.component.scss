@@ -1,7 +1,9 @@
+$borderColor: rgba(0,0,0,0.6);
+
 .day {
   text-align: center;
-  border-right: 1px solid black;
-  border-bottom: 1px solid black;
+  border-right: 1px solid $borderColor;
+  border-bottom: 1px solid $borderColor;
 }
 .table {
   width: 100%;
@@ -19,26 +21,38 @@
 .buttons__wrapper {
   display: flex;
   align-items: center;
-  margin-right: 30px;
+  left: 50%;
+  top:50%;
+  position: absolute;
+  transform: translate(-50%,-50%);
 }
 .current-month {
   margin: 0 15px;
+    width: 110px;
+    text-align: center;
 }
 .row-item {
   display: grid;
-  grid-template-columns: 140px repeat(35, 30px);
+  grid-template-columns: 240px repeat(35, 30px);
 }
 
 .title {
   padding: 0 5px;
-  border-left: 1px solid black;
-  border-right: 1px solid black;
-  border-bottom: 1px solid black;
+  border-left: 1px solid $borderColor;
+  border-right: 1px solid $borderColor;
+  border-bottom: 1px solid $borderColor; 
+  white-space: nowrap;
+  &.header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 
 .header {
-  border-top: 1px solid black;
+  border-top: 1px solid $borderColor;
 }
+
 
 .days_wrapper-table {
   display: flex;
@@ -68,5 +82,10 @@
 }
 .filters_wrapper {
   margin-top: 35px;
+  position: relative;
   display: flex;
+}
+.day-header {
+  font-weight: 600;
+  border-bottom: 1px solid rgba(0,0,0,0.2);
 }

@@ -86,8 +86,8 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     );
   }
 
-  public isWeekend(task: TaskModel): string {
-    return task.dateStart.format('d') === '0' || task.dateStart.format('d') === '6' ? 'weekend' : '';
+  public isWeekend(date: Moment): string {
+    return date.format('d') === '0' || date.format('d') === '6' ? 'weekend' : '';
   }
   private updateTaskData(): void {
     this.monthData$ = combineLatest(this.date$, this.employees$, this.tasks$).pipe(

@@ -2,6 +2,16 @@
   <div class="row">
     <div class="col-md-12">
       <div class="filters_wrapper">
+          <mat-form-field>
+              <mat-label>Проект</mat-label>
+              <mat-select [formControl]='filter'>
+                <mat-option>Сбросить</mat-option>
+                <mat-option *ngFor="let project of projects$ | async"
+                  [value]="project.title">
+                  {{project.title}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
         <div class="buttons__wrapper">
           <button class="btn btn-outline-primary prev"
             (click)="prevMonth()">
@@ -14,43 +24,38 @@
           </button>
         </div>
 
-        <mat-form-field>
-          <mat-label>Проект</mat-label>
-          <mat-select [formControl]='filter'>
-            <mat-option>Сбросить</mat-option>
-            <mat-option *ngFor="let project of projects$ | async"
-              [value]="project.title">
-              {{project.title}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+       
       </div>
       <div class="table"
         *ngIf="monthData$ | async as monthData">
 
         <div class="row-item">
           <div class="title header">Сотрудник</div>
-          <div class="day header"
-            *ngFor="let date of monthDays$ | async">
-            <div>{{date | datePipe: 'D'}} </div>
+          <div class="day header {{isWeekend(date)}}"
+            *ngFor="let date of monthDays$ | async" >
+            <div class='day-header'>{{date | datePipe: 'D'}} </div>
             <div>{{date | datePipe: 'ddd'}}</div>
           </div>
         </div>
 
         <div *ngFor="let data of monthData | filterTeamEmployeePipe:filter.value"
           class="row-item">
-          <a class="title"
-            [routerLink]="['/presence', data.employee.mailNickname]">{{ data.employee.username.split(' ')[0]}} {{ data.employee.username.split(' ')[1][0]}}
-          </a>
+          <div class="title">
+            <div>
+            <a 
+            [routerLink]="['/presence', data.employee.mailNickname]">{{ data.employee.username.split(' ')[0]}} {{ data.employee.username.split(' ')[1]}}
+            </a></div>
+            <div>{{data.employee.jobPosition}}</div>
+          </div>
           <div *ngFor="let task of data.tasks"
-            class="day {{isWeekend(task)}}"
+            class="day {{isWeekend(task.dateStart)}}"
             [ngClass]="task?.type ? dayType[task?.type]: ''">
           </div>
         </div>
 
       </div>
       <div class="agenda__wrapper">
-        <app-agenda></app-agenda>
+        <app-agenda [isLineView]="true"></app-agenda>
       </div>
     </div>
   </div>

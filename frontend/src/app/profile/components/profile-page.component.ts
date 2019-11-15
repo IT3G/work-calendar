@@ -71,7 +71,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.profileForm.get('isAdmin').enable();
     this.profileForm.get('hasMailing').enable();
     this.profileForm.get('subdivision').enable();
-
+    this.profileForm.get('jobPosition').enable();
     this.isEdit = true;
   }
 
@@ -149,6 +149,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       telNumber: new FormControl(user.telNumber),
       isAdmin: new FormControl(user.isAdmin),
       hasMailing: new FormControl(user.hasMailing),
+      jobPosition: new FormControl(user.jobPosition ? user.jobPosition : null),
       subdivision: new FormControl(user.subdivision ? user.subdivision : null)
     });
     this.profileForm.disable();
