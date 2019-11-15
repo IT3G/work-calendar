@@ -21,8 +21,10 @@ export class SendMailService {
 
     const users = data.adress.join(',');
 
-    const message = `Пользователь ${data.author} изменил присутсвие на <b>${data.date}</b> для ${data.user} на <u>${data.status}</u>`;
-
+    let message = `Пользователь ${data.author} изменил присутсвие на <b>${data.date}</b> для ${data.user} на <u>${data.status}</u><br><br>${data.comment}`;
+    if (data.dateEnd) {
+      message = `Пользователь ${data.author} изменил присутсвие c <b>${data.date}</b> по <b>${data.dateEnd}</b> для ${data.user} на <u>${data.status}</u><br><br>${data.comment}`;
+    }
     let info = await transporter.sendMail({
       from: `${this.config.MAIL_SENDER_NAME}<${this.config.MAIL_SENDER_ADDRESS}>`,
       to: users,

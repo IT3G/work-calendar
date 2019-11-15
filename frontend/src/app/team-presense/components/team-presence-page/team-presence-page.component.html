@@ -47,6 +47,7 @@
           </div>
           <div
             *ngFor="let task of data.tasks"
+            [matTooltip]="task.comment"
             class="day {{ task?.type ? dayType[(task?.type)] : '' }}"
             [ngClass]="{ weekend: isWeekend(task.dateStart) }"
           ></div>

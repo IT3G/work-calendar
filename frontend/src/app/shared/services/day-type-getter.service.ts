@@ -20,7 +20,7 @@ export class DayTypeGetterService {
       dayType = 6;
     }
 
-    if ((dayType === DayType.COMMON && dt.weekday() === 5) || dt.weekday() === 6) {
+    if ((dayType === DayType.COMMON && dt.weekday() === 5) || (dt.weekday() === 6 && dayType === DayType.COMMON)) {
       dayType = 6;
     }
     return dayType;
