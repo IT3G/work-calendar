@@ -1,0 +1,45 @@
+- hosts: all
+
+  vars:
+    image_name: '172.17.21.6:8888/calendar-frontend:latest'
+    container_name: 'calendar-frontend'
+
+  tasks:
+
+    - name: 'Stop old container to free port'
+      ignore_errors: 'yes'
+      shell: "docker stop {{ container_name }} ; docker rm --force {{ container_name }}"
+
+    - name: 'Start or replace a container with docker_container module'
+      docker_container:
+        name: "{{ container_name }}"
+        image: "{{ image_name }}"
+        detach: true
+        pull: yes
+        labels:
+          app: "{{ container_name }}"
+        env:
+          test1: "es321"
+        ports:
+          - '8089:80'
+      register: docker_results
+
+    - name: 'Retrieve container ID and ephemeral port'
+      set_fact:
+        container_id: "{{ docker_results.ansible_facts.docker_container.Id }}"
+        ephemeral_port: "{{ docker_results.ansible_facts.docker_container.NetworkSettings.Ports['7000/tcp'][0].HostPort }}"
+
+    - block:
+      - name: 'Verify that the new container is serving traffic'
+        uri:
+          url: "http://localhost:{{ ephemeral_port }}/"
+          status_code: 200
+        register: container_status
+        retries: "{{ app.health_retries | default('10') }}"
+        delay: "{{ app.health_retry_delay | default('2') }}"
+        until: "container_status.status == 200"
+      rescue:
+      - name: 'Terminate failed container'
+      - fail:
+          msg: 'New container failed to return HTTP 200 and has been terminated'
+
