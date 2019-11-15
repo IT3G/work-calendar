@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material';
 import { Observable } from 'rxjs';
 import { ProjectsApiService } from '../../../core/services/projects-api.service';
 import { ProjectModel } from '../../../shared/models/projects.model';
+import { SnackbarService } from '../../../shared/services/snackbar.service';
 import { ProjectAddComponent } from './project-add/project-add.component';
 
 @Component({
@@ -15,7 +16,7 @@ export class ProjectsComponent implements OnInit {
   public displayedColumns: string[];
   public title: string;
 
-  constructor(private projectsApi: ProjectsApiService, public dialog: MatDialog) {}
+  constructor(private snackbar: SnackbarService, private projectsApi: ProjectsApiService, public dialog: MatDialog) {}
 
   ngOnInit() {
     this.projects$ = this.projectsApi.getProjects();
@@ -35,7 +36,10 @@ export class ProjectsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (!result) return;
 
-      this.projectsApi.addProject({ title: result }).subscribe(() => (this.projects$ = this.projectsApi.getProjects()));
+      this.projectsApi.addProject({ title: result }).subscribe(() => {
+        this.snackbar.showSuccessSnackBar('Проект успешно добавлен');
+        this.projects$ = this.projectsApi.getProjects();
+      });
     });
   }
 }

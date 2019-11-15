@@ -9,6 +9,10 @@ export class SendMailService {
   public async sendMail(data: SendMailRequestModel): Promise<string> {
     process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 
+    if (process.env.NODE_ENV === `dev`) {
+      return;
+    }
+
     const transporter = nodemailer.createTransport({
       host: this.config.MAIL_HOST,
       port: 25,

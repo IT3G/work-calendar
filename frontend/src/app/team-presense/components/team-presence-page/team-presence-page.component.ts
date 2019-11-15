@@ -86,9 +86,14 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     );
   }
 
-  public isWeekend(date: Moment): string {
-    return date.format('d') === '0' || date.format('d') === '6' ? 'weekend' : '';
+  public isWeekend(date: Moment): boolean {
+    return date.format('d') === '0' || date.format('d') === '6';
   }
+
+  public isCurrentDay(date: Moment): boolean {
+    return date.isSame(moment(), 'day');
+  }
+
   private updateTaskData(): void {
     this.monthData$ = combineLatest(this.date$, this.employees$, this.tasks$).pipe(
       filter(([_, employees, tasks]) => !!(employees && employees.length && tasks)),
@@ -104,9 +109,11 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
 
           const day = startOfMonth;
           while (day.isBefore(endOfMonth)) {
-            const task = tasks.find(i => i.employee === emp.mailNickname && moment(day).isSame(i.dateStart, 'day'));
-            if (task) {
-              res.tasks.push(task);
+            const task = tasks.filter(i => i.employee === emp.mailNickname && moment(day).isSame(i.dateStart, 'day'));
+            if (task.length) {
+              task.sort((a, b) => (a.dtCreated.isAfter(b.dtCreated) ? -1 : 1));
+              const lastTask = task[0];
+              res.tasks.push(lastTask);
             } else {
               res.tasks.push({
                 dateStart: moment(day)

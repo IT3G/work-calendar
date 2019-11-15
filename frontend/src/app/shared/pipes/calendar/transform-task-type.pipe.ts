@@ -15,6 +15,10 @@ export class TransformTaskTypePipe implements PipeTransform {
     if (!date) return `type_COMMON`;
     const dtMoment = this.dateConvertService.convertNgbDateToMoment(date);
     const dayType = DayType[this.dayTypeGetterService.getDayType(dtMoment, tasks)];
+
+    if (!dayType) {
+      return `type_WEEKEND`;
+    }
     return `type_${dayType}`;
   }
 }
