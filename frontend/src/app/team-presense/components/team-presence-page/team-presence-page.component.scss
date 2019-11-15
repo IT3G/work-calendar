@@ -4,6 +4,7 @@ $borderColor: rgba(0,0,0,0.6);
   text-align: center;
   border-right: 1px solid $borderColor;
   border-bottom: 1px solid $borderColor;
+  min-height: 35px;
 }
 .table {
   width: 100%;
@@ -33,7 +34,7 @@ $borderColor: rgba(0,0,0,0.6);
 }
 .row-item {
   display: grid;
-  grid-template-columns: 240px repeat(35, 30px);
+  grid-template-columns: 240px repeat(35, 25px);
 }
 
 .title {
@@ -45,7 +46,8 @@ $borderColor: rgba(0,0,0,0.6);
   &.header{
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: left;
+    font-weight: 600;
   }
 }
 
