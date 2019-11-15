@@ -1,9 +1,10 @@
 - hosts: all
 
   vars:
-    image_name: '172.17.21.6:8888/calendar-frontend:latest'
-    container_name: 'calendar-frontend'
-    container_ext_port: '8089'
+    image_name: '172.17.21.6:8888/calendar-backend:latest'
+    container_name: 'calendar-backend'
+    container_ext_port: '3000'
+    container_int_port: '3000'
 
   tasks:
 
@@ -22,7 +23,7 @@
         env:
           test1: "es321"
         ports:
-          - '{{ container_ext_port }}:80'
+          - '{{ container_ext_port }}:{{ container_int_port }}'
       register: docker_results
 
     - block:
