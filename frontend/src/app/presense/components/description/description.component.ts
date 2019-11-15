@@ -15,6 +15,7 @@ import { Employee } from '../../../shared/models/employee.model';
 import { SendMailRequestModel } from '../../../shared/models/send-mail.request.model';
 import { SendingTaskModel } from '../../../shared/models/sending-task.model';
 import { TaskModel } from '../../../shared/models/tasks.models';
+import { SnackbarService } from '../../../shared/services/snackbar.service';
 import { TaskMapperService } from '../../../shared/services/task-mapper.service';
 
 @Component({
@@ -32,6 +33,7 @@ export class DescriptionComponent implements OnInit {
   private getCommentSub = new Subscription();
 
   constructor(
+    private snackbar: SnackbarService,
     private contextStoreService: ContextStoreService,
     private taskApiService: TaskApiService,
     private fb: FormBuilder,
@@ -74,7 +76,10 @@ export class DescriptionComponent implements OnInit {
     };
     const mappedForm = this.taskMapperService.mapToSendingModel(taskFormVal);
 
-    this.taskApiService.addTask(mappedForm).subscribe(() => this.tasksStoreService.update());
+    this.taskApiService.addTask(mappedForm).subscribe(() => {
+      this.snackbar.showSuccessSnackBar('Событие добавлено');
+      this.tasksStoreService.update();
+    });
 
     if (sendingMail.adress.length) {
       this.mailApiService.sendMail(sendingMail).subscribe(key => console.log(key));
@@ -132,7 +137,8 @@ export class DescriptionComponent implements OnInit {
             !emp.projects.length) &&
           emp.hasMailing
       )
-      .map(emp => emp.email);
+      .map(emp => emp.email)
+      .filter(emp => this.contextStoreService.getCurrentUser().username !== emp);
 
     const obj = {
       adress: mailingAddresses,
@@ -141,6 +147,7 @@ export class DescriptionComponent implements OnInit {
       user: this.selectedUser.username,
       status: this.getTitle(formValue.type.id)
     };
+
     return obj;
   }
 }
