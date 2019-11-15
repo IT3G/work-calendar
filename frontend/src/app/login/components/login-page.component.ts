@@ -15,7 +15,7 @@ import { Employee } from '../../shared/models/employee.model';
 })
 export class LoginPageComponent implements OnInit {
   public errorMessage: string;
-  private loginForm: FormGroup;
+  public loginForm: FormGroup;
 
   constructor(
     private authService: AuthApiService,
