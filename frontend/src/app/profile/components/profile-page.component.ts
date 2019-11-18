@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import { combineLatest, Observable, Subscription } from 'rxjs';
@@ -40,7 +40,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     private employeeStoreService: EmployeeStoreService,
     private route: ActivatedRoute,
     private projectsApi: ProjectsApiService,
-    private taskApi: TaskApiService
+    private taskApi: TaskApiService,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit() {
@@ -56,8 +57,37 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.searchUserByLoginSub.unsubscribe();
   }
 
+  public createProjectsFormGroup(project: any): FormGroup {
+    return this.fb.group({
+      title: project.title,
+      dateStart: project.dateStart,
+      dateEnd: project.dateEnd
+    });
+  }
+
+  public createEmptyProjectsFormGroup(): FormGroup {
+    return this.fb.group({
+      title: null,
+      dateStart: null,
+      dateEnd: null
+    });
+  }
+
+  public get projectFormArray(): FormArray {
+    return this.profileForm.get('projects') as FormArray;
+  }
+
+  public addProjectFromGroup(): void {
+    const formArray = this.projectFormArray;
+    formArray.controls.push(this.createEmptyProjectsFormGroup());
+  }
+
   public onEnter(e: KeyboardEvent): void {
     if (e.keyCode === 13) this.onUpdateProfile();
+  }
+
+  public removeFormGroupProject(index: number): void {
+    this.projectFormArray.removeAt(index);
   }
 
   public hasDateRange(task: TaskModel): boolean {
@@ -76,7 +106,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   }
 
   public onUpdateProfile(): void {
-    this.employeeApiService.updateUserInfo(this.login, this.profileForm.value).subscribe(() => {
+    this.employeeApiService.updateUserInfo(this.login, this.profileForm.getRawValue()).subscribe(() => {
       this.cancelEdit();
       this.contextStoreService.update();
       this.employeeStoreService.update();
@@ -140,11 +170,11 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   }
 
   private initForm(user: Employee): void {
-    this.profileForm = new FormGroup({
+    this.profileForm = this.fb.group({
       id: new FormControl(user._id),
       username: new FormControl(user.username),
       email: new FormControl(user.email),
-      projects: new FormControl(user.projects),
+      projects: this.fb.array(user.projects.map(project => this.createProjectsFormGroup(project))),
       location: new FormControl(user.location),
       telNumber: new FormControl(user.telNumber),
       isAdmin: new FormControl(user.isAdmin),

@@ -22,12 +22,13 @@
   display: grid;
   grid-template-columns: max-content 1fr;
   column-gap: 30px;
-  align-items: center;
+  align-items: flex-start;
   row-gap: 10px;
 }
 .title {
   font-size: 15px;
   font-weight: 600;
+  margin-top: 20px;
 }
 button {
   margin-right: 10px;
@@ -38,4 +39,39 @@ button {
 table {
   width: 100%;
   margin-top: 50px;
+}
+.project-grid {
+  display: grid;
+  grid-template-columns: 180px 130px 130px 20px;
+  grid-gap: 10px;
+  align-items: center;
+}
+.project {
+  position: relative;
+}
+.add {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  cursor: pointer;
+  &-btn {
+    width: 20px;
+    height: 20px;
+    background: url('/assets/icons/add.svg');
+    background-size: 100%;
+  }
+  &-margin {
+    margin-top: 20px;
+  }
+}
+.span-project {
+  padding-left: 10px;
+}
+.delete {
+  width: 20px;
+  height: 20px;
+  background: url('/assets/icons/remove.svg');
+  background-size: 100%;
+  margin-left: 10px;
+  cursor: pointer;
 }

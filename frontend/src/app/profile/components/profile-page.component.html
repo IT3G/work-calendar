@@ -7,7 +7,7 @@
       </ngx-avatar>
     </div>
     <div class="col-md-10">
-      <div class="profile-form col-md-7"
+      <div class="profile-form col-md-10"
         [formGroup]="profileForm"
         (keydown)=onEnter($event)>
         <div class="grid">
@@ -40,19 +40,46 @@
             </mat-form-field>
           </div>
           <div class='title'>проекты:</div>
-          <div class="form-group">
-            <!-- <mat-form-field>
-              <input matInput
-                value="{{ user.projects }}"
-                autocomplete="off">
-            </mat-form-field> -->
-            <mat-form-field>
-              <mat-select formControlName="projects"
-                multiple>
-                <mat-option *ngFor="let project of projects$ | async"
-                  [value]="project.title">{{project.title}}</mat-option>
-              </mat-select>
-            </mat-form-field>
+          <div class="form-group project">
+            <div *ngFor="let projectFormGroup of projectFormArray.controls; index as i"
+              class="project-grid">
+              <mat-form-field>
+                <mat-select [formControl]="projectFormGroup.get('title')">
+                  <mat-option *ngFor="let project of projects$ | async"
+                    [value]="project.title">{{project.title}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="control">
+                <input matInput
+                  autocomplete="off"
+                  [formControl]="projectFormGroup.get('dateStart')"
+                  [matDatepicker]="pickerFrom"
+                  placeholder="c" />
+                <mat-datepicker-toggle matSuffix
+                  [for]="pickerFrom"></mat-datepicker-toggle>
+                <mat-datepicker #pickerFrom></mat-datepicker>
+              </mat-form-field>
+              <mat-form-field class="control">
+                <input matInput
+                  autocomplete="off"
+                  [formControl]="projectFormGroup.get('dateEnd')"
+                  [matDatepicker]="pickerTo"
+                  placeholder="по" />
+                <mat-datepicker-toggle matSuffix
+                  [for]="pickerTo"></mat-datepicker-toggle>
+                <mat-datepicker #pickerTo></mat-datepicker>
+              </mat-form-field>
+              <div class="delete"
+                *ngIf="isEdit"
+                (click)='removeFormGroupProject(i)'></div>
+            </div>
+            <div class="add"
+              [class.add-margin]='!projectFormArray.controls.length'
+              *ngIf="isEdit"
+              (click)="addProjectFromGroup()">
+              <div class="add-btn"></div>
+              <span class="span-project">добавить проект</span>
+            </div>
           </div>
           <div class='title'>подразделение:</div>
           <div class="form-group">
