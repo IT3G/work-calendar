@@ -115,6 +115,8 @@ mat-form-field {
 }
 .jobPosition {
   font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .currentDay {
   .day-wrapper {
