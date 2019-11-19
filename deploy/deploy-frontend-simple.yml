@@ -53,10 +53,10 @@
         delay: "2"
         until: "container_status.status == 200"
 
-    - name: 'Queue previous containers to RM in 180 minutes'
+    - name: 'Queue previous containers to RM in 10 minutes'
       at:
         command: "/usr/bin/docker rm --force {{ item }}"
-        count: 180
+        count: 10
         units: 'minutes'
       with_items: "{{ previous_containers.stdout_lines }}"
       when: (item.find(container_label) == -1)
