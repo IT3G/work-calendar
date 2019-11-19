@@ -47,7 +47,7 @@ export class GitInfoService {
       filter(v => !!v),
       map(version => {
         const date = moment(version.committerDate);
-        const result = `commit: ${version.abbreviatedSha}, date: ${date.toString()} message: ${version.commitMessage}`;
+        const result = `${date.format('DD.MM.YYYY HH:mm:ss')}`;
 
         return result;
       })
