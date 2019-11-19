@@ -170,6 +170,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   }
 
   private initForm(user: Employee): void {
+    const date = user.whenCreated.slice(0, 8);
     this.profileForm = this.fb.group({
       id: new FormControl(user._id),
       username: new FormControl(user.username),
@@ -180,7 +181,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       isAdmin: new FormControl(user.isAdmin),
       hasMailing: new FormControl(user.hasMailing),
       jobPosition: new FormControl(user.jobPosition ? user.jobPosition : null),
-      subdivision: new FormControl(user.subdivision ? user.subdivision : null)
+      subdivision: new FormControl(user.subdivision ? user.subdivision : null),
+      whenCreated: new FormControl(user.whenCreated ? moment(date).format() : null)
     });
     this.profileForm.disable();
   }
