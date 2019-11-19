@@ -5,6 +5,7 @@
     container_name: 'calendar-frontend'
     container_label: 'calendar-frontend'
     container_ext_port: '8089'
+    container_int_port: '80'
 
   tasks:
 
@@ -34,8 +35,16 @@
         env:
           test1: "es321"
         ports:
-          - '{{ container_ext_port }}:80'
+          - '{{ container_ext_port }}:{{ container_int_port }}'
       register: docker_results
+
+    - debug:
+        msg: '{{ docker_results }}'
+
+    - name: 'Retrieve container ID'
+      set_fact:
+        container_id: "{{ docker_results.ansible_facts.docker_container.Id }}"
+¹        ephemeral_port: "{{ docker_results.ansible_facts.docker_container.NetworkSettings.Ports['7000/tcp'][0].HostPort }}"
 
     - block:
       - name: 'Verify that the new container is serving traffic'
@@ -53,5 +62,4 @@
         count: 600
         units: 'minutes'
       with_items: "{{ previous_containers.stdout_lines }}"
-      when: (item.find(container_id) == -1)
-
+      when: (item.find(container_label) == -1)
