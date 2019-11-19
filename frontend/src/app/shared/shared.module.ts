@@ -7,6 +7,7 @@ import { AvatarModule } from 'ngx-avatar';
 import { MaterialModule } from '../material.module';
 import { AgendaComponent } from './components/agenda/agenda.component';
 import { TransformTaskTypePipe } from './pipes/calendar/transform-task-type.pipe';
+import { CurrentProjectsPipe } from './pipes/current-projects.pipe';
 import { DatePipe } from './pipes/date.pipe';
 import { CurrentEmployeePipe } from './pipes/description-history/current-employee.pipe';
 import { TaskTypePipe } from './pipes/description-history/task-type.pipe';
@@ -21,8 +22,10 @@ const pipes = [
   CurrentEmployeePipe,
   TransformTaskTypePipe,
   FilterEmployeePipe,
+  CurrentProjectsPipe,
   FilterTeamEmployeePipe
 ];
+
 const modules = [MaterialModule, FormsModule, ReactiveFormsModule, AvatarModule, NgbModule, RouterModule];
 
 const components = [AgendaComponent];

@@ -47,15 +47,6 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  public getProjects(emp: Employee): string {
-    const result = emp.projects.map(p => p.title).filter(p => p!);
-
-    if (!result.length) {
-      return '-';
-    }
-
-    return result.join(',');
-  }
   public openDialog(): void {
     const dialogRef = this.dialog.open(EmployeeAddComponent, {
       width: '250px',
@@ -76,7 +67,7 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
   }
 
   private setDisplayedColumns(): void {
-    this.displayedColumns = ['username', 'login', 'projects', 'location', 'telNumber', 'isAdmin'];
+    this.displayedColumns = ['username', 'login', 'jobPosition', 'projects', 'location', 'telNumber', 'isAdmin'];
   }
 
   private showErrorMessage(res: HttpErrorResponse): void {
