@@ -83,7 +83,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private addGitVersionToPageTitle(): void {
     const currentTitle = this.title.getTitle();
     this.gitInfo.getVersionAsString().subscribe(version => {
-      this.title.setTitle(`${currentTitle} ${version}`);
+      this.title.setTitle(`${currentTitle} (${version})`);
     });
   }
 }
