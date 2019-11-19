@@ -47,6 +47,9 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
+  public getProjects(emp: Employee): string {
+    return emp.projects.map(p => p.title).join(',');
+  }
   public openDialog(): void {
     const dialogRef = this.dialog.open(EmployeeAddComponent, {
       width: '250px',
