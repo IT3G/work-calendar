@@ -133,3 +133,11 @@ mat-form-field {
   font-size: 21px;
   line-height: 34px;
 }
+.number {
+  position: absolute;
+  right: calc(100% + -10px);
+  text-align: right;
+  color: #9c9a9a;
+  font-size: 14px;
+  margin-top: 1px;
+}
