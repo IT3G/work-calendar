@@ -131,15 +131,14 @@ export class DescriptionComponent implements OnInit {
       .getEmployeesSnapshot()
       .filter(
         emp =>
-          (emp.projects.some((project: string) => {
-            return this.contextStoreService.getCurrentUser().projects.includes(project);
+          (emp.projects.some((projectEmp: { title: string; dateStart: string; dateEnd: string }) => {
+            return this.selectedUser.projects.some(project => project.title === projectEmp.title);
           }) ||
             !emp.projects.length) &&
           emp.hasMailing
       )
       .filter(emp => this.contextStoreService.getCurrentUser().email !== emp.email)
       .map(emp => emp.email);
-
     const obj = {
       adress: mailingAddresses,
       author: this.contextStoreService.getCurrentUser().username,
