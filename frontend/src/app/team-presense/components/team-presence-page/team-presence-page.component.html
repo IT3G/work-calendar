@@ -37,9 +37,9 @@
             <div>{{ date | datePipe: 'ddd' }}</div>
           </div>
         </div>
-
-        <div *ngFor="let data of (monthData | filterTeamEmployeePipe: filter.value :  (date$ | async))"
+        <div *ngFor="let data of (monthData | filterTeamEmployeePipe: filter.value :  (date$ | async)); index as i"
           class="row-item">
+          <div class="number">{{i + 1}}</div>
           <div class="title">
             <div>
               <a [routerLink]="['/presence', data.employee.mailNickname]">{{ data.employee.username.split(' ')[0] }} {{ data.employee.username.split(' ')[1] }}
