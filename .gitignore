@@ -50,3 +50,6 @@ Thumbs.db
 /backend/node_modules
 
 *.retry
+
+
+git-info.json
