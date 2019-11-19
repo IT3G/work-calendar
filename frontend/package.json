@@ -5,7 +5,7 @@
     "preBuild": "node scripts/build-pre.js",
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json",
-    "build": "yarn preBuild && ng build --prod",
+    "build": "yarn preBuild && yarn ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
