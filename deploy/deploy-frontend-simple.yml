@@ -16,8 +16,8 @@
 
     - name: 'Stop old container to free port'
       shell: "docker stop {{ item }}"
-      ignore_errors: 'yes'
 #      shell: "docker stop {{ container_id }} ; docker rm --force {{ container_id }}"
+      ignore_errors: 'yes'
       with_items: "{{ previous_containers.stdout_lines }}"
       when: (item.find(container_label) == -1)
 
@@ -28,7 +28,7 @@
         detach: true
         pull: yes
         labels:
-          app: "{{ container_name }}"
+          app: "{{ container_label }}"
         env:
           test1: "es321"
         ports:
