@@ -48,7 +48,13 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
   }
 
   public getProjects(emp: Employee): string {
-    return emp.projects.map(p => p.title).join(',');
+    const result = emp.projects.map(p => p.title).filter(p => p!);
+
+    if (!result.length) {
+      return '-';
+    }
+
+    return result.join(',');
   }
   public openDialog(): void {
     const dialogRef = this.dialog.open(EmployeeAddComponent, {
