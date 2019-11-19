@@ -1,0 +1,1 @@
+Откройте файл настроек MongoDB /etc/mongod.conf и измените bindIp например на 0.0.0.0 и затем sudo service mongod restart, не хватило времени написать шаблон j2

@@ -1,0 +1,37 @@
+- hosts: all
+
+  vars:
+    image_name: '172.17.21.6:8888/calendar-backend:latest'
+    container_name: 'calendar-backend'
+    container_ext_port: '3000'
+    container_int_port: '3000'
+
+  tasks:
+
+    - name: 'Stop old container to free port'
+      ignore_errors: 'yes'
+      shell: "docker stop {{ container_name }} ; docker rm --force {{ container_name }}"
+
+    - name: 'Start or replace a container with docker_container module'
+      docker_container:
+        name: "{{ container_name }}"
+        image: "{{ image_name }}"
+        detach: true
+        pull: yes
+        labels:
+          app: "{{ container_name }}"
+        env:
+          test1: "es321"
+        ports:
+          - '{{ container_ext_port }}:{{ container_int_port }}'
+      register: docker_results
+
+    - block:
+      - name: 'Verify that the new container is serving traffic'
+        uri:
+          url: "http://localhost:{{ container_ext_port }}/"
+          status_code: 200
+        register: container_status
+        retries: "10"
+        delay: "2"
+        until: "container_status.status == 200"

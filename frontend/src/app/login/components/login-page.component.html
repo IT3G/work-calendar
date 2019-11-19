@@ -1,0 +1,33 @@
+<div class="wrapper">
+  <div class="login-form"
+    [formGroup]="loginForm"
+    (keydown)=onEnter($event)>
+    <div class="form-group">
+      <mat-form-field>
+        <input matInput
+          placeholder="login"
+          autocomplete="off"
+          formControlName="username">
+        <span matSuffix
+          class="input-login__suffix">@it2g.ru</span>
+      </mat-form-field>
+    </div>
+    <div class="form-group">
+      <mat-form-field class="example-full-width">
+        <input matInput
+          placeholder="password"
+          type="password"
+          autocomplete="off"
+          formControlName="password">
+      </mat-form-field>
+      <label class="response-message error">{{errorMessage}}</label>
+    </div>
+    <div class="form-footer">
+      <button type="submit"
+        mat-raised-button
+        color="primary"
+        (click)="login()"
+        [disabled]="loginForm.invalid">Войти</button>
+    </div>
+  </div>
+</div>

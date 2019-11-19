@@ -1,0 +1,52 @@
+:host {
+  display: block;
+  text-align: center;
+  height: 350px;
+}
+
+:host /deep/ ngb-datepicker {
+  .custom-day {
+    text-align: center;
+    padding: 0.185rem 0.25rem;
+    display: inline-block;
+    height: 2rem;
+    width: 2rem;
+  }
+  .custom-day.selected {
+    outline: none;
+  }
+  .custom-day.hasTask {
+    outline: none;
+    background-color: blue;
+    color: white;
+  }
+  .selected {
+    border: 1px solid black;
+  }
+  .custom-day {
+    outline: none;
+    &.type_COMMON {
+      background-color: #ffffff;
+    }
+    &.type_CUSTOM {
+      background-color: #90caf9;
+    }
+    &.type_LEFT {
+      background-color: #ef9a9a;
+      color: white;
+    }
+    &.type_VACATION {
+      background-color: #c5e1a5;
+      color: white;
+    }
+    &.type_SICK {
+      background-color: #ffe082;
+    }
+    &.type_WEEKEND {
+      background-color: rgba(127, 140, 141, 0.2);
+    }
+  }
+}
+.date-picker {
+  transform: scale(1.25) translateY(30px);
+}

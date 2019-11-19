@@ -1,0 +1,52 @@
+<nav class="nav">
+  <a class="nav-item"
+    *ngIf="(isAuth$ | async)"
+    routerLink="/presence"
+    routerLinkActive="active">Мое присутствие
+  </a>
+  <a class="nav-item"
+    routerLink="/team-presence"
+    routerLinkActive="active">Команда
+  </a>
+  <a class="nav-item"
+    *ngIf="(isAuth$ | async)"
+    routerLink="/profile"
+    routerLinkActive="active">Профиль
+  </a>
+
+  <button mat-button
+    class="nav-item"
+    *ngIf="(isAuth$ | async) && (isAdmin$ | async)"
+    [ngClass]="{'active': (router.url === '/employee-list') || (router.url === '/app-configuration')  || (router.url === '/projects')}"
+    [matMenuTriggerFor]="menu">Администр.
+  </button>
+  <mat-menu #menu="matMenu">
+    <a mat-menu-item
+      class="nav-item"
+      routerLink="/employee-list"
+      routerLinkActive="active">Сотрудники
+    </a>
+    <a mat-menu-item
+      class="nav-item"
+      routerLink="/projects"
+      routerLinkActive="active">Проекты
+    </a>
+    <a mat-menu-item
+      class="nav-item"
+      routerLink="/app-configuration"
+      routerLinkActive="active">Конфигурация
+    </a>
+  </mat-menu>
+
+  <ng-template #noAuth>
+    <a class="btn btn-outline-primary"
+      routerLink="/login"
+      routerLinkActive="active">Войти
+    </a>
+  </ng-template>
+
+  <a class="btn btn-outline-primary"
+    *ngIf="(isAuth$ | async); else noAuth"
+    (click)="logout()">Выйти
+  </a>
+</nav>

@@ -1,0 +1,135 @@
+$borderColor: #e3e3e3;
+
+.day {
+  text-align: center;
+  border-right: 1px solid $borderColor;
+  border-bottom: 2px solid $borderColor;
+  min-height: 45px;
+  &.header {
+    border-bottom: 1px solid $borderColor;
+  }
+}
+.table {
+  width: 100%;
+  overflow: auto;
+  margin-top: 20px;
+}
+.month_title {
+  text-align: center;
+}
+
+.weekend {
+  background-color: #efecec;
+}
+
+.buttons__wrapper {
+  display: flex;
+  align-items: center;
+  left: 50%;
+  top: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+.current-month {
+  margin: 0 15px;
+  width: 115px;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.row-item {
+  display: grid;
+  grid-template-columns: 240px repeat(35, 30px);
+}
+
+.title {
+  padding: 0 5px;
+  border-right: 1px solid $borderColor;
+  border-bottom: 2px solid $borderColor;
+  white-space: nowrap;
+  &.header {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    font-weight: 500;
+    border-bottom: 1px solid $borderColor;
+  }
+}
+
+.header {
+  //border-top: 1px solid $borderColor;
+}
+
+.days_wrapper-table {
+  display: flex;
+}
+
+.COMMON {
+  &.weekend {
+    background-color: #efecec;
+  }
+}
+.CUSTOM {
+  background-color: rgb(144, 202, 249);
+}
+.LEFT {
+  background-color: #ef9a9a;
+  color: white;
+}
+.VACATION {
+  background-color: #c5e1a5;
+  color: white;
+}
+.SICK {
+  background-color: #ffe082;
+}
+.agenda__wrapper {
+  margin-top: 70px;
+  display: flex;
+  justify-content: center;
+}
+.filters_wrapper {
+  margin-top: 35px;
+  position: relative;
+  display: flex;
+}
+.day-header {
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+mat-form-field {
+  margin-right: 20px;
+}
+
+@media (max-width: 620px) {
+  .buttons__wrapper {
+    left: initial;
+    top: initial;
+    position: static;
+    transform: initial;
+  }
+}
+.jobPosition {
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.currentDay {
+  .day-wrapper {
+    background: #ff3b30;
+    color: white;
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+  }
+}
+.button-change-month {
+  color: #007bff;
+  cursor: pointer;
+  font-size: 21px;
+  line-height: 34px;
+}

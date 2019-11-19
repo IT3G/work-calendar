@@ -1,0 +1,1 @@
+call docker build -t 172.17.21.6:8888/calendar-frontend:latest . --no-cache

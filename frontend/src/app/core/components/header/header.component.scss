@@ -1,0 +1,30 @@
+.contaienr {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+.avatar {
+  margin-right: 10px;
+}
+
+.user-info-container {
+  display: flex;
+  align-items: center;
+}
+
+.mobile-menu {
+  display: none;
+  cursor: pointer;
+}
+
+@media (max-width: 750px) {
+  .menu {
+    display: none;
+  }
+
+  .mobile-menu {
+    display: block;
+    padding-right: 14px;
+  }
+}

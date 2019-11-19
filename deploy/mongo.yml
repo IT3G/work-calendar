@@ -1,0 +1,52 @@
+---
+
+- hosts: all
+  vars:
+    mongodb_admin_user: 'root'
+    mongodb_admin_password: 'r00t123'
+
+
+  tasks:
+  - name: Add YUM repository
+    template:
+      src: mongodb.repo.j2
+      dest: /etc/yum.repos.d/mongodb.repo
+      mode: 0644
+
+  - name: Install MongoDB package
+    yum:
+      name: "mongodb-org"
+
+  - name: Start
+    service:
+      name: mongod.service
+      enabled: yes
+      state: started
+
+  - name: Check
+    uri:
+     url: http://localhost:27017
+     method: GET
+
+  - name: Install the latest pymongo package
+    pip: name=pymongo state=latest use_mirrors=no
+
+  - name: Create MongoDB root user siteRootAdmin
+    mongodb_user:
+      database: "admin"
+      name: "{{ mongodb_admin_user }}"
+      password: "{{ mongodb_admin_password }}"
+      roles: "root"
+      state: present
+
+  - name: Create user
+    mongodb_user:
+      login_user: "{{ mongodb_admin_user }}"
+      login_password: "{{ mongodb_admin_password }}"
+      database: calendar
+      name: calendar
+      password: calendar
+      roles: 'readWrite'
+      state: present
+
+

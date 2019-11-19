@@ -1,0 +1,16 @@
+<div class="container"
+  *ngIf='selectedUser && (tasks$ | async) '>
+  <div class="row">
+    <div class="col-md-4">
+      <app-current-day [selectedUser]="selectedUser"></app-current-day>
+      <app-calendar [tasks]='tasks$ | async'></app-calendar>
+      <app-agenda></app-agenda>
+    </div>
+    <div class="col-md-3">
+      <app-description [selectedUser]="selectedUser"></app-description>
+    </div>
+    <div class="col-md-5">
+      <app-description-history [tasks$]="tasks$"></app-description-history>
+    </div>
+  </div>
+</div>
