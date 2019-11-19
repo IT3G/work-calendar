@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
 import { AuthGuardService } from './core/guards/auth-guard.service';
 import { EmployeeApiService } from './core/services/employee-api.service';
+import { GitInfoService } from './core/services/git-info.service';
 import { TaskApiService } from './core/services/task-api.service';
 import { ContextStoreService } from './core/store/context-store.service';
 import { EmployeeStoreService } from './core/store/employee-store.service';
@@ -19,6 +21,8 @@ export class AppComponent implements OnInit, OnDestroy {
   public userSession: string;
   public subscription = new Subscription();
   constructor(
+    private title: Title,
+    private gitInfo: GitInfoService,
     private contextStoreService: ContextStoreService,
     private taskApiService: TaskApiService,
     private employeeApiService: EmployeeApiService,
@@ -30,6 +34,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getInfoFromStore();
+    this.addGitVersionToPageTitle();
   }
 
   ngOnDestroy() {
@@ -72,5 +77,13 @@ export class AppComponent implements OnInit, OnDestroy {
         this.contextStoreService.setCurrentUser(key);
       })
     );
+  }
+
+  /** Добавление версии в заголовок */
+  private addGitVersionToPageTitle(): void {
+    const currentTitle = this.title.getTitle();
+    this.gitInfo.getVersionAsString().subscribe(version => {
+      this.title.setTitle(`${currentTitle} (${version})`);
+    });
   }
 }
