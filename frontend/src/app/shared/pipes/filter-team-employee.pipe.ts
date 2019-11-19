@@ -26,6 +26,9 @@ export class FilterTeamEmployeePipe implements PipeTransform {
           dateStart.add(1, 'd');
         }
 
+        infoAboutProj.dateStart = infoAboutProj.dateStart ? infoAboutProj.dateStart : moment('1900-01-01').format();
+        infoAboutProj.dateEnd = infoAboutProj.dateEnd ? infoAboutProj.dateEnd : moment('2100-01-01').format();
+
         return res.some(date => moment(date).isBetween(infoAboutProj.dateStart, infoAboutProj.dateEnd));
       });
   }
