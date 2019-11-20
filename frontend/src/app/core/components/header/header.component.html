@@ -1,18 +1,13 @@
-<div (swipe)="onSwipe($event)"
-  class="contaienr shadow-sm">
+<div (swipe)="onSwipe($event)" class="contaienr shadow-sm">
   <div class="user-info-container">
-    <ngx-avatar class="menu"
-      *ngIf="(currentUser$ | async) as currentUser"
-      size="40"
-      value="{{ currentUser.username | usernamePipe }}">
+    <ngx-avatar class="menu" *ngIf="(currentUser$ | async) as currentUser" size="40" [src]="currentUser | avatarSource">
     </ngx-avatar>
     &nbsp;
-    <div class="mobile-menu"
-      (click)="mobileMenuClick.emit()">
+    <div class="mobile-menu" (click)="mobileMenuClick.emit()">
       <i class="fa fa-bars"></i>
     </div>
     <h5 class="my-0 mr-md-auto font-weight-normal">
-      Привет, {{ (currentUser$ | async) ? (currentUser$ | async).username.split(' ')[1] : "гость" }}!
+      Привет, {{ (currentUser$ | async) ? (currentUser$ | async).username.split(' ')[1] : 'гость' }}!
     </h5>
   </div>
 

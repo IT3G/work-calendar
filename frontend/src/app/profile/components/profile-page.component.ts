@@ -118,6 +118,10 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.isEdit = false;
   }
 
+  public getAvatarSrc() {
+    return `/backend/avatar?login=` + this.login;
+  }
+
   private getUserInfo(): void {
     this.login = this.route.snapshot.params.id;
     if (!this.login) {
