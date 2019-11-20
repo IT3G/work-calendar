@@ -2,10 +2,13 @@ import { HttpService, Injectable } from '@nestjs/common';
 import { AxiosResponse } from 'axios';
 import { switchMap } from 'rxjs/operators';
 import { Config } from '../config/config';
+import { AvatarsService } from './avatars.service';
 
 @Injectable()
-export class ConfluenceAvatarService {
-  constructor(private http: HttpService, private config: Config) {}
+export class ConfluenceAvatarService extends AvatarsService {
+  constructor(private http: HttpService, private config: Config) {
+    super();
+  }
 
   public async getAvatarByLogin(login: string): Promise<AxiosResponse<any>> {
     const authData = {

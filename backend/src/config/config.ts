@@ -15,6 +15,7 @@ export class Config {
   READER_PASSWORD: string;
   SERVER_URL: string;
   SUFFIX: string;
+  AVATAR_SOURCE: string;
   CONFLUENCE_BASE_URL: string;
   CONFLUENCE_LOGIN: string;
   CONFLUENCE_PASSWORD: string;

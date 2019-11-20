@@ -1,6 +1,12 @@
 <div (swipe)="onSwipe($event)" class="contaienr shadow-sm">
   <div class="user-info-container">
-    <ngx-avatar class="menu" *ngIf="(currentUser$ | async) as currentUser" size="40" [src]="currentUser | avatarSource">
+    <ngx-avatar
+      class="menu"
+      *ngIf="(currentUser$ | async) as currentUser"
+      size="40"
+      [src]="currentUser | avatarSource"
+      value="{{ currentUser.username | usernamePipe }}"
+    >
     </ngx-avatar>
     &nbsp;
     <div class="mobile-menu" (click)="mobileMenuClick.emit()">

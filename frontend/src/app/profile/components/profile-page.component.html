@@ -1,7 +1,7 @@
 <div class="container" *ngIf="selectedUser as user">
   <div class="row">
     <div class="col-md-2">
-      <ngx-avatar [src]="user | avatarSource" size="160"> </ngx-avatar>
+      <ngx-avatar [src]="user | avatarSource" size="160" value="{{ user.username | usernamePipe }}"> </ngx-avatar>
     </div>
     <div class="col-md-10">
       <div class="profile-form col-md-10" [formGroup]="profileForm" (keydown)="onEnter($event)">
