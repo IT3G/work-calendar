@@ -82,7 +82,7 @@ export class DescriptionComponent implements OnInit {
     });
 
     if (sendingMail.adress.length) {
-      this.mailApiService.sendMail(sendingMail).subscribe(key => console.log(key));
+      //this.mailApiService.sendMail(sendingMail).subscribe(key => console.log(key));
     }
   }
 
@@ -131,9 +131,13 @@ export class DescriptionComponent implements OnInit {
       .getEmployeesSnapshot()
       .filter(
         emp =>
-          (emp.projects.some((projectEmp: { title: string; dateStart: string; dateEnd: string }) => {
-            return this.selectedUser.projects.some(project => project.title === projectEmp.title);
-          }) ||
+          (emp.projects
+            .filter(p => moment().isBetween(p.dateStart, p.dateEnd))
+            .some((projectEmp: { title: string; dateStart: string; dateEnd: string }) => {
+              return this.selectedUser.projects
+                .filter(p => moment().isBetween(p.dateStart, p.dateEnd))
+                .some(project => project.title === projectEmp.title);
+            }) ||
             !emp.projects.length) &&
           emp.hasMailing
       )
