@@ -18,6 +18,14 @@
               <input matInput value="{{ user.email }}" autocomplete="off" formControlName="email" />
             </mat-form-field>
           </div>
+          <div class="title">дата выхода:</div>
+          <div class="form-group">
+            <mat-form-field class="control control-date">
+              <input matInput autocomplete="off" formControlName="whenCreated" [matDatepicker]="pickerCreate" />
+              <mat-datepicker-toggle matSuffix [for]="pickerCreate"></mat-datepicker-toggle>
+              <mat-datepicker #pickerCreate></mat-datepicker>
+            </mat-form-field>
+          </div>
           <div class="title">должность:</div>
           <div class="form-group">
             <mat-form-field>
