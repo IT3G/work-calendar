@@ -29,7 +29,7 @@
         <div class="row-item">
           <div class="title header">Сотрудник</div>
           <div class="day header "
-            [ngClass]="{ weekend: isWeekend(date), currentDay: isCurrentDay(date) }"
+            [ngClass]="{ weekend: date | isWeekendDayPipe, currentDay: date | isCurrentDayPipe}"
             *ngFor="let date of (monthDays$ | async)">
             <div class="day-header">
               <div class="day-wrapper">{{ date | datePipe: 'D' }}</div>
@@ -50,7 +50,7 @@
           <div *ngFor="let task of data.tasks"
             [matTooltip]="task.comment"
             class="day {{ task?.type ? dayType[(task?.type)] : '' }}"
-            [ngClass]="{ weekend: isWeekend(task.dateStart) }"></div>
+            [ngClass]="{ weekend: task.dateStart | isWeekendDayPipe }"></div>
         </div>
       </div>
       <div class="agenda__wrapper">
