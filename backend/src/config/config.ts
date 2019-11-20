@@ -24,9 +24,7 @@ export class Config {
 let config;
 
 export function getConfig() {
-  const path = process.env.NODE_ENV === `prod` ? `dist` : `src`;
-  const configPath = `${path}/enviroments/${process.env.NODE_ENV || 'dev'}.env`;
-  // const configPath = `src/enviroments/${process.env.NODE_ENV || 'dev'}.env`;
+  const configPath = `./environments/${process.env.NODE_ENV || 'dev'}.env`;
   if (!config) {
     config = dotenv.parse(fs.readFileSync(configPath));
   }

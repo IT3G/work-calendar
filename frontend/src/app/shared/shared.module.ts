@@ -14,6 +14,8 @@ import { CurrentEmployeePipe } from './pipes/description-history/current-employe
 import { TaskTypePipe } from './pipes/description-history/task-type.pipe';
 import { FilterEmployeePipe } from './pipes/filter-employee.pipe';
 import { FilterTeamEmployeePipe } from './pipes/filter-team-employee.pipe';
+import { IsCurrentDayPipe } from './pipes/is-current-day.pipe';
+import { IsWeekendDayPipe } from './pipes/is-weekend-day.pipe';
 import { UsernamePipe } from './pipes/username.pipe';
 
 const pipes = [
@@ -25,7 +27,9 @@ const pipes = [
   FilterEmployeePipe,
   FilterTeamEmployeePipe,
   AvatarSourcePipe,
-  CurrentProjectsPipe
+  CurrentProjectsPipe,
+  IsWeekendDayPipe,
+  IsCurrentDayPipe
 ];
 
 const modules = [MaterialModule, FormsModule, ReactiveFormsModule, AvatarModule, NgbModule, RouterModule];
