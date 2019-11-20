@@ -3,34 +3,60 @@
   vars:
     image_name: '172.17.21.6:8888/calendar-frontend:latest'
     container_name: 'calendar-frontend'
+    container_label: 'calendar-frontend'
     container_ext_port: '8089'
+    container_int_port: '80'
+    healthcheck_url: 'http://localhost:{{ container_ext_port }}/'
 
   tasks:
 
+    - name: 'Retrieve container IDs of previous web versions'
+      command: "docker ps -qa --no-trunc --filter 'label=app={{ container_label }}'"
+      register: previous_containers
+
     - name: 'Stop old container to free port'
+      shell: "docker stop {{ item }}"
+#      shell: "docker stop {{ container_id }} ; docker rm --force {{ container_id }}"
       ignore_errors: 'yes'
-      shell: "docker stop {{ container_name }} ; docker rm --force {{ container_name }}"
+      with_items: "{{ previous_containers.stdout_lines }}"
+      when: (item.find(container_label) == -1)
 
     - name: 'Start or replace a container with docker_container module'
       docker_container:
-        name: "{{ container_name }}"
+        name: "{{ container_name }}-{{ ansible_date_time.epoch }}"
         image: "{{ image_name }}"
         detach: true
         pull: yes
         labels:
-          app: "{{ container_name }}"
+          app: "{{ container_label }}"
         env:
           test1: "es321"
         ports:
-          - '{{ container_ext_port }}:80'
+          - '{{ container_ext_port }}:{{ container_int_port }}'
       register: docker_results
+
+    - debug:
+        msg: '{{ docker_results }}'
+
+    - name: 'Retrieve container ID'
+      set_fact:
+        container_id: "{{ docker_results.ansible_facts.docker_container.Id }}"
+#        ephemeral_port: "{{ docker_results.ansible_facts.docker_container.NetworkSettings.Ports['7000/tcp'][0].HostPort }}"
 
     - block:
       - name: 'Verify that the new container is serving traffic'
         uri:
-          url: "http://localhost:{{ container_ext_port }}/"
+          url: "{{ healthcheck_url }}"
           status_code: 200
         register: container_status
         retries: "10"
         delay: "2"
         until: "container_status.status == 200"
+
+    - name: 'Queue previous containers to RM in 10 minutes'
+      at:
+        command: "/usr/bin/docker rm --force {{ item }}"
+        count: 10
+        units: 'minutes'
+      with_items: "{{ previous_containers.stdout_lines }}"
+      when: (item.find(container_label) == -1)
