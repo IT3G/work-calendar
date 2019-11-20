@@ -1,8 +1,7 @@
 <div class="day">
   <p>Присутствие на {{ currentDate$ | async | datePipe: 'D MMMM YYYY' }}</p>
   <div style="display: inline-flex">
-    <ngx-avatar size="28"
-      value="{{ selectedUser.username | usernamePipe }}">
+    <ngx-avatar size="28" [src]="selectedUser | avatarSource" value="{{ selectedUser.username | usernamePipe }}">
     </ngx-avatar>
     &nbsp;
     <a [routerLink]="['/profile', selectedUser.mailNickname]">

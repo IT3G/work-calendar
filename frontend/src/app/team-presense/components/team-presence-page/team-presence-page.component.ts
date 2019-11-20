@@ -23,8 +23,10 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
   public monthData$: Observable<PresenceModel[]>;
   public monthDays$: Observable<Moment[]>;
   public dayType = DayType;
-  private qParamsSnpshotMonth = this.route.snapshot.queryParams.month;
-  public date$ = new BehaviorSubject<Moment>(this.qParamsSnpshotMonth ? moment(this.qParamsSnpshotMonth) : moment());
+  private qParamsSnpshotMonth = this.route.snapshot.queryParams.date;
+  public date$ = new BehaviorSubject<Moment>(
+    this.qParamsSnpshotMonth ? moment(this.qParamsSnpshotMonth, 'MM-YYYY') : moment()
+  );
   private employees$: Observable<Employee[]>;
   private tasks$: Observable<TaskModel[]>;
   private dateSub = new Subscription();
@@ -53,17 +55,17 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
   }
 
   public prevMonth(): void {
-    this.date$.next(moment(this.date$.value).subtract(1, 'months'));
+    this.date$.next(this.date$.value.subtract(1, 'months'));
   }
 
   public nextMonth(): void {
-    this.date$.next(moment(this.date$.value).add(1, 'months'));
+    this.date$.next(this.date$.value.add(1, 'months'));
   }
 
   private getQueryParamsDate() {
     this.dateSub.add(
       this.date$.subscribe(date => {
-        this.router.navigate([], { queryParams: { month: date.toISOString() } });
+        this.router.navigate([], { queryParams: { date: moment(date).format('MM-YYYY') } });
       })
     );
   }
@@ -84,14 +86,6 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
         return res;
       })
     );
-  }
-
-  public isWeekend(date: Moment): boolean {
-    return date.format('d') === '0' || date.format('d') === '6';
-  }
-
-  public isCurrentDay(date: Moment): boolean {
-    return date.isSame(moment(), 'day');
   }
 
   private updateTaskData(): void {

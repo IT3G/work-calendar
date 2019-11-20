@@ -15,14 +15,16 @@ export class Config {
   READER_PASSWORD: string;
   SERVER_URL: string;
   SUFFIX: string;
+  AVATAR_SOURCE: string;
+  CONFLUENCE_BASE_URL: string;
+  CONFLUENCE_LOGIN: string;
+  CONFLUENCE_PASSWORD: string;
 }
 
 let config;
 
 export function getConfig() {
-  const path = process.env.NODE_ENV === `prod` ? `dist` : `src`;
-  const configPath = `${path}/enviroments/${process.env.NODE_ENV || 'dev'}.env`;
-  // const configPath = `src/enviroments/${process.env.NODE_ENV || 'dev'}.env`;
+  const configPath = `./environments/${process.env.NODE_ENV || 'dev'}.env`;
   if (!config) {
     config = dotenv.parse(fs.readFileSync(configPath));
   }
