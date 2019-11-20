@@ -82,7 +82,7 @@ export class DescriptionComponent implements OnInit {
     });
 
     if (sendingMail.adress.length) {
-      //this.mailApiService.sendMail(sendingMail).subscribe(key => console.log(key));
+      this.mailApiService.sendMail(sendingMail).subscribe(key => console.log(key));
     }
   }
 
