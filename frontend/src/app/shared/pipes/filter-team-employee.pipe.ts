@@ -15,7 +15,7 @@ export class FilterTeamEmployeePipe implements PipeTransform {
     return value
       .filter(v => v.employee.projects.some(proj => proj.title === filter))
       .filter(v => {
-        const infoAboutProj = v.employee.projects.find(proj => proj.title === filter);
+        const infoAboutProj = v.employee.projects.filter(proj => proj.title === filter);
 
         const dateStart = date.clone().startOf('month');
         const dateEnd = date.clone().endOf('month');
@@ -26,7 +26,12 @@ export class FilterTeamEmployeePipe implements PipeTransform {
           dateStart.add(1, 'd');
         }
 
-        return res.some(date => moment(date).isBetween(infoAboutProj.dateStart, infoAboutProj.dateEnd));
+        infoAboutProj.map(info => {
+          info.dateStart = info.dateStart ? info.dateStart : moment('1900-01-01').format();
+          info.dateEnd = info.dateEnd ? info.dateEnd : moment('2100-01-01').format();
+        });
+
+        return infoAboutProj.some(proj => res.some(date => moment(date).isBetween(proj.dateStart, proj.dateEnd)));
       });
   }
 }

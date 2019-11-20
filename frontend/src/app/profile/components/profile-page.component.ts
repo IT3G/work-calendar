@@ -98,10 +98,13 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.profileForm.get('projects').enable();
     this.profileForm.get('location').enable();
     this.profileForm.get('telNumber').enable();
-    this.profileForm.get('isAdmin').enable();
+
     this.profileForm.get('hasMailing').enable();
-    this.profileForm.get('subdivision').enable();
-    this.profileForm.get('jobPosition').enable();
+    if (this.contextStoreService.getCurrentUser().isAdmin) {
+      this.profileForm.get('subdivision').enable();
+      this.profileForm.get('jobPosition').enable();
+      this.profileForm.get('isAdmin').enable();
+    }
     this.isEdit = true;
   }
 
@@ -174,6 +177,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   }
 
   private initForm(user: Employee): void {
+    const date = user.whenCreated.slice(0, 8);
     this.profileForm = this.fb.group({
       id: new FormControl(user._id),
       username: new FormControl(user.username),
@@ -184,7 +188,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       isAdmin: new FormControl(user.isAdmin),
       hasMailing: new FormControl(user.hasMailing),
       jobPosition: new FormControl(user.jobPosition ? user.jobPosition : null),
-      subdivision: new FormControl(user.subdivision ? user.subdivision : null)
+      subdivision: new FormControl(user.subdivision ? user.subdivision : null),
+      whenCreated: new FormControl(user.whenCreated ? moment(date).format() : null)
     });
     this.profileForm.disable();
   }

@@ -18,12 +18,33 @@
               <input matInput value="{{ user.email }}" autocomplete="off" formControlName="email" />
             </mat-form-field>
           </div>
+          <div class="title">дата выхода:</div>
+          <div class="form-group">
+            <mat-form-field class="control control-date">
+              <input matInput autocomplete="off" formControlName="whenCreated" [matDatepicker]="pickerCreate" />
+              <mat-datepicker-toggle matSuffix [for]="pickerCreate"></mat-datepicker-toggle>
+              <mat-datepicker #pickerCreate></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="title">город:</div>
+          <div class="form-group">
+            <mat-form-field>
+              <input matInput value="{{ user.location }}" autocomplete="off" formControlName="location" />
+            </mat-form-field>
+          </div>
+          <div class="title">подразделение:</div>
+          <div class="form-group">
+            <mat-form-field>
+              <input matInput value="{{ user.subdivision }}" autocomplete="off" formControlName="subdivision" />
+            </mat-form-field>
+          </div>
           <div class="title">должность:</div>
           <div class="form-group">
             <mat-form-field>
               <input matInput value="{{ user.jobPosition }}" autocomplete="off" formControlName="jobPosition" />
             </mat-form-field>
           </div>
+
           <div class="title">проекты:</div>
           <div class="form-group project">
             <div *ngFor="let projectFormGroup of projectFormArray.controls; index as i" class="project-grid">
@@ -68,6 +89,7 @@
               <span class="span-project">добавить проект</span>
             </div>
           </div>
+          <<<<<<< HEAD
           <div class="title">подразделение:</div>
           <div class="form-group">
             <mat-form-field>
@@ -81,6 +103,9 @@
             </mat-form-field>
           </div>
           <div class="title">телефон:</div>
+          =======
+          <div class="title">телефон:</div>
+          >>>>>>> master
           <div class="form-group">
             <mat-form-field>
               <input matInput value="{{ user.telNumber }}" autocomplete="off" formControlName="telNumber" />
