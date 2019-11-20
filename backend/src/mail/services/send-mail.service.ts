@@ -1,17 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { Config } from '../../config/config';
+import { Config, getConfig } from '../../config/config';
 import { SendMailRequestModel } from '../models/send-mail.request.model';
 const nodemailer = require('nodemailer');
+const config = getConfig();
+
 @Injectable()
 export class SendMailService {
   constructor(private config: Config) {}
 
   public async sendMail(data: SendMailRequestModel): Promise<string> {
-    process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
-
-    if (process.env.NODE_ENV === `dev`) {
+    if (config.FEATURE_SEND_MAIL !== 'YES') {
       return;
     }
+
+    process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 
     const transporter = nodemailer.createTransport({
       host: this.config.MAIL_HOST,

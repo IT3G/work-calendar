@@ -43,7 +43,8 @@
         container_id: "{{ docker_results.ansible_facts.docker_container.Id }}"
 #        ephemeral_port: "{{ docker_results.ansible_facts.docker_container.NetworkSettings.Ports['7000/tcp'][0].HostPort }}"
 
-    - block:
+    - name: 'Verify that the new container is serving traffic'
+      block:
       - name: 'Verify that the new container is serving traffic'
         uri:
           url: "{{ healthcheck_url }}"
@@ -52,6 +53,12 @@
         retries: "10"
         delay: "2"
         until: "container_status.status == 200"
+      rescue:
+      - name: 'Run old container'
+        shell: "docker run {{ item }}"
+        ignore_errors: 'yes'
+        with_items: "{{ previous_containers.stdout_lines }}"
+        when: (item.find(container_label) == -1)
 
     - name: 'Queue previous containers to RM in 10 minutes'
       at:

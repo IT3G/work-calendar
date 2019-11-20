@@ -7,9 +7,10 @@ import { MailModule } from './mail/mail.module';
 import { ProjectsModule } from './projects/projects.module';
 import { TasksModule } from './tasks/tasks.module';
 import { UsersModule } from './users/users.module';
+import { SettingsModule } from './settings/settings.module';
 const config = getConfig();
 
-const url = `mongodb://${config['DATABASE_USER']}:${config['DATABASE_PASSWORD']}@${config['DATABASE_URL']}`;
+const url = `${config['DATABASE_URL']}`;
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ const url = `mongodb://${config['DATABASE_USER']}:${config['DATABASE_PASSWORD']}
     AvatarsModule,
     MongooseModule.forRoot(url, {
       useNewUrlParser: true
-    })
+    }),
+    SettingsModule
   ],
   providers: [{ provide: Config, useValue: config }]
 })

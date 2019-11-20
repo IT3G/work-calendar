@@ -8,7 +8,7 @@ import { DefaultAvatarsService } from './default-avatars.service';
 const avatarServiceProvider = {
   provide: AvatarsService,
   useFactory: (http: HttpService, config: Config) => {
-    if (config.AVATAR_SOURCE === 'CONFLUENCE') {
+    if (config.FEATURE_AVATAR_SOURCE === 'CONFLUENCE') {
       return new ConfluenceAvatarService(http, config);
     } else {
       return new DefaultAvatarsService(http);
