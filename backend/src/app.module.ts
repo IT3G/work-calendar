@@ -5,12 +5,12 @@ import { AvatarsModule } from './avatars/avatars.module';
 import { Config, getConfig } from './config/config';
 import { MailModule } from './mail/mail.module';
 import { ProjectsModule } from './projects/projects.module';
+import { SettingsModule } from './settings/settings.module';
 import { TasksModule } from './tasks/tasks.module';
 import { UsersModule } from './users/users.module';
-import { SettingsModule } from './settings/settings.module';
 const config = getConfig();
 
-const url = `${config['DATABASE_URL']}`;
+const url = `${config.DATABASE_URL}`;
 
 @Module({
   imports: [
@@ -21,10 +21,10 @@ const url = `${config['DATABASE_URL']}`;
     ProjectsModule,
     AvatarsModule,
     MongooseModule.forRoot(url, {
-      useNewUrlParser: true
+      useNewUrlParser: true,
     }),
-    SettingsModule
+    SettingsModule,
   ],
-  providers: [{ provide: Config, useValue: config }]
+  providers: [{ provide: Config, useValue: config }],
 })
 export class AppModule {}

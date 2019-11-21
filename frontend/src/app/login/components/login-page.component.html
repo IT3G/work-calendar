@@ -1,7 +1,7 @@
 <div class="wrapper">
   <div class="login-form"
     [formGroup]="loginForm"
-    (keydown)=onEnter($event)>
+    (keydown.enter)=login()>
     <div class="form-group">
       <mat-form-field>
         <input matInput

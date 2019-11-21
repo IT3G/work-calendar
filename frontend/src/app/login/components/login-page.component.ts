@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthGuardService } from '../../core/guards/auth-guard.service';
 import { AuthApiService } from '../../core/services/auth-api.service';
 import { EmployeeApiService } from '../../core/services/employee-api.service';
 import { ContextStoreService } from '../../core/store/context-store.service';
@@ -22,7 +21,6 @@ export class LoginPageComponent implements OnInit {
     private contextStoreService: ContextStoreService,
     private employeeStoreService: EmployeeStoreService,
     private employeeApiService: EmployeeApiService,
-    private authGuardService: AuthGuardService,
     private router: Router
   ) {}
 
@@ -34,10 +32,6 @@ export class LoginPageComponent implements OnInit {
     this.authService
       .login(this.loginForm.value)
       .subscribe(res => this.successedLogin(res), err => this.erroredLogin(err), () => this.finishedLogin());
-  }
-
-  public onEnter(e: KeyboardEvent): void {
-    if (e.keyCode === 13) this.login();
   }
 
   private initForm(): void {
@@ -66,7 +60,6 @@ export class LoginPageComponent implements OnInit {
         });
     });
 
-    this.authGuardService.isActivated = true;
     this.router.navigate(['/presence']);
   }
 }

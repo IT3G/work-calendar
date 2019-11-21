@@ -1,5 +1,4 @@
-<div class="container"
-  *ngIf="projects$ | async as projects">
+<div class="container">
 
   <button mat-raised-button
     color="primary"
@@ -7,7 +6,7 @@
   </button>
 
   <table mat-table
-    [dataSource]="projects"
+    [dataSource]="projects$ | async"
     class="mat-elevation-z6">
 
     <ng-container matColumnDef="title">

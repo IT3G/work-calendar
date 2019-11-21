@@ -1,4 +1,7 @@
-import { ApiModelProperty } from "@nestjs/swagger";
+import { ApiModelProperty } from '@nestjs/swagger';
+import { JobPositionModel } from './job-position.response.model';
+
+import { Document } from 'mongoose';
 
 export class LoginResponseModel {
   @ApiModelProperty()
@@ -26,5 +29,5 @@ export class LoginResponseModel {
   @ApiModelProperty()
   subdivision: string;
   @ApiModelProperty()
-  jobPosition: string;
+  jobPosition: JobPositionModel;
 }

@@ -89,14 +89,14 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
   }
 
   private updateTaskData(): void {
-    this.monthData$ = combineLatest(this.date$, this.employees$, this.tasks$).pipe(
+    this.monthData$ = combineLatest([this.date$, this.employees$, this.tasks$]).pipe(
       filter(([_, employees, tasks]) => !!(employees && employees.length && tasks)),
       map(([date, employees, tasks]) =>
         employees.map(emp => {
           const startOfMonth = date.clone().startOf('month');
           const endOfMonth = date.clone().endOf('month');
 
-          let res = {
+          const res = {
             employee: emp,
             tasks: []
           };

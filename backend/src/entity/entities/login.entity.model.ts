@@ -1,24 +1,18 @@
-import { JobPositionModel } from './job-position.model';
+import { Document } from 'mongoose';
+import { JobPositionEntity } from './job-position.entity.model';
 
-export class Employee {
-  _id: string;
+export interface UserEntity extends Document {
   username: string;
   location: string;
   position: string;
+  projects: string[];
   whenCreated: string;
   email: string;
   telNumber: string;
   physicalDeliveryOfficeName: string;
   mailNickname: string;
-  projects: [
-    {
-      title: string;
-      dateStart: string;
-      dateEnd: string;
-    }
-  ];
   isAdmin: boolean;
   hasMailing: boolean;
   subdivision: string;
-  jobPosition: JobPositionModel;
+  jobPosition: JobPositionEntity;
 }
