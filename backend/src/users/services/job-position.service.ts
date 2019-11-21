@@ -35,4 +35,8 @@ export class JobPositionService {
     await this.jobPositionModel.findByIdAndUpdate(id, data);
     return await this.jobPositionModel.findById(id);
   }
+
+  async delete(id: number): Promise<JobPositionModel> {
+    return await this.jobPositionModel.findByIdAndDelete(id);
+  }
 }

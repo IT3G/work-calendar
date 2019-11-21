@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, NotFoundException, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, NotFoundException, Param, Post, Res } from '@nestjs/common';
 import { JobPositionModel } from '../auth/models/job-position.response.model';
 import { JobPositionService } from './services/job-position.service';
 
@@ -39,6 +39,13 @@ export class JobPositionController {
     if (!jobPosition) {
       throw new NotFoundException('Job position not exist!');
     }
+
+    return res.status(HttpStatus.OK).json(jobPosition);
+  }
+
+  @Delete('/:id')
+  async deleteJobPosition(@Res() res, @Param('id') id) {
+    const jobPosition = await this.jobPositionService.delete(id);
 
     return res.status(HttpStatus.OK).json(jobPosition);
   }

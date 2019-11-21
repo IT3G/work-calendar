@@ -17,4 +17,8 @@ export class JobPositionApiService {
   addPosition(jobPosition: JobPositionModel): Observable<JobPositionModel> {
     return this.http.post<JobPositionModel>(this.baseUrl, jobPosition);
   }
+
+  deletePosition(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
 }

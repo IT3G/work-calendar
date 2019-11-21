@@ -1,11 +1,21 @@
 table {
-    margin-top: 20px;
-    width: 100%;
-  }
-  button {
-    margin: 15px 0 5px;
-  }
-  .container {
-    padding: 20px 0;
-  }
-  
+  margin-top: 20px;
+  width: 100%;
+}
+
+tr:hover {
+  background: lightcyan;
+}
+
+button {
+  margin: 15px 0 5px;
+}
+.container {
+  padding: 20px 0;
+}
+
+.delete {
+  width: 30px;
+  text-align: center;
+  cursor: pointer;
+}

@@ -14,7 +14,7 @@ import { AddPopupComponent } from '../popups/add-popup/add-popup.component';
 })
 export class JobPositionAdministrationComponent implements OnInit {
   public jobPositions$: BehaviorSubject<JobPositionModel[]> = new BehaviorSubject([]);
-  public displayedColumns: string[] = ['name'];
+  public displayedColumns: string[] = ['name', 'delete'];
   public title: string;
 
   constructor(
@@ -29,6 +29,13 @@ export class JobPositionAdministrationComponent implements OnInit {
 
   public trackByFn(index: number, item: JobPositionModel) {
     return `${item._id}_${item.name}`;
+  }
+
+  public delete(item: JobPositionModel) {
+    this.jobPositionApi.deletePosition(item._id).subscribe(() => {
+      this.jobPositions$.next(this.jobPositions$.value.filter(i => i._id !== item._id));
+      this.snackbar.showSuccessSnackBar('Должность успешно удалена');
+    });
   }
 
   public openDialog(): void {
