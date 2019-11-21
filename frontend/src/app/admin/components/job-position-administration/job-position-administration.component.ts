@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
+import { filter, first, switchMap } from 'rxjs/operators';
 import { JobPositionApiService } from '../../../core/services/job-position-api.service';
 import { JobPositionModel } from '../../../shared/models/job-position.model';
 import { SnackbarService } from '../../../shared/services/snackbar.service';
@@ -12,7 +13,7 @@ import { AddPopupComponent } from '../popups/add-popup/add-popup.component';
   styleUrls: ['./job-position-administration.component.scss']
 })
 export class JobPositionAdministrationComponent implements OnInit {
-  public jobPositions$: Observable<JobPositionModel[]>;
+  public jobPositions$: BehaviorSubject<JobPositionModel[]> = new BehaviorSubject([]);
   public displayedColumns: string[] = ['name'];
   public title: string;
 
@@ -23,7 +24,11 @@ export class JobPositionAdministrationComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.jobPositions$ = this.jobPositionApi.getAll();
+    this.jobPositionApi.getAll().subscribe(res => this.jobPositions$.next(res));
+  }
+
+  public trackByFn(index: number, item: JobPositionModel) {
+    return `${item._id}_${item.name}`;
   }
 
   public openDialog(): void {
@@ -32,15 +37,16 @@ export class JobPositionAdministrationComponent implements OnInit {
       data: { title: 'Добавьте новую должность' }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (!result) {
-        return;
-      }
-
-      this.jobPositionApi.addPosition({ name: result }).subscribe(() => {
+    dialogRef
+      .afterClosed()
+      .pipe(
+        first(),
+        filter(res => !!res),
+        switchMap(res => this.jobPositionApi.addPosition({ name: res }))
+      )
+      .subscribe(res => {
         this.snackbar.showSuccessSnackBar('Должность успешно добавлена');
-        this.jobPositions$ = this.jobPositionApi.getAll();
+        this.jobPositions$.next([...this.jobPositions$.value, res]);
       });
-    });
   }
 }

@@ -1,5 +1,4 @@
-<div class="container"
-  *ngIf="jobPositions$ | async as jobPositions">
+<div class="container">
 
   <button mat-raised-button
     color="primary"
@@ -7,7 +6,8 @@
   </button>
 
   <table mat-table
-    [dataSource]="jobPositions"
+    [dataSource]="jobPositions$|async"
+    [trackBy]="trackByFn"
     class="mat-elevation-z6">
 
     <ng-container matColumnDef="name">
