@@ -5,14 +5,15 @@ import { ProjectSchema } from './schemas/projects.schemas';
 import { TaskSchema } from './schemas/task.schemas';
 import { UserSchema } from './schemas/user.schemas';
 
+const mongoModule = MongooseModule.forFeature([
+  { name: 'Users', schema: UserSchema },
+  { name: 'JobPosition', schema: JobPosition },
+  { name: 'Projects', schema: ProjectSchema },
+  { name: 'Tasks', schema: TaskSchema },
+]);
+
 @Module({
-  imports: [
-    MongooseModule.forFeature([
-      { name: 'Users', schema: UserSchema },
-      { name: 'JobPosition', schema: JobPosition },
-      { name: 'Projects', schema: ProjectSchema },
-      { name: 'Tasks', schema: TaskSchema },
-    ]),
-  ],
+  imports: [mongoModule],
+  exports: [mongoModule],
 })
 export class EntityModule {}

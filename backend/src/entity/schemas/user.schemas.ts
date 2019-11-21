@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
+import { Schema } from 'mongoose';
 
-export const UserSchema = new mongoose.Schema({
+export const UserSchema = new Schema({
   username: String,
   location: String,
   position: String,
@@ -13,5 +13,5 @@ export const UserSchema = new mongoose.Schema({
   isAdmin: Boolean,
   hasMailing: Boolean,
   subdivision: String,
-  jobPosition: { type: mongoose.Schema.Types.ObjectId, ref: 'JobPosition' },
+  jobPosition: { type: Schema.Types.ObjectId, ref: 'JobPosition' },
 });

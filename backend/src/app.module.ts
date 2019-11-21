@@ -8,7 +8,7 @@ import { TasksModule } from './tasks/tasks.module';
 import { UsersModule } from './users/users.module';
 const config = getConfig();
 
-const url = `mongodb://${config['DATABASE_USER']}:${config['DATABASE_PASSWORD']}@${config['DATABASE_URL']}`;
+const url = `mongodb://${config.DATABASE_USER}:${config.DATABASE_PASSWORD}@${config.DATABASE_URL}`;
 
 @Module({
   imports: [
@@ -18,9 +18,9 @@ const url = `mongodb://${config['DATABASE_USER']}:${config['DATABASE_PASSWORD']}
     TasksModule,
     ProjectsModule,
     MongooseModule.forRoot(url, {
-      useNewUrlParser: true
-    })
+      useNewUrlParser: true,
+    }),
   ],
-  providers: [{ provide: Config, useValue: config }]
+  providers: [{ provide: Config, useValue: config }],
 })
 export class AppModule {}
