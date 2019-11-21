@@ -1,7 +1,6 @@
-import { Controller, Get, Res, HttpStatus, Param, NotFoundException, Post, Body } from '@nestjs/common';
-import { JobPositionService } from './services/job-position.service';
+import { Body, Controller, Get, HttpStatus, NotFoundException, Param, Post, Res } from '@nestjs/common';
 import { JobPositionModel } from '../auth/models/job-position.response.model';
-import { LoginResponseModel } from '../auth/models/login.response.model';
+import { JobPositionService } from './services/job-position.service';
 
 @Controller('jobPosition')
 export class JobPositionController {

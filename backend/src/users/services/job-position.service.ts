@@ -31,8 +31,8 @@ export class JobPositionService {
     return jobPosition.save();
   }
 
-  async updateJobPosition(id: string, data: JobPositionModel): Promise<JobPositionModel> {
-    const result = await this.jobPositionModel.updateOne({ name: data.name }, { ...data });
-    return result;
+  async updateJobPosition(id: number, data: JobPositionModel): Promise<JobPositionModel> {
+    await this.jobPositionModel.findByIdAndUpdate(id, data);
+    return await this.jobPositionModel.findById(id);
   }
 }
