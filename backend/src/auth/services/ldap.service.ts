@@ -9,8 +9,8 @@ export class LdapService implements OnApplicationShutdown {
   config = {
     readerDn: this.configService.READER_DOMAIN_NAME,
     readerPwd: this.configService.READER_PASSWORD,
-    serverUrl: this.configService.SERVER_URL,
-    suffix: this.configService.SUFFIX
+    serverUrl: this.configService.LDAP_SERVER_URL,
+    suffix: this.configService.LDAP_SUFFIX
   };
 
   client: any;
@@ -69,7 +69,7 @@ export class LdapService implements OnApplicationShutdown {
   }
 
   private getFilter(username: string): Promise<string> {
-    const login = `${username}${this.configService.MAIL_PREFIX}`;
+    const login = `${username}${this.configService.MAIL_POSTFIX}`;
     return new Promise((resolve, reject) => {
       this.client.bind(this.config.readerDn, this.config.readerPwd, err => {
         if (err) {

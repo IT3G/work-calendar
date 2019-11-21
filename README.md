@@ -15,7 +15,7 @@ Worktime planning tool.
 
 2. Run '/database/docker-compose up --build' to start MongoDB
 
-3. !!! Check existence, or create correct '\backend\src\enviroments\dev.env' file !!!
+3. !!! Modify config file '\backend\environments\test.env' file or create new, ala 'dev.env' !!!
 
 4. Run '/backend/npm run start:dev' to run Node backend
 

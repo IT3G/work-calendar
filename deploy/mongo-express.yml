@@ -4,7 +4,7 @@
   vars:
     mongodb_admin_user: 'root'
     mongodb_admin_password: 'r00t123'
-    mongodb_server: 'host.docker.internal'
+    mongodb_server: '172.17.21.94'
     mongo_express_port: 9009
 
   tasks:
@@ -16,7 +16,7 @@
         - "0.0.0.0:9009:9009"
       state: started
       restart: yes
-      network_mode: host
+#      network_mode: host
       env:
         ME_CONFIG_MONGODB_SERVER: '{{ mongodb_server }}'
         ME_CONFIG_MONGODB_ADMINUSERNAME: '{{ mongodb_admin_user }}'

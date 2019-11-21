@@ -6,6 +6,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AvatarModule } from 'ngx-avatar';
 import { MaterialModule } from '../material.module';
 import { AgendaComponent } from './components/agenda/agenda.component';
+import { AvatarSourcePipe } from './pipes/avatar-source.pipe';
 import { TransformTaskTypePipe } from './pipes/calendar/transform-task-type.pipe';
 import { CurrentProjectsPipe } from './pipes/current-projects.pipe';
 import { DatePipe } from './pipes/date.pipe';
@@ -24,8 +25,9 @@ const pipes = [
   CurrentEmployeePipe,
   TransformTaskTypePipe,
   FilterEmployeePipe,
-  CurrentProjectsPipe,
   FilterTeamEmployeePipe,
+  AvatarSourcePipe,
+  CurrentProjectsPipe,
   IsWeekendDayPipe,
   IsCurrentDayPipe
 ];

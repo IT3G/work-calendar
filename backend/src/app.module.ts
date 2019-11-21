@@ -1,14 +1,16 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
+import { AvatarsModule } from './avatars/avatars.module';
 import { Config, getConfig } from './config/config';
 import { MailModule } from './mail/mail.module';
 import { ProjectsModule } from './projects/projects.module';
+import { SettingsModule } from './settings/settings.module';
 import { TasksModule } from './tasks/tasks.module';
 import { UsersModule } from './users/users.module';
 const config = getConfig();
 
-const url = `mongodb://${config.DATABASE_USER}:${config.DATABASE_PASSWORD}@${config.DATABASE_URL}`;
+const url = `${config.DATABASE_URL}`;
 
 @Module({
   imports: [
@@ -17,9 +19,11 @@ const url = `mongodb://${config.DATABASE_USER}:${config.DATABASE_PASSWORD}@${con
     UsersModule,
     TasksModule,
     ProjectsModule,
+    AvatarsModule,
     MongooseModule.forRoot(url, {
       useNewUrlParser: true,
     }),
+    SettingsModule,
   ],
   providers: [{ provide: Config, useValue: config }],
 })
