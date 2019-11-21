@@ -10,7 +10,6 @@ import { RouterModule } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import * as moment from 'moment';
 import { environment } from '../environments/environment';
-import { AdminModule } from './admin/admin.module';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { AuthApiService } from './core/services/auth-api.service';
@@ -36,7 +35,6 @@ export function onInit(appLoadService: AppLoadService) {
   imports: [
     BrowserModule,
     HttpClientModule,
-    AdminModule,
     LoginModule,
     CoreModule,
     PresenseModule,

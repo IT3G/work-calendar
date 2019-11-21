@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
-import { AuthGuardService } from './core/guards/auth-guard.service';
 import { EmployeeApiService } from './core/services/employee-api.service';
 import { GitInfoService } from './core/services/git-info.service';
 import { TaskApiService } from './core/services/task-api.service';
@@ -28,8 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private employeeApiService: EmployeeApiService,
     private employeeStoreService: EmployeeStoreService,
     private tasksStoreService: TasksStoreService,
-    private taskMapperService: TaskMapperService,
-    private authGuardService: AuthGuardService
+    private taskMapperService: TaskMapperService
   ) {}
 
   ngOnInit() {
@@ -50,7 +48,6 @@ export class AppComponent implements OnInit, OnDestroy {
     if (this.userSession) {
       this.getCurrentUser(this.userSession);
       this.subscription.add(this.contextStoreService.updater().subscribe(() => this.getCurrentUser(this.userSession)));
-      this.authGuardService.isActivated = true;
     }
   }
 
