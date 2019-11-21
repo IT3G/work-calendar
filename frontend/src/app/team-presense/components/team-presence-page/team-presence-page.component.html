@@ -45,7 +45,7 @@
               <a [routerLink]="['/presence', data.employee.mailNickname]">{{ data.employee.username.split(' ')[0] }} {{ data.employee.username.split(' ')[1] }}
               </a>
             </div>
-            <div class="jobPosition">{{ data.employee.jobPosition }}</div>
+            <div class="jobPosition">{{ data.employee?.jobPosition?.name }}</div>
           </div>
           <div *ngFor="let task of data.tasks"
             [matTooltip]="task.comment"

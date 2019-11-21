@@ -8,7 +8,7 @@ import { ConfigurationComponent } from './components/configuration/configuration
 import { EmployeeAddComponent } from './components/employee-list/employee-add/employee-add.component';
 import { EmployeeListComponent } from './components/employee-list/employee-list.component';
 import { JobPositionAdministrationComponent } from './components/job-position-administration/job-position-administration.component';
-import { ProjectAddComponent } from './components/projects/project-add/project-add.component';
+import { AddPopupComponent } from './components/popups/add-popup/add-popup.component';
 import { ProjectsComponent } from './components/projects/projects.component';
 
 const routes: Routes = [
@@ -21,14 +21,14 @@ const routes: Routes = [
 
 const components = [
   ProjectsComponent,
-  ProjectAddComponent,
+  AddPopupComponent,
   EmployeeListComponent,
   EmployeeAddComponent,
   ConfigurationComponent,
   JobPositionAdministrationComponent
 ];
 
-const entryComponents = [ProjectAddComponent, EmployeeAddComponent];
+const entryComponents = [AddPopupComponent, EmployeeAddComponent];
 
 @NgModule({
   declarations: [...components],

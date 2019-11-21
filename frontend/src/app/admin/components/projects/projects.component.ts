@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { ProjectsApiService } from '../../../core/services/projects-api.service';
 import { ProjectModel } from '../../../shared/models/projects.model';
 import { SnackbarService } from '../../../shared/services/snackbar.service';
-import { ProjectAddComponent } from './project-add/project-add.component';
+import { AddPopupComponent } from '../popups/add-popup/add-popup.component';
 
 @Component({
   selector: 'app-projects',
@@ -13,28 +13,24 @@ import { ProjectAddComponent } from './project-add/project-add.component';
 })
 export class ProjectsComponent implements OnInit {
   public projects$: Observable<ProjectModel[]>;
-  public displayedColumns: string[];
-  public title: string;
+  public displayedColumns: string[] = ['title'];
 
   constructor(private snackbar: SnackbarService, private projectsApi: ProjectsApiService, public dialog: MatDialog) {}
 
   ngOnInit() {
     this.projects$ = this.projectsApi.getProjects();
-    this.setDisplayedColumns();
-  }
-
-  private setDisplayedColumns(): void {
-    this.displayedColumns = ['title'];
   }
 
   public openDialog(): void {
-    const dialogRef = this.dialog.open(ProjectAddComponent, {
-      width: '250px',
-      data: { title: this.title }
+    const dialogRef = this.dialog.open(AddPopupComponent, {
+      width: '400px',
+      data: { title: 'Введите название проекта' }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (!result) return;
+      if (!result) {
+        return;
+      }
 
       this.projectsApi.addProject({ title: result }).subscribe(() => {
         this.snackbar.showSuccessSnackBar('Проект успешно добавлен');

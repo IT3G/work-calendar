@@ -1,0 +1,21 @@
+<div mat-dialog-content>
+  <h4>{{data.title}}</h4>
+
+  <mat-form-field class="input">
+    <input matInput
+      autocomplete="off"
+      [(ngModel)]="value"
+      (keydown.enter)="onEnter()">
+  </mat-form-field>
+</div>
+
+<div class="buttons"
+  mat-dialog-actions>
+  <button mat-button
+    [mat-dialog-close]="value">Добавить
+  </button>
+
+  <button mat-button
+    (click)="onNoClick()">Закрыть
+  </button>
+</div>
