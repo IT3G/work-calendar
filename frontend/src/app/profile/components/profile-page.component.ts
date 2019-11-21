@@ -5,12 +5,14 @@ import * as moment from 'moment';
 import { combineLatest, Observable, Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { EmployeeApiService } from '../../core/services/employee-api.service';
+import { JobPositionApiService } from '../../core/services/job-position-api.service';
 import { ProjectsApiService } from '../../core/services/projects-api.service';
 import { TaskApiService } from '../../core/services/task-api.service';
 import { ContextStoreService } from '../../core/store/context-store.service';
 import { EmployeeStoreService } from '../../core/store/employee-store.service';
 import { DayType } from '../../shared/const/day-type.const';
 import { Employee } from '../../shared/models/employee.model';
+import { JobPositionModel } from '../../shared/models/job-position.model';
 import { ProjectModel } from '../../shared/models/projects.model';
 import { TaskModel } from '../../shared/models/tasks.models';
 
@@ -23,8 +25,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   public selectedUser: Employee;
   public profileForm: FormGroup;
   public isAdmin$: Observable<boolean>;
-  public isEdit: boolean = false;
-  public canEdit: boolean = true;
+  public isEdit = false;
+  public canEdit = true;
   private login: string;
   private getCurrentUserSub = new Subscription();
   private searchUserByLoginSub = new Subscription();
@@ -32,21 +34,23 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   public taskHistory$: Observable<TaskModel[]>;
   public activity: TaskModel[];
   public dayType = DayType;
-  public displayedColumns: string[];
+  public displayedColumns: string[] = ['dateCreate', 'date', 'who', 'type', 'comment'];
+  public jobPositions: JobPositionModel[];
   public users$: Observable<Employee[]>;
+
   constructor(
     private contextStoreService: ContextStoreService,
     private employeeApiService: EmployeeApiService,
     private employeeStoreService: EmployeeStoreService,
     private route: ActivatedRoute,
     private projectsApi: ProjectsApiService,
+    private jobPositionApi: JobPositionApiService,
     private taskApi: TaskApiService,
     private fb: FormBuilder
   ) {}
 
   ngOnInit() {
     this.users$ = this.employeeApiService.loadAllEmployees();
-    this.displayedColumns = ['dateCreate', 'date', 'who', 'type', 'comment'];
     this.getUserInfo();
     this.isAdmin$ = this.contextStoreService.isCurrentUserAdmin$();
     this.projects$ = this.projectsApi.getProjects();
@@ -80,10 +84,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   public addProjectFromGroup(): void {
     const formArray = this.projectFormArray;
     formArray.controls.push(this.createEmptyProjectsFormGroup());
-  }
-
-  public onEnter(e: KeyboardEvent): void {
-    if (e.keyCode === 13) this.onUpdateProfile();
   }
 
   public removeFormGroupProject(index: number): void {
@@ -126,12 +126,16 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   }
 
   private getUserInfo(): void {
-    this.login = this.route.snapshot.params.id;
-    if (!this.login) {
-      this.getUserFromStore();
-    } else {
-      this.getUserFromApi();
-    }
+    this.jobPositionApi.getAll().subscribe(res => {
+      this.jobPositions = res;
+
+      this.login = this.route.snapshot.params.id;
+      if (!this.login) {
+        this.getUserFromStore();
+      } else {
+        this.getUserFromApi();
+      }
+    });
   }
 
   private getUserFromApi() {
@@ -164,19 +168,20 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   public loadTasks(user: string): void {
     this.taskHistory$ = this.taskApi.loadAllTasksByAuthor(user);
-    combineLatest(this.users$, this.taskHistory$)
+    combineLatest([this.users$, this.taskHistory$])
       .pipe(filter(([users, tasks]) => !!users.length && !!tasks.length))
       .subscribe(
         ([users, tasks]) =>
           (this.activity = tasks.map(task => {
-            const user = users.find(user => user.mailNickname === task.employee);
-            task.employee = user.username;
+            const currentUser = users.find(u => u.mailNickname === task.employee);
+            task.employee = currentUser.username;
             return task;
           }))
       );
   }
 
   private initForm(user: Employee): void {
+    const jobPosition = this.jobPositions.find(jp => user.jobPosition && jp._id === user.jobPosition._id);
     const date = user.whenCreated.slice(0, 8);
     this.profileForm = this.fb.group({
       id: new FormControl(user._id),
@@ -187,7 +192,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       telNumber: new FormControl(user.telNumber),
       isAdmin: new FormControl(user.isAdmin),
       hasMailing: new FormControl(user.hasMailing),
-      jobPosition: new FormControl(user.jobPosition ? user.jobPosition : null),
+      jobPosition: new FormControl(jobPosition),
       subdivision: new FormControl(user.subdivision ? user.subdivision : null),
       whenCreated: new FormControl(user.whenCreated ? moment(date).format() : null)
     });
