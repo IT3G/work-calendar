@@ -64,7 +64,7 @@ export class LdapService implements OnApplicationShutdown {
       isAdmin: false,
       hasMailing: true,
       subdivision: null,
-      jobPosition: attributes.find(el => el.type === 'title') ? attributes.find(el => el.type === 'title').data : null
+      jobPosition: null
     };
   }
 
@@ -93,7 +93,7 @@ export class LdapService implements OnApplicationShutdown {
           scope: 'sub'
         },
         (err, searchRes) => {
-          var searchList = [];
+          const searchList = [];
 
           searchRes.on('searchEntry', entry => {
             searchList.push(entry);
@@ -108,17 +108,16 @@ export class LdapService implements OnApplicationShutdown {
               reject({ user: null });
             }
 
-            for (let i = 0; i < searchList.length; i++)
-              this.client.bind(searchList[0].objectName, password, err => {
-                if (add && !err) {
-                  resolve(searchList);
-                }
-                if (err || !password) {
-                  reject({ user: null });
-                } else {
-                  resolve(searchList);
-                }
-              });
+            this.client.bind(searchList[0].objectName, password, err => {
+              if (add && !err) {
+                resolve(searchList);
+              }
+              if (err || !password) {
+                reject({ user: null });
+              } else {
+                resolve(searchList);
+              }
+            });
           });
         }
       );

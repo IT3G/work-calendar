@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose';
+import mongoose from 'mongoose';
 
 export const UserSchema = new mongoose.Schema({
   username: String,
@@ -13,5 +13,5 @@ export const UserSchema = new mongoose.Schema({
   isAdmin: Boolean,
   hasMailing: Boolean,
   subdivision: String,
-  jobPosition: String
+  jobPosition: { type: mongoose.Schema.Types.ObjectId, ref: 'JobPosition' },
 });
