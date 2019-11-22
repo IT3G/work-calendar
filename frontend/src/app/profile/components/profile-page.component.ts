@@ -172,17 +172,22 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       .pipe(filter(([users, tasks]) => !!users.length && !!tasks.length))
       .subscribe(
         ([users, tasks]) =>
-          (this.activity = tasks.map(task => {
-            const currentUser = users.find(u => u.mailNickname === task.employee);
-            task.employee = currentUser.username;
-            return task;
-          }))
+          (this.activity = tasks
+            .map(task => {
+              const currentUser = users.find(u => u.mailNickname === task.employee);
+              if (!currentUser) {
+                return;
+              }
+              task.employee = currentUser.username ? currentUser.username : currentUser.mailNickname;
+              return task;
+            })
+            .filter(t => !!t))
       );
   }
 
   private initForm(user: Employee): void {
     const jobPosition = this.jobPositions.find(jp => user.jobPosition && jp._id === user.jobPosition._id);
-    const date = user.whenCreated.slice(0, 8);
+    const date = user.whenCreated ? user.whenCreated.slice(0, 8) : null;
     this.profileForm = this.fb.group({
       id: new FormControl(user._id),
       username: new FormControl(user.username),

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { AuthApiService } from '../../core/services/auth-api.service';
 import { EmployeeApiService } from '../../core/services/employee-api.service';
 import { ContextStoreService } from '../../core/store/context-store.service';
@@ -15,6 +17,7 @@ import { Employee } from '../../shared/models/employee.model';
 export class LoginPageComponent implements OnInit {
   public errorMessage: string;
   public loginForm: FormGroup;
+  public hasRegistration$: Observable<boolean>;
 
   constructor(
     private authService: AuthApiService,
@@ -26,6 +29,10 @@ export class LoginPageComponent implements OnInit {
 
   ngOnInit() {
     this.initForm();
+    this.hasRegistration$ = this.contextStoreService.settings$.pipe(
+      filter(s => !!s),
+      map(s => s.FEATURE_AUTH_TYPE === 'PASSWORD')
+    );
   }
 
   public login() {

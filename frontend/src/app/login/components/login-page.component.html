@@ -23,11 +23,18 @@
       <label class="response-message error">{{errorMessage}}</label>
     </div>
     <div class="form-footer">
-      <button type="submit"
-        mat-raised-button
-        color="primary"
-        (click)="login()"
-        [disabled]="loginForm.invalid">Войти</button>
+      <div>
+        <button type="submit"
+          mat-raised-button
+          color="primary"
+          (click)="login()"
+          [disabled]="loginForm.invalid">Войти</button>
+      </div>
+      <div *ngIf='hasRegistration$ | async'>
+        <button type="submit"
+          mat-raised-button
+          color="primary"
+          routerLink='/registration'>Регистрация</button></div>
     </div>
   </div>
 </div>
