@@ -3,6 +3,7 @@ import { Router, RouterModule, Routes } from '@angular/router';
 import { AuthGuardService as AuthGuard } from '../core/guards/auth-guard.service';
 import { IsAdminGuardService } from '../core/guards/is-admin-guard.service';
 import { LoginPageComponent } from '../login/components/login-page.component';
+import { RegistrationComponent } from '../login/registration/registration.component';
 import { PresencePageComponent } from '../presense/components/presence-page/presence-page.component';
 import { ProfilePageComponent } from '../profile/components/profile-page.component';
 import { TeamPresencePageComponent } from '../team-presense/components/team-presence-page/team-presence-page.component';
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'presence/:id', component: PresencePageComponent, canActivate: [AuthGuard] },
   { path: 'team-presence', component: TeamPresencePageComponent },
   { path: 'login', component: LoginPageComponent },
+  { path: 'registration', component: RegistrationComponent },
   { path: 'admin', loadChildren: '../admin/admin.module#AdminModule', canActivate: [AuthGuard, IsAdminGuardService] },
   { path: '', redirectTo: 'presence', pathMatch: 'full' }
 ];

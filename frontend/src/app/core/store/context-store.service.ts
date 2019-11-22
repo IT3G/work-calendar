@@ -11,6 +11,8 @@ export class ContextStoreService {
   private currentDate = new BehaviorSubject<Moment>(null);
   private dayType = new BehaviorSubject<DayType>(null);
   private comment = new BehaviorSubject<string>(null);
+
+  public settings$ = new BehaviorSubject<any>(null);
   private updateEmitter$ = new Subject();
 
   public getCurrentDate$(): Observable<Moment> {

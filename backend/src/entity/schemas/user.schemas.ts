@@ -14,4 +14,6 @@ export const UserSchema = new Schema({
   hasMailing: Boolean,
   subdivision: String,
   jobPosition: { type: Schema.Types.ObjectId, ref: 'JobPosition' },
+  authType: String,
+  hashPswd: String
 });

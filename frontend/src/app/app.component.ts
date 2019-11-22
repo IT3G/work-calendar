@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
+import { ConfigurationApiService } from './core/services/configuration-api.service';
 import { EmployeeApiService } from './core/services/employee-api.service';
 import { GitInfoService } from './core/services/git-info.service';
 import { TaskApiService } from './core/services/task-api.service';
@@ -27,7 +28,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private employeeApiService: EmployeeApiService,
     private employeeStoreService: EmployeeStoreService,
     private tasksStoreService: TasksStoreService,
-    private taskMapperService: TaskMapperService
+    private taskMapperService: TaskMapperService,
+    private configurationApi: ConfigurationApiService
   ) {}
 
   ngOnInit() {
@@ -44,6 +46,9 @@ export class AppComponent implements OnInit, OnDestroy {
     this.getTasks();
     this.subscription.add(this.tasksStoreService.updater().subscribe(() => this.getTasks()));
     this.subscription.add(this.employeeStoreService.updater().subscribe(() => this.getEmployees()));
+    this.subscription.add(
+      this.configurationApi.loadSettings().subscribe(res => this.contextStoreService.settings$.next(res))
+    );
     this.userSession = JSON.parse(localStorage.getItem('userSession'));
     if (this.userSession) {
       this.getCurrentUser(this.userSession);

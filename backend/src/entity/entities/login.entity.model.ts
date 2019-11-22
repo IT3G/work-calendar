@@ -15,4 +15,6 @@ export interface UserEntity extends Document {
   hasMailing: boolean;
   subdivision: string;
   jobPosition: JobPositionEntity;
+  authType?: string;
+  hashPswd?: string;
 }

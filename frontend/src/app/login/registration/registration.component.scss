@@ -26,12 +26,6 @@
   margin-top: 10px;
   display: flex;
   justify-content: space-between;
-  > div {
-    margin-right: 10px;
-    &:last-child {
-      margin: 0;
-    }
-  }
 }
 button {
   width: 100%;

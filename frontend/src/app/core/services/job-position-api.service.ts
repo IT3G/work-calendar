@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 import { JobPositionModel } from '../../shared/models/job-position.model';
 
 @Injectable({
@@ -8,7 +9,7 @@ import { JobPositionModel } from '../../shared/models/job-position.model';
 })
 export class JobPositionApiService {
   constructor(private http: HttpClient) {}
-  private readonly baseUrl = 'backend/jobPosition';
+  private readonly baseUrl = `${environment.baseUrl}/jobPosition`;
 
   getAll(): Observable<JobPositionModel[]> {
     return this.http.get<JobPositionModel[]>(this.baseUrl);

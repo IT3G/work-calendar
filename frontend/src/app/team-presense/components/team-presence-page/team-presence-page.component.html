@@ -42,7 +42,7 @@
           <div class="number">{{i + 1}}.</div>
           <div class="title">
             <div>
-              <a [routerLink]="['/presence', data.employee.mailNickname]">{{ data.employee.username.split(' ')[0] }} {{ data.employee.username.split(' ')[1] }}
+              <a [routerLink]="['/presence', data.employee.mailNickname]">{{ data.employee?.username?.split(' ')[0] }} {{ data.employee?.username?.split(' ')[1] }}
               </a>
             </div>
             <div class="jobPosition">{{ data.employee?.jobPosition?.name }}</div>

@@ -64,7 +64,9 @@ export class LdapService implements OnApplicationShutdown {
       isAdmin: false,
       hasMailing: true,
       subdivision: null,
-      jobPosition: null
+      jobPosition: null,
+      authType: 'LDAP',
+      hashPswd: null
     };
   }
 
@@ -106,6 +108,7 @@ export class LdapService implements OnApplicationShutdown {
           searchRes.on('end', retVal => {
             if (!searchList.length) {
               reject({ user: null });
+              return;
             }
 
             this.client.bind(searchList[0].objectName, password, err => {
