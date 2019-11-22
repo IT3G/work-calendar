@@ -17,6 +17,6 @@ export class AuthApiInBackendService implements AuthApiService {
   }
 
   public registration(req: AuthRequestModel): Observable<any> {
-    return this.http.post<any>('/backend/auth/registration', req);
+    return this.http.post<any>(`${environment.baseUrl}/auth/registration`, req);
   }
 }

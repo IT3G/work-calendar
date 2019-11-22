@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import { combineLatest, Observable, Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import { EmployeeApiService } from '../../core/services/employee-api.service';
 import { JobPositionApiService } from '../../core/services/job-position-api.service';
 import { ProjectsApiService } from '../../core/services/projects-api.service';
@@ -122,7 +123,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   }
 
   public getAvatarSrc() {
-    return `/backend/avatar?login=` + this.login;
+    return `${environment.baseUrl}/avatar?login=` + this.login;
   }
 
   private getUserInfo(): void {

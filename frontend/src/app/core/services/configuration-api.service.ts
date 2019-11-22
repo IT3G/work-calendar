@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 import { ConfigModel } from '../../shared/models/config.model';
 
 @Injectable({
@@ -10,7 +11,7 @@ export class ConfigurationApiService {
   constructor(private http: HttpClient) {}
 
   public loadSettings(): Observable<any> {
-    return this.http.get<any>('backend/settings');
+    return this.http.get<any>(`${environment.baseUrl}/settings`);
   }
 
   public getConfig() {
