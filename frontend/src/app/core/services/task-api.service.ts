@@ -13,14 +13,14 @@ export class TaskApiService {
   constructor(private http: HttpClient) {}
 
   public addTask(task: SendingTaskModel): Observable<any> {
-    return this.http.post<Employee>(`${environment.baseUrl}tasks`, task);
+    return this.http.post<Employee>(`${environment.baseUrl}/tasks`, task);
   }
 
   public loadAllTasks(): Observable<TaskModel[]> {
-    return this.http.get<TaskModel[]>(`${environment.baseUrl}tasks`);
+    return this.http.get<TaskModel[]>(`${environment.baseUrl}/tasks`);
   }
 
   public loadAllTasksByAuthor(author: string): Observable<TaskModel[]> {
-    return this.http.get<TaskModel[]>(`${environment.baseUrl}tasks/${author}`);
+    return this.http.get<TaskModel[]>(`${environment.baseUrl}/tasks/${author}`);
   }
 }

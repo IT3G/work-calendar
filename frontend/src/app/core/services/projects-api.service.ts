@@ -11,9 +11,9 @@ export class ProjectsApiService {
   constructor(private http: HttpClient) {}
 
   public getProjects(): Observable<ProjectModel[]> {
-    return this.http.get<ProjectModel[]>(`${environment.baseUrl}/backend/projects`);
+    return this.http.get<ProjectModel[]>(`${environment.baseUrl}/projects`);
   }
   public addProject(data: ProjectModel): Observable<ProjectModel> {
-    return this.http.post<ProjectModel>(`${environment.baseUrl}/backend/projects/add`, data);
+    return this.http.post<ProjectModel>(`${environment.baseUrl}/projects/add`, data);
   }
 }

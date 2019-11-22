@@ -13,6 +13,6 @@ export class AuthApiInBackendService implements AuthApiService {
   constructor(private http: HttpClient) {}
 
   public login(req: AuthRequestModel): Observable<Employee> {
-    return this.http.post<Employee>(`${environment.baseUrl}/backend/auth`, req);
+    return this.http.post<Employee>(`${environment.baseUrl}/auth`, req);
   }
 }

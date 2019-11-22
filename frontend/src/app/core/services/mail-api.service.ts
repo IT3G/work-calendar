@@ -12,6 +12,6 @@ export class MailApiService {
   constructor(private http: HttpClient) {}
 
   public sendMail(req: SendMailRequestModel): Observable<SendingTaskModel> {
-    return this.http.post<SendingTaskModel>(`${environment.baseUrl}/backend/mail`, req);
+    return this.http.post<SendingTaskModel>(`${environment.baseUrl}/mail`, req);
   }
 }
