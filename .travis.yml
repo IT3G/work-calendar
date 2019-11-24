@@ -9,10 +9,11 @@ branches:
   - master
 
 before_script:
+  - cd frontend
   - npm install -g @angular/cli
 
 script:
-- ng build --prod --base-href https://enrey.github.io/work-calendar/
+- npm run build:test
 
 deploy:
   provider: pages
