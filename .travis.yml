@@ -20,6 +20,6 @@ deploy:
   provider: pages
   skip_cleanup: true
   github_token: $GITHUB_TOKEN
-  local_dir: dist/work-calendar
+  local_dir: frontend/dist/work-calendar
   on:
     branch: master
