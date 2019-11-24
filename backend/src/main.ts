@@ -5,6 +5,8 @@ import { getConfig } from './config/config';
 const config = getConfig();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.enableCors();
   
   const options = new DocumentBuilder()
   .setTitle('Work-Calendar')
@@ -17,6 +19,6 @@ async function bootstrap() {
 
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(config['APP_PORT']);
+  await app.listen(process.env.PORT || config['APP_PORT']);
 }
 bootstrap();

@@ -8,6 +8,7 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "build:prod": "yarn prebuild && cross-env NODE_ENV=prod webpack",
+    "heroku-postbuild": "yarn prebuild && cross-env NODE_ENV=test webpack",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "cross-env NODE_ENV=dev nest start --watch",
