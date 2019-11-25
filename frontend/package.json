@@ -5,8 +5,9 @@
     "preBuild": "node scripts/build-pre.js",
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json",
-    "build": "yarn preBuild && yarn ng build --prod",
-    "build:test": "yarn preBuild && yarn ng build --prod --base-href /work-calendar/",
+    "build": "yarn preBuild && yarn ng build",
+    "build:prod": "yarn preBuild && yarn ng build --configuration=production",
+    "build:test": "yarn preBuild && yarn ng build --configuration=test --base-href /work-calendar/",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

@@ -34,14 +34,14 @@ export class JobPositionAdministrationComponent implements OnInit {
   public delete(item: JobPositionModel) {
     this.jobPositionApi.deletePosition(item._id).subscribe(() => {
       this.jobPositions$.next(this.jobPositions$.value.filter(i => i._id !== item._id));
-      this.snackbar.showSuccessSnackBar('Должность успешно удалена');
+      this.snackbar.showSuccessSnackBar('Позиция успешно удалена');
     });
   }
 
   public openDialog(): void {
     const dialogRef = this.dialog.open(AddPopupComponent, {
       width: '400px',
-      data: { title: 'Добавьте новую должность' }
+      data: { title: 'Добавьте новую позицию' }
     });
 
     dialogRef
@@ -52,7 +52,7 @@ export class JobPositionAdministrationComponent implements OnInit {
         switchMap(res => this.jobPositionApi.addPosition({ name: res }))
       )
       .subscribe(res => {
-        this.snackbar.showSuccessSnackBar('Должность успешно добавлена');
+        this.snackbar.showSuccessSnackBar('Позиция успешно добавлена');
         this.jobPositions$.next([...this.jobPositions$.value, res]);
       });
   }

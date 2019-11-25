@@ -2,7 +2,7 @@
 
   <button mat-raised-button
     color="primary"
-    (click)="openDialog()">Добавить должность
+    (click)="openDialog()">Добавить позицию
   </button>
 
   <table mat-table
@@ -12,7 +12,7 @@
 
     <ng-container matColumnDef="name">
       <th mat-header-cell
-        *matHeaderCellDef>Должность</th>
+        *matHeaderCellDef>Позиция</th>
       <td mat-cell
         *matCellDef="let position">
         {{position?.name}}
