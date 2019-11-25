@@ -71,11 +71,11 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
       'username',
       'login',
       'jobPosition',
+      'subdivision',
       'projects',
       'location',
       'telNumber',
-      'isAdmin',
-      'subdivision'
+      'isAdmin'
     ];
   }
 
