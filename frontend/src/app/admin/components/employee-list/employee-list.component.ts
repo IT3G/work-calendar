@@ -67,7 +67,16 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
   }
 
   private setDisplayedColumns(): void {
-    this.displayedColumns = ['username', 'login', 'jobPosition', 'projects', 'location', 'telNumber', 'isAdmin'];
+    this.displayedColumns = [
+      'username',
+      'login',
+      'jobPosition',
+      'projects',
+      'location',
+      'telNumber',
+      'isAdmin',
+      'subdivision'
+    ];
   }
 
   private showErrorMessage(res: HttpErrorResponse): void {

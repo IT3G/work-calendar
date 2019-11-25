@@ -49,7 +49,13 @@
       <th mat-header-cell
         *matHeaderCellDef>Должность</th>
       <td mat-cell
-        *matCellDef="let employee">{{employee.jobPosition ? employee.jobPosition : "-"}}</td>
+        *matCellDef="let employee">{{employee.jobPosition ? employee.jobPosition?.name : "-"}}</td>
+    </ng-container>
+    <ng-container matColumnDef="subdivision">
+      <th mat-header-cell
+        *matHeaderCellDef>Подразделение</th>
+      <td mat-cell
+        *matCellDef="let employee">{{employee.subdivision ? employee.subdivision : "-"}}</td>
     </ng-container>
     <ng-container matColumnDef="location">
       <th mat-header-cell
