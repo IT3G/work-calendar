@@ -55,11 +55,11 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
   }
 
   public prevMonth(): void {
-    this.date$.next(this.date$.value.subtract(1, 'months'));
+    this.date$.next(this.date$.value.clone().subtract(1, 'months'));
   }
 
   public nextMonth(): void {
-    this.date$.next(this.date$.value.add(1, 'months'));
+    this.date$.next(this.date$.value.clone().add(1, 'months'));
   }
 
   private getQueryParamsDate() {
