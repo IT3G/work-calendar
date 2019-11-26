@@ -24,7 +24,7 @@
             <div>{{ date | datePipe: 'ddd' }}</div>
           </div>
         </div>
-        <div *ngFor="let data of (monthData | filterTeamEmployeePipe: filtersForm?.value :  (date$ | async)); index as i"
+        <div *ngFor="let data of (monthData | presenceFilter:filtersForm?.value:(date$ | async)); index as i"
           class="row-item">
           <div class="number">{{i + 1}}.</div>
           <div class="title">
