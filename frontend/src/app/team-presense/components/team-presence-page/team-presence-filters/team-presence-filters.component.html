@@ -1,4 +1,5 @@
-<form class="form" [formGroup]="filtersForm">
+<form class="form"
+  [formGroup]="filtersForm">
 
   <mat-form-field>
     <input matInput
@@ -22,7 +23,7 @@
     <mat-select formControlName="jobPosition">
       <mat-option>Сбросить</mat-option>
       <mat-option *ngFor="let jobPosition of jobPositions"
-        [value]="jobPosition">
+        [value]="jobPosition.name">
         {{ jobPosition.name }}
       </mat-option>
     </mat-select>

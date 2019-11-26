@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
@@ -37,7 +37,8 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
 
   private employees$: Observable<Employee[]>;
   private tasks$: Observable<TaskModel[]>;
-  private dateSub = new Subscription();
+  private subscription = new Subscription();
+
   constructor(
     private employeeStoreService: EmployeeStoreService,
     private tasksStoreService: TasksStoreService,
@@ -49,18 +50,18 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.initFilterForm();
+    this.initFilterForm(this.route.snapshot.queryParams);
     this.employees$ = this.employeeStoreService.getEmployees();
     this.tasks$ = this.tasksStoreService.getTasks();
     this.monthDays$ = this.getMonthDays();
     this.updateTaskData();
-    this.getQueryParamsDate();
+    this.updateQueryParamsOnChange();
     this.projects$ = this.projectsApi.getProjects();
     this.jobPositions$ = this.jobPositionApi.getAll();
   }
 
   ngOnDestroy() {
-    this.dateSub.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   public prevMonth(): void {
@@ -71,11 +72,21 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     this.date$.next(this.date$.value.clone().add(1, 'months'));
   }
 
-  private getQueryParamsDate() {
-    this.dateSub.add(
-      this.date$.subscribe(date => {
-        this.router.navigate([], { queryParams: { date: moment(date).format('MM-YYYY') } });
-      })
+  private updateQueryParamsOnChange() {
+    this.subscription.add(
+      this.date$.subscribe(date =>
+        this.router.navigate([], {
+          queryParams: { ...this.route.snapshot.queryParams, date: moment(date).format('MM-YYYY') }
+        })
+      )
+    );
+
+    this.subscription.add(
+      this.filtersForm.valueChanges.subscribe(filters =>
+        this.router.navigate([], {
+          queryParams: { ...this.route.snapshot.queryParams, ...filters }
+        })
+      )
     );
   }
 
@@ -97,13 +108,17 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     );
   }
 
-  private initFilterForm(): void {
+  private initFilterForm(filters?: Params): void {
     this.filtersForm = this.fb.group({
       name: [''],
       jobPosition: [null],
       project: [null],
       location: [null]
     });
+
+    if (filters) {
+      this.filtersForm.patchValue(filters);
+    }
   }
 
   private updateTaskData(): void {

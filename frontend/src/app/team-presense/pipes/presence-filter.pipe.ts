@@ -32,7 +32,7 @@ export class PresenceFilterPipe implements PipeTransform {
     }
 
     if (filter.jobPosition) {
-      res = res.filter(i => i.employee.jobPosition && i.employee.jobPosition._id === filter.jobPosition._id);
+      res = res.filter(i => i.employee.jobPosition && i.employee.jobPosition.name === filter.jobPosition);
     }
 
     if (filter.project) {

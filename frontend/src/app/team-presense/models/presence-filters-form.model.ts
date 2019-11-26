@@ -1,9 +1,8 @@
-import { JobPositionModel } from '../../shared/models/job-position.model';
 import { LocationEnum } from '../../shared/models/location.enum';
 
 export class PresenceFiltersFormModel {
   name: string;
-  jobPosition: JobPositionModel;
+  jobPosition: string;
   project: string;
   location: LocationEnum;
 }
