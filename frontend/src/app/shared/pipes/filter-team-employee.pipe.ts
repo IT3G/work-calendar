@@ -8,6 +8,10 @@ import { PresenceModel } from '../models/presence.page.model';
 })
 export class FilterTeamEmployeePipe implements PipeTransform {
   transform(value: PresenceModel[], filter: string, date: Moment): PresenceModel[] {
+    if (!value) {
+      return [];
+    }
+
     if (!filter) {
       return value;
     }
@@ -19,7 +23,7 @@ export class FilterTeamEmployeePipe implements PipeTransform {
 
         const dateStart = date.clone().startOf('month');
         const dateEnd = date.clone().endOf('month');
-        let res = [];
+        const res = [];
 
         while (dateStart.isBefore(dateEnd)) {
           res.push(dateStart.clone());

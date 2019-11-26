@@ -1,15 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { JobPositionModel } from '../../../../shared/models/job-position.model';
+import { LocationEnum } from '../../../../shared/models/location.enum';
+import { ProjectModel } from '../../../../shared/models/projects.model';
 
 @Component({
   selector: 'app-team-presence-filters',
   templateUrl: './team-presence-filters.component.html',
-  styleUrls: ['./team-presence-filters.component.scss']
+  styleUrls: ['./team-presence-filters.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TeamPresenceFiltersComponent implements OnInit {
+export class TeamPresenceFiltersComponent {
+  @Input()
+  filtersForm: FormGroup;
 
-  constructor() { }
+  @Input()
+  projects: ProjectModel[];
 
-  ngOnInit() {
-  }
+  @Input()
+  jobPositions: JobPositionModel[];
 
+  @Input()
+  locations: LocationEnum[];
 }

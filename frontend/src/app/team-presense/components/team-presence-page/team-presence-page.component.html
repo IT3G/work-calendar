@@ -1,11 +1,16 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <div class="filters_wrapper">
-        <app-month-selector [date]="date$|async"
-          (nextMonth)="nextMonth()"
-          (prevMonth)="prevMonth()"></app-month-selector>
-      </div>
+
+      <app-team-presence-filters [filtersForm]="filtersForm"
+        [projects]="projects$|async"
+        [jobPositions]="jobPositions$|async"
+        [locations]="locations"></app-team-presence-filters>
+
+      <app-month-selector [date]="date$|async"
+        (nextMonth)="nextMonth()"
+        (prevMonth)="prevMonth()"></app-month-selector>
+
       <div class="table"
         *ngIf="(monthData$ | async) as monthData">
         <div class="row-item">
@@ -19,7 +24,7 @@
             <div>{{ date | datePipe: 'ddd' }}</div>
           </div>
         </div>
-        <div *ngFor="let data of (monthData | filterTeamEmployeePipe: filter.value :  (date$ | async)); index as i"
+        <div *ngFor="let data of (monthData | filterTeamEmployeePipe: filtersForm?.value :  (date$ | async)); index as i"
           class="row-item">
           <div class="number">{{i + 1}}.</div>
           <div class="title">

@@ -1,7 +1,7 @@
 :host {
   display: flex;
   align-items: baseline;
-  margin: 0 auto;
+  justify-content: center;
 }
 
 .button-change-month {
@@ -17,12 +17,3 @@
   text-align: center;
   text-transform: capitalize;
 }
-
-// @media (max-width: 620px) {
-//   :host {
-//     left: initial;
-//     top: initial;
-//     position: static;
-//     transform: initial;
-//   }
-// }
