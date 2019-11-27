@@ -1,7 +1,9 @@
 import { Body, Controller, Post, Res } from '@nestjs/common';
 import { SendMailRequestModel } from './models/send-mail.request.model';
 import { SendMailService } from './services/send-mail.service';
+import { ApiUseTags } from '@nestjs/swagger';
 
+@ApiUseTags('Mail')
 @Controller('mail')
 export class MailController {
   constructor(private sendMailService: SendMailService) {}

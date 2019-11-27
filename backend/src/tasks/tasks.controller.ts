@@ -1,7 +1,9 @@
 import { Body, Controller, Get, HttpStatus, Param, Post, Res } from '@nestjs/common';
 import { TaskResponseModel } from './models/task.request.model';
 import { TaskService } from './services/task.service';
+import { ApiUseTags } from '@nestjs/swagger';
 
+@ApiUseTags('Tasks')
 @Controller('tasks')
 export class TasksController {
   constructor(private taskService: TaskService) {}

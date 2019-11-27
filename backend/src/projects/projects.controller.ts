@@ -1,7 +1,9 @@
 import { Body, Controller, Get, HttpStatus, Post, Res } from '@nestjs/common';
 import { ProjectModel } from './models/projects.request.model';
 import { ProjectsService } from './services/projects.service';
+import { ApiUseTags } from '@nestjs/swagger';
 
+@ApiUseTags('Projects')
 @Controller('projects')
 export class ProjectsController {
   constructor(private projectsService: ProjectsService) {}
