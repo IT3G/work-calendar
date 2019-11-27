@@ -1,15 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { JobPositionApiService } from '../../../core/services/job-position-api.service';
 import { ProjectsApiService } from '../../../core/services/projects-api.service';
 import { EmployeeStoreService } from '../../../core/store/employee-store.service';
 import { TasksStoreService } from '../../../core/store/tasks-store.service';
 import { DayType } from '../../../shared/const/day-type.const';
+import { locationsDictionary } from '../../../shared/const/locations-dictionary.const';
 import { Employee } from '../../../shared/models/employee.model';
+import { JobPositionModel } from '../../../shared/models/job-position.model';
 import { PresenceModel } from '../../../shared/models/presence.page.model';
 import { ProjectModel } from '../../../shared/models/projects.model';
 import { TaskModel } from '../../../shared/models/tasks.models';
@@ -27,31 +30,38 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
   public date$ = new BehaviorSubject<Moment>(
     this.qParamsSnpshotMonth ? moment(this.qParamsSnpshotMonth, 'MM-YYYY') : moment()
   );
+  public filtersForm: FormGroup;
+  public projects$: Observable<ProjectModel[]>;
+  public jobPositions$: Observable<JobPositionModel[]>;
+  public locations = locationsDictionary;
+
   private employees$: Observable<Employee[]>;
   private tasks$: Observable<TaskModel[]>;
-  private dateSub = new Subscription();
-  public filter: FormControl;
-  public projects$: Observable<ProjectModel[]>;
+  private subscription = new Subscription();
+
   constructor(
     private employeeStoreService: EmployeeStoreService,
     private tasksStoreService: TasksStoreService,
     private route: ActivatedRoute,
     private router: Router,
-    private projectsApi: ProjectsApiService
+    private fb: FormBuilder,
+    private projectsApi: ProjectsApiService,
+    private jobPositionApi: JobPositionApiService
   ) {}
 
   ngOnInit() {
-    this.filter = new FormControl();
+    this.initFilterForm(this.route.snapshot.queryParams);
     this.employees$ = this.employeeStoreService.getEmployees();
     this.tasks$ = this.tasksStoreService.getTasks();
     this.monthDays$ = this.getMonthDays();
     this.updateTaskData();
-    this.getQueryParamsDate();
+    this.updateQueryParamsOnChange();
     this.projects$ = this.projectsApi.getProjects();
+    this.jobPositions$ = this.jobPositionApi.getAll();
   }
 
   ngOnDestroy() {
-    this.dateSub.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   public prevMonth(): void {
@@ -62,11 +72,21 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     this.date$.next(this.date$.value.clone().add(1, 'months'));
   }
 
-  private getQueryParamsDate() {
-    this.dateSub.add(
-      this.date$.subscribe(date => {
-        this.router.navigate([], { queryParams: { date: moment(date).format('MM-YYYY') } });
-      })
+  private updateQueryParamsOnChange() {
+    this.subscription.add(
+      this.date$.subscribe(date =>
+        this.router.navigate([], {
+          queryParams: { ...this.route.snapshot.queryParams, date: moment(date).format('MM-YYYY') }
+        })
+      )
+    );
+
+    this.subscription.add(
+      this.filtersForm.valueChanges.subscribe(filters =>
+        this.router.navigate([], {
+          queryParams: { ...this.route.snapshot.queryParams, ...filters }
+        })
+      )
     );
   }
 
@@ -86,6 +106,19 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
         return res;
       })
     );
+  }
+
+  private initFilterForm(filters?: Params): void {
+    this.filtersForm = this.fb.group({
+      name: [''],
+      jobPosition: [null],
+      project: [null],
+      location: [null]
+    });
+
+    if (filters) {
+      this.filtersForm.patchValue(filters);
+    }
   }
 
   private updateTaskData(): void {

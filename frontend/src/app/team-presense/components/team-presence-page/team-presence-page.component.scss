@@ -22,22 +22,6 @@ $borderColor: #e3e3e3;
   background-color: #efecec;
 }
 
-.buttons__wrapper {
-  display: flex;
-  align-items: center;
-  left: 50%;
-  top: 50%;
-  position: absolute;
-  transform: translate(-50%, -50%);
-}
-
-.current-month {
-  margin: 0 15px;
-  width: 115px;
-  text-align: center;
-  text-transform: capitalize;
-}
-
 .row-item {
   display: grid;
   grid-template-columns: 240px repeat(35, 30px);
@@ -85,11 +69,7 @@ $borderColor: #e3e3e3;
   display: flex;
   justify-content: center;
 }
-.filters_wrapper {
-  margin-top: 35px;
-  position: relative;
-  display: flex;
-}
+
 .day-header {
   font-weight: 500;
   display: flex;
@@ -101,14 +81,6 @@ mat-form-field {
   margin-right: 20px;
 }
 
-@media (max-width: 620px) {
-  .buttons__wrapper {
-    left: initial;
-    top: initial;
-    position: static;
-    transform: initial;
-  }
-}
 .jobPosition {
   font-size: 13px;
   overflow: hidden;
@@ -123,12 +95,7 @@ mat-form-field {
     border-radius: 50%;
   }
 }
-.button-change-month {
-  color: #007bff;
-  cursor: pointer;
-  font-size: 21px;
-  line-height: 34px;
-}
+
 .number {
   position: absolute;
   right: calc(100% + -10px);

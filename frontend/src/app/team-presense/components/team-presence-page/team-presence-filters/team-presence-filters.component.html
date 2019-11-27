@@ -1,0 +1,42 @@
+<form class="form"
+  [formGroup]="filtersForm">
+
+  <mat-form-field>
+    <input matInput
+      formControlName="name"
+      placeholder="Ф.И.О.">
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Проект</mat-label>
+    <mat-select formControlName="project">
+      <mat-option>Сбросить</mat-option>
+      <mat-option *ngFor="let project of projects"
+        [value]="project.title">
+        {{ project.title }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Должность</mat-label>
+    <mat-select formControlName="jobPosition">
+      <mat-option>Сбросить</mat-option>
+      <mat-option *ngFor="let jobPosition of jobPositions"
+        [value]="jobPosition.name">
+        {{ jobPosition.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Регион</mat-label>
+    <mat-select formControlName="location">
+      <mat-option>Сбросить</mat-option>
+      <mat-option *ngFor="let location of locations"
+        [value]="location">
+        {{ location }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</form>
