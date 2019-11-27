@@ -1,7 +1,9 @@
 import { Body, Controller, Delete, Get, HttpStatus, NotFoundException, Param, Post, Res } from '@nestjs/common';
 import { JobPositionModel } from '../auth/models/job-position.response.model';
 import { JobPositionService } from './services/job-position.service';
+import { ApiUseTags } from '@nestjs/swagger';
 
+@ApiUseTags('Job position')
 @Controller('jobPosition')
 export class JobPositionController {
   constructor(private jobPositionService: JobPositionService) {}

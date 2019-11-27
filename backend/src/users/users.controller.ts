@@ -1,7 +1,9 @@
 import { Body, Controller, Get, HttpStatus, NotFoundException, Param, Post, Res } from '@nestjs/common';
 import { LoginResponseModel } from '../auth/models/login.response.model';
 import { UsersService } from './services/users.service';
+import { ApiUseTags } from '@nestjs/swagger';
 
+@ApiUseTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private userService: UsersService) {}

@@ -4,6 +4,9 @@ import { Config } from '../config/config';
 import { UsersService } from '../users/services/users.service';
 import { LoginRequestModel } from './models/login.request.model';
 import { LdapService } from './services/ldap.service';
+import { ApiUseTags } from '@nestjs/swagger';
+
+@ApiUseTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(
