@@ -12,8 +12,8 @@ export const UserSchema = new Schema({
   mailNickname: String,
   isAdmin: Boolean,
   hasMailing: Boolean,
-  subdivision: String,
+  subdivision: { type: Schema.Types.ObjectId, ref: 'SubdivisionSchema' },
   jobPosition: { type: Schema.Types.ObjectId, ref: 'JobPosition' },
   authType: String,
-  hashPswd: String
+  hashPswd: String,
 });

@@ -10,12 +10,14 @@ import { EmployeeListComponent } from './components/employee-list/employee-list.
 import { JobPositionAdministrationComponent } from './components/job-position-administration/job-position-administration.component';
 import { AddPopupComponent } from './components/popups/add-popup/add-popup.component';
 import { ProjectsComponent } from './components/projects/projects.component';
+import { SubdivisionAdmComponent } from './components/subdivision-adm/subdivision-adm.component';
 
 const routes: Routes = [
   { path: 'employee-list', component: EmployeeListComponent },
   { path: 'projects', component: ProjectsComponent },
   { path: 'app-configuration', component: ConfigurationComponent },
   { path: 'job-position', component: JobPositionAdministrationComponent },
+  { path: 'subdivision', component: SubdivisionAdmComponent },
   { path: '', redirectTo: 'projects', pathMatch: 'full' }
 ];
 
@@ -31,7 +33,7 @@ const components = [
 const entryComponents = [AddPopupComponent, EmployeeAddComponent];
 
 @NgModule({
-  declarations: [...components],
+  declarations: [...components, SubdivisionAdmComponent],
   entryComponents: [...entryComponents],
   imports: [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule, SharedModule, RouterModule.forChild(routes)]
 })

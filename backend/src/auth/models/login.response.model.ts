@@ -1,5 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { JobPositionModel } from './job-position.response.model';
+import { SubdivisionModel } from '../../subdivision/models/subdivision.responce.model';
 
 export class LoginResponseModel {
   @ApiModelProperty()
@@ -25,7 +26,7 @@ export class LoginResponseModel {
   @ApiModelProperty()
   hasMailing: boolean;
   @ApiModelProperty()
-  subdivision: string;
+  subdivision: SubdivisionModel;
   @ApiModelProperty()
   jobPosition: JobPositionModel;
   @ApiModelProperty()
