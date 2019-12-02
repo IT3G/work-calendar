@@ -16,6 +16,8 @@ import { JobPositionModel } from '../../../shared/models/job-position.model';
 import { PresenceModel } from '../../../shared/models/presence.page.model';
 import { ProjectModel } from '../../../shared/models/projects.model';
 import { TaskModel } from '../../../shared/models/tasks.models';
+import { SubdivisionModel } from '../../../shared/models/subdivisions.model';
+import { SubdivisionApiService } from '../../../core/services/subdivision-api.service';
 
 @Component({
   selector: 'app-team-presence',
@@ -33,6 +35,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
   public filtersForm: FormGroup;
   public projects$: Observable<ProjectModel[]>;
   public jobPositions$: Observable<JobPositionModel[]>;
+  public subdivisions$: Observable<SubdivisionModel[]>;
   public locations = locationsDictionary;
 
   private employees$: Observable<Employee[]>;
@@ -46,7 +49,8 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     private router: Router,
     private fb: FormBuilder,
     private projectsApi: ProjectsApiService,
-    private jobPositionApi: JobPositionApiService
+    private jobPositionApi: JobPositionApiService,
+    private subdivisionApi: SubdivisionApiService
   ) {}
 
   ngOnInit() {
@@ -58,6 +62,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     this.updateQueryParamsOnChange();
     this.projects$ = this.projectsApi.getProjects();
     this.jobPositions$ = this.jobPositionApi.getAll();
+    this.subdivisions$ = this.subdivisionApi.getSubdivisions();
   }
 
   ngOnDestroy() {
@@ -111,6 +116,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
   private initFilterForm(filters?: Params): void {
     this.filtersForm = this.fb.group({
       name: [''],
+      subdivision: [null],
       jobPosition: [null],
       project: [null],
       location: [null]
