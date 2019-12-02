@@ -33,7 +33,7 @@ export class SubdivisionAdmComponent implements OnInit {
       .pipe(
         first(),
         filter(res => !!res),
-        switchMap(res => this.subdivisionApi.addSubdivision({ title: res }))
+        switchMap(res => this.subdivisionApi.addSubdivision({ name: res }))
       )
       .subscribe(res => {
         this.snackbar.showSuccessSnackBar('Подразделение успешно добавлен');

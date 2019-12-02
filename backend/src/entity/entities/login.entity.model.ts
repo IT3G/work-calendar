@@ -1,5 +1,6 @@
 import { Document } from 'mongoose';
 import { JobPositionEntity } from './job-position.entity.model';
+import { SubdivisionEntity } from './subdivision.entity.model';
 
 export interface UserEntity extends Document {
   username: string;
@@ -13,7 +14,7 @@ export interface UserEntity extends Document {
   mailNickname: string;
   isAdmin: boolean;
   hasMailing: boolean;
-  subdivision: string;
+  subdivision: SubdivisionEntity;
   jobPosition: JobPositionEntity;
   authType?: string;
   hashPswd?: string;
