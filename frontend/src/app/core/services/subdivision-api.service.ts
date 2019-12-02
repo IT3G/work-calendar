@@ -11,9 +11,9 @@ export class SubdivisionApiService {
   constructor(private http: HttpClient) {}
 
   public getSubdivisions(): Observable<SubdivisionModel[]> {
-    return this.http.get<SubdivisionModel[]>(`${environment.baseUrl}/subdivisions`);
+    return this.http.get<SubdivisionModel[]>(`${environment.baseUrl}/subdivision`);
   }
   public addSubdivision(data: SubdivisionModel): Observable<SubdivisionModel> {
-    return this.http.post<SubdivisionModel>(`${environment.baseUrl}/subdivisions/add`, data);
+    return this.http.post<SubdivisionModel>(`${environment.baseUrl}/subdivision`, data);
   }
 }

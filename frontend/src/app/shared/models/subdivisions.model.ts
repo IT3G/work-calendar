@@ -1,4 +1,4 @@
 export class SubdivisionModel {
   _id?: number;
-  title: string;
+  name: string;
 }

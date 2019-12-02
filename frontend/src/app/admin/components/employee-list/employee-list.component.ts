@@ -33,7 +33,8 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
     private snackbar: SnackbarService,
     private ar: ActivatedRoute,
     public dialog: MatDialog
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.filter = new FormControl();
@@ -54,7 +55,7 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (!result) return;
+      if (!result) { return; }
 
       this.employeeApi.addNewUser({ username: result }).subscribe(
         () => {
