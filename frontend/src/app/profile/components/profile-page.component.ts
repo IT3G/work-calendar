@@ -203,7 +203,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   private initForm(user: Employee): void {
     const jobPosition = this.jobPositions.find(jp => jp._id === user.jobPosition._id);
-    const subdivision = this.subdivisions.find(sd => sd._id === user.subdivision._id);
+    const subdivision = this.subdivisions.find(sd => user.subdivision && sd._id === user.subdivision._id);
     const date = user.whenCreated ? user.whenCreated.slice(0, 8) : null;
 
     this.profileForm = this.fb.group({

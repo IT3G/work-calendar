@@ -36,8 +36,10 @@ export class LoginPageComponent implements OnInit {
   }
 
   public login() {
+    const info = this.loginForm.value;
+    info.username = info.username.toLowerCase();
     this.authService
-      .login(this.loginForm.value)
+      .login(info)
       .subscribe(res => this.successedLogin(res), err => this.erroredLogin(err), () => this.finishedLogin());
   }
 
