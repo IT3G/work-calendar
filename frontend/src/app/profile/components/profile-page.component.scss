@@ -1,6 +1,12 @@
 .container {
   margin-top: 35px;
 }
+.sendings {
+  position: absolute;
+  right: 10px;
+  top: 0;
+  max-width: 260px;
+}
 .text-right {
   color: rgb(148, 148, 148);
 }
@@ -81,4 +87,15 @@ table {
 
 .mat-form-field {
   width: 100%;
+}
+.scroll {
+  max-height: 560px;
+  overflow-y: scroll;
+}
+
+@media (max-width: 1200px) {
+  .sendings {
+    position: static;
+    max-width: 100%;
+  }
 }
