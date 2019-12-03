@@ -4,7 +4,7 @@
   vars:
     mongodb_admin_user: 'root'
     mongodb_admin_password: 'r00t123'
-    mongodb_server: '172.17.21.94'
+    mongodb_server: '172.17.21.21'
     mongo_express_port: 9009
 
   tasks:
