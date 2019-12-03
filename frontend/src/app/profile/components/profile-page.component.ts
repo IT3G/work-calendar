@@ -8,6 +8,7 @@ import { environment } from '../../../environments/environment';
 import { EmployeeApiService } from '../../core/services/employee-api.service';
 import { JobPositionApiService } from '../../core/services/job-position-api.service';
 import { ProjectsApiService } from '../../core/services/projects-api.service';
+import { SubdivisionApiService } from '../../core/services/subdivision-api.service';
 import { TaskApiService } from '../../core/services/task-api.service';
 import { ContextStoreService } from '../../core/store/context-store.service';
 import { EmployeeStoreService } from '../../core/store/employee-store.service';
@@ -15,9 +16,9 @@ import { DayType } from '../../shared/const/day-type.const';
 import { Employee } from '../../shared/models/employee.model';
 import { JobPositionModel } from '../../shared/models/job-position.model';
 import { ProjectModel } from '../../shared/models/projects.model';
-import { TaskModel } from '../../shared/models/tasks.models';
 import { SubdivisionModel } from '../../shared/models/subdivisions.model';
-import { SubdivisionApiService } from '../../core/services/subdivision-api.service';
+import { TaskModel } from '../../shared/models/tasks.models';
+import { SendingMailService } from '../../shared/services/sending-mail.service';
 
 @Component({
   selector: 'app-team',
@@ -41,7 +42,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   public jobPositions: JobPositionModel[];
   public subdivisions: SubdivisionModel[];
   public users$: Observable<Employee[]>;
-
+  public mailingAddresses: Employee[];
   constructor(
     private contextStoreService: ContextStoreService,
     private employeeApiService: EmployeeApiService,
@@ -51,9 +52,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     private jobPositionApi: JobPositionApiService,
     private subdivisionsApi: SubdivisionApiService,
     private taskApi: TaskApiService,
-    private fb: FormBuilder
-  ) {
-  }
+    private fb: FormBuilder,
+    private sendingMail: SendingMailService
+  ) {}
 
   ngOnInit() {
     this.users$ = this.employeeApiService.loadAllEmployees();
@@ -136,19 +137,18 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     const jobPositions$ = this.jobPositionApi.getAll();
     const subdivisions$ = this.subdivisionsApi.getSubdivisions();
 
-    forkJoin([jobPositions$, subdivisions$])
-      .subscribe(res => {
-        const [jobPositions, subdivisions] = res;
-        this.jobPositions = jobPositions;
-        this.subdivisions = subdivisions;
+    forkJoin([jobPositions$, subdivisions$]).subscribe(res => {
+      const [jobPositions, subdivisions] = res;
+      this.jobPositions = jobPositions;
+      this.subdivisions = subdivisions;
 
-        this.login = this.route.snapshot.params.id;
-        if (!this.login) {
-          this.getUserFromStore();
-        } else {
-          this.getUserFromApi();
-        }
-      });
+      this.login = this.route.snapshot.params.id;
+      if (!this.login) {
+        this.getUserFromStore();
+      } else {
+        this.getUserFromApi();
+      }
+    });
   }
 
   private getUserFromApi() {
@@ -162,6 +162,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           this.setSelectedUser(user);
           this.canEdit = false;
           this.loadTasks(user.mailNickname);
+          this.mailingAddresses = this.sendingMail.filterEmployee(this.selectedUser);
         })
     );
   }
@@ -172,12 +173,11 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         .getCurrentUser$()
         .pipe(filter(user => !!user))
         .subscribe(user => {
-          console.log('FromStore', user);
-
           this.initForm(user);
           this.setSelectedUser(user);
           this.login = user.mailNickname;
           this.loadTasks(user.mailNickname);
+          this.mailingAddresses = this.sendingMail.filterEmployee(this.selectedUser);
         })
     );
   }

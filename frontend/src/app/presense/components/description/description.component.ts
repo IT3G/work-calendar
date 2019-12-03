@@ -7,7 +7,6 @@ import { filter } from 'rxjs/operators';
 import { MailApiService } from '../../../core/services/mail-api.service';
 import { TaskApiService } from '../../../core/services/task-api.service';
 import { ContextStoreService } from '../../../core/store/context-store.service';
-import { EmployeeStoreService } from '../../../core/store/employee-store.service';
 import { TasksStoreService } from '../../../core/store/tasks-store.service';
 import { AgendaColors } from '../../../shared/const/agenda-colors.const';
 import { AgendaColorsModel } from '../../../shared/models/agenda-colors.model';
@@ -15,6 +14,7 @@ import { Employee } from '../../../shared/models/employee.model';
 import { SendMailRequestModel } from '../../../shared/models/send-mail.request.model';
 import { SendingTaskModel } from '../../../shared/models/sending-task.model';
 import { TaskModel } from '../../../shared/models/tasks.models';
+import { SendingMailService } from '../../../shared/services/sending-mail.service';
 import { SnackbarService } from '../../../shared/services/snackbar.service';
 import { TaskMapperService } from '../../../shared/services/task-mapper.service';
 
@@ -39,7 +39,7 @@ export class DescriptionComponent implements OnInit {
     private fb: FormBuilder,
     private mailApiService: MailApiService,
     private tasksStoreService: TasksStoreService,
-    private employeeStoreService: EmployeeStoreService,
+    private sendingMail: SendingMailService,
     private taskMapperService: TaskMapperService
   ) {}
 
@@ -127,22 +127,11 @@ export class DescriptionComponent implements OnInit {
   }
 
   private bundleToSendingMail(formValue: SendingTaskModel): SendMailRequestModel {
-    const mailingAddresses = this.employeeStoreService
-      .getEmployeesSnapshot()
-      .filter(
-        emp =>
-          (emp.projects
-            .filter(p => moment().isBetween(p.dateStart, p.dateEnd))
-            .some((projectEmp: { title: string; dateStart: string; dateEnd: string }) => {
-              return this.selectedUser.projects
-                .filter(p => moment().isBetween(p.dateStart, p.dateEnd))
-                .some(project => project.title === projectEmp.title);
-            }) ||
-            !emp.projects.length) &&
-          emp.hasMailing
-      )
+    const mailingAddresses = this.sendingMail
+      .filterEmployee(this.selectedUser)
       .filter(emp => this.contextStoreService.getCurrentUser().email !== emp.email)
       .map(emp => emp.email);
+
     const obj = {
       adress: mailingAddresses,
       author: this.contextStoreService.getCurrentUser().username,
