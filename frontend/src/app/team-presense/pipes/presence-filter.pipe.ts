@@ -35,6 +35,10 @@ export class PresenceFilterPipe implements PipeTransform {
       res = res.filter(i => i.employee.jobPosition && i.employee.jobPosition.name === filter.jobPosition);
     }
 
+    if (filter.subdivision) {
+      res = res.filter(i => i.employee.subdivision && i.employee.subdivision.name === filter.subdivision);
+    }
+
     if (filter.project) {
       const monthStart = date.clone().startOf('month');
       const monthEnd = date.clone().endOf('month');

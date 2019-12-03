@@ -8,6 +8,7 @@ import { ProjectsModule } from './projects/projects.module';
 import { SettingsModule } from './settings/settings.module';
 import { TasksModule } from './tasks/tasks.module';
 import { UsersModule } from './users/users.module';
+import { SubdivisionModule } from './subdivision/subdivision.module';
 const config = getConfig();
 
 const url = `${config.DATABASE_URL}`;
@@ -19,6 +20,7 @@ const url = `${config.DATABASE_URL}`;
     UsersModule,
     TasksModule,
     ProjectsModule,
+    SubdivisionModule,
     AvatarsModule,
     MongooseModule.forRoot(url, {
       useNewUrlParser: true,

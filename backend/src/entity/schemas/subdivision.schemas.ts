@@ -1,5 +1,5 @@
 import { Schema } from 'mongoose';
 
-export const JobPositionSchema = new Schema({
+export const SubdivisionSchema = new Schema({
   name: String,
 });

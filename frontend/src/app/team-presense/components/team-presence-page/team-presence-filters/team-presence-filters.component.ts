@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { JobPositionModel } from '../../../../shared/models/job-position.model';
 import { LocationEnum } from '../../../../shared/models/location.enum';
 import { ProjectModel } from '../../../../shared/models/projects.model';
+import { SubdivisionModel } from '../../../../shared/models/subdivisions.model';
 
 @Component({
   selector: 'app-team-presence-filters',
@@ -19,6 +20,9 @@ export class TeamPresenceFiltersComponent {
 
   @Input()
   jobPositions: JobPositionModel[];
+
+  @Input()
+  subdivisions: SubdivisionModel[];
 
   @Input()
   locations: LocationEnum[];

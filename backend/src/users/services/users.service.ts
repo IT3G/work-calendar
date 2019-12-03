@@ -5,21 +5,28 @@ import { Model } from 'mongoose';
 import { LoginRequestModel } from '../../auth/models/login.request.model';
 import { UserEntity } from '../../entity/entities/login.entity.model';
 import { UserResponseModel } from '../models/user.request.model';
+
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel('Users') private readonly userModel: Model<UserEntity>) {}
+  constructor(@InjectModel('Users') private readonly userModel: Model<UserEntity>) {
+  }
 
   async getUsers(): Promise<UserEntity[]> {
     const users = await this.userModel
       .find()
       .populate('jobPosition')
+      .populate('subdivision')
       .sort({ username: 'asc' })
       .exec();
     return users;
   }
 
   async getUserByLogin(mailNickname: string): Promise<UserEntity[]> {
-    const user = await this.userModel.find({ mailNickname }).exec();
+    const user = await this.userModel.find({ mailNickname })
+      .populate('jobPosition')
+      .populate('subdivision')
+      .exec();
+
     return user;
   }
 
@@ -27,6 +34,7 @@ export class UsersService {
     const user = await this.userModel
       .findById(id)
       .populate('jobPosition')
+      .populate('subdivision')
       .exec();
     return user;
   }

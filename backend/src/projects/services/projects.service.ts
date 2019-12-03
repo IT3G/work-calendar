@@ -9,8 +9,7 @@ export class ProjectsService {
   constructor(@InjectModel('Projects') private readonly projectModel: Model<ProjectEntity>) {}
 
   async getProjects(): Promise<ProjectModel[]> {
-    const projects = await this.projectModel.find().exec();
-    return projects;
+    return await this.projectModel.find().exec();
   }
 
   async addProject(project: ProjectModel): Promise<ProjectModel> {
