@@ -88,3 +88,14 @@ table {
 .mat-form-field {
   width: 100%;
 }
+.scroll {
+  max-height: 560px;
+  overflow-y: scroll;
+}
+
+@media (max-width: 1200px) {
+  .sendings {
+    position: static;
+    max-width: 100%;
+  }
+}
