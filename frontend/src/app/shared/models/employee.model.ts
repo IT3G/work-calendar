@@ -1,5 +1,4 @@
-import { JobPositionModel } from './job-position.model';
-import { SubdivisionModel } from './subdivisions.model';
+import { DictionaryModel } from './dictionary.model';
 
 export class Employee {
   _id: string;
@@ -20,6 +19,6 @@ export class Employee {
   ];
   isAdmin: boolean;
   hasMailing: boolean;
-  subdivision: SubdivisionModel;
-  jobPosition: JobPositionModel;
+  subdivision: DictionaryModel;
+  jobPosition: DictionaryModel;
 }
