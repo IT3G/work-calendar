@@ -9,6 +9,6 @@ export class FilterEmployeePipe implements PipeTransform {
       return value;
     }
 
-    return value.filter(v => v.projects.some(proj => proj.title === filter));
+    return value.filter(v => v.projects.some(proj => proj.name === filter));
   }
 }

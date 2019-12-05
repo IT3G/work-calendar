@@ -15,7 +15,7 @@
       <td mat-cell
         *matCellDef="let project">
         <a routerLink="/employee-list"
-          [queryParams]="{project: project.title}">{{project.title}}</a>
+          [queryParams]="{project: project.name}">{{project.name}}</a>
 
       </td>
     </ng-container>

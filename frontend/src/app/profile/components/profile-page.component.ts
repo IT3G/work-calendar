@@ -62,20 +62,18 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.searchUserByLoginSub.unsubscribe();
   }
 
-  public createProjectsFormGroup(project: any): FormGroup {
-    return this.fb.group({
-      title: project.title,
-      dateStart: project.dateStart,
-      dateEnd: project.dateEnd
-    });
-  }
-
-  public createEmptyProjectsFormGroup(): FormGroup {
-    return this.fb.group({
-      title: null,
+  public createProjectsFormGroup(project?: any): FormGroup {
+    const group = this.fb.group({
+      name: null,
       dateStart: null,
       dateEnd: null
     });
+
+    if (project) {
+      group.patchValue(project);
+    }
+
+    return group;
   }
 
   public get projectFormArray(): FormArray {
@@ -84,7 +82,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   public addProjectFromGroup(): void {
     const formArray = this.projectFormArray;
-    formArray.controls.push(this.createEmptyProjectsFormGroup());
+    formArray.controls.push(this.createProjectsFormGroup());
   }
 
   public removeFormGroupProject(index: number): void {

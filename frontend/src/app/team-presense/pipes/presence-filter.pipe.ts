@@ -48,7 +48,7 @@ export class PresenceFilterPipe implements PipeTransform {
           return false;
         }
 
-        const selectedProjects = i.employee.projects.filter(p => p.title === filter.project);
+        const selectedProjects = i.employee.projects.filter(p => p.name === filter.project);
         if (!selectedProjects.length) {
           return false;
         }

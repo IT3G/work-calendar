@@ -18,14 +18,14 @@ export class SendingMailService {
             return moment().isBetween(p.dateStart, p.dateEnd);
           })
 
-          .some((projectEmp: { title: string; dateStart: string; dateEnd: string }) => {
+          .some((projectEmp: { name: string; dateStart: string; dateEnd: string }) => {
             return selectedUser.projects
               .filter(p => {
                 p.dateStart = p.dateStart ? p.dateStart : moment('1900-01-01').format();
                 p.dateEnd = p.dateEnd ? p.dateEnd : moment('2100-01-01').format();
                 return moment().isBetween(p.dateStart, p.dateEnd);
               })
-              .some(project => project.title === projectEmp.title);
+              .some(project => project.name === projectEmp.name);
           }) ||
           !emp.projects.length) &&
         emp.hasMailing
