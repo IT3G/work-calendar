@@ -22,7 +22,8 @@ export class UsersService {
   }
 
   async getUserByLogin(mailNickname: string): Promise<UserEntity[]> {
-    const user = await this.userModel.find({ mailNickname })
+    const employeeRegex = new RegExp(`^${mailNickname}$`, 'i');
+    const user = await this.userModel.find({ mailNickname: employeeRegex })
       .populate('jobPosition')
       .populate('subdivision')
       .exec();
