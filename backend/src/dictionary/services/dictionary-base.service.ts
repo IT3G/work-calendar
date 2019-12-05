@@ -23,9 +23,9 @@ export class DictionaryBaseService {
     return result.save();
   }
 
-  async update(id: number, request: DictionaryModel): Promise<Document> {
-    await this.entity.findByIdAndUpdate(id, request);
-    return await this.entity.findById(id);
+  async update(request: DictionaryModel): Promise<Document> {
+    await this.entity.findByIdAndUpdate(request._id, request);
+    return await this.entity.findById(request._id);
   }
 
   async delete(id: number): Promise<Document> {

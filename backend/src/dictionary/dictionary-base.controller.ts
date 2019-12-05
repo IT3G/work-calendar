@@ -1,4 +1,4 @@
-import { Body, Delete, Get, HttpStatus, NotFoundException, Param, Post, Res } from '@nestjs/common';
+import { Body, Delete, Get, HttpStatus, NotFoundException, Param, Post, Put, Res } from '@nestjs/common';
 import { DictionaryModel } from './models/dictionary.model';
 import { DictionaryBaseService } from './services/dictionary-base.service';
 
@@ -23,8 +23,8 @@ export class DictionaryBaseController {
   }
 
   @Post()
-  async add(@Res() res, @Body() data: DictionaryModel) {
-    const result = await this.apiService.add(data);
+  async add(@Res() res, @Body() request: DictionaryModel) {
+    const result = await this.apiService.add(request);
 
     if (!result) {
       throw new NotFoundException('Не удалось сохранить');
@@ -33,9 +33,9 @@ export class DictionaryBaseController {
     return res.status(HttpStatus.OK).json(result);
   }
 
-  @Post('/:id')
-  async update(@Res() res, @Param('id') id, @Body() data: DictionaryModel) {
-    const result = await this.apiService.update(id, data);
+  @Put('')
+  async update(@Res() res, @Body() request: DictionaryModel) {
+    const result = await this.apiService.update( request);
 
     if (!result) {
       throw new NotFoundException('Не удалось обновить');
