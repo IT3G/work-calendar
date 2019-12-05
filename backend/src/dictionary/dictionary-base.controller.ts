@@ -1,9 +1,9 @@
 import { Body, Delete, Get, HttpStatus, NotFoundException, Param, Post, Res } from '@nestjs/common';
-import { Document } from 'mongoose';
+import { DictionaryModel } from './models/dictionary.model';
 import { DictionaryBaseService } from './services/dictionary-base.service';
 
-export class DictionaryBaseController<T extends Document, K, S extends DictionaryBaseService<T, K>> {
-  constructor(private apiService: S) {}
+export class DictionaryBaseController {
+  constructor(private apiService: DictionaryBaseService) {}
 
   @Get()
   async getAll(@Res() res) {
@@ -23,7 +23,7 @@ export class DictionaryBaseController<T extends Document, K, S extends Dictionar
   }
 
   @Post()
-  async add(@Res() res, @Body() data: K) {
+  async add(@Res() res, @Body() data: DictionaryModel) {
     const result = await this.apiService.add(data);
 
     if (!result) {
@@ -34,7 +34,7 @@ export class DictionaryBaseController<T extends Document, K, S extends Dictionar
   }
 
   @Post('/:id')
-  async update(@Res() res, @Param('id') id, @Body() data: K) {
+  async update(@Res() res, @Param('id') id, @Body() data: DictionaryModel) {
     const result = await this.apiService.update(id, data);
 
     if (!result) {
