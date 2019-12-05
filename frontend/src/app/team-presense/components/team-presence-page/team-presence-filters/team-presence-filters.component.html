@@ -12,8 +12,8 @@
     <mat-select formControlName="project">
       <mat-option>Сбросить</mat-option>
       <mat-option *ngFor="let project of projects"
-        [value]="project.title">
-        {{ project.title }}
+        [value]="project.name">
+        {{ project.name }}
       </mat-option>
     </mat-select>
   </mat-form-field>

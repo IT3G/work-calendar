@@ -11,7 +11,7 @@ export class AddPopupComponent {
 
   constructor(
     public dialogRef: MatDialogRef<AddPopupComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { title: string }
+    @Inject(MAT_DIALOG_DATA) public data: { name: string }
   ) {}
 
   public onNoClick(): void {
