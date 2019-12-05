@@ -1,6 +1,5 @@
 import { ApiModelProperty } from '@nestjs/swagger';
-import { JobPositionModel } from '../../dictionary/models/job-position.model';
-import { SubdivisionModel } from '../../dictionary/models/subdivision.model';
+import { DictionaryModel } from '../../dictionary/models/dictionary.model';
 export class LoginResponseModel {
   @ApiModelProperty()
   username: string;
@@ -25,9 +24,9 @@ export class LoginResponseModel {
   @ApiModelProperty()
   hasMailing: boolean;
   @ApiModelProperty()
-  subdivision: SubdivisionModel;
+  subdivision: DictionaryModel;
   @ApiModelProperty()
-  jobPosition: JobPositionModel;
+  jobPosition: DictionaryModel;
   @ApiModelProperty()
   authType?: string;
   @ApiModelProperty()

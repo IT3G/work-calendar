@@ -1,6 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 
-export class ProjectModel {
+export class DictionaryModel {
   @ApiModelProperty({ type: String })
-  title: string;
+  name: string;
 }
