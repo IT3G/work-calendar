@@ -13,7 +13,8 @@ export class ProjectsApiService {
   public getProjects(): Observable<ProjectModel[]> {
     return this.http.get<ProjectModel[]>(`${environment.baseUrl}/projects`);
   }
+
   public addProject(data: ProjectModel): Observable<ProjectModel> {
-    return this.http.post<ProjectModel>(`${environment.baseUrl}/projects/add`, data);
+    return this.http.post<ProjectModel>(`${environment.baseUrl}/projects`, data);
   }
 }
