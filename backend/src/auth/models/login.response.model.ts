@@ -1,7 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger';
-import { JobPositionModel } from './job-position.response.model';
-import { SubdivisionModel } from '../../subdivision/models/subdivision.responce.model';
-
+import { JobPositionModel } from '../../dictionary/models/job-position.model';
+import { SubdivisionModel } from '../../dictionary/models/subdivision.model';
 export class LoginResponseModel {
   @ApiModelProperty()
   username: string;

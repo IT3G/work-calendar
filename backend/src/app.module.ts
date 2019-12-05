@@ -3,12 +3,11 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
 import { AvatarsModule } from './avatars/avatars.module';
 import { Config, getConfig } from './config/config';
+import { DictionaryModule } from './dictionary/dictionary.module';
 import { MailModule } from './mail/mail.module';
-import { ProjectsModule } from './projects/projects.module';
 import { SettingsModule } from './settings/settings.module';
 import { TasksModule } from './tasks/tasks.module';
 import { UsersModule } from './users/users.module';
-import { SubdivisionModule } from './subdivision/subdivision.module';
 const config = getConfig();
 
 const url = `${config.DATABASE_URL}`;
@@ -19,12 +18,11 @@ const url = `${config.DATABASE_URL}`;
     MailModule,
     UsersModule,
     TasksModule,
-    ProjectsModule,
-    SubdivisionModule,
     AvatarsModule,
     MongooseModule.forRoot(url, {
       useNewUrlParser: true,
     }),
+    DictionaryModule,
     SettingsModule,
   ],
   providers: [{ provide: Config, useValue: config }],
