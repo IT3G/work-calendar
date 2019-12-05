@@ -1,6 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 
 export class JobPositionModel {
-  @ApiModelProperty()
+  @ApiModelProperty({ type: String })
   name: string;
 }
