@@ -15,7 +15,7 @@ export class CurrentProjectsPipe implements PipeTransform {
       })
       .filter(p => moment().isBetween(p.dateStart, p.dateEnd))
       .filter(p => p!)
-      .map(p => p.name);
+      .map(p => p.project);
 
     if (!result.length) {
       return '-';
