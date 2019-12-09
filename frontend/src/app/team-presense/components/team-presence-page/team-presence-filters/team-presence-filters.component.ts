@@ -1,9 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { JobPositionModel } from '../../../../shared/models/job-position.model';
+import { DictionaryModel } from '../../../../shared/models/dictionary.model';
 import { LocationEnum } from '../../../../shared/models/location.enum';
-import { ProjectModel } from '../../../../shared/models/projects.model';
-import { SubdivisionModel } from '../../../../shared/models/subdivisions.model';
 
 @Component({
   selector: 'app-team-presence-filters',
@@ -16,13 +14,13 @@ export class TeamPresenceFiltersComponent {
   filtersForm: FormGroup;
 
   @Input()
-  projects: ProjectModel[];
+  projects: DictionaryModel[];
 
   @Input()
-  jobPositions: JobPositionModel[];
+  jobPositions: DictionaryModel[];
 
   @Input()
-  subdivisions: SubdivisionModel[];
+  subdivisions: DictionaryModel[];
 
   @Input()
   locations: LocationEnum[];

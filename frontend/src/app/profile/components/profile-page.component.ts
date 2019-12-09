@@ -5,18 +5,14 @@ import * as moment from 'moment';
 import { combineLatest, forkJoin, Observable, Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
+import { DictionaryApiService } from '../../core/services/dictionary-api.service';
 import { EmployeeApiService } from '../../core/services/employee-api.service';
-import { JobPositionApiService } from '../../core/services/job-position-api.service';
-import { ProjectsApiService } from '../../core/services/projects-api.service';
-import { SubdivisionApiService } from '../../core/services/subdivision-api.service';
 import { TaskApiService } from '../../core/services/task-api.service';
 import { ContextStoreService } from '../../core/store/context-store.service';
 import { EmployeeStoreService } from '../../core/store/employee-store.service';
 import { DayType } from '../../shared/const/day-type.const';
+import { DictionaryModel } from '../../shared/models/dictionary.model';
 import { Employee } from '../../shared/models/employee.model';
-import { JobPositionModel } from '../../shared/models/job-position.model';
-import { ProjectModel } from '../../shared/models/projects.model';
-import { SubdivisionModel } from '../../shared/models/subdivisions.model';
 import { TaskModel } from '../../shared/models/tasks.models';
 import { SendingMailService } from '../../shared/services/sending-mail.service';
 
@@ -34,13 +30,13 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   private login: string;
   private getCurrentUserSub = new Subscription();
   private searchUserByLoginSub = new Subscription();
-  public projects$: Observable<ProjectModel[]>;
+  public projects: DictionaryModel[];
   public taskHistory$: Observable<TaskModel[]>;
   public activity: TaskModel[];
   public dayType = DayType;
   public displayedColumns: string[] = ['dateCreate', 'date', 'who', 'type', 'comment'];
-  public jobPositions: JobPositionModel[];
-  public subdivisions: SubdivisionModel[];
+  public jobPositions: DictionaryModel[];
+  public subdivisions: DictionaryModel[];
   public users$: Observable<Employee[]>;
   public mailingAddresses: Employee[];
   constructor(
@@ -48,9 +44,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     private employeeApiService: EmployeeApiService,
     private employeeStoreService: EmployeeStoreService,
     private route: ActivatedRoute,
-    private projectsApi: ProjectsApiService,
-    private jobPositionApi: JobPositionApiService,
-    private subdivisionsApi: SubdivisionApiService,
+    private dictionaryApi: DictionaryApiService,
     private taskApi: TaskApiService,
     private fb: FormBuilder,
     private sendingMail: SendingMailService
@@ -60,7 +54,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.users$ = this.employeeApiService.loadAllEmployees();
     this.getUserInfo();
     this.isAdmin$ = this.contextStoreService.isCurrentUserAdmin$();
-    this.projects$ = this.projectsApi.getProjects();
+    this.dictionaryApi.getAll('project').subscribe(p => (this.projects = p));
   }
 
   ngOnDestroy() {
@@ -68,20 +62,18 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.searchUserByLoginSub.unsubscribe();
   }
 
-  public createProjectsFormGroup(project: any): FormGroup {
-    return this.fb.group({
-      title: project.title,
-      dateStart: project.dateStart,
-      dateEnd: project.dateEnd
-    });
-  }
-
-  public createEmptyProjectsFormGroup(): FormGroup {
-    return this.fb.group({
-      title: null,
+  public createProjectsFormGroup(project?: any): FormGroup {
+    const group = this.fb.group({
+      project: null,
       dateStart: null,
       dateEnd: null
     });
+
+    if (project) {
+      group.patchValue(project);
+    }
+
+    return group;
   }
 
   public get projectFormArray(): FormArray {
@@ -90,7 +82,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   public addProjectFromGroup(): void {
     const formArray = this.projectFormArray;
-    formArray.controls.push(this.createEmptyProjectsFormGroup());
+    formArray.controls.push(this.createProjectsFormGroup());
   }
 
   public removeFormGroupProject(index: number): void {
@@ -134,8 +126,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   }
 
   private getUserInfo(): void {
-    const jobPositions$ = this.jobPositionApi.getAll();
-    const subdivisions$ = this.subdivisionsApi.getSubdivisions();
+    const jobPositions$ = this.dictionaryApi.getAll('jobPosition');
+    const subdivisions$ = this.dictionaryApi.getAll('subdivision');
 
     forkJoin([jobPositions$, subdivisions$]).subscribe(res => {
       const [jobPositions, subdivisions] = res;

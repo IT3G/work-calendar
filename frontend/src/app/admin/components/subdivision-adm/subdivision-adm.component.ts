@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { BehaviorSubject } from 'rxjs';
 import { filter, first, switchMap } from 'rxjs/operators';
-import { SubdivisionModel } from '../../../shared/models/subdivisions.model';
+import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
+import { DictionaryModel } from '../../../shared/models/dictionary.model';
 import { SnackbarService } from '../../../shared/services/snackbar.service';
 import { AddPopupComponent } from '../popups/add-popup/add-popup.component';
-import { SubdivisionApiService } from '../../../core/services/subdivision-api.service';
 
 @Component({
   selector: 'app-subdivision-adm',
@@ -13,13 +13,17 @@ import { SubdivisionApiService } from '../../../core/services/subdivision-api.se
   styleUrls: ['./subdivision-adm.component.scss']
 })
 export class SubdivisionAdmComponent implements OnInit {
-  public subdivisions$: BehaviorSubject<SubdivisionModel[]> = new BehaviorSubject([]);
+  public subdivisions$: BehaviorSubject<DictionaryModel[]> = new BehaviorSubject([]);
   public displayedColumns: string[] = ['title'];
 
-  constructor(private snackbar: SnackbarService, private subdivisionApi: SubdivisionApiService, public dialog: MatDialog) {}
+  constructor(
+    private snackbar: SnackbarService,
+    private dictionaryApi: DictionaryApiService,
+    public dialog: MatDialog
+  ) {}
 
   ngOnInit() {
-    this.subdivisionApi.getSubdivisions().subscribe(res => this.subdivisions$.next(res));
+    this.dictionaryApi.getAll('subdivision').subscribe(res => this.subdivisions$.next(res));
   }
 
   public openDialog(): void {
@@ -33,12 +37,11 @@ export class SubdivisionAdmComponent implements OnInit {
       .pipe(
         first(),
         filter(res => !!res),
-        switchMap(res => this.subdivisionApi.addSubdivision({ name: res }))
+        switchMap(res => this.dictionaryApi.add('subdivision', { name: res }))
       )
       .subscribe(res => {
         this.snackbar.showSuccessSnackBar('Подразделение успешно добавлен');
         this.subdivisions$.next([...this.subdivisions$.value, res]);
       });
   }
-
 }
