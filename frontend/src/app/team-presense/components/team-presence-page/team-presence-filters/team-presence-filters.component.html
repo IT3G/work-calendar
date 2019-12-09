@@ -12,7 +12,7 @@
     <mat-select formControlName="project">
       <mat-option>Сбросить</mat-option>
       <mat-option *ngFor="let project of projects"
-        [value]="project.name">
+        [value]="project._id">
         {{ project.name }}
       </mat-option>
     </mat-select>
