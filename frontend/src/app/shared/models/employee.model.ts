@@ -12,7 +12,7 @@ export class Employee {
   mailNickname: string;
   projects: [
     {
-      name: string;
+      project: string;
       dateStart: string;
       dateEnd: string;
     }
