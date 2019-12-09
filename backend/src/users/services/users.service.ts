@@ -8,8 +8,7 @@ import { UserResponseModel } from '../models/user.request.model';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel('Users') private readonly userModel: Model<UserEntity>) {
-  }
+  constructor(@InjectModel('Users') private readonly userModel: Model<UserEntity>) {}
 
   async getUsers(): Promise<UserEntity[]> {
     const users = await this.userModel
@@ -23,7 +22,8 @@ export class UsersService {
 
   async getUserByLogin(mailNickname: string): Promise<UserEntity[]> {
     const employeeRegex = new RegExp(`^${mailNickname}$`, 'i');
-    const user = await this.userModel.find({ mailNickname: employeeRegex })
+    const user = await this.userModel
+      .find({ mailNickname: employeeRegex })
       .populate('jobPosition')
       .populate('subdivision')
       .exec();
@@ -61,9 +61,9 @@ export class UsersService {
       subdivision: null,
       jobPosition: null,
       authType: 'hash',
-      hashPswd: crypto.createHmac('sha256', userInfo.password).digest('hex')
+      hashPswd: crypto.createHmac('sha256', userInfo.password).digest('hex'),
     };
-    console.log(data);
+
     const newUser = await this.userModel.create(data);
     return newUser.save();
   }
