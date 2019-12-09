@@ -81,9 +81,9 @@
             <div *ngFor="let projectFormGroup of projectFormArray.controls; index as i"
               class="project-grid">
               <mat-form-field>
-                <mat-select [formControl]="projectFormGroup.get('name')">
-                  <mat-option *ngFor="let project of (projects$ | async)"
-                    [value]="project.name">{{
+                <mat-select [formControl]="projectFormGroup.get('project')">
+                  <mat-option *ngFor="let project of (projects)"
+                    [value]="project._id">{{
                     project.name
                     }}</mat-option>
                 </mat-select>

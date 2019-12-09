@@ -30,7 +30,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   private login: string;
   private getCurrentUserSub = new Subscription();
   private searchUserByLoginSub = new Subscription();
-  public projects$: Observable<DictionaryModel[]>;
+  public projects: DictionaryModel[];
   public taskHistory$: Observable<TaskModel[]>;
   public activity: TaskModel[];
   public dayType = DayType;
@@ -54,7 +54,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.users$ = this.employeeApiService.loadAllEmployees();
     this.getUserInfo();
     this.isAdmin$ = this.contextStoreService.isCurrentUserAdmin$();
-    this.projects$ = this.dictionaryApi.getAll('project');
+    this.dictionaryApi.getAll('project').subscribe(p => (this.projects = p));
   }
 
   ngOnDestroy() {
@@ -64,7 +64,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   public createProjectsFormGroup(project?: any): FormGroup {
     const group = this.fb.group({
-      name: null,
+      project: null,
       dateStart: null,
       dateEnd: null
     });
