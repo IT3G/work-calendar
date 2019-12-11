@@ -16,6 +16,7 @@ import { FilterEmployeePipe } from './pipes/filter-employee.pipe';
 import { IsCurrentDayPipe } from './pipes/is-current-day.pipe';
 import { IsWeekendDayPipe } from './pipes/is-weekend-day.pipe';
 import { UsernamePipe } from './pipes/username.pipe';
+import { FileInputResetComponent } from './components/file-input-reset/file-input-reset.component';
 
 const pipes = [
   UsernamePipe,
@@ -32,7 +33,7 @@ const pipes = [
 
 const modules = [MaterialModule, FormsModule, ReactiveFormsModule, AvatarModule, NgbModule, RouterModule];
 
-const components = [AgendaComponent];
+const components = [AgendaComponent, FileInputResetComponent];
 @NgModule({
   declarations: [...pipes, ...components],
   imports: [CommonModule, ...modules],

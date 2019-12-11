@@ -1,0 +1,43 @@
+
+:host {
+  width: 550px;
+}
+
+.custom-file-input-wrapper {
+  padding: 5px 0;
+  width: 100%;
+}
+
+.native-file-input {
+  display: none;
+}
+
+.custom-upload-file-input {
+  display: grid;
+  grid-template-columns: 1fr 40px;
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    'info close'
+    'errorArea errorArea';
+  justify-items: flex-start;
+  align-items: center;
+}
+
+.custom-upload-file-input-label {
+  grid-area: info;
+}
+
+.selected-file-name {
+  grid-area: info;
+  word-break: break-all;
+}
+
+.close-button {
+  grid-area: close;
+  align-content: flex-start;
+}
+
+.error-message {
+  color: #f44336;
+  grid-area: errorArea;
+}
