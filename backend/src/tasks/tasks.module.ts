@@ -6,6 +6,7 @@ import { TasksController } from './tasks.controller';
 @Module({
   imports: [EntityModule],
   controllers: [TasksController],
-  providers: [TaskService]
+  providers: [TaskService],
 })
-export class TasksModule {}
+export class TasksModule {
+}

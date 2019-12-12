@@ -1,0 +1,38 @@
+main {
+  max-width: max-content;
+  padding: 10px;
+}
+
+.month-indicator {
+  text-align: center;
+  font-weight: 500;
+}
+
+
+.day-of-week,
+.date-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.day-of-week {
+  margin-top: 20px;
+}
+
+.day-of-week > * {
+  text-align: center;
+}
+
+.date-grid {
+  margin-top: 10px;
+}
+
+.date-grid div {
+  position: relative;
+  border: 0;
+  width: 30px;
+  height: 30px;
+  font-size: 12px;
+  text-align: center;
+  line-height: 30px;
+}

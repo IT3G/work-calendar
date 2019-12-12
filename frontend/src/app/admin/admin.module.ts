@@ -12,7 +12,7 @@ import { AddPopupComponent } from './components/popups/add-popup/add-popup.compo
 import { ProjectsComponent } from './components/projects/projects.component';
 import { SubdivisionAdmComponent } from './components/subdivision-adm/subdivision-adm.component';
 import { HolidaysComponent } from './components/holidays/holidays.component';
-import { AddHolidaysComponent } from './components/popups/add-holidays/add-holidays.component';
+import { CalendarBlockComponent } from './components/holidays/calendar-block/calendar-block.component';
 
 const routes: Routes = [
   { path: 'employee-list', component: EmployeeListComponent },
@@ -27,7 +27,6 @@ const routes: Routes = [
 const components = [
   ProjectsComponent,
   AddPopupComponent,
-  AddHolidaysComponent,
   EmployeeListComponent,
   EmployeeAddComponent,
   ConfigurationComponent,
@@ -36,10 +35,10 @@ const components = [
   JobPositionAdministrationComponent
 ];
 
-const entryComponents = [AddPopupComponent, AddHolidaysComponent, EmployeeAddComponent];
+const entryComponents = [AddPopupComponent, EmployeeAddComponent];
 
 @NgModule({
-  declarations: [...components],
+  declarations: [...components, CalendarBlockComponent],
   entryComponents: [...entryComponents],
   imports: [
     CommonModule,

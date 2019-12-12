@@ -14,7 +14,6 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
   ]
 })
 export class FileInputResetComponent implements ControlValueAccessor {
-  private onChange: Function;
   public file: File;
 
   @Input()
@@ -23,34 +22,51 @@ export class FileInputResetComponent implements ControlValueAccessor {
   @Input()
   buttonText: string;
 
+  private onChange = (value: File | null) => {
+  };
+  private onTouched = () => {
+  };
+
   constructor(private host: ElementRef<HTMLInputElement>) {
+  }
+
+  @HostListener('click')
+  click() {
+    this.onTouched();
   }
 
   @HostListener('change', ['$event.target.files'])
   emitFiles(event: FileList) {
     const file = event && event.item(0);
-    this.onChange(file);
-    this.file = file;
+    this.onFileSelect(file);
   }
 
   writeValue(value: any) {
     this.file = value;
-    const nativeFileCtrl: HTMLInputElement = this.host.nativeElement.querySelector('#file-input');
-    nativeFileCtrl.value = value;
+    this.updateNativeInput(value);
   }
 
-  registerOnChange(fn: Function) {
+  registerOnChange(fn) {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: Function) {
+  registerOnTouched(fn) {
+    this.onTouched = fn;
   }
 
-  setDisabledState(isDisabled: boolean): void {
+  private onFileSelect(value) {
+    this.file = value;
+    this.onTouched();
+    this.onChange(value);
   }
 
   public onFileReset() {
-    this.onChange(null);
-    this.file = null;
+    this.onFileSelect(null);
+    this.updateNativeInput(null);
+  }
+
+  private updateNativeInput(value) {
+    const nativeFileCtrl: HTMLInputElement = this.host.nativeElement.querySelector('#file-input');
+    nativeFileCtrl.value = value;
   }
 }

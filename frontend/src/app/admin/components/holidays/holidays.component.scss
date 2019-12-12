@@ -1,10 +1,34 @@
-.wrapper {
-  display: flex;
-  padding: 10px 20px;
+.file-input-wrapper {
+  max-width: 500px;
+  border: 1px solid gray;
+  padding: 20px;
+  border-radius: 8px;
 }
+
 
 .page-title {
   font-size: 18px;
   font-weight: bold;
   padding: 10px 0 20px;
+}
+
+
+.empty-data {
+  padding: 30px 0;
+}
+
+
+.holidays-wrapper {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.holidays-year {
+  font-size: 28px;
+}
+
+.year-wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-left: 40px;
 }
