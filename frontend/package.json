@@ -7,6 +7,7 @@
     "start": "ng serve --proxy-config proxy.conf.json",
     "build": "yarn preBuild && yarn ng build",
     "build:prod": "yarn preBuild && yarn ng build --configuration=production",
+    "build:preprod": "yarn preBuild && yarn ng build --configuration=preprod",
     "build:test": "yarn preBuild && yarn ng build --configuration=test --base-href /work-calendar/",
     "test": "ng test",
     "lint": "ng lint",
