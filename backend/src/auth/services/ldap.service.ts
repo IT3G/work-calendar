@@ -10,7 +10,7 @@ export class LdapService implements OnApplicationShutdown {
     readerDn: this.configService.READER_DOMAIN_NAME,
     readerPwd: this.configService.READER_PASSWORD,
     serverUrl: this.configService.LDAP_SERVER_URL,
-    suffix: this.configService.LDAP_SUFFIX
+    suffix: this.configService.LDAP_SUFFIX,
   };
 
   client: any;
@@ -22,7 +22,7 @@ export class LdapService implements OnApplicationShutdown {
   public async auth(credentials: LoginRequestModel, add?: boolean): Promise<LoginResponseModel> {
     this.client = ldap.createClient({
       url: this.config.serverUrl,
-      reconnect: true
+      reconnect: true,
     });
 
     this.client.on('error', err => {
@@ -33,7 +33,7 @@ export class LdapService implements OnApplicationShutdown {
     const result = user[0];
     result.attributes = result.attributes.map(el => ({
       type: el.type,
-      data: this.stringFromUTF8Array(el._vals[0])
+      data: this.stringFromUTF8Array(el._vals[0]),
     }));
 
     this.client.destroy();
@@ -42,32 +42,34 @@ export class LdapService implements OnApplicationShutdown {
     return data;
   }
 
-  private mapToSendOnClient(attributes: { type: string; data: string }[]): LoginResponseModel {
+  private mapToSendOnClient(attributes: Array<{ type: string; data: string }>): LoginResponseModel {
     return {
-      username: attributes.find(el => el.type === 'cn') ? attributes.find(el => el.type === 'cn').data : null,
-      location: attributes.find(el => el.type === 'l') ? attributes.find(el => el.type === 'l').data : null,
-      position: attributes.find(el => el.type === 'title') ? attributes.find(el => el.type === 'title').data : null,
-      whenCreated: attributes.find(el => el.type === 'whenCreated')
-        ? attributes.find(el => el.type === 'whenCreated').data
-        : null,
-      email: attributes.find(el => el.type === 'userPrincipalName')
-        ? attributes.find(el => el.type === 'userPrincipalName').data
-        : null,
-      telNumber: attributes.find(el => el.type === 'mobile') ? attributes.find(el => el.type === 'mobile').data : null,
-      physicalDeliveryOfficeName: attributes.find(el => el.type === 'physicalDeliveryOfficeName')
-        ? attributes.find(el => el.type === 'physicalDeliveryOfficeName').data
-        : null,
-      mailNickname: attributes.find(el => el.type === 'mailNickname')
-        ? attributes.find(el => el.type === 'mailNickname').data
-        : null,
+      username: this.getAttribute(attributes, 'cn'),
+      location: this.getAttribute(attributes, 'l'),
+      position: this.getAttribute(attributes, 'title'),
+      whenCreated: this.getAttribute(attributes, 'whenCreated'),
+      email: this.getAttribute(attributes, 'userPrincipalName'),
+      telNumber: this.getAttribute(attributes, 'mobile'),
+      physicalDeliveryOfficeName: this.getAttribute(attributes, 'physicalDeliveryOfficeName'),
+      mailNickname: this.getAttribute(attributes, 'mailNickname'),
       projects: [],
       isAdmin: false,
       hasMailing: true,
       subdivision: null,
       jobPosition: null,
       authType: 'LDAP',
-      hashPswd: null
+      hashPswd: null,
     };
+  }
+
+  private getAttribute(attributes: Array<{ type: string; data: string }>, val: string) {
+    const attr = attributes.find(el => el.type === val);
+
+    if (!attr) {
+      return null;
+    }
+
+    return attr.data;
   }
 
   private getFilter(username: string): Promise<string> {
@@ -92,7 +94,7 @@ export class LdapService implements OnApplicationShutdown {
         this.config.suffix,
         {
           filter,
-          scope: 'sub'
+          scope: 'sub',
         },
         (err, searchRes) => {
           const searchList = [];
@@ -122,7 +124,7 @@ export class LdapService implements OnApplicationShutdown {
               }
             });
           });
-        }
+        },
       );
     });
   }
@@ -130,19 +132,23 @@ export class LdapService implements OnApplicationShutdown {
   private stringFromUTF8Array(data) {
     const atributtes = [...data];
     const extraByteMap = [1, 1, 1, 1, 2, 2, 3, 0];
-    var count = atributtes.length;
-    var str = '';
+    const count = atributtes.length;
+    let str = '';
 
-    for (var index = 0; index < count; ) {
-      var ch = data[index++];
+    for (let index = 0; index < count; ) {
+      let ch = data[index++];
       if (ch & 0x80) {
-        var extra = extraByteMap[(ch >> 3) & 0x07];
-        if (!(ch & 0x40) || !extra || index + extra > count) return null;
+        let extra = extraByteMap[(ch >> 3) & 0x07];
+        if (!(ch & 0x40) || !extra || index + extra > count) {
+          return null;
+        }
 
         ch = ch & (0x3f >> extra);
         for (; extra > 0; extra -= 1) {
-          var chx = data[index++];
-          if ((chx & 0xc0) != 0x80) return null;
+          const chx = data[index++];
+          if ((chx & 0xc0) != 0x80) {
+            return null;
+          }
 
           ch = (ch << 6) | (chx & 0x3f);
         }

@@ -149,7 +149,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         .searchUserByLogin(this.login)
         .pipe(map(users => users[0]))
         .subscribe((user: Employee) => {
-          console.log('FromApi', user);
           this.initForm(user);
           this.setSelectedUser(user);
           this.canEdit = false;
@@ -196,7 +195,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   private initForm(user: Employee): void {
     const jobPosition = this.jobPositions.find(jp => user.jobPosition && jp._id === user.jobPosition._id);
     const subdivision = this.subdivisions.find(sd => user.subdivision && sd._id === user.subdivision._id);
-    const date = user.whenCreated ? user.whenCreated.slice(0, 8) : null;
 
     this.profileForm = this.fb.group({
       id: new FormControl(user._id),
@@ -209,7 +207,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       hasMailing: new FormControl(user.hasMailing),
       jobPosition: new FormControl(jobPosition),
       subdivision: new FormControl(subdivision),
-      whenCreated: new FormControl(user.whenCreated ? moment(date).format() : null)
+      whenCreated: new FormControl(user.whenCreated)
     });
     this.profileForm.disable();
   }
