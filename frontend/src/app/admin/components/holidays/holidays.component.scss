@@ -32,3 +32,28 @@
   grid-template-columns: repeat(3, 1fr);
   margin-left: 40px;
 }
+
+
+.free-days {
+  background-color: #e91e63;
+  border: 2px solid #b0003a;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  line-height: 48px;
+  text-align: center;
+  color: white;
+  margin: 10px;
+}
+
+.work-days {
+  background-color: #4caf50;
+  border: 2px solid #087f23;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  line-height: 48px;
+  text-align: center;
+  color: white;
+  margin: 10px;
+}

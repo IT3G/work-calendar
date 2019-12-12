@@ -20,21 +20,12 @@
     <div *ngFor="let year of (holidays$ | async); let i = index" class="holidays-wrapper">
       <div>
         <div class="holidays-year">{{year?.year}}</div>
-        <div>Всего праздничных и выходных дней: {{year?.allDays}}</div>
-        <div>Всего рабочих дней: {{year?.allWork}}</div>
-        <div>Рабочих часов при рабочей неделе</div>
-        <table>
-          <tr>
-            <td>24-часовой</td>
-            <td>36-часовой</td>
-            <td>40-часовой</td>
-          </tr>
-          <tr>
-            <td>{{year?.hours24}}</td>
-            <td>{{year?.hours36}}</td>
-            <td>{{year?.hours40}}</td>
-          </tr>
-        </table>
+        <div class="free-days" title="Праздничны и выходных дней">{{year?.allDays}}</div>
+        <div class="work-days" title="Рабочих дней">{{year?.allWork}}</div>
+        <div>Рабочих часов</div>
+        <div>24 ч/нед: {{year?.hours24}}</div>
+        <div>36 ч/нед: {{year?.hours36}}</div>
+        <div>40 ч/нед: {{year?.hours40}}</div>
       </div>
 
       <div class="year-wrapper">
