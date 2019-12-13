@@ -17,6 +17,7 @@ import { CustomDateAdapter } from './core/services/custom-date-adapter.service';
 import { AuthApiInBackendService } from './core/services/impl/backend/auth-api-in-backend.service';
 import { LoginModule } from './login/login.module';
 import { PresenseModule } from './presense/presense.module';
+import { PrintVacationModule } from './print-vacation/print-vacation.module';
 import { ProfileModule } from './profile/profile.module';
 import { AppRoutingModule } from './routing/app-routing.module';
 import { AppLoadService } from './shared/services/app-load.service';
@@ -46,6 +47,7 @@ export function onInit(appLoadService: AppLoadService) {
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
+    PrintVacationModule,
     RouterModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],

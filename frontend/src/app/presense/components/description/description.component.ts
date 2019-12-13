@@ -84,6 +84,12 @@ export class DescriptionComponent implements OnInit {
     if (sendingMail.adress.length) {
       this.mailApiService.sendMail(sendingMail).subscribe(key => console.log(key));
     }
+
+    let printContents, popupWin;
+    popupWin = window.open('', 'self');
+    popupWin.document.open();
+    popupWin.document.write('component');
+    popupWin.document.close();
   }
 
   public getTitle(id: number): string {
