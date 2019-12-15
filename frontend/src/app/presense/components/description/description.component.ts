@@ -1,5 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
@@ -39,10 +41,11 @@ export class DescriptionComponent implements OnInit {
     private fb: FormBuilder,
     private mailApiService: MailApiService,
     private tasksStoreService: TasksStoreService,
+    private http: HttpClient,
     private employeeStoreService: EmployeeStoreService,
-    private taskMapperService: TaskMapperService
+    private taskMapperService: TaskMapperService, private sanitizer: DomSanitizer
   ) {}
-
+  
   ngOnInit() {
     this.initForm();
     this.getInfoFromStore();
@@ -84,12 +87,22 @@ export class DescriptionComponent implements OnInit {
     if (sendingMail.adress.length) {
       this.mailApiService.sendMail(sendingMail).subscribe(key => console.log(key));
     }
+    
+    this.http.get('assets/1.html', { responseType: 'text' }).subscribe((data: any) => 
+    
+    {
 
-    let printContents, popupWin;
-    popupWin = window.open('', 'self');
-    popupWin.document.open();
-    popupWin.document.write('component');
-    popupWin.document.close();
+    const chars = data.split('***');
+
+      let printContents, popupWin;
+      popupWin = window.open('', 'self');
+      popupWin.document.open();
+      const company_name = 'Microsoft';
+      const main_manager  = 'Bill Gates'
+      const result = `${chars[0]}${company_name}${chars[1]}${main_manager}${chars[2]}Глотова Дмитрия Юрьевича${chars[3]}`
+      popupWin.document.write(result);
+    })
+    
   }
 
   public getTitle(id: number): string {
