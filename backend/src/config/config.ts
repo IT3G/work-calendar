@@ -19,6 +19,9 @@ export class Config {
   CONFLUENCE_LOGIN: string;
   CONFLUENCE_PASSWORD: string;
   FEATURE_SEND_MAIL: 'NO' | 'YES';
+  JWT_SECRET_KEY: string;
+  JWT_EXPIRES: string;
+  JWT_ONLY_HTTPS: 'NO' | 'YES';
 }
 
 let config;
