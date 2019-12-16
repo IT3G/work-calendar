@@ -4,6 +4,7 @@ import { Config, getConfig } from '../config/config';
 import { EntityModule } from '../entity/entity.module';
 import { AuthController } from './auth.controller';
 import { AvatarsController } from './avatars.controller';
+import { AuthService } from './services/auth.service';
 import { AvatarsService } from './services/avatars/avatars.service';
 import { ConfluenceAvatarService } from './services/avatars/confluence-avatars.service';
 import { DefaultAvatarsService } from './services/avatars/default-avatars.service';
@@ -35,6 +36,6 @@ const avatarServiceProvider = {
     }),
   ],
   controllers: [UsersController, AuthController, AvatarsController],
-  providers: [UsersService, LdapService, avatarServiceProvider, { provide: Config, useValue: config }],
+  providers: [UsersService, LdapService, AuthService, avatarServiceProvider, { provide: Config, useValue: config }],
 })
 export class UsersModule {}
