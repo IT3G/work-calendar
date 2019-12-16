@@ -1,9 +1,10 @@
-import { HttpModule, HttpService, Module } from '@nestjs/common';
+import { HttpModule, HttpService, MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { Config, getConfig } from '../config/config';
 import { EntityModule } from '../entity/entity.module';
 import { AuthController } from './auth.controller';
 import { AvatarsController } from './avatars.controller';
+import { AuthMiddleware } from './middleware/auth.middleware';
 import { AuthService } from './services/auth.service';
 import { AvatarsService } from './services/avatars/avatars.service';
 import { ConfluenceAvatarService } from './services/avatars/confluence-avatars.service';
@@ -16,14 +17,14 @@ const config = getConfig();
 
 const avatarServiceProvider = {
   provide: AvatarsService,
-  useFactory: (http: HttpService, config: Config) => {
+  useFactory: (http: HttpService, conf: Config) => {
     if (config.FEATURE_AVATAR_SOURCE === 'CONFLUENCE') {
-      return new ConfluenceAvatarService(http, config);
+      return new ConfluenceAvatarService(http, conf);
     } else {
       return new DefaultAvatarsService(http);
     }
   },
-  inject: [HttpService, Config],
+  inject: [HttpService, Config]
 };
 
 @Module({
@@ -32,10 +33,14 @@ const avatarServiceProvider = {
     HttpModule,
     JwtModule.register({
       secret: config.JWT_SECRET_KEY,
-      signOptions: { expiresIn: config.JWT_EXPIRES },
-    }),
+      signOptions: { expiresIn: config.JWT_EXPIRES }
+    })
   ],
   controllers: [UsersController, AuthController, AvatarsController],
-  providers: [UsersService, LdapService, AuthService, avatarServiceProvider, { provide: Config, useValue: config }],
+  providers: [UsersService, LdapService, AuthService, avatarServiceProvider, { provide: Config, useValue: config }]
 })
-export class UsersModule {}
+export class UsersModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}

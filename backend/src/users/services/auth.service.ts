@@ -67,7 +67,7 @@ export class AuthService {
     return this.jwtService.sign(sign);
   }
 
-  async validateUser(jwt: string): Promise<boolean> {
+  async verifyUser(jwt: string): Promise<boolean> {
     const res: JwtSignModel = this.jwtService.verify(jwt);
     const user = await this.usersService.getUserByLogin(res.mailNickname);
 
