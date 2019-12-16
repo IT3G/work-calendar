@@ -1,7 +1,7 @@
 import { Injectable, OnApplicationShutdown } from '@nestjs/common';
-import { LoginRequestModel } from 'src/auth/models/login.request.model';
-import { LoginResponseModel } from 'src/auth/models/login.response.model';
 import { Config } from '../../config/config';
+import { LoginModel } from '../models/login.model';
+import { UserModel } from '../models/user.model';
 const ldap = require('ldapjs');
 @Injectable()
 export class LdapService implements OnApplicationShutdown {
@@ -10,7 +10,7 @@ export class LdapService implements OnApplicationShutdown {
     readerDn: this.configService.READER_DOMAIN_NAME,
     readerPwd: this.configService.READER_PASSWORD,
     serverUrl: this.configService.LDAP_SERVER_URL,
-    suffix: this.configService.LDAP_SUFFIX
+    suffix: this.configService.LDAP_SUFFIX,
   };
 
   client: any;
@@ -19,10 +19,10 @@ export class LdapService implements OnApplicationShutdown {
     this.client.destroy();
   }
 
-  public async auth(credentials: LoginRequestModel, add?: boolean): Promise<LoginResponseModel> {
+  public async auth(credentials: LoginModel, add?: boolean): Promise<UserModel> {
     this.client = ldap.createClient({
       url: this.config.serverUrl,
-      reconnect: true
+      reconnect: true,
     });
 
     this.client.on('error', err => {
@@ -33,16 +33,16 @@ export class LdapService implements OnApplicationShutdown {
     const result = user[0];
     result.attributes = result.attributes.map(el => ({
       type: el.type,
-      data: this.stringFromUTF8Array(el._vals[0])
+      data: this.stringFromUTF8Array(el._vals[0]),
     }));
 
     this.client.destroy();
 
-    const data: LoginResponseModel = this.mapToSendOnClient(result.attributes);
+    const data: UserModel = this.mapToSendOnClient(result.attributes);
     return data;
   }
 
-  private mapToSendOnClient(attributes: Array<{ type: string; data: string }>): LoginResponseModel {
+  private mapToSendOnClient(attributes: Array<{ type: string; data: string }>): UserModel {
     return {
       username: this.getAttribute(attributes, 'cn'),
       location: this.getAttribute(attributes, 'l'),
@@ -58,7 +58,7 @@ export class LdapService implements OnApplicationShutdown {
       subdivision: null,
       jobPosition: null,
       authType: 'LDAP',
-      hashPswd: null
+      hashPswd: null,
     };
   }
 
@@ -90,7 +90,7 @@ export class LdapService implements OnApplicationShutdown {
         this.config.suffix,
         {
           filter,
-          scope: 'sub'
+          scope: 'sub',
         },
         (err, searchRes) => {
           const searchList = [];
@@ -120,7 +120,7 @@ export class LdapService implements OnApplicationShutdown {
               }
             });
           });
-        }
+        },
       );
     });
   }

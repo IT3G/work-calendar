@@ -3,7 +3,7 @@ import { ApiUseTags } from '@nestjs/swagger';
 import * as crypto from 'crypto';
 import { Config } from '../config/config';
 import { UsersService } from '../users/services/users.service';
-import { LoginRequestModel } from './models/login.request.model';
+import { LoginModel } from './models/login.model';
 import { LdapService } from './services/ldap.service';
 
 @ApiUseTags('Auth')
@@ -15,7 +15,7 @@ export class AuthController {
     private config: Config,
   ) {}
   @Post()
-  async auth(@Res() res, @Body() credentials: LoginRequestModel) {
+  async auth(@Res() res, @Body() credentials: LoginModel) {
     const result = await this.usersService.getUserByLogin(credentials.username);
 
     /**pswd auth type */
@@ -43,7 +43,7 @@ export class AuthController {
   }
 
   @Post('/add')
-  async authAndAdd(@Res() res, @Body() credentials: LoginRequestModel) {
+  async authAndAdd(@Res() res, @Body() credentials: LoginModel) {
     try {
       const ldapResult = await this.ldapService.auth(credentials, true);
       const result = await this.usersService.getUserByLogin(ldapResult.mailNickname);
@@ -59,7 +59,7 @@ export class AuthController {
   }
 
   @Post('/registration')
-  async registration(@Res() res, @Body() credentials: LoginRequestModel) {
+  async registration(@Res() res, @Body() credentials: LoginModel) {
     try {
       const result = await this.usersService.getUserByLogin(credentials.username);
       if (result) {
