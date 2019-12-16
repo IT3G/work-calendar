@@ -20,10 +20,10 @@ export class UsersService {
     return users;
   }
 
-  async getUserByLogin(mailNickname: string): Promise<UserEntity[]> {
+  async getUserByLogin(mailNickname: string): Promise<UserEntity> {
     const employeeRegex = new RegExp(`^${mailNickname}$`, 'i');
     const user = await this.userModel
-      .find({ mailNickname: employeeRegex })
+      .findOne({ mailNickname: employeeRegex })
       .populate('jobPosition')
       .populate('subdivision')
       .exec();
@@ -61,7 +61,7 @@ export class UsersService {
       subdivision: null,
       jobPosition: null,
       authType: 'hash',
-      hashPswd: crypto.createHmac('sha256', userInfo.password).digest('hex'),
+      hashPswd: crypto.createHmac('sha256', userInfo.password).digest('hex')
     };
 
     const newUser = await this.userModel.create(data);

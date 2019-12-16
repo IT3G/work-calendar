@@ -1,10 +1,10 @@
 import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
+import { ApiUseTags } from '@nestjs/swagger';
 import * as crypto from 'crypto';
 import { Config } from '../config/config';
 import { UsersService } from '../users/services/users.service';
 import { LoginRequestModel } from './models/login.request.model';
 import { LdapService } from './services/ldap.service';
-import { ApiUseTags } from '@nestjs/swagger';
 
 @ApiUseTags('Auth')
 @Controller('auth')
@@ -12,7 +12,7 @@ export class AuthController {
   constructor(
     private readonly ldapService: LdapService,
     private readonly usersService: UsersService,
-    private config: Config
+    private config: Config,
   ) {}
   @Post()
   async auth(@Res() res, @Body() credentials: LoginRequestModel) {
@@ -20,8 +20,8 @@ export class AuthController {
 
     /**pswd auth type */
     if (this.config.FEATURE_AUTH_TYPE !== 'LDAP') {
-      if (result[0] && result[0].hashPswd === crypto.createHmac('sha256', credentials.password).digest('hex')) {
-        res.status(HttpStatus.OK).send(result[0]);
+      if (result && result.hashPswd === crypto.createHmac('sha256', credentials.password).digest('hex')) {
+        res.status(HttpStatus.OK).send(result);
       } else {
         res.status(HttpStatus.NOT_ACCEPTABLE).send('USER NOT FOUND');
       }
@@ -31,8 +31,8 @@ export class AuthController {
 
     try {
       const ldapResult = await this.ldapService.auth(credentials);
-      if (result.length) {
-        res.status(HttpStatus.OK).send(result[0]);
+      if (result) {
+        res.status(HttpStatus.OK).send(result);
       } else {
         const newUser = await this.usersService.addUser(ldapResult);
         res.status(HttpStatus.OK).send(newUser);
@@ -47,7 +47,7 @@ export class AuthController {
     try {
       const ldapResult = await this.ldapService.auth(credentials, true);
       const result = await this.usersService.getUserByLogin(ldapResult.mailNickname);
-      if (result.length) {
+      if (result) {
         res.status(HttpStatus.NOT_ACCEPTABLE).send('USER ALREADY EXIST');
       } else {
         const newUser = await this.usersService.addUser(ldapResult);
@@ -62,7 +62,7 @@ export class AuthController {
   async registration(@Res() res, @Body() credentials: LoginRequestModel) {
     try {
       const result = await this.usersService.getUserByLogin(credentials.username);
-      if (result.length) {
+      if (result) {
         res.status(HttpStatus.NOT_ACCEPTABLE).send('USER ALREADY EXIST');
         return;
       }

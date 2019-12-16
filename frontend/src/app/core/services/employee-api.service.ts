@@ -14,8 +14,8 @@ export class EmployeeApiService {
     return this.http.get<Employee[]>(`${environment.baseUrl}/users`);
   }
 
-  public searchUserByLogin(usernameString: string): Observable<Employee[]> {
-    return this.http.get<Employee[]>(`${environment.baseUrl}/users/login/${usernameString}`);
+  public searchUserByLogin(usernameString: string): Observable<Employee> {
+    return this.http.get<Employee>(`${environment.baseUrl}/users/login/${usernameString}`);
   }
 
   public searchUserById(id: string): Observable<Employee> {
