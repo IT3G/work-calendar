@@ -17,5 +17,4 @@ export class HolidaysService {
     const newHolidays = await this.holidaysModel.create(holidays);
     return newHolidays.save();
   }
-
 }

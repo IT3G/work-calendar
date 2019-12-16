@@ -19,41 +19,35 @@
 
 
 .holidays-wrapper {
-  display: flex;
-  margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  grid-template-rows: 42px 1fr;
+  grid-gap: 20px;
+  grid-template-areas: 'head head' 'info calendar';
+
+  margin: 20px 0;
 }
 
 .holidays-year {
+  grid-area: head;
   font-size: 28px;
+  color: #4b830d;
+  padding-left: 30px;
+  line-height: 42px;
+  background-color: rgba(197, 225, 165, 0.36);
+}
+
+.info {
+  width: 300px;
+  padding-left: 30px;
+  grid-area: info;
 }
 
 .year-wrapper {
+  grid-area: calendar;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  margin-left: 40px;
+  justify-content: end;
+  grid-template-columns: repeat(3, 240px);
+  grid-gap: 10px;
 }
 
-
-.free-days {
-  background-color: #e91e63;
-  border: 2px solid #b0003a;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  line-height: 48px;
-  text-align: center;
-  color: white;
-  margin: 10px;
-}
-
-.work-days {
-  background-color: #4caf50;
-  border: 2px solid #087f23;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  line-height: 48px;
-  text-align: center;
-  color: white;
-  margin: 10px;
-}

@@ -1,26 +1,26 @@
-<div>
-  <main>
-    <div class="calendar">
-      <div class="month-indicator">
-        <div>{{getMonthName(date.month)}}</div>
-      </div>
-      <div class="day-of-week">
-        <div>Пн</div>
-        <div>Вт</div>
-        <div>Ср</div>
-        <div>Чт</div>
-        <div>Пт</div>
-        <div>Сб</div>
-        <div>Вс</div>
-      </div>
-      <div class="date-grid">
-        <div [ngStyle]="{'grid-column': getDayNumber().toString()}" datetime="2019-02-01">1</div>
-        <div *ngFor="let day of daysInMonth">
-          {{day}}
-        </div>
-      </div>
+<div class="calendar">
+  <div class="month-indicator">
+    <div>{{getMonthName(date.month)}}</div>
+  </div>
+  <div class="holidays-list">{{days}}</div>
+  <div class="day-of-week">
+    <div>Пн</div>
+    <div>Вт</div>
+    <div>Ср</div>
+    <div>Чт</div>
+    <div>Пт</div>
+    <div>Сб</div>
+    <div>Вс</div>
+  </div>
+  <div class="date-grid">
+    <div
+      [ngStyle]="{'grid-column': getDayNumber()}" [ngClass]="{'holiday' : isHoliday(1)}">1
     </div>
-  </main>
-
+    <div title="{{getTitle(day)}}"
+         *ngFor="let day of daysInMonth"
+         [ngClass]="{'holiday' : isHoliday(day), 'pre-holiday': isPreHoliday(day)}">
+      {{day}}
+    </div>
+  </div>
 </div>
 

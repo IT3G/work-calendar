@@ -13,6 +13,7 @@ import { ProjectsComponent } from './components/projects/projects.component';
 import { SubdivisionAdmComponent } from './components/subdivision-adm/subdivision-adm.component';
 import { HolidaysComponent } from './components/holidays/holidays.component';
 import { CalendarBlockComponent } from './components/holidays/calendar-block/calendar-block.component';
+import { HolidaysPipe } from './pipes/holidays.pipe';
 
 const routes: Routes = [
   { path: 'employee-list', component: EmployeeListComponent },
@@ -38,7 +39,7 @@ const components = [
 const entryComponents = [AddPopupComponent, EmployeeAddComponent];
 
 @NgModule({
-  declarations: [...components, CalendarBlockComponent],
+  declarations: [...components, CalendarBlockComponent, HolidaysPipe],
   entryComponents: [...entryComponents],
   imports: [
     CommonModule,

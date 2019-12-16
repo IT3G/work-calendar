@@ -4,6 +4,7 @@ interface DateCalendar {
   year: string;
   month: number;
 }
+
 //
 // export enum NumberOfMonth {
 //   Jan = 1,
@@ -21,7 +22,7 @@ interface DateCalendar {
 // }
 
 export enum NamesOfMonth {
-  'Январь'= 1,
+  'Январь' = 1,
   'Февраль',
   'Март',
   'Апрель',
@@ -57,16 +58,17 @@ export class CalendarBlockComponent implements OnInit {
     this.daysInMonth = this.getDaysInMonth(this.date);
   }
 
-  public getDayNumber(): number {
+  public getDayNumber(): string {
     if (!this.date) {
-      return 1;
+      return '1';
     }
-    const date = new Date(`${this.date.year}-${this.date.month}-01 `);
-    return date.getDay();
+    const date = new Date(`${this.date.year}-${this.date.month}-01`);
+    const dayNumber = date.getDay();
+    return dayNumber === 0 ? '7' : `${dayNumber}`;
   }
 
   public getMonthName(month: number) {
-    return  NamesOfMonth[month];
+    return NamesOfMonth[month];
   }
 
   public getDateOfMonth(year: string, month: number): string {
@@ -76,5 +78,27 @@ export class CalendarBlockComponent implements OnInit {
   public getDaysInMonth(date: DateCalendar): number[] {
     const days = new Date(Number(date.year), date.month, 0).getDate();
     return new Array(days - 1).fill(0).map((x, i) => i + 2);
+  }
+
+  public isHoliday(day: number): boolean {
+    return this.prepareDaysArr(this.days).includes(`${day}`);
+  }
+
+  public isPreHoliday(day: number): boolean {
+    return this.prepareDaysArr(this.days).includes(`${day}*`);
+  }
+
+  public prepareDaysArr(data: string) {
+    return data.split(',');
+  }
+
+  public getTitle(day: number): string {
+    if (this.isHoliday(day)) {
+      return 'Выходной день';
+    }
+    if (this.isPreHoliday(day)) {
+      return 'Предпраздничный день';
+    }
+    return 'Рабочий день';
   }
 }

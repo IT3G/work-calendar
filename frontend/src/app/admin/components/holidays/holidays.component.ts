@@ -4,24 +4,21 @@ import * as Papa from 'papaparse';
 import { ParseResult } from 'papaparse';
 import { FormControl } from '@angular/forms';
 import { HolidaysApiService } from '../../../core/services/holidays-api.service';
-import { HolidaysSendModel } from '../../../shared/models/holidays.model';
 
 interface HolidaysModel {
   year: string;
-  months: {
-    Jan: string;
-    Feb: string;
-    Mar: string;
-    Apr: string;
-    May: string;
-    June: string;
-    July: string;
-    Aug: string;
-    Sept: string;
-    Oct: string;
-    Nov: string;
-    Dec: string;
-  };
+  Jan: string;
+  Feb: string;
+  Mar: string;
+  Apr: string;
+  May: string;
+  June: string;
+  July: string;
+  Aug: string;
+  Sept: string;
+  Oct: string;
+  Nov: string;
+  Dec: string;
   allDays: string;
   allWork: string;
   hours24: string;
@@ -59,6 +56,8 @@ export enum HolidaysRawData {
 export class HolidaysComponent implements OnInit {
   public holidays$: BehaviorSubject<HolidaysModel[]> = new BehaviorSubject([]);
 
+  public holidaysToSend: HolidaysModel[];
+
   public fileType = '.csv';
   public buttonText = 'Загрузить файл';
   public fileControl: FormControl;
@@ -70,21 +69,18 @@ export class HolidaysComponent implements OnInit {
     this.fileControl = new FormControl();
 
     this.holidaysService.loadHolidays().subscribe(res => {
-      // this.holidays$.next(res);
+      this.holidays$.next(res.sort((a, b) => Number(a.year) - Number(b.year)));
     });
 
     this.fileControl.valueChanges.subscribe(res => {
       if (res) {
         this.getData(res);
-      } else {
-        this.holidays$.next([]);
       }
     });
   }
 
   public sendToDB() {
-    const testYear = { year: '2919', data: 'data-data' };
-    this.holidaysService.addHolidays(testYear).subscribe();
+    this.holidaysService.addHolidays([this.holidaysToSend[20]]).subscribe();
   }
 
   private getData(data) {
@@ -92,7 +88,8 @@ export class HolidaysComponent implements OnInit {
       header: true,
       skipEmptyLines: true,
       complete: (result, file) => {
-        this.holidays$.next(this.mapper(result, file));
+        this.holidaysToSend = this.mapper(result, file);
+        console.log(this.holidaysToSend);
       }
     });
   }
@@ -104,11 +101,10 @@ export class HolidaysComponent implements OnInit {
     };
   }
 
-
   private mapper(data: ParseResult, file: File): HolidaysModel[] {
-
     return data.data.map(item => {
-      const monthMapped = {
+      return {
+        year: item[HolidaysRawData.yearMonth],
         Jan: item[HolidaysRawData.Jan],
         Feb: item[HolidaysRawData.Feb],
         Mar: item[HolidaysRawData.Mar],
@@ -120,12 +116,7 @@ export class HolidaysComponent implements OnInit {
         Sept: item[HolidaysRawData.Sept],
         Oct: item[HolidaysRawData.Oct],
         Nov: item[HolidaysRawData.Nov],
-        Dec: item[HolidaysRawData.Dec]
-      };
-
-      return {
-        year: item[HolidaysRawData.yearMonth],
-        months: monthMapped,
+        Dec: item[HolidaysRawData.Dec],
         allDays: item[HolidaysRawData.allDays],
         allWork: item[HolidaysRawData.allWork],
         hours24: item[HolidaysRawData.hours24],
@@ -135,4 +126,5 @@ export class HolidaysComponent implements OnInit {
       };
     });
   }
+
 }
