@@ -1,7 +1,7 @@
 import { Injectable, OnApplicationShutdown } from '@nestjs/common';
-import { LoginRequestModel } from 'src/auth/models/login.request.model';
-import { LoginResponseModel } from 'src/auth/models/login.response.model';
 import { Config } from '../../config/config';
+import { LoginModel } from '../models/login.model';
+import { UserModel } from '../models/user.model';
 const ldap = require('ldapjs');
 @Injectable()
 export class LdapService implements OnApplicationShutdown {
@@ -19,7 +19,7 @@ export class LdapService implements OnApplicationShutdown {
     this.client.destroy();
   }
 
-  public async auth(credentials: LoginRequestModel, add?: boolean): Promise<LoginResponseModel> {
+  public async auth(credentials: LoginModel, add?: boolean): Promise<UserModel> {
     this.client = ldap.createClient({
       url: this.config.serverUrl,
       reconnect: true,
@@ -38,11 +38,11 @@ export class LdapService implements OnApplicationShutdown {
 
     this.client.destroy();
 
-    const data: LoginResponseModel = this.mapToSendOnClient(result.attributes);
+    const data: UserModel = this.mapToSendOnClient(result.attributes);
     return data;
   }
 
-  private mapToSendOnClient(attributes: Array<{ type: string; data: string }>): LoginResponseModel {
+  private mapToSendOnClient(attributes: Array<{ type: string; data: string }>): UserModel {
     return {
       username: this.getAttribute(attributes, 'cn'),
       location: this.getAttribute(attributes, 'l'),
@@ -65,11 +65,7 @@ export class LdapService implements OnApplicationShutdown {
   private getAttribute(attributes: Array<{ type: string; data: string }>, val: string) {
     const attr = attributes.find(el => el.type === val);
 
-    if (!attr) {
-      return null;
-    }
-
-    return attr.data;
+    return attr ? attr.data : null;
   }
 
   private getFilter(username: string): Promise<string> {

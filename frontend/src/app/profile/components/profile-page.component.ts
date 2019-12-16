@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import { combineLatest, forkJoin, Observable, Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { DictionaryApiService } from '../../core/services/dictionary-api.service';
 import { EmployeeApiService } from '../../core/services/employee-api.service';
@@ -145,16 +145,13 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   private getUserFromApi() {
     this.searchUserByLoginSub.add(
-      this.employeeApiService
-        .searchUserByLogin(this.login)
-        .pipe(map(users => users[0]))
-        .subscribe((user: Employee) => {
-          this.initForm(user);
-          this.setSelectedUser(user);
-          this.canEdit = false;
-          this.loadTasks(user.mailNickname);
-          this.mailingAddresses = this.sendingMail.filterEmployee(this.selectedUser);
-        })
+      this.employeeApiService.searchUserByLogin(this.login).subscribe((user: Employee) => {
+        this.initForm(user);
+        this.setSelectedUser(user);
+        this.canEdit = false;
+        this.loadTasks(user.mailNickname);
+        this.mailingAddresses = this.sendingMail.filterEmployee(this.selectedUser);
+      })
     );
   }
 
