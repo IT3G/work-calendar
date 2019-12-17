@@ -1,24 +1,30 @@
 <div class="container">
-  <div class="page-title">Производственный календарь</div>
+  <div class="page-title">Производственный календарь: {{(holidays$ | async).length}}</div>
 
-  <div class="file-input-wrapper">
+  <div class="infoblock">
     <app-file-input-reset
       [formControl]="fileControl"
       [fileType]="fileType"
       [buttonText]="buttonText">
     </app-file-input-reset>
-
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="sendToDB()">загрузить в базу
-    </button>
+    <div>
+      <a
+        target="_blank"
+        href="https://data.gov.ru/opendata/resource/8ba5011a-233e-4e01-a1d2-ff5598d0f34f#2/0.0/0.0">Здесь можно скачать
+        актуальную версию:</a>
+      <div>При скачивании выбрать: Последний набор (UFR-8)</div>
+    </div>
   </div>
 
+  <div class="filter"  *ngIf="(holidays$ | async).length > 0">
+    <div (click)="setFilter('')" [ngClass]="{'active' : filterYear === '' }">Все</div>
+    <div *ngFor="let year of (holidays$ | async)"
+         (click)="setFilter(year?.year)" [ngClass]="{'active' : filterYear === year?.year}">{{ year?.year }}</div>
+  </div>
 
   <div *ngIf="(holidays$ | async).length > 0; else emptyTable">
 
-    <div *ngFor="let year of (holidays$ | async); let i = index" class="holidays-wrapper">
+    <div *ngFor="let year of (holidays$ | async) | holidays: filterYear ; let i = index" class="holidays-wrapper">
       <div class="holidays-year">{{year?.year}}</div>
 
       <div class="info">
@@ -64,12 +70,7 @@
       <div>
         Производственный календарь не загружен.
       </div>
-      <a
-        target="_blank"
-        href="https://data.gov.ru/opendata/resource/8ba5011a-233e-4e01-a1d2-ff5598d0f34f#2/0.0/0.0">Здесь можно скачать
-        актуальную версию:</a>
-      <div>При скачивании выбрать: Последний набор (UFR-8)</div>
     </div>
-
   </ng-template>
+
 </div>

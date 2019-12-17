@@ -13,8 +13,13 @@ export class HolidaysService {
     return await this.holidaysModel.find().exec();
   }
 
-  async addHolidays(holidays: HolidaysResponseModel): Promise<HolidaysResponseModel> {
-    const newHolidays = await this.holidaysModel.create(holidays);
+  async deleteAllHolidays(): Promise<HolidaysResponseModel[]> {
+    return this.holidaysModel.find().remove();
+  }
+
+  async addHolidays(holidays: HolidaysResponseModel[]): Promise<HolidaysEntity[]> {
+
+    return this.holidaysModel.insertMany(holidays);
     return newHolidays.save();
   }
 }

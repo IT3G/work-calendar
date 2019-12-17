@@ -4,8 +4,9 @@ import * as Papa from 'papaparse';
 import { ParseResult } from 'papaparse';
 import { FormControl } from '@angular/forms';
 import { HolidaysApiService } from '../../../core/services/holidays-api.service';
+import { combineLatest, switchMap } from 'rxjs/operators';
 
-interface HolidaysModel {
+export interface HolidaysModel {
   year: string;
   Jan: string;
   Feb: string;
@@ -55,41 +56,40 @@ export enum HolidaysRawData {
 })
 export class HolidaysComponent implements OnInit {
   public holidays$: BehaviorSubject<HolidaysModel[]> = new BehaviorSubject([]);
-
-  public holidaysToSend: HolidaysModel[];
+  public filterYear: string;
 
   public fileType = '.csv';
   public buttonText = 'Загрузить файл';
   public fileControl: FormControl;
+  public filterControl: FormControl;
 
   constructor(private holidaysService: HolidaysApiService) {
   }
 
   ngOnInit() {
     this.fileControl = new FormControl();
+    this.filterControl = new FormControl();
+    this.filterYear = '';
 
-    this.holidaysService.loadHolidays().subscribe(res => {
-      this.holidays$.next(res.sort((a, b) => Number(a.year) - Number(b.year)));
-    });
+    this.holidaysService.getAllHolidays()
+      .subscribe(res => {
+        this.holidays$
+          .next(res.sort((a, b) => {
+            return Number(a.year) - Number(b.year);
+          }));
+      });
 
     this.fileControl.valueChanges.subscribe(res => {
       if (res) {
-        this.getData(res);
-      }
-    });
-  }
-
-  public sendToDB() {
-    this.holidaysService.addHolidays([this.holidaysToSend[20]]).subscribe();
-  }
-
-  private getData(data) {
-    Papa.parse(data, {
-      header: true,
-      skipEmptyLines: true,
-      complete: (result, file) => {
-        this.holidaysToSend = this.mapper(result, file);
-        console.log(this.holidaysToSend);
+        Papa.parse(res, {
+          header: true,
+          skipEmptyLines: true,
+          complete: (result, file) => {
+            this.holidaysService.deleteHolidays().subscribe();
+            this.holidaysService.addHolidays(this.mapper(result, file)).subscribe();
+            this.holidays$.next(this.mapper(result, file));
+          }
+        });
       }
     });
   }
@@ -99,6 +99,10 @@ export class HolidaysComponent implements OnInit {
       year,
       month
     };
+  }
+
+  public setFilter(year: string) {
+    this.filterYear = year;
   }
 
   private mapper(data: ParseResult, file: File): HolidaysModel[] {
@@ -126,5 +130,4 @@ export class HolidaysComponent implements OnInit {
       };
     });
   }
-
 }

@@ -1,7 +1,10 @@
 import { Schema } from 'mongoose';
 
 export const HolidaysSchema = new Schema({
-    year: String,
+    year: {
+        type: String,
+        default: 'NoName',
+    },
     Jan: String,
     Feb: String,
     Mar: String,

@@ -10,8 +10,12 @@ import { HolidaysSendModel } from '../../shared/models/holidays.model';
 export class HolidaysApiService {
   constructor(private http: HttpClient) {
   }
-  public loadHolidays(): Observable<HolidaysSendModel[]> {
+  public getAllHolidays(): Observable<HolidaysSendModel[]> {
     return this.http.get<HolidaysSendModel[]>(`${environment.baseUrl}/holidays`);
+  }
+
+  public deleteHolidays(): Observable<HolidaysSendModel[]> {
+    return this.http.delete<HolidaysSendModel[]>(`${environment.baseUrl}/holidays`);
   }
 
   public addHolidays(holidays: HolidaysSendModel[]): Observable<HolidaysSendModel[]> {
