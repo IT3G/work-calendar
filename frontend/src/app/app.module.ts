@@ -12,6 +12,7 @@ import * as moment from 'moment';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
+import { AuthInterceptorProvider } from './core/interceptors/auth.interceptor';
 import { AuthApiService } from './core/services/auth-api.service';
 import { CustomDateAdapter } from './core/services/custom-date-adapter.service';
 import { LoginModule } from './login/login.module';
@@ -54,6 +55,7 @@ export function onInit(appLoadService: AppLoadService) {
     { provide: LOCALE_ID, useValue: 'ru-RU' },
     AuthApiService,
     AppLoadService,
+    AuthInterceptorProvider,
     { provide: APP_INITIALIZER, useFactory: onInit, deps: [AppLoadService], multi: true },
     { provide: DateAdapter, useClass: CustomDateAdapter }
   ],

@@ -20,7 +20,7 @@ export class AuthMiddleware implements NestMiddleware {
     }
 
     try {
-      this.authService.verifyAndGetUser(cookies[this.config.JWT_COOKIE_NAME]);
+      await this.authService.verifyAndGetUser(cookies[this.config.JWT_COOKIE_NAME]);
     } catch (e) {
       throw new UnauthorizedException();
     }
