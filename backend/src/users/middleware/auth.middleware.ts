@@ -15,12 +15,12 @@ export class AuthMiddleware implements NestMiddleware {
 
     const cookies = req.signedCookies;
 
-    if (!cookies || !cookies[this.config.JWT_COOKIE_NAME]) {
+    if (!cookies) {
       throw new UnauthorizedException();
     }
 
     try {
-      this.authService.verifyUser(cookies[this.config.JWT_COOKIE_NAME]);
+      this.authService.verifyAndGetUser(cookies[this.config.JWT_COOKIE_NAME]);
     } catch (e) {
       throw new UnauthorizedException();
     }

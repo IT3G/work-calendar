@@ -14,7 +14,6 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { AuthApiService } from './core/services/auth-api.service';
 import { CustomDateAdapter } from './core/services/custom-date-adapter.service';
-import { AuthApiInBackendService } from './core/services/impl/backend/auth-api-in-backend.service';
 import { LoginModule } from './login/login.module';
 import { PresenseModule } from './presense/presense.module';
 import { ProfileModule } from './profile/profile.module';
@@ -53,9 +52,9 @@ export function onInit(appLoadService: AppLoadService) {
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'ru-RU' },
     { provide: LOCALE_ID, useValue: 'ru-RU' },
+    AuthApiService,
     AppLoadService,
     { provide: APP_INITIALIZER, useFactory: onInit, deps: [AppLoadService], multi: true },
-    { provide: AuthApiService, useClass: AuthApiInBackendService },
     { provide: DateAdapter, useClass: CustomDateAdapter }
   ],
   bootstrap: [AppComponent]

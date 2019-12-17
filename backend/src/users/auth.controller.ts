@@ -1,6 +1,6 @@
-import { Body, Controller, Get, HttpStatus, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post, Req, Res } from '@nestjs/common';
 import { ApiUseTags } from '@nestjs/swagger';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { Config } from '../config/config';
 import { UsersService } from '../users/services/users.service';
 import { LoginModel } from './models/login.model';
@@ -30,6 +30,16 @@ export class AuthController {
         .send(user);
     } catch (e) {
       res.status(HttpStatus.NOT_ACCEPTABLE).send('e');
+    }
+  }
+
+  @Get('/current')
+  async getCurrentUser(@Req() req: Request, @Res() res: Response) {
+    try {
+      const user = await this.authService.verifyAndGetUser(req.signedCookies[this.config.JWT_COOKIE_NAME]);
+      res.status(HttpStatus.OK).send(user);
+    } catch (e) {
+      res.status(HttpStatus.NOT_ACCEPTABLE).send('user not found');
     }
   }
 

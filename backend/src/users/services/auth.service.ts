@@ -67,10 +67,13 @@ export class AuthService {
     return this.jwtService.sign(sign);
   }
 
-  async verifyUser(jwt: string): Promise<boolean> {
+  async verifyAndGetUser(jwt: string): Promise<UserEntity> {
+    if (!jwt) {
+      return Promise.reject('JWT not found');
+    }
+
     const res: JwtSignModel = this.jwtService.verify(jwt);
     const user = await this.usersService.getUserByLogin(res.mailNickname);
-
-    return !!user;
+    return user;
   }
 }
