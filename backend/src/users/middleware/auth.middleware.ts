@@ -1,25 +1,26 @@
 import { Injectable, NestMiddleware, UnauthorizedException } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { Config } from '../../config/config';
 import { AuthService } from '../services/auth.service';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private config: Config) {}
 
   async use(req: Request, res: Response, next: Function) {
-    if (req.originalUrl === '/auth') {
+    if (req.originalUrl === this.config.AUTH_URL) {
       next();
       return;
     }
 
     const cookies = req.signedCookies;
 
-    if (!cookies || !cookies.JWT) {
+    if (!cookies || !cookies[this.config.JWT_COOKIE_NAME]) {
       throw new UnauthorizedException();
     }
 
     try {
-      this.authService.verifyUser(cookies.JWT);
+      this.authService.verifyUser(cookies[this.config.JWT_COOKIE_NAME]);
     } catch (e) {
       throw new UnauthorizedException();
     }

@@ -22,6 +22,8 @@ export class Config {
   JWT_SECRET_KEY: string;
   JWT_EXPIRES: string;
   JWT_ONLY_HTTPS: 'NO' | 'YES';
+  JWT_COOKIE_NAME: string;
+  AUTH_URL: 'string';
 }
 
 let config;

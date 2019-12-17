@@ -1,4 +1,4 @@
-import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post, Res } from '@nestjs/common';
 import { ApiUseTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { Config } from '../config/config';
@@ -22,7 +22,7 @@ export class AuthController {
       const user = await this.authService.auth(credentials);
       res
         .status(HttpStatus.OK)
-        .cookie('JWT', this.authService.getJWTbyUser(user), {
+        .cookie(this.config.JWT_COOKIE_NAME, this.authService.getJWTbyUser(user), {
           httpOnly: true,
           signed: true,
           secure: this.config.JWT_ONLY_HTTPS === 'YES',
@@ -31,6 +31,14 @@ export class AuthController {
     } catch (e) {
       res.status(HttpStatus.NOT_ACCEPTABLE).send('e');
     }
+  }
+
+  @Get('/logout')
+  async logout(@Res() res: Response) {
+    res
+      .clearCookie(this.config.JWT_COOKIE_NAME)
+      .status(HttpStatus.CREATED)
+      .send();
   }
 
   @Post('/add')
