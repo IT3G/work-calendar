@@ -52,6 +52,8 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     this.employees$ = this.employeeStoreService.getEmployees();
     this.tasks$ = this.tasksStoreService.getTasks();
     this.monthDays$ = this.getMonthDays();
+    this.tasksStoreService.update();
+    this.employeeStoreService.update();
     this.updateTaskData();
     this.updateQueryParamsOnChange();
     this.projects$ = this.dictionaryApi.getAll('project');
