@@ -4,17 +4,19 @@ import { Router } from '@angular/router';
 import { UNAUTHORIZED } from 'http-status-codes';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { ContextStoreService } from '../store/context-store.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private context: ContextStoreService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
       catchError((err: HttpErrorResponse) => {
         if (err && err.status === UNAUTHORIZED) {
+          this.context.setCurrentUser(null);
           this.router.navigateByUrl('/login');
         }
 

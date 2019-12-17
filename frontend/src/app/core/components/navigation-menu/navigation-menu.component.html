@@ -5,6 +5,7 @@
     routerLinkActive="active">Мое присутствие
   </a>
   <a class="nav-item"
+    *ngIf="(isAuth$ | async)"
     routerLink="/team-presence"
     routerLinkActive="active">Команда
   </a>
