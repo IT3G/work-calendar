@@ -1,6 +1,7 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { DictionaryModel } from '../../dictionary/models/dictionary.model';
-export class LoginResponseModel {
+
+export class UserModel {
   @ApiModelProperty()
   username: string;
   @ApiModelProperty()

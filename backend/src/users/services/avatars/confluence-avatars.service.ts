@@ -1,7 +1,7 @@
 import { HttpService, Injectable } from '@nestjs/common';
 import { AxiosResponse } from 'axios';
 import { switchMap } from 'rxjs/operators';
-import { Config } from '../config/config';
+import { Config } from '../../../config/config';
 import { AvatarsService } from './avatars.service';
 
 @Injectable()
