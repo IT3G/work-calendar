@@ -14,24 +14,30 @@ export class UsersController {
     return res.status(HttpStatus.OK).json(posts);
   }
 
-  @Get('/login/:login')
-  async getUserByLogin(@Res() res, @Param('login') login) {
-    const user = await this.userService.getUserByLogin(login);
-    if (!user) { throw new NotFoundException('User does not exist!'); }
+  @Get(':id')
+  async getUserById(@Res() res, @Param('id') id) {
+    const user = await this.userService.getUserById(id);
+    if (!user) {
+      throw new NotFoundException('User does not exist!');
+    }
     return res.status(HttpStatus.OK).json(user);
   }
 
-  @Get('/id/:id')
-  async getUserById(@Res() res, @Param('id') id) {
-    const user = await this.userService.getUserById(id);
-    if (!user) { throw new NotFoundException('User does not exist!'); }
+  @Get('/login/:login')
+  async getUserByLogin(@Res() res, @Param('login') login) {
+    const user = await this.userService.getUserByLogin(login);
+    if (!user) {
+      throw new NotFoundException('User does not exist!');
+    }
     return res.status(HttpStatus.OK).json(user);
   }
 
   @Post('/login/:login')
   async editUserByLogin(@Res() res, @Param('login') login, @Body() data: UserModel) {
     const editedUser = await this.userService.updateUserByLogin(login, data);
-    if (!editedUser) { throw new NotFoundException('User does not exist!'); }
+    if (!editedUser) {
+      throw new NotFoundException('User does not exist!');
+    }
     return res.status(HttpStatus.OK).json(editedUser);
   }
 }

@@ -49,11 +49,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.configurationApi.loadSettings().subscribe(res => this.contextStoreService.settings$.next(res))
     );
-    this.userSession = JSON.parse(localStorage.getItem('userSession'));
-    if (this.userSession) {
-      this.getCurrentUser(this.userSession);
-      this.subscription.add(this.contextStoreService.updater().subscribe(() => this.getCurrentUser(this.userSession)));
-    }
   }
 
   private getTasks(): void {
@@ -69,14 +64,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.employeeApiService.loadAllEmployees().subscribe((key: Employee[]) => {
         this.employeeStoreService.addEmployees(key);
-      })
-    );
-  }
-
-  private getCurrentUser(id: string): void {
-    this.subscription.add(
-      this.employeeApiService.searchUserById(id).subscribe((key: Employee) => {
-        this.contextStoreService.setCurrentUser(key);
       })
     );
   }

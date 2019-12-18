@@ -1,13 +1,31 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 import { AuthRequestModel } from '../../shared/models/auth.request.model';
 import { Employee } from '../../shared/models/employee.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export abstract class AuthApiService {
-  constructor() {}
+export class AuthApiService {
+  private readonly url = `${environment.baseUrl}/auth`;
 
-  public abstract login(req: AuthRequestModel): Observable<Employee>;
+  constructor(private http: HttpClient) {}
+
+  public login(req: AuthRequestModel): Observable<Employee> {
+    return this.http.post<Employee>(this.url, req);
+  }
+
+  public logout(): Observable<Employee> {
+    return this.http.get<Employee>(`${this.url}/logout`);
+  }
+
+  public getCurrentUser(): Observable<Employee> {
+    return this.http.get<Employee>(`${this.url}/current`);
+  }
+
+  public registration(req: AuthRequestModel): Observable<any> {
+    return this.http.post<Employee>(`${this.url}/registration`, req);
+  }
 }
