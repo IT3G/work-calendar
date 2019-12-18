@@ -5,7 +5,6 @@ import { ProjectSchema } from './schemas/project.schemas';
 import { SubdivisionSchema } from './schemas/subdivision.schemas';
 import { TaskSchema } from './schemas/task.schemas';
 import { UserSchema } from './schemas/user.schemas';
-import { HolidaysSchema } from './schemas/holidays.schemas';
 
 const mongoModule = MongooseModule.forFeature([
   { name: 'Users', schema: UserSchema },
@@ -13,7 +12,6 @@ const mongoModule = MongooseModule.forFeature([
   { name: 'Project', schema: ProjectSchema },
   { name: 'Tasks', schema: TaskSchema },
   { name: 'Subdivision', schema: SubdivisionSchema },
-  { name: 'Holidays', schema: HolidaysSchema },
 ]);
 
 @Module({

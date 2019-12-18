@@ -5,6 +5,7 @@
     routerLinkActive="active">Мое присутствие
   </a>
   <a class="nav-item"
+    *ngIf="(isAuth$ | async)"
     routerLink="/team-presence"
     routerLinkActive="active">Команда
   </a>
@@ -28,13 +29,8 @@
     </a>
     <a mat-menu-item
       class="nav-item"
-      routerLink="/admin/projects"
-      routerLinkActive="active">Проекты
-    </a>
-    <a mat-menu-item
-      class="nav-item"
-      routerLink="/admin/job-position"
-      routerLinkActive="active">Должности
+      routerLink="/admin/dictionary"
+      routerLinkActive="active">Справочники
     </a>
     <a mat-menu-item
       class="nav-item"

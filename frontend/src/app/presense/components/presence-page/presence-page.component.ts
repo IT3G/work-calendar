@@ -42,9 +42,9 @@ export class PresencePageComponent implements OnInit, OnDestroy {
 
   private checkRoute(): void {
     if (this.route.snapshot.params.id) {
-      this.employeeApiService.searchUserByLogin(this.route.snapshot.params.id).subscribe((res: Employee[]) => {
-        this.selectedUser = res[0];
-        this.tasks$ = this.searchTasksByUserNickname(res[0].mailNickname);
+      this.employeeApiService.searchUserByLogin(this.route.snapshot.params.id).subscribe((res: Employee) => {
+        this.selectedUser = res;
+        this.tasks$ = this.searchTasksByUserNickname(res.mailNickname);
       });
     } else {
       this.getCurrentUserSub.add(

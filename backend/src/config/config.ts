@@ -13,16 +13,22 @@ export class Config {
   READER_PASSWORD: string;
   LDAP_SERVER_URL: string;
   LDAP_SUFFIX: string;
-  FEATURE_AVATAR_SOURCE: string;
-  FEATURE_AUTH_TYPE: string;
+  FEATURE_AVATAR_SOURCE: 'NO' | 'CONFLUENCE';
+  FEATURE_AUTH_TYPE: 'PASSWORD' | 'LDAP';
   CONFLUENCE_BASE_URL: string;
   CONFLUENCE_LOGIN: string;
   CONFLUENCE_PASSWORD: string;
+  FEATURE_SEND_MAIL: 'NO' | 'YES';
+  JWT_SECRET_KEY: string;
+  JWT_EXPIRES: string;
+  JWT_ONLY_HTTPS: 'NO' | 'YES';
+  JWT_COOKIE_NAME: string;
+  UNAUTH_URLS: 'string';
 }
 
 let config;
 
-export function getConfig() {
+export function getConfig(): Config {
   const configPath = `./environments/${process.env.NODE_ENV || 'dev'}.env`;
   if (!config) {
     config = dotenv.parse(fs.readFileSync(configPath));

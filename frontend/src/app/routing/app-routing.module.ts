@@ -15,11 +15,11 @@ const routes: Routes = [
   { path: 'profile/:id', component: ProfilePageComponent, canActivate: [AuthGuard] },
   { path: 'presence', component: PresencePageComponent, canActivate: [AuthGuard] },
   { path: 'presence/:id', component: PresencePageComponent, canActivate: [AuthGuard] },
-  { path: 'team-presence', component: TeamPresencePageComponent },
+  { path: 'team-presence', component: TeamPresencePageComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginPageComponent },
   { path: 'registration', component: RegistrationComponent },
   { path: 'admin', loadChildren: '../admin/admin.module#AdminModule', canActivate: [AuthGuard, IsAdminGuardService] },
-  { path: '', redirectTo: 'team-presence', pathMatch: 'full' }
+  { path: '', redirectTo: 'login', pathMatch: 'full' }
 ];
 
 @NgModule({

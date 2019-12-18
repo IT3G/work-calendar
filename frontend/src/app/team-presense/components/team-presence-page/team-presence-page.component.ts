@@ -14,8 +14,6 @@ import { DictionaryModel } from '../../../shared/models/dictionary.model';
 import { Employee } from '../../../shared/models/employee.model';
 import { PresenceModel } from '../../../shared/models/presence.page.model';
 import { TaskModel } from '../../../shared/models/tasks.models';
-import { HolidaysApiService } from '../../../core/services/holidays-api.service';
-import { HolidaysSendModel } from '../../../shared/models/holidays.model';
 
 @Component({
   selector: 'app-team-presence',
@@ -25,7 +23,6 @@ import { HolidaysSendModel } from '../../../shared/models/holidays.model';
 export class TeamPresencePageComponent implements OnInit, OnDestroy {
   public monthData$: Observable<PresenceModel[]>;
   public monthDays$: Observable<Moment[]>;
-  public holidays$: Observable<HolidaysSendModel[]>;
   public dayType = DayType;
   private qParamsSnpshotMonth = this.route.snapshot.queryParams.date;
   public date$ = new BehaviorSubject<Moment>(
@@ -47,16 +44,16 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
-    private dictionaryApi: DictionaryApiService,
-    private holidaysService: HolidaysApiService
+    private dictionaryApi: DictionaryApiService
   ) {}
 
   ngOnInit() {
     this.initFilterForm(this.route.snapshot.queryParams);
     this.employees$ = this.employeeStoreService.getEmployees();
-    this.holidays$ = this.holidaysService.getAllHolidays();
     this.tasks$ = this.tasksStoreService.getTasks();
     this.monthDays$ = this.getMonthDays();
+    this.tasksStoreService.update();
+    this.employeeStoreService.update();
     this.updateTaskData();
     this.updateQueryParamsOnChange();
     this.projects$ = this.dictionaryApi.getAll('project');

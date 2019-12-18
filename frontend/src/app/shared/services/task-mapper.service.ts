@@ -11,26 +11,26 @@ import { TaskModel } from '../../shared/models/tasks.models';
 export class TaskMapperService {
   constructor() {}
 
-  public mapToTaskModel(task: TaskModel[]): TaskModel[] {
-    const result = task.map(i => {
+  public mapToTaskModel(tasks: TaskModel[]): TaskModel[] {
+    const result = tasks.map(task => {
       return {
-        ...i,
-        dateStart: moment(i.dateStart),
-        dateEnd: moment(i.dateEnd),
-        dtCreated: moment(i.dtCreated),
-        type: DayType[i.type]
+        ...task,
+        dateStart: moment(task.dateStart, 'YYYY-MM-DD'),
+        dateEnd: moment(task.dateEnd, 'YYYY-MM-DD'),
+        dtCreated: moment(task.dtCreated),
+        type: DayType[task.type]
       };
     });
 
     const bar = [];
-    result.forEach(item => {
-      if (item.dateStart !== item.dateEnd) {
-        const lastDay = moment(item.dateEnd);
-        let nextDate = moment(item.dateStart);
+    result.forEach(task => {
+      if (task.dateStart !== task.dateEnd) {
+        const lastDay = moment(task.dateEnd);
+        let nextDate = moment(task.dateStart);
 
         while (nextDate.isSameOrBefore(lastDay)) {
           bar.push({
-            ...item,
+            ...task,
             dateStart: nextDate
           });
           nextDate = nextDate.clone().add(1, 'd');
@@ -38,18 +38,18 @@ export class TaskMapperService {
         return;
       }
 
-      bar.push(item);
+      bar.push(task);
     });
 
-    const sorted = _.orderBy(bar, ['dtCreated'], ['desc']);
-    return sorted;
+    const sortedResult = _.orderBy(bar, ['dtCreated'], ['desc']);
+    return sortedResult;
   }
 
   public mapToSendingModel(task: TaskModel): SendingTaskModel {
     return {
       type: DayType[task.type],
-      dateStart: task.dateStart.toISOString(),
-      dateEnd: task.dateEnd.toISOString(),
+      dateStart: task.dateStart.format('YYYY-MM-DD'),
+      dateEnd: task.dateEnd.format('YYYY-MM-DD'),
       employee: task.employee,
       comment: task.comment,
       dtCreated: task.dtCreated.toISOString(),
