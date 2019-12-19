@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { AuthApiService } from '../../services/auth-api.service';
 import { ContextStoreService } from '../../store/context-store.service';
 
 @Component({
@@ -13,7 +14,11 @@ export class NavigationMenuComponent implements OnInit {
   public isAuth$: Observable<boolean>;
   public isAdmin$: Observable<boolean>;
 
-  constructor(private contextStoreService: ContextStoreService, private router: Router) {}
+  constructor(
+    private contextStoreService: ContextStoreService,
+    private router: Router,
+    private authApi: AuthApiService
+  ) {}
 
   ngOnInit() {
     this.isAuth$ = this.contextStoreService.getCurrentUser$().pipe(map(user => !!user));
@@ -25,8 +30,10 @@ export class NavigationMenuComponent implements OnInit {
   }
 
   public logout(): void {
-    localStorage.removeItem('userSession');
-    this.contextStoreService.setCurrentUser(null);
-    this.router.navigate(['team-presence']);
+    this.authApi.logout().subscribe(() => {
+      localStorage.removeItem('userSession');
+      this.contextStoreService.setCurrentUser(null);
+      this.router.navigate(['login']);
+    });
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthApiInBackendService } from '../../core/services/impl/backend/auth-api-in-backend.service';
+import { AuthApiService } from '../../core/services/auth-api.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 
 @Component({
@@ -10,8 +10,8 @@ import { SnackbarService } from '../../shared/services/snackbar.service';
 })
 export class RegistrationComponent implements OnInit {
   public registrationForm: FormGroup;
-  public successRegistration: boolean = false;
-  constructor(private authService: AuthApiInBackendService, private snackbar: SnackbarService) {}
+  public successRegistration = false;
+  constructor(private authService: AuthApiService, private snackbar: SnackbarService) {}
 
   ngOnInit() {
     this.initForm();

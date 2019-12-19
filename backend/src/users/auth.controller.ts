@@ -1,58 +1,69 @@
-import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post, Req, Res } from '@nestjs/common';
 import { ApiUseTags } from '@nestjs/swagger';
-import * as crypto from 'crypto';
+import { Request, Response } from 'express';
 import { Config } from '../config/config';
 import { UsersService } from '../users/services/users.service';
 import { LoginModel } from './models/login.model';
+import { AuthService } from './services/auth.service';
 import { LdapService } from './services/ldap.service';
 
 @ApiUseTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(
-    private readonly ldapService: LdapService,
-    private readonly usersService: UsersService,
+    private ldapService: LdapService,
+    private usersService: UsersService,
+    private authService: AuthService,
     private config: Config,
   ) {}
   @Post()
-  async auth(@Res() res, @Body() credentials: LoginModel) {
-    const result = await this.usersService.getUserByLogin(credentials.username);
-
-    /**pswd auth type */
-    if (this.config.FEATURE_AUTH_TYPE !== 'LDAP') {
-      if (result && result.hashPswd === crypto.createHmac('sha256', credentials.password).digest('hex')) {
-        res.status(HttpStatus.OK).send(result);
-      } else {
-        res.status(HttpStatus.NOT_ACCEPTABLE).send('USER NOT FOUND');
-      }
-
-      return;
-    }
-
+  async auth(@Res() res: Response, @Body() credentials: LoginModel) {
     try {
-      const ldapResult = await this.ldapService.auth(credentials);
-      if (result) {
-        res.status(HttpStatus.OK).send(result);
-      } else {
-        const newUser = await this.usersService.addUser(ldapResult);
-        res.status(HttpStatus.OK).send(newUser);
-      }
+      const user = await this.authService.auth(credentials);
+      res
+        .status(HttpStatus.OK)
+        .cookie(this.config.JWT_COOKIE_NAME, this.authService.getJWTbyUser(user), {
+          httpOnly: true,
+          signed: true,
+          secure: this.config.JWT_ONLY_HTTPS === 'YES',
+        })
+        .send(user);
     } catch (e) {
-      res.status(HttpStatus.NOT_ACCEPTABLE).send('USER NOT FOUND');
+      res.status(HttpStatus.NOT_ACCEPTABLE).send('e');
     }
+  }
+
+  @Get('/current')
+  async getCurrentUser(@Req() req: Request, @Res() res: Response) {
+    try {
+      const user = await this.authService.verifyAndGetUser(req.signedCookies[this.config.JWT_COOKIE_NAME]);
+      res.status(HttpStatus.OK).send(user);
+    } catch (e) {
+      res.status(HttpStatus.NOT_ACCEPTABLE).send('user not found');
+    }
+  }
+
+  @Get('/logout')
+  async logout(@Res() res: Response) {
+    res
+      .clearCookie(this.config.JWT_COOKIE_NAME)
+      .status(HttpStatus.CREATED)
+      .send();
   }
 
   @Post('/add')
   async authAndAdd(@Res() res, @Body() credentials: LoginModel) {
     try {
       const ldapResult = await this.ldapService.auth(credentials, true);
-      const result = await this.usersService.getUserByLogin(ldapResult.mailNickname);
-      if (result) {
+      const user = await this.usersService.getUserByLogin(ldapResult.mailNickname);
+
+      if (user) {
         res.status(HttpStatus.NOT_ACCEPTABLE).send('USER ALREADY EXIST');
-      } else {
-        const newUser = await this.usersService.addUser(ldapResult);
-        res.status(HttpStatus.OK).send(newUser);
+        return;
       }
+
+      const newUser = await this.usersService.addUser(ldapResult);
+      res.status(HttpStatus.OK).send(newUser);
     } catch (e) {
       res.status(HttpStatus.NOT_ACCEPTABLE).send('USER NOT FOUND');
     }
@@ -61,11 +72,13 @@ export class AuthController {
   @Post('/registration')
   async registration(@Res() res, @Body() credentials: LoginModel) {
     try {
-      const result = await this.usersService.getUserByLogin(credentials.username);
-      if (result) {
+      const user = await this.usersService.getUserByLogin(credentials.username);
+
+      if (user) {
         res.status(HttpStatus.NOT_ACCEPTABLE).send('USER ALREADY EXIST');
         return;
       }
+
       const newUser = await this.usersService.registration(credentials);
       res.status(HttpStatus.OK).send(newUser);
     } catch (e) {
