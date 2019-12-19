@@ -20,14 +20,8 @@ export class AuthController {
   async auth(@Res() res: Response, @Body() credentials: LoginModel) {
     try {
       const user = await this.authService.auth(credentials);
-      res
-        .status(HttpStatus.OK)
-        .cookie(this.config.JWT_COOKIE_NAME, this.authService.getJWTbyUser(user), {
-          httpOnly: true,
-          signed: true,
-          secure: this.config.JWT_ONLY_HTTPS === 'YES',
-        })
-        .send(user);
+      user.hashPswd = `Bearer ${this.authService.getJWTbyUser(user)}`;
+      res.status(HttpStatus.OK).send(user);
     } catch (e) {
       res.status(HttpStatus.NOT_ACCEPTABLE).send('e');
     }
@@ -36,19 +30,14 @@ export class AuthController {
   @Get('/current')
   async getCurrentUser(@Req() req: Request, @Res() res: Response) {
     try {
-      const user = await this.authService.verifyAndGetUser(req.signedCookies[this.config.JWT_COOKIE_NAME]);
+      const authHeader = req.header('Authorization');
+      const [bearer, jwt] = authHeader.split(' ');
+
+      const user = await this.authService.verifyAndGetUser(jwt);
       res.status(HttpStatus.OK).send(user);
     } catch (e) {
       res.status(HttpStatus.NOT_ACCEPTABLE).send('user not found');
     }
-  }
-
-  @Get('/logout')
-  async logout(@Res() res: Response) {
-    res
-      .clearCookie(this.config.JWT_COOKIE_NAME)
-      .status(HttpStatus.CREATED)
-      .send();
   }
 
   @Post('/add')

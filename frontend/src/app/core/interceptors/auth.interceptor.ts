@@ -13,6 +13,16 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private router: Router, private context: ContextStoreService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    const jwt = localStorage.getItem('Authorization');
+
+    if (jwt) {
+      request = request.clone({
+        setHeaders: {
+          Authorization: jwt
+        }
+      });
+    }
+
     return next.handle(request).pipe(
       catchError((err: HttpErrorResponse) => {
         if (err && err.status === UNAUTHORIZED) {
