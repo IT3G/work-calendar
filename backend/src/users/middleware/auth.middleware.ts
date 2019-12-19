@@ -10,19 +10,16 @@ export class AuthMiddleware implements NestMiddleware {
   async use(req: Request, res: Response, next: Function) {
     const urls = JSON.parse(this.config.UNAUTH_URLS);
 
-    if (urls.includes(req.originalUrl)) {
+    if (urls.includes(req.baseUrl)) {
       next();
       return;
     }
 
-    const cookies = req.signedCookies;
-
-    if (!cookies) {
-      throw new UnauthorizedException();
-    }
-
     try {
-      await this.authService.verifyAndGetUser(cookies[this.config.JWT_COOKIE_NAME]);
+      const authHeader = req.header('Authorization');
+      const [bearer, jwt] = authHeader.split(' ');
+
+      await this.authService.verifyAndGetUser(jwt);
     } catch (e) {
       throw new UnauthorizedException();
     }

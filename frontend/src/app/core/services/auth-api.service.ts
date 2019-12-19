@@ -17,10 +17,6 @@ export class AuthApiService {
     return this.http.post<Employee>(this.url, req);
   }
 
-  public logout(): Observable<Employee> {
-    return this.http.get<Employee>(`${this.url}/logout`);
-  }
-
   public getCurrentUser(): Observable<Employee> {
     return this.http.get<Employee>(`${this.url}/current`);
   }

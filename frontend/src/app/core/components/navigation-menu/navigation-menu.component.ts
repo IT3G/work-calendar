@@ -30,10 +30,8 @@ export class NavigationMenuComponent implements OnInit {
   }
 
   public logout(): void {
-    this.authApi.logout().subscribe(() => {
-      localStorage.removeItem('userSession');
-      this.contextStoreService.setCurrentUser(null);
-      this.router.navigate(['login']);
-    });
+    localStorage.removeItem('Authorization');
+    this.contextStoreService.setCurrentUser(null);
+    this.router.navigate(['login']);
   }
 }
