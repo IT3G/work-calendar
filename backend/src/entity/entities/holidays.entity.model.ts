@@ -1,6 +1,10 @@
 import { Document } from 'mongoose';
 
 export interface HolidaysEntity extends Document {
+  data: HolidaysYearEntity[];
+}
+
+interface HolidaysYearEntity extends Document {
   year: string;
   Jan: string;
   Feb: string;

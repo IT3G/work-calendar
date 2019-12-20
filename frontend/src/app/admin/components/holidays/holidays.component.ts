@@ -4,50 +4,8 @@ import * as Papa from 'papaparse';
 import { ParseResult } from 'papaparse';
 import { FormControl } from '@angular/forms';
 import { HolidaysApiService } from '../../../core/services/holidays-api.service';
-import { combineLatest, switchMap } from 'rxjs/operators';
+import { HolidaysModel, HolidaysRawData, HolidaysYearModel } from '../../../shared/models/holidays.model';
 
-export interface HolidaysModel {
-  year: string;
-  Jan: string;
-  Feb: string;
-  Mar: string;
-  Apr: string;
-  May: string;
-  June: string;
-  July: string;
-  Aug: string;
-  Sept: string;
-  Oct: string;
-  Nov: string;
-  Dec: string;
-  allDays: string;
-  allWork: string;
-  hours24: string;
-  hours36: string;
-  hours40: string;
-  fileName: string;
-}
-
-export enum HolidaysRawData {
-  Jan = 'Январь',
-  Feb = 'Февраль',
-  Mar = 'Март',
-  Apr = 'Апрель',
-  May = 'Май',
-  June = 'Июнь',
-  July = 'Июль',
-  Aug = 'Август',
-  Sept = 'Сентябрь',
-  Oct = 'Октябрь',
-  Nov = 'Ноябрь',
-  Dec = 'Декабрь',
-  allDays = 'Всего праздничных и выходных дней',
-  allWork = 'Всего рабочих дней',
-  yearMonth = 'Год/Месяц',
-  hours24 = 'Количество рабочих часов при 24-часовой рабочей неделе',
-  hours36 = 'Количество рабочих часов при 36-часовой рабочей неделе',
-  hours40 = 'Количество рабочих часов при 40-часовой рабочей неделе',
-}
 
 @Component({
   selector: 'app-holidays',
@@ -55,7 +13,7 @@ export enum HolidaysRawData {
   styleUrls: ['./holidays.component.scss']
 })
 export class HolidaysComponent implements OnInit {
-  public holidays$: BehaviorSubject<HolidaysModel[]> = new BehaviorSubject([]);
+  public holidays$: BehaviorSubject<HolidaysModel> = new BehaviorSubject({data: []});
   public filterYear: string;
 
   public fileType = '.csv';
@@ -63,21 +21,26 @@ export class HolidaysComponent implements OnInit {
   public fileControl: FormControl;
   public filterControl: FormControl;
 
+  public isLoading: Boolean = true;
+
   constructor(private holidaysService: HolidaysApiService) {
   }
 
   ngOnInit() {
     this.fileControl = new FormControl();
     this.filterControl = new FormControl();
-    this.filterYear = '';
+    this.filterYear = new Date().getFullYear().toString();
 
     this.holidaysService.getAllHolidays()
       .subscribe(res => {
-        this.holidays$
-          .next(res.sort((a, b) => {
-            return Number(a.year) - Number(b.year);
-          }));
-      });
+        if (res.data && res.data.length > 0) {
+          // const result = res.data.sort((a, b) => {
+          //   return Number(a.year) - Number(b.year);
+          // });
+          this.holidays$.next(res);
+        }
+
+      }).add(() => this.isLoading = false);
 
     this.fileControl.valueChanges.subscribe(res => {
       if (res) {
@@ -85,9 +48,11 @@ export class HolidaysComponent implements OnInit {
           header: true,
           skipEmptyLines: true,
           complete: (result, file) => {
-            this.holidaysService.deleteHolidays().subscribe();
-            this.holidaysService.addHolidays(this.mapper(result, file)).subscribe();
-            this.holidays$.next(this.mapper(result, file));
+
+            const _id = this.holidays$.value._id;
+
+            this.holidaysService.upsertHolidays({data: this.mapper(result, file), _id, }).subscribe();
+            this.holidays$.next({data: this.mapper(result, file), _id, });
           }
         });
       }
@@ -105,8 +70,8 @@ export class HolidaysComponent implements OnInit {
     this.filterYear = year;
   }
 
-  private mapper(data: ParseResult, file: File): HolidaysModel[] {
-    return data.data.map(item => {
+  private mapper(src: ParseResult, file: File): HolidaysYearModel[] {
+    return src.data.map(item => {
       return {
         year: item[HolidaysRawData.yearMonth],
         Jan: item[HolidaysRawData.Jan],
