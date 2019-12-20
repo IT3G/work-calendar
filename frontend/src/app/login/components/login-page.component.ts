@@ -51,7 +51,7 @@ export class LoginPageComponent implements OnInit {
   }
 
   private successedLogin(res: Employee): void {
-    localStorage.setItem('userSession', JSON.stringify(res._id));
+    localStorage.setItem('Authorization', res.hashPswd);
     this.contextStoreService.setCurrentUser(res);
   }
 

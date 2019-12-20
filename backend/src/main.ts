@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 import { getConfig } from './config/config';
 
@@ -9,6 +10,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors();
+  app.use(cookieParser(config.JWT_SECRET_KEY));
 
   const options = new DocumentBuilder()
     .setTitle('Work-Calendar')
@@ -20,7 +22,7 @@ async function bootstrap() {
 
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(process.env.PORT || config['APP_PORT']);
+  await app.listen(process.env.PORT || config.APP_PORT);
 }
 
 bootstrap();

@@ -21,4 +21,5 @@ export class Employee {
   hasMailing: boolean;
   subdivision: DictionaryModel;
   jobPosition: DictionaryModel;
+  hashPswd: string;
 }
