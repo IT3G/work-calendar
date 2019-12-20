@@ -16,15 +16,20 @@
         *ngIf="(monthData$ | async) as monthData">
         <div class="row-item">
           <div class="title header">Сотрудник</div>
+
           <div class="day header "
-            [ngClass]="{ weekend: date | isWeekendDayPipe, currentDay: date | isCurrentDayPipe}"
+            [ngClass]="{ currentDay: date | isCurrentDayPipe, holiday: date | isHoliday:(holidays$ | async) }"
             *ngFor="let date of (monthDays$ | async)">
+
             <div class="day-header">
               <div class="day-wrapper">{{ date | datePipe: 'D' }}</div>
             </div>
+
             <div>{{ date | datePipe: 'ddd' }}</div>
           </div>
+
         </div>
+
         <div *ngFor="let data of (monthData | presenceFilter:filtersForm?.value:(date$ | async)); index as i"
           class="row-item">
           <div class="number">{{i + 1}}.</div>

@@ -1,0 +1,76 @@
+<div class="container">
+  <div class="page-title">Производственный календарь: {{(holidays$ | async).length}}</div>
+
+  <div class="infoblock">
+    <app-file-input-reset
+      [formControl]="fileControl"
+      [fileType]="fileType"
+      [buttonText]="buttonText">
+    </app-file-input-reset>
+    <div>
+      <a
+        target="_blank"
+        href="https://data.gov.ru/opendata/resource/8ba5011a-233e-4e01-a1d2-ff5598d0f34f#2/0.0/0.0">Здесь можно скачать
+        актуальную версию:</a>
+      <div>При скачивании выбрать: Последний набор (UFR-8)</div>
+    </div>
+  </div>
+
+  <div class="filter"  *ngIf="(holidays$ | async).length > 0">
+    <div (click)="setFilter('')" [ngClass]="{'active' : filterYear === '' }">Все</div>
+    <div *ngFor="let year of (holidays$ | async)"
+         (click)="setFilter(year?.year)" [ngClass]="{'active' : filterYear === year?.year}">{{ year?.year }}</div>
+  </div>
+
+  <div *ngIf="(holidays$ | async).length > 0; else emptyTable">
+
+    <div *ngFor="let year of (holidays$ | async) | holidays: filterYear ; let i = index" class="holidays-wrapper">
+      <div class="holidays-year">{{year?.year}}</div>
+
+      <div class="info">
+        <div>Рабочих дней: {{year?.allWork}}</div>
+        <div>Праздничны и выходных дней: {{year?.allDays}}</div>
+        <div>Рабочих часов</div>
+        <div>24 ч/нед: {{year?.hours24}}</div>
+        <div>36 ч/нед: {{year?.hours36}}</div>
+        <div>40 ч/нед: {{year?.hours40}}</div>
+      </div>
+
+      <div class="year-wrapper">
+        <app-calendar-block [days]="year.Jan"
+                            [date]="getDate(year.year, 1)"></app-calendar-block>
+        <app-calendar-block [days]="year.Feb"
+                            [date]="getDate(year.year, 2)"></app-calendar-block>
+        <app-calendar-block [days]="year.Mar"
+                            [date]="getDate(year.year, 3)"></app-calendar-block>
+        <app-calendar-block [days]="year.Apr"
+                            [date]="getDate(year.year, 4)"></app-calendar-block>
+        <app-calendar-block [days]="year.May"
+                            [date]="getDate(year.year, 5)"></app-calendar-block>
+        <app-calendar-block [days]="year.June"
+                            [date]="getDate(year.year, 6)"></app-calendar-block>
+        <app-calendar-block [days]="year.July"
+                            [date]="getDate(year.year, 7)"></app-calendar-block>
+        <app-calendar-block [days]="year.Aug"
+                            [date]="getDate(year.year, 8)"></app-calendar-block>
+        <app-calendar-block [days]="year.Sept"
+                            [date]="getDate(year.year, 9)"></app-calendar-block>
+        <app-calendar-block [days]="year.Oct"
+                            [date]="getDate(year.year, 10)"></app-calendar-block>
+        <app-calendar-block [days]="year.Nov"
+                            [date]="getDate(year.year, 11)"></app-calendar-block>
+        <app-calendar-block [days]="year.Dec"
+                            [date]="getDate(year.year, 12)"></app-calendar-block>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #emptyTable>
+    <div class="empty-data">
+      <div>
+        Производственный календарь не загружен.
+      </div>
+    </div>
+  </ng-template>
+
+</div>

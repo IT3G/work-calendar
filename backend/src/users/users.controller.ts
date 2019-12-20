@@ -2,6 +2,7 @@ import { Body, Controller, Get, HttpStatus, NotFoundException, Param, Post, Res 
 import { ApiUseTags } from '@nestjs/swagger';
 import { UserModel } from './models/user.model';
 import { UsersService } from './services/users.service';
+import { ApiUseTags } from '@nestjs/swagger';
 
 @ApiUseTags('Users')
 @Controller('users')
