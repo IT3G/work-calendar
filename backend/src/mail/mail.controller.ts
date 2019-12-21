@@ -1,8 +1,9 @@
 import { Body, Controller, Post, Res } from '@nestjs/common';
 import { SendMailRequestModel } from './models/send-mail.request.model';
 import { SendMailService } from './services/send-mail.service';
-import { ApiUseTags } from '@nestjs/swagger';
+import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @ApiUseTags('Mail')
 @Controller('mail')
 export class MailController {
