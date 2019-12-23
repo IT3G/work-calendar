@@ -25,7 +25,6 @@ export class PrintHelperService {
     const companyName = settings.PRINT_COMPANY_NAME;
     const mainManager = settings.PRINT_HEAD_MANAGER_NAME;
     const position = settings.PRINT_HEAD_MANAGER_POSITION;
-
     /** dates calc */
     const dateStartMoment = moment(dateStart);
     const dateEndMoment = dateEnd ? moment(dateEnd) : null;
@@ -41,47 +40,34 @@ export class PrintHelperService {
 
     const formatEmployee = incline({ last: employee.split(' ')[0], first: employee.split(' ')[1] }, 'genitive');
 
-    /** html concat */
-    const { headersHtml, dateStartHtml, dateEndHtml, daysCountHtml, footerHtml } = this.htmlConcat(
+    const headersHtml = this.createHeaderHtml(blocks, companyName, position, mainManager, formatEmployee);
+
+    const { dateStartHtml, dateEndHtml, daysCountHtml } = this.createDatesHtml(
       blocks,
-      companyName,
-      position,
-      mainManager,
-      formatEmployee,
       dayAndMonthStart,
       dateStartMoment,
       dayAndMonthEnd,
       dateEnd,
       dateEndMoment,
-      daysCount,
-      dayNow,
-      employee
+      daysCount
     );
+
+    const footerHtml = `${dayNow[0]}${blocks[12]}${dayNow[1]}${blocks[13]}${dayNow[2]}${blocks[14]}${employee}${
+      blocks[15]
+    }`;
 
     return `${headersHtml}${dateStartHtml}${dateEndHtml}${daysCountHtml}${footerHtml}`;
   }
 
-  private htmlConcat(
+  private createDatesHtml(
     blocks: string[],
-    companyName: string,
-    position: string,
-    mainManager: string,
-    formatEmployee,
     dayAndMonthStart: string[],
     dateStartMoment: Moment,
     dayAndMonthEnd: string[],
     dateEnd: string,
     dateEndMoment: Moment,
-    daysCount: string,
-    dayNow: string[],
-    employee: string
+    daysCount: string
   ) {
-    /** header */
-    const headersHtml = `${blocks[0]}${companyName}${blocks[1]}${position}${blocks[2]}${mainManager}${blocks[3]}${
-      formatEmployee.last
-    } ${formatEmployee.first}`;
-
-    /** dates */
     const dateStartHtml = `${blocks[4]}${dayAndMonthStart[0]}${blocks[5]}${dayAndMonthStart[1]}${
       blocks[6]
     }${dateStartMoment.format('YYYY')}${blocks[7]}`;
@@ -89,12 +75,18 @@ export class PrintHelperService {
       dayAndMonthEnd ? dayAndMonthEnd[1] : ''
     }${blocks[9]}${dateEnd ? dateEndMoment.format('YYYY') : ''}${blocks[10]}`;
     const daysCountHtml = `${daysCount}${blocks[11]}`;
+    return { dateStartHtml, dateEndHtml, daysCountHtml };
+  }
 
-    /** footer */
-    const footerHtml = `${dayNow[0]}${blocks[12]}${dayNow[1]}${blocks[13]}${dayNow[2]}${blocks[14]}${employee}${
-      blocks[15]
-    }`;
-
-    return { headersHtml, dateStartHtml, dateEndHtml, daysCountHtml, footerHtml };
+  private createHeaderHtml(
+    blocks: string[],
+    companyName: string,
+    position: string,
+    mainManager: string,
+    formatEmployee
+  ): string {
+    return `${blocks[0]}${companyName}${blocks[1]}${position}${blocks[2]}${mainManager}${blocks[3]}${
+      formatEmployee.last
+    } ${formatEmployee.first}`;
   }
 }
