@@ -1,0 +1,76 @@
+.file-input-wrapper {
+  max-width: 500px;
+  padding: 20px;
+}
+
+.page-title {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 0 20px;
+}
+
+
+.infoblock {
+  display: grid;
+  grid-template-columns: repeat(2, 50%);
+  margin-bottom: 30px;
+}
+
+.empty-data {
+  padding: 30px 0;
+}
+
+
+.holidays-wrapper {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  grid-template-rows: 42px 1fr;
+  grid-gap: 20px;
+  grid-template-areas: 'head head' 'info calendar';
+
+  margin: 20px 0;
+}
+
+.holidays-year {
+  grid-area: head;
+  font-size: 28px;
+  color: #4b830d;
+  padding-left: 30px;
+  line-height: 42px;
+  background-color: rgba(197, 225, 165, 0.36);
+}
+
+.info {
+  width: 300px;
+  padding-left: 30px;
+  grid-area: info;
+}
+
+.year-wrapper {
+  grid-area: calendar;
+  display: grid;
+  justify-content: end;
+  grid-template-columns: repeat(3, 240px);
+  grid-gap: 10px;
+}
+
+.filter {
+  display: grid;
+  grid-template-columns: repeat(10, 80px);
+  grid-gap: 2px;
+
+  div {
+    padding: 3px 5px;
+    text-align: center;
+    background-color: rgba(197, 225, 165, 0.36);
+
+    &:hover {
+      background-color: #c5e1a5;
+      cursor: pointer;
+    }
+
+    &.active {
+      background-color: #c5e1a5;
+    }
+  }
+}

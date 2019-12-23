@@ -9,15 +9,19 @@ import { DayTypeGetterService } from '../../services/day-type-getter.service';
   name: 'transformTaskType'
 })
 export class TransformTaskTypePipe implements PipeTransform {
-  constructor(private dateConvertService: DateConvertService, private dayTypeGetterService: DayTypeGetterService) {}
+  constructor(private dateConvertService: DateConvertService, private dayTypeGetterService: DayTypeGetterService) {
+  }
 
   transform(date: NgbDateStruct, tasks: TaskModel[]): string {
-    if (!date) return `type_COMMON`;
+    if (!date) {
+      return `type_COMMON`;
+    }
+
     const dtMoment = this.dateConvertService.convertNgbDateToMoment(date);
     const dayType = DayType[this.dayTypeGetterService.getDayType(dtMoment, tasks)];
 
     if (!dayType) {
-      return `type_WEEKEND`;
+      return `type_COMMON`;
     }
     return `type_${dayType}`;
   }

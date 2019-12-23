@@ -1,0 +1,60 @@
+.calendar {
+  max-width: max-content;
+  padding: 10px;
+  border: 2px solid #c5e1a5;
+}
+
+.month-indicator {
+  text-align: center;
+  font-weight: 500;
+  color: #4b830d;
+}
+
+.holidays-list {
+  font-size: 12px;
+  line-height: 16px;
+  text-align: center;
+}
+
+.day-of-week,
+.date-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 30px);
+  grid-gap: 1px;
+}
+
+.day-of-week {
+  margin-top: 10px;
+}
+
+.day-of-week > * {
+  text-align: center;
+}
+
+.date-grid {
+  margin-top: 10px;
+}
+
+.date-grid div {
+  position: relative;
+  border: 0;
+  width: 30px;
+  height: 30px;
+  font-size: 12px;
+  text-align: center;
+  line-height: 30px;
+
+  &:hover {
+    cursor: pointer;
+    outline: 2px solid #4b830d;
+    outline-offset: -2px;
+  }
+}
+
+
+.holiday {
+  background-color: #c5e1a5;
+}
+.pre-holiday {
+  background-color: rgba(197, 225, 165, 0.36);
+}

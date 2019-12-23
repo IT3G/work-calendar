@@ -1,29 +1,52 @@
 :host {
   margin-bottom: 30px;
-  flex-wrap: wrap;
-  display: flex;
   padding: 0 45px 0 45px;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
+
+.day-type.vertical {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+
+  .item {
+    width: 50%;
+  }
+}
+
+.day-type.horizontal {
+  display: flex;
+}
+
+
+.holiday-type.vertical {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+}
+
+
+.holiday-type.horizontal {
+  display: flex;
+
+}
+
 
 .label {
   width: 25px;
   height: 25px;
+  min-width: 25px;
+  min-height: 25px;
   border: 1px solid;
   margin: 5px;
 }
 
 .item {
-  width: 50%;
   display: flex;
   align-items: center;
-}
-
-.item-line {
-  width: min-content;
-  margin-right: 20px;
-  &:last-child() {
-    margin-right: 0;
-  }
 }
 
 /deep/ .mat-tooltip {

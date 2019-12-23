@@ -1,7 +1,15 @@
-<div class="item" [class.item-line]='isLineView'
-  *ngFor="let item of options"
-  [matTooltip]="item.tooltip">
-  <div class="label"
-    [style.backgroundColor]="item.color"></div>
-  <div class="title">{{item.title}}</div>
+<div class="day-type" [ngClass]="{'vertical' :!isLineView, 'horizontal': isLineView }">
+  <div class="item" *ngFor="let item of optionsAgenda"
+       [matTooltip]="item.tooltip">
+    <div class="label"
+         [style.backgroundColor]="item.color"></div>
+    <div class="title">{{item.title}}</div>
+  </div>
+</div>
+<div class="holiday-type"  [ngClass]="{'vertical' :!isLineView, 'horizontal': isLineView }">
+  <div class="item" *ngFor="let item of optionsHoliday">
+    <div class="label"
+         [style.backgroundColor]="item.color"></div>
+    <div class="title">{{item.title}}</div>
+  </div>
 </div>

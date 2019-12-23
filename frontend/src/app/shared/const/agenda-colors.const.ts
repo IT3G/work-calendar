@@ -33,3 +33,4 @@ export const AgendaColors = [
     tooltip: 'Заболел, отсутствую на работе'
   }
 ];
+

@@ -1,3 +1,5 @@
+@import 'src/app/shared/styles/color';
+
 $borderColor: #e3e3e3;
 
 .day {
@@ -19,7 +21,19 @@ $borderColor: #e3e3e3;
 }
 
 .weekend {
-  background-color: #efecec;
+  background-color: rgba(197, 202, 233, 0.8);
+}
+
+.day_HOLIDAY {
+  background-color: $holiday;
+}
+
+.day_PRE_HOLIDAY {
+  background-color: $pre-holiday;
+}
+
+.holiday {
+  background-color: #f05772;
 }
 
 .row-item {
