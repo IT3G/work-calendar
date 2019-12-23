@@ -22,6 +22,9 @@ export class Config {
   JWT_SECRET_KEY: string;
   JWT_EXPIRES: string;
   UNAUTH_URLS: 'string';
+  PRINT_COMPANY_NAME: string;
+  PRINT_HEAD_MANAGER_POSITION: string;
+  PRINT_HEAD_MANAGER_NAME: string;
 }
 
 let config;

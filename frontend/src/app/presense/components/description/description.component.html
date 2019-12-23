@@ -48,7 +48,7 @@
     (click)="addTask()">
     Сохранить
   </button>
-  <a *ngIf='form.get("type").value.id === 4'
+  <a *ngIf='form.get("type").value?.id === 4'
     class="print"
     (click)="printStatement()">
     распечатать заявление на отпуск

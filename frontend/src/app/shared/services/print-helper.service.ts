@@ -13,7 +13,7 @@ export class PrintHelperService {
     const content = this.formatHtml(html, employee, dateStart, dateEnd);
     const popupWin = window.open('', 'self');
     popupWin.document.open();
-    popupWin.document.write('<html><body afterprint="window.close()" onload="window.print()">' + content + '</html>');
+    popupWin.document.write('<html><body onafterprint="window.close()" onload="window.print()">' + content + '</html>');
     popupWin.document.close();
   }
 
@@ -36,7 +36,7 @@ export class PrintHelperService {
     const dayNow = moment()
       .format('D MMMM YYYY')
       .split(' ');
-    console.log(blocks);
+
     const formatEmployee = incline({ last: employee.split(' ')[0], first: employee.split(' ')[1] }, 'genitive');
     /** html concat */
     const headersHtml = `${blocks[0]}${companyName}${blocks[1]}${position}${blocks[2]}${mainManager}${blocks[3]}${

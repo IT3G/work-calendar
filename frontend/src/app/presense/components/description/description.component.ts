@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
@@ -14,6 +15,7 @@ import { Employee } from '../../../shared/models/employee.model';
 import { SendMailRequestModel } from '../../../shared/models/send-mail.request.model';
 import { SendingTaskModel } from '../../../shared/models/sending-task.model';
 import { TaskModel } from '../../../shared/models/tasks.models';
+import { PrintHelperService } from '../../../shared/services/print-helper.service';
 import { SendingMailService } from '../../../shared/services/sending-mail.service';
 import { SnackbarService } from '../../../shared/services/snackbar.service';
 import { TaskMapperService } from '../../../shared/services/task-mapper.service';
@@ -40,7 +42,9 @@ export class DescriptionComponent implements OnInit {
     private mailApiService: MailApiService,
     private tasksStoreService: TasksStoreService,
     private sendingMail: SendingMailService,
-    private taskMapperService: TaskMapperService
+    private taskMapperService: TaskMapperService,
+    private printHelperService: PrintHelperService,
+    private http: HttpClient
   ) {}
 
   ngOnInit() {
@@ -93,19 +97,17 @@ export class DescriptionComponent implements OnInit {
     const originalTasks = this.tasksStoreService.originalTasks$.value;
     const event = originalTasks
       .filter(t => t.employee === this.selectedUser.mailNickname)
-      .find(t => {
-        const foo = moment(dateStart);
-        const foo1 = moment(t.dateStart);
-        const foo2 = moment(t.dateEnd);
-        debugger;
-        return foo.isBetween(foo1, foo2, 'day');
-      });
-    const events = originalTasks.filter(t => t.employee === this.selectedUser.mailNickname);
+      .filter(t => moment(dateStart).isBetween(moment(t.dateStart), moment(t.dateEnd), null, '[]'))
+      .sort((a, b) => (moment(a.dtCreated).isAfter(b.dtCreated) ? -1 : 1))[0];
 
-    console.log(event);
-    // this.http.get('assets/1.html', { responseType: 'text' }).subscribe((data: string) => {
-    //   this.printHelperService.printStatement(data, this.selectedUser.username, dateStart, dateEnd);
-    // });
+    if (event) {
+      dateEnd = event.dateEnd;
+      dateStart = event.dateStart;
+    }
+
+    this.http.get('assets/1.html', { responseType: 'text' }).subscribe((data: string) => {
+      this.printHelperService.printStatement(data, this.selectedUser.username, dateStart, dateEnd);
+    });
   }
 
   public getTitle(id: number): string {
