@@ -1,9 +1,10 @@
 import { Body, Controller, Get, HttpStatus, NotFoundException, Param, Post, Res } from '@nestjs/common';
-import { ApiUseTags } from '@nestjs/swagger';
+import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
 import { UserModel } from './models/user.model';
 import { UsersService } from './services/users.service';
 import { ApiUseTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @ApiUseTags('Users')
 @Controller('users')
 export class UsersController {

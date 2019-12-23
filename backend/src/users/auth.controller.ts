@@ -1,5 +1,5 @@
 import { Body, Controller, Get, HttpStatus, Post, Req, Res } from '@nestjs/common';
-import { ApiUseTags } from '@nestjs/swagger';
+import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { Config } from '../config/config';
 import { UsersService } from '../users/services/users.service';
@@ -7,6 +7,7 @@ import { LoginModel } from './models/login.model';
 import { AuthService } from './services/auth.service';
 import { LdapService } from './services/ldap.service';
 
+@ApiBearerAuth()
 @ApiUseTags('Auth')
 @Controller('auth')
 export class AuthController {
