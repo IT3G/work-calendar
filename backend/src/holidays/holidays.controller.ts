@@ -16,8 +16,24 @@ export class HolidaysController {
   }
 
   @Post()
-  async upsertHolidays(@Res() res, @Body() holidays: HolidaysResponseModel) {
-    const newHolidays = await this.holidaysService.upsertHolidays(holidays);
-    return res.status(HttpStatus.OK).json(newHolidays);
+  async addHolidays(@Res() res, @Body() holidays: HolidaysResponseModel) {
+    const result = await this.holidaysService.addHolidays(holidays);
+
+    if (!result) {
+      throw new NotFoundException('Не удалось сохранить');
+    }
+
+    return res.status(HttpStatus.OK).json(result);
+  }
+
+  @Put('')
+  async updateHolidays(@Res() res, @Body() holidays: HolidaysResponseModel) {
+    const result = await this.holidaysService.updateHolidays(holidays);
+
+    if (!result) {
+      throw new NotFoundException('Не удалось обновить');
+    }
+
+    return res.status(HttpStatus.OK).json(result);
   }
 }

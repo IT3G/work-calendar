@@ -14,13 +14,13 @@ export class HolidaysService {
     return await this.holidaysModel.find().exec();
   }
 
-  async upsertHolidays(holidays: HolidaysResponseModel): Promise<Document> {
-    if (holidays._id) {
-      await this.holidaysModel.findByIdAndUpdate(holidays._id, holidays);
-      return await this.holidaysModel.findById(holidays._id);
-    }
-
+  async addHolidays(holidays: HolidaysResponseModel): Promise<Document> {
     const result = await this.holidaysModel.create(holidays);
     return result.save();
+  }
+
+  async updateHolidays(holidays: HolidaysResponseModel): Promise<Document> {
+    await this.holidaysModel.findByIdAndUpdate(holidays._id, holidays);
+    return await this.holidaysModel.findById(holidays._id);
   }
 }

@@ -14,7 +14,11 @@ export class HolidaysApiService {
     return this.http.get<HolidaysModel>(`${environment.baseUrl}/holidays`);
   }
 
-  public upsertHolidays(holidays: HolidaysModel): Observable<HolidaysModel> {
+  public addHolidays(holidays: HolidaysModel): Observable<HolidaysModel> {
     return this.http.post<HolidaysModel>(`${environment.baseUrl}/holidays`, holidays);
+  }
+
+  public updateHolidays(holidays: HolidaysModel): Observable<HolidaysModel> {
+    return this.http.put<HolidaysModel>(`${environment.baseUrl}/holidays`, holidays);
   }
 }

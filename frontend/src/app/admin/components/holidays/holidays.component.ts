@@ -13,13 +13,12 @@ import { HolidaysModel, HolidaysRawData, HolidaysYearModel } from '../../../shar
   styleUrls: ['./holidays.component.scss']
 })
 export class HolidaysComponent implements OnInit {
-  public holidays$: BehaviorSubject<HolidaysModel> = new BehaviorSubject({data: []});
+  public holidays$: BehaviorSubject<HolidaysModel> = new BehaviorSubject(null);
   public filterYear: string;
 
   public fileType = '.csv';
   public buttonText = 'Загрузить файл';
   public fileControl: FormControl;
-  public filterControl: FormControl;
 
   public isLoading: Boolean = true;
 
@@ -28,19 +27,13 @@ export class HolidaysComponent implements OnInit {
 
   ngOnInit() {
     this.fileControl = new FormControl();
-    this.filterControl = new FormControl();
     this.filterYear = new Date().getFullYear().toString();
 
     this.holidaysService.getAllHolidays()
       .subscribe(res => {
-        if (res.data && res.data.length > 0) {
-          // const result = res.data.sort((a, b) => {
-          //   return Number(a.year) - Number(b.year);
-          // });
-          this.holidays$.next(res);
-        }
-
+        this.holidays$.next(res[0]);
       }).add(() => this.isLoading = false);
+
 
     this.fileControl.valueChanges.subscribe(res => {
       if (res) {
@@ -48,11 +41,16 @@ export class HolidaysComponent implements OnInit {
           header: true,
           skipEmptyLines: true,
           complete: (result, file) => {
+            const currentID = this.holidays$.value && this.holidays$.value._id;
 
-            const _id = this.holidays$.value._id;
+            if (currentID) {
+              this.holidaysService.updateHolidays({ data: this.mapper(result, file), _id: currentID });
+              this.holidays$.next({ data: this.mapper(result, file), _id: currentID });
 
-            this.holidaysService.upsertHolidays({data: this.mapper(result, file), _id, }).subscribe();
-            this.holidays$.next({data: this.mapper(result, file), _id, });
+            } else {
+              this.holidaysService.addHolidays({ data: this.mapper(result, file) }).subscribe();
+              this.holidays$.next({ data: this.mapper(result, file) });
+            }
           }
         });
       }

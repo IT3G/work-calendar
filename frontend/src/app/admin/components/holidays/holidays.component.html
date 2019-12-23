@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="page-title">Производственный календарь: {{(holidays$ | async).data.length}}</div>
+  <div class="page-title">Производственный календарь</div>
 
   <div class="infoblock">
     <app-file-input-reset
@@ -7,6 +7,7 @@
       [fileType]="fileType"
       [buttonText]="buttonText">
     </app-file-input-reset>
+
     <div>
       <a
         target="_blank"
@@ -18,14 +19,16 @@
 
   <div *ngIf="!isLoading; else wait">
     <div class="filter"  *ngIf="(holidays$ | async)?.data?.length > 0">
-      <div (click)="setFilter('')" [ngClass]="{'active' : filterYear === '' }">Все</div>
-      <div *ngFor="let year of (holidays$ | async).data"
-           (click)="setFilter(year?.year)" [ngClass]="{'active' : filterYear === year?.year}">{{ year?.year }}</div>
+      <div (click)="setFilter('')"
+           [ngClass]="{'active' : filterYear === '' }">Все</div>
+      <div *ngFor="let year of (holidays$ | async)?.data"
+           (click)="setFilter(year?.year)"
+           [ngClass]="{'active' : filterYear === year?.year}">{{ year?.year }}</div>
     </div>
 
-    <div *ngIf="(holidays$ | async).data.length > 0; else emptyTable">
+    <div *ngIf="(holidays$ | async)?.data?.length > 0; else emptyTable">
 
-      <div *ngFor="let year of (holidays$ | async).data | holidaysYearFilterPipe: filterYear ; let i = index" class="holidays-wrapper">
+      <div *ngFor="let year of (holidays$ | async)?.data | holidaysYearFilterPipe: filterYear ; let i = index" class="holidays-wrapper">
         <div class="holidays-year">{{year?.year}}</div>
 
         <div class="info">
