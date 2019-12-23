@@ -59,6 +59,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private getTasks(): void {
     this.subscription.add(
       this.taskApiService.loadAllTasks().subscribe((res: TaskModel[]) => {
+        this.tasksStoreService.originalTasks$.next(res);
         const result = this.taskMapperService.mapToTaskModel(res);
         this.tasksStoreService.addTasks(result);
       })

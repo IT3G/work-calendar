@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { DomSanitizer } from '@angular/platform-browser';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
@@ -17,6 +16,7 @@ import { Employee } from '../../../shared/models/employee.model';
 import { SendMailRequestModel } from '../../../shared/models/send-mail.request.model';
 import { SendingTaskModel } from '../../../shared/models/sending-task.model';
 import { TaskModel } from '../../../shared/models/tasks.models';
+import { PrintHelperService } from '../../../shared/services/print-helper.service';
 import { SnackbarService } from '../../../shared/services/snackbar.service';
 import { TaskMapperService } from '../../../shared/services/task-mapper.service';
 
@@ -43,9 +43,10 @@ export class DescriptionComponent implements OnInit {
     private tasksStoreService: TasksStoreService,
     private http: HttpClient,
     private employeeStoreService: EmployeeStoreService,
-    private taskMapperService: TaskMapperService, private sanitizer: DomSanitizer
+    private taskMapperService: TaskMapperService,
+    private printHelperService: PrintHelperService
   ) {}
-  
+
   ngOnInit() {
     this.initForm();
     this.getInfoFromStore();
@@ -87,22 +88,28 @@ export class DescriptionComponent implements OnInit {
     if (sendingMail.adress.length) {
       this.mailApiService.sendMail(sendingMail).subscribe(key => console.log(key));
     }
-    
-    this.http.get('assets/1.html', { responseType: 'text' }).subscribe((data: any) => 
-    
-    {
+  }
 
-    const chars = data.split('***');
+  public printStatement(): void {
+    const val = this.form.getRawValue();
+    let dateStart = val.dateStart;
+    let dateEnd = val.dateEnd;
+    const originalTasks = this.tasksStoreService.originalTasks$.value;
+    const event = originalTasks
+      .filter(t => t.employee === this.selectedUser.mailNickname)
+      .find(t => {
+        const foo = moment(dateStart);
+        const foo1 = moment(t.dateStart);
+        const foo2 = moment(t.dateEnd);
+        debugger;
+        return foo.isBetween(foo1, foo2, 'day');
+      });
+    const events = originalTasks.filter(t => t.employee === this.selectedUser.mailNickname);
 
-      let printContents, popupWin;
-      popupWin = window.open('', 'self');
-      popupWin.document.open();
-      const company_name = 'Microsoft';
-      const main_manager  = 'Bill Gates'
-      const result = `${chars[0]}${company_name}${chars[1]}${main_manager}${chars[2]}Глотова Дмитрия Юрьевича${chars[3]}`
-      popupWin.document.write(result);
-    })
-    
+    console.log(event);
+    // this.http.get('assets/1.html', { responseType: 'text' }).subscribe((data: string) => {
+    //   this.printHelperService.printStatement(data, this.selectedUser.username, dateStart, dateEnd);
+    // });
   }
 
   public getTitle(id: number): string {

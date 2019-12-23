@@ -27,4 +27,10 @@ select {
 
 .control {
   width: 100%;
+  margin-bottom: 10px;
+}
+.print {
+  color: #007bff !important;
+  text-decoration: underline !important;
+  cursor: pointer;
 }
