@@ -7,7 +7,10 @@ import { AgendaColorsModel } from '../../models/agenda-colors.model';
 })
 export class TaskTypePipe implements PipeTransform {
   transform(value: number): any {
-    if (!value) return null;
+    if (!value) {
+      return null;
+    }
+
     return AgendaColors.find((agenda: AgendaColorsModel) => agenda.id === value).title;
   }
 }

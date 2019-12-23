@@ -6,10 +6,10 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { EmployeeApiService } from 'src/app/core/services/employee-api.service';
 import { SnackbarService } from 'src/app/shared/services/snackbar.service';
-import { ProjectsApiService } from '../../../core/services/projects-api.service';
+import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
 import { EmployeeStoreService } from '../../../core/store/employee-store.service';
+import { DictionaryModel } from '../../../shared/models/dictionary.model';
 import { Employee } from '../../../shared/models/employee.model';
-import { ProjectModel } from '../../../shared/models/projects.model';
 import { EmployeeAddComponent } from './employee-add/employee-add.component';
 
 @Component({
@@ -19,7 +19,7 @@ import { EmployeeAddComponent } from './employee-add/employee-add.component';
 })
 export class EmployeeListComponent implements OnInit, OnDestroy {
   public employees: Employee[];
-  public projects$: Observable<ProjectModel[]>;
+  public projects$: Observable<DictionaryModel[]>;
   public filter: FormControl;
   public displayedColumns: string[];
   public login: string;
@@ -28,18 +28,17 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
 
   constructor(
     private employeeStoreService: EmployeeStoreService,
-    private projectsApi: ProjectsApiService,
+    private dictionaryApi: DictionaryApiService,
     private employeeApi: EmployeeApiService,
     private snackbar: SnackbarService,
     private ar: ActivatedRoute,
     public dialog: MatDialog
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this.filter = new FormControl();
     this.ar.queryParams.subscribe(res => this.filter.setValue(res.project));
-    this.projects$ = this.projectsApi.getProjects();
+    this.projects$ = this.dictionaryApi.getAll('project');
     this.subscription.add(this.employeeStoreService.getEmployees().subscribe(res => (this.employees = res)));
     this.setDisplayedColumns();
   }
@@ -55,7 +54,9 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (!result) { return; }
+      if (!result) {
+        return;
+      }
 
       this.employeeApi.addNewUser({ username: result }).subscribe(
         () => {

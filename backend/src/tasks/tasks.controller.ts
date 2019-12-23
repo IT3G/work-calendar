@@ -1,8 +1,9 @@
 import { Body, Controller, Get, HttpStatus, Param, Post, Res } from '@nestjs/common';
 import { TaskResponseModel } from './models/task.request.model';
 import { TaskService } from './services/task.service';
-import { ApiUseTags } from '@nestjs/swagger';
+import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @ApiUseTags('Tasks')
 @Controller('tasks')
 export class TasksController {

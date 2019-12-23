@@ -5,19 +5,15 @@ import * as moment from 'moment';
 import { Moment } from 'moment';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { JobPositionApiService } from '../../../core/services/job-position-api.service';
-import { ProjectsApiService } from '../../../core/services/projects-api.service';
+import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
 import { EmployeeStoreService } from '../../../core/store/employee-store.service';
 import { TasksStoreService } from '../../../core/store/tasks-store.service';
 import { DayType } from '../../../shared/const/day-type.const';
 import { locationsDictionary } from '../../../shared/const/locations-dictionary.const';
+import { DictionaryModel } from '../../../shared/models/dictionary.model';
 import { Employee } from '../../../shared/models/employee.model';
-import { JobPositionModel } from '../../../shared/models/job-position.model';
 import { PresenceModel } from '../../../shared/models/presence.page.model';
-import { ProjectModel } from '../../../shared/models/projects.model';
 import { TaskModel } from '../../../shared/models/tasks.models';
-import { SubdivisionModel } from '../../../shared/models/subdivisions.model';
-import { SubdivisionApiService } from '../../../core/services/subdivision-api.service';
 
 @Component({
   selector: 'app-team-presence',
@@ -33,9 +29,9 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     this.qParamsSnpshotMonth ? moment(this.qParamsSnpshotMonth, 'MM-YYYY') : moment()
   );
   public filtersForm: FormGroup;
-  public projects$: Observable<ProjectModel[]>;
-  public jobPositions$: Observable<JobPositionModel[]>;
-  public subdivisions$: Observable<SubdivisionModel[]>;
+  public projects$: Observable<DictionaryModel[]>;
+  public jobPositions$: Observable<DictionaryModel[]>;
+  public subdivisions$: Observable<DictionaryModel[]>;
   public locations = locationsDictionary;
 
   private employees$: Observable<Employee[]>;
@@ -48,9 +44,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
-    private projectsApi: ProjectsApiService,
-    private jobPositionApi: JobPositionApiService,
-    private subdivisionApi: SubdivisionApiService
+    private dictionaryApi: DictionaryApiService
   ) {}
 
   ngOnInit() {
@@ -58,11 +52,13 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     this.employees$ = this.employeeStoreService.getEmployees();
     this.tasks$ = this.tasksStoreService.getTasks();
     this.monthDays$ = this.getMonthDays();
+    this.tasksStoreService.update();
+    this.employeeStoreService.update();
     this.updateTaskData();
     this.updateQueryParamsOnChange();
-    this.projects$ = this.projectsApi.getProjects();
-    this.jobPositions$ = this.jobPositionApi.getAll();
-    this.subdivisions$ = this.subdivisionApi.getSubdivisions();
+    this.projects$ = this.dictionaryApi.getAll('project');
+    this.jobPositions$ = this.dictionaryApi.getAll('jobPosition');
+    this.subdivisions$ = this.dictionaryApi.getAll('subdivision');
   }
 
   ngOnDestroy() {

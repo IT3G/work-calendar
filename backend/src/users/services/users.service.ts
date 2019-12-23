@@ -2,14 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as crypto from 'crypto';
 import { Model } from 'mongoose';
-import { LoginRequestModel } from '../../auth/models/login.request.model';
 import { UserEntity } from '../../entity/entities/login.entity.model';
-import { UserResponseModel } from '../models/user.request.model';
+import { LoginModel } from '../models/login.model';
+import { UserModel } from '../models/user.model';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel('Users') private readonly userModel: Model<UserEntity>) {
-  }
+  constructor(@InjectModel('Users') private readonly userModel: Model<UserEntity>) {}
 
   async getUsers(): Promise<UserEntity[]> {
     const users = await this.userModel
@@ -21,8 +20,10 @@ export class UsersService {
     return users;
   }
 
-  async getUserByLogin(mailNickname: string): Promise<UserEntity[]> {
-    const user = await this.userModel.find({ mailNickname })
+  async getUserByLogin(mailNickname: string): Promise<UserEntity> {
+    const employeeRegex = new RegExp(`^${mailNickname}$`, 'i');
+    const user = await this.userModel
+      .findOne({ mailNickname: employeeRegex })
       .populate('jobPosition')
       .populate('subdivision')
       .exec();
@@ -39,13 +40,13 @@ export class UsersService {
     return user;
   }
 
-  async addUser(userInfo: UserResponseModel): Promise<UserEntity> {
+  async addUser(userInfo: UserModel): Promise<UserEntity> {
     const newUser = await this.userModel.create(userInfo);
     return newUser.save();
   }
 
-  async registration(userInfo: LoginRequestModel): Promise<UserEntity> {
-    const data: UserResponseModel = {
+  async registration(userInfo: LoginModel): Promise<UserEntity> {
+    const data: UserModel = {
       username: userInfo.name,
       location: null,
       position: null,
@@ -60,14 +61,14 @@ export class UsersService {
       subdivision: null,
       jobPosition: null,
       authType: 'hash',
-      hashPswd: crypto.createHmac('sha256', userInfo.password).digest('hex')
+      hashPswd: crypto.createHmac('sha256', userInfo.password).digest('hex'),
     };
-    console.log(data);
+
     const newUser = await this.userModel.create(data);
     return newUser.save();
   }
 
-  async updateUserByLogin(login: string, data: UserResponseModel): Promise<UserEntity> {
+  async updateUserByLogin(login: string, data: UserModel): Promise<UserEntity> {
     const result = await this.userModel.updateOne({ mailNickname: login }, { ...data });
     return result;
   }

@@ -7,8 +7,8 @@
       <mat-select [formControl]='filter'>
         <mat-option>Сбросить</mat-option>
         <mat-option *ngFor="let project of projects$ | async"
-          [value]="project.title">
-          {{project.title}}
+          [value]="project.name">
+          {{project.name}}
         </mat-option>
       </mat-select>
     </mat-form-field>

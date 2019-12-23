@@ -7,4 +7,4 @@ all:
 
 application:
   hosts:
-    172.17.21.94:
+    172.17.21.21:

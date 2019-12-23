@@ -36,8 +36,10 @@ export class LoginPageComponent implements OnInit {
   }
 
   public login() {
+    const info = this.loginForm.value;
+    info.username = info.username.toLowerCase();
     this.authService
-      .login(this.loginForm.value)
+      .login(info)
       .subscribe(res => this.successedLogin(res), err => this.erroredLogin(err), () => this.finishedLogin());
   }
 
@@ -49,7 +51,7 @@ export class LoginPageComponent implements OnInit {
   }
 
   private successedLogin(res: Employee): void {
-    localStorage.setItem('userSession', JSON.stringify(res._id));
+    localStorage.setItem('Authorization', res.hashPswd);
     this.contextStoreService.setCurrentUser(res);
   }
 
