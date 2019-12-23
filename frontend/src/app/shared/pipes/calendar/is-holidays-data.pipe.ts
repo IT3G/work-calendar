@@ -8,7 +8,7 @@ import { HolidaysModel, MonthNumber } from '../../models/holidays.model';
 export class IsHolidayDataPipe implements PipeTransform {
 
   transform(date: NgbDateStruct, holidays: HolidaysModel[]): string {
-    if (!date || !holidays) {
+    if (!date || !(holidays && holidays.length)) {
       return `day_WORK`;
     }
 

@@ -4,7 +4,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
-import { filter, map, switchMap } from 'rxjs/operators';
+import { filter, map, share, switchMap } from 'rxjs/operators';
 import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
 import { EmployeeStoreService } from '../../../core/store/employee-store.service';
 import { TasksStoreService } from '../../../core/store/tasks-store.service';
@@ -42,7 +42,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
   private employees$: Observable<Employee[]>;
   private tasks$: Observable<TaskModel[]>;
 
-  public holidays$: Observable<HolidaysModel[]>;
+  public holidays$: BehaviorSubject<HolidaysModel[]> = new BehaviorSubject<HolidaysModel[]>([]);
 
   private subscription = new Subscription();
 
@@ -62,10 +62,9 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     this.initFilterForm(this.route.snapshot.queryParams);
     this.employees$ = this.employeeStoreService.getEmployees();
     this.tasks$ = this.tasksStoreService.getTasks();
-    this.holidays$ = this.holidaysService.getAllHolidays();
+    this.holidaysService.getAllHolidays().subscribe(res => this.holidays$.next(res));
 
     this.monthDays$ = this.getMonthDays();
-
 
     this.tasksStoreService.update();
     this.employeeStoreService.update();
