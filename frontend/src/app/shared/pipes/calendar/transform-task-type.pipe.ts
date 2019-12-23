@@ -21,7 +21,7 @@ export class TransformTaskTypePipe implements PipeTransform {
     const dayType = DayType[this.dayTypeGetterService.getDayType(dtMoment, tasks)];
 
     if (!dayType) {
-      return `type_WEEKEND`;
+      return `type_COMMON`;
     }
     return `type_${dayType}`;
   }

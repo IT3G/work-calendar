@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-md-4">
       <app-current-day [selectedUser]="selectedUser"></app-current-day>
-      <app-calendar [tasks]='tasks$ | async'></app-calendar>
+      <app-calendar [tasks]='tasks$ | async' [holidays]="holidays$ | async"></app-calendar>
       <app-agenda></app-agenda>
     </div>
     <div class="col-md-3">

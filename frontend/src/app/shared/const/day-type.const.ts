@@ -3,5 +3,5 @@ export enum DayType {
   CUSTOM = 2,
   LEFT = 3,
   VACATION = 4,
-  SICK = 5
+  SICK = 5,
 }

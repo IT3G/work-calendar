@@ -1,3 +1,5 @@
+@import 'src/app/shared/styles/color';
+
 :host {
   display: block;
   text-align: center;
@@ -25,6 +27,7 @@
   }
   .custom-day {
     outline: none;
+    border: 1px solid white;
     &.type_COMMON {
       background-color: #ffffff;
     }
@@ -42,8 +45,13 @@
     &.type_SICK {
       background-color: #ffe082;
     }
-    &.type_WEEKEND {
-      background-color: rgba(127, 140, 141, 0.2);
+    &.day_WORK {
+    }
+    &.day_HOLIDAY {
+      background-color: $holiday;
+    }
+    &.day_PRE_HOLIDAY {
+      background-color: $pre-holiday;
     }
   }
 }

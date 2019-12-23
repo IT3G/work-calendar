@@ -17,7 +17,7 @@ import { IsCurrentDayPipe } from './pipes/is-current-day.pipe';
 import { IsWeekendDayPipe } from './pipes/is-weekend-day.pipe';
 import { UsernamePipe } from './pipes/username.pipe';
 import { FileInputResetComponent } from './components/file-input-reset/file-input-reset.component';
-import { IsHolidayPipe } from './pipes/is-holiday.pipe';
+import { IsHolidayDataPipe } from './pipes/calendar/is-holidays-data.pipe';
 
 const pipes = [
   UsernamePipe,
@@ -29,15 +29,16 @@ const pipes = [
   AvatarSourcePipe,
   CurrentProjectsPipe,
   IsWeekendDayPipe,
-  IsCurrentDayPipe
+  IsCurrentDayPipe,
+  IsHolidayDataPipe
 ];
 
 const modules = [MaterialModule, FormsModule, ReactiveFormsModule, AvatarModule, NgbModule, RouterModule];
 
 const components = [AgendaComponent, FileInputResetComponent];
 @NgModule({
-  declarations: [...pipes, ...components, IsHolidayPipe],
+  declarations: [...pipes, ...components],
   imports: [CommonModule, ...modules],
-  exports: [...pipes, ...modules, ...components, IsHolidayPipe]
+  exports: [...pipes, ...modules, ...components]
 })
 export class SharedModule {}

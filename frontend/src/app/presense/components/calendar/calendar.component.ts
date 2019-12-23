@@ -4,6 +4,7 @@ import { ContextStoreService } from '../../../core/store/context-store.service';
 import { TaskModel } from '../../../shared/models/tasks.models';
 import { DateConvertService } from '../../../shared/services/date-convert.service';
 import { DayTypeGetterService } from '../../../shared/services/day-type-getter.service';
+import { HolidaysModel } from '../../../shared/models/holidays.model';
 
 @Component({
   selector: 'app-calendar',
@@ -12,13 +13,17 @@ import { DayTypeGetterService } from '../../../shared/services/day-type-getter.s
 })
 export class CalendarComponent implements OnInit {
   @Input() tasks: TaskModel[];
+
+  @Input() holidays: HolidaysModel;
+
   public selectedDate: NgbDateStruct;
 
   constructor(
     private contextStoreService: ContextStoreService,
     private dateConvertService: DateConvertService,
     private dayTypeGetterService: DayTypeGetterService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.onDateSelect(this.dateConvertService.convertMomentToNgbDate(this.contextStoreService.getCurrentDate()));

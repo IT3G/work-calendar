@@ -4,7 +4,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { BehaviorSubject, combineLatest, Observable, Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { filter, map, switchMap } from 'rxjs/operators';
 import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
 import { EmployeeStoreService } from '../../../core/store/employee-store.service';
 import { TasksStoreService } from '../../../core/store/tasks-store.service';
@@ -14,6 +14,10 @@ import { DictionaryModel } from '../../../shared/models/dictionary.model';
 import { Employee } from '../../../shared/models/employee.model';
 import { PresenceModel } from '../../../shared/models/presence.page.model';
 import { TaskModel } from '../../../shared/models/tasks.models';
+import { HolidaysApiService } from '../../../core/services/holidays-api.service';
+import { HolidaysModel } from '../../../shared/models/holidays.model';
+import { DateConvertService } from '../../../shared/services/date-convert.service';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-team-presence',
@@ -28,6 +32,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
   public date$ = new BehaviorSubject<Moment>(
     this.qParamsSnpshotMonth ? moment(this.qParamsSnpshotMonth, 'MM-YYYY') : moment()
   );
+
   public filtersForm: FormGroup;
   public projects$: Observable<DictionaryModel[]>;
   public jobPositions$: Observable<DictionaryModel[]>;
@@ -36,6 +41,9 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
 
   private employees$: Observable<Employee[]>;
   private tasks$: Observable<TaskModel[]>;
+
+  public holidays$: Observable<HolidaysModel[]>;
+
   private subscription = new Subscription();
 
   constructor(
@@ -44,18 +52,27 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
-    private dictionaryApi: DictionaryApiService
-  ) {}
+    private dictionaryApi: DictionaryApiService,
+    private holidaysService: HolidaysApiService,
+    private dateConvertService: DateConvertService
+  ) {
+  }
 
   ngOnInit() {
     this.initFilterForm(this.route.snapshot.queryParams);
     this.employees$ = this.employeeStoreService.getEmployees();
     this.tasks$ = this.tasksStoreService.getTasks();
+    this.holidays$ = this.holidaysService.getAllHolidays();
+
     this.monthDays$ = this.getMonthDays();
+
+
     this.tasksStoreService.update();
     this.employeeStoreService.update();
+
     this.updateTaskData();
     this.updateQueryParamsOnChange();
+
     this.projects$ = this.dictionaryApi.getAll('project');
     this.jobPositions$ = this.dictionaryApi.getAll('jobPosition');
     this.subdivisions$ = this.dictionaryApi.getAll('subdivision');
@@ -156,5 +173,9 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
         })
       )
     );
+  }
+
+  public convertDate(day: Moment): NgbDateStruct {
+    return this.dateConvertService.convertMomentToNgbDate(day);
   }
 }

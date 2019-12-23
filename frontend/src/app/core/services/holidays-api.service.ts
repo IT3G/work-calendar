@@ -10,8 +10,8 @@ import { HolidaysModel } from '../../shared/models/holidays.model';
 export class HolidaysApiService {
   constructor(private http: HttpClient) {
   }
-  public getAllHolidays(): Observable<HolidaysModel> {
-    return this.http.get<HolidaysModel>(`${environment.baseUrl}/holidays`);
+  public getAllHolidays(): Observable<HolidaysModel[]> {
+    return this.http.get<HolidaysModel[]>(`${environment.baseUrl}/holidays`);
   }
 
   public addHolidays(holidays: HolidaysModel): Observable<HolidaysModel> {

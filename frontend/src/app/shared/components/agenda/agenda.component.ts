@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AgendaColors } from '../../const/agenda-colors.const';
 import { AgendaColorsModel } from '../../models/agenda-colors.model';
+import { HolidayColorsModel } from '../../models/holiday-colors.model';
+import { HolidayColors } from '../../const/holiday-color.const';
 
 @Component({
   selector: 'app-agenda',
@@ -8,11 +10,13 @@ import { AgendaColorsModel } from '../../models/agenda-colors.model';
   styleUrls: ['./agenda.component.scss']
 })
 export class AgendaComponent implements OnInit {
-  public options: AgendaColorsModel[];
+  public optionsAgenda: AgendaColorsModel[];
+  public optionsHoliday: HolidayColorsModel[];
   @Input()
   public isLineView: boolean;
 
   ngOnInit() {
-    this.options = AgendaColors;
+    this.optionsAgenda = AgendaColors;
+    this.optionsHoliday = HolidayColors;
   }
 }

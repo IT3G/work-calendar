@@ -7,6 +7,8 @@ import { ContextStoreService } from '../../../core/store/context-store.service';
 import { TasksStoreService } from '../../../core/store/tasks-store.service';
 import { Employee } from '../../../shared/models/employee.model';
 import { TaskModel } from '../../../shared/models/tasks.models';
+import { HolidaysModel } from '../../../shared/models/holidays.model';
+import { HolidaysApiService } from '../../../core/services/holidays-api.service';
 
 @Component({
   selector: 'app-presence',
@@ -16,17 +18,20 @@ import { TaskModel } from '../../../shared/models/tasks.models';
 export class PresencePageComponent implements OnInit, OnDestroy {
   public selectedUser: Employee;
   public tasks$: Observable<TaskModel[]>;
+  public holidays$: Observable<HolidaysModel[]>;
   private getCurrentUserSub = new Subscription();
 
   constructor(
     private route: ActivatedRoute,
     private contextStoreService: ContextStoreService,
     private tasksStoreService: TasksStoreService,
-    private employeeApiService: EmployeeApiService
+    private employeeApiService: EmployeeApiService,
+    private holidaysService: HolidaysApiService
   ) {}
 
   ngOnInit() {
     this.checkRoute();
+    this.holidays$ = this.holidaysService.getAllHolidays();
   }
 
   ngOnDestroy() {

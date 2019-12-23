@@ -46,3 +46,19 @@ export enum HolidaysRawData {
   hours36 = 'Количество рабочих часов при 36-часовой рабочей неделе',
   hours40 = 'Количество рабочих часов при 40-часовой рабочей неделе',
 }
+
+
+export enum MonthNumber {
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'June',
+  'July',
+  'Aug',
+  'Sept',
+  'Oct',
+  'Nov',
+  'Dec',
+}
