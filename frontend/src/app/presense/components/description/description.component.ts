@@ -91,22 +91,24 @@ export class DescriptionComponent implements OnInit {
   }
 
   public printStatement(): void {
-    const val = this.form.getRawValue();
-    let dateStart = val.dateStart;
-    let dateEnd = val.dateEnd;
+    const formValue = this.form.getRawValue();
     const originalTasks = this.tasksStoreService.originalTasks$.value;
-    const event = originalTasks
-      .filter(t => t.employee === this.selectedUser.mailNickname)
-      .filter(t => moment(dateStart).isBetween(moment(t.dateStart), moment(t.dateEnd), null, '[]'))
+    let dateStart = formValue.dateStart;
+    let dateEnd = formValue.dateEnd;
+
+    const currentTask = originalTasks
+      .filter(
+        task =>
+          task.employee === this.selectedUser.mailNickname &&
+          moment(dateStart).isBetween(moment(task.dateStart), moment(task.dateEnd), null, '[]')
+      )
       .sort((a, b) => (moment(a.dtCreated).isAfter(b.dtCreated) ? -1 : 1))[0];
 
-    if (event) {
-      dateEnd = event.dateEnd;
-      dateStart = event.dateStart;
-    }
+    dateEnd = currentTask.dateEnd;
+    dateStart = currentTask.dateStart;
 
-    this.http.get('assets/1.html', { responseType: 'text' }).subscribe((data: string) => {
-      this.printHelperService.printStatement(data, this.selectedUser.username, dateStart, dateEnd);
+    this.http.get('assets/html/print-vacation.html', { responseType: 'text' }).subscribe((html: string) => {
+      this.printHelperService.printStatement(html, this.selectedUser.username, dateStart, dateEnd);
     });
   }
 
