@@ -6,6 +6,7 @@ import { TaskModel } from '../../shared/models/tasks.models';
   providedIn: 'root'
 })
 export class TasksStoreService {
+  public originalTasks$ = new BehaviorSubject<TaskModel[]>([]);
   private tasks$ = new BehaviorSubject<TaskModel[]>([]);
   private updateEmitter$ = new Subject();
 

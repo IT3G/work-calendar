@@ -1,6 +1,7 @@
 .form-container {
   max-width: 350px;
   margin: 0 auto 10px;
+  text-align: center;
 }
 .title {
   font-size: 19px;
@@ -27,4 +28,10 @@ select {
 
 .control {
   width: 100%;
+  margin-bottom: 10px;
+}
+.print {
+  color: #007bff !important;
+  text-decoration: underline !important;
+  cursor: pointer;
 }

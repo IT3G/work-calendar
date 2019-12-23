@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
@@ -14,6 +15,7 @@ import { Employee } from '../../../shared/models/employee.model';
 import { SendMailRequestModel } from '../../../shared/models/send-mail.request.model';
 import { SendingTaskModel } from '../../../shared/models/sending-task.model';
 import { TaskModel } from '../../../shared/models/tasks.models';
+import { PrintHelperService } from '../../../shared/services/print-helper.service';
 import { SendingMailService } from '../../../shared/services/sending-mail.service';
 import { SnackbarService } from '../../../shared/services/snackbar.service';
 import { TaskMapperService } from '../../../shared/services/task-mapper.service';
@@ -40,7 +42,9 @@ export class DescriptionComponent implements OnInit {
     private mailApiService: MailApiService,
     private tasksStoreService: TasksStoreService,
     private sendingMail: SendingMailService,
-    private taskMapperService: TaskMapperService
+    private taskMapperService: TaskMapperService,
+    private printHelperService: PrintHelperService,
+    private http: HttpClient
   ) {}
 
   ngOnInit() {
@@ -84,6 +88,28 @@ export class DescriptionComponent implements OnInit {
     if (sendingMail.adress.length) {
       this.mailApiService.sendMail(sendingMail).subscribe(key => console.log(key));
     }
+  }
+
+  public printStatement(): void {
+    const formValue = this.form.getRawValue();
+    const originalTasks = this.tasksStoreService.originalTasks$.value;
+    let dateStart = formValue.dateStart;
+    let dateEnd = formValue.dateEnd;
+
+    const currentTask = originalTasks
+      .filter(
+        task =>
+          task.employee === this.selectedUser.mailNickname &&
+          moment(dateStart).isBetween(moment(task.dateStart), moment(task.dateEnd), null, '[]')
+      )
+      .sort((a, b) => (moment(a.dtCreated).isAfter(b.dtCreated) ? -1 : 1))[0];
+
+    dateEnd = currentTask.dateEnd;
+    dateStart = currentTask.dateStart;
+
+    this.http.get('assets/html/print-vacation.html', { responseType: 'text' }).subscribe((html: string) => {
+      this.printHelperService.printStatement(html, this.selectedUser.username, dateStart, dateEnd);
+    });
   }
 
   public getTitle(id: number): string {

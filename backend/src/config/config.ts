@@ -21,7 +21,10 @@ export class Config {
   FEATURE_SEND_MAIL: 'NO' | 'YES';
   JWT_SECRET_KEY: string;
   JWT_EXPIRES: string;
-  UNAUTH_URLS: 'string';
+  UNAUTH_URLS: string[];
+  PRINT_COMPANY_NAME: string;
+  PRINT_HEAD_MANAGER_POSITION: string;
+  PRINT_HEAD_MANAGER_NAME: string;
 }
 
 let config;
