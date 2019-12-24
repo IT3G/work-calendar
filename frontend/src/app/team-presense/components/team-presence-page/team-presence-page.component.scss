@@ -1,4 +1,5 @@
 @import 'src/app/shared/styles/color';
+@import 'src/app/shared/styles/scroll';
 
 $borderColor: #e3e3e3;
 
@@ -13,9 +14,23 @@ $borderColor: #e3e3e3;
 }
 .table {
   width: 100%;
+  min-width: 1100px;
   overflow: auto;
   margin-top: 20px;
 }
+
+.table-header {
+  padding-right: 6px;
+}
+
+.table-scrolled {
+  max-height: calc(100vh - 450px);
+  min-height: 100px;
+  overflow-y: scroll;
+  @extend .scrollbar;
+}
+
+
 .month_title {
   text-align: center;
 }
@@ -38,7 +53,7 @@ $borderColor: #e3e3e3;
 
 .row-item {
   display: grid;
-  grid-template-columns: 240px repeat(35, 30px);
+  //настройки сетки заданы через [ngStyle] динамически
 }
 
 .title {
@@ -111,10 +126,9 @@ mat-form-field {
 }
 
 .number {
-  position: absolute;
-  right: calc(100% + -10px);
   text-align: right;
   color: #9c9a9a;
   font-size: 14px;
   margin-top: 1px;
+  padding-right: 5px;
 }

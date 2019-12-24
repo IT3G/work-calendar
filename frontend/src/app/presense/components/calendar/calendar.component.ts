@@ -36,7 +36,6 @@ export class CalendarComponent implements OnInit {
     this.contextStoreService.setDayType(this.dayTypeGetterService.getDayType(dt, this.tasks));
 
     const existedTask = this.tasks.find(i => dt.isSame(i.dateStart, 'day'));
-    console.log(this.dayTypeGetterService.getDayType(dt, this.tasks));
     if (existedTask) {
       this.contextStoreService.setComment(existedTask.comment);
     } else {

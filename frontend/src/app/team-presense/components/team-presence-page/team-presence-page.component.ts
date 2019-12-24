@@ -177,4 +177,9 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
   public convertDate(day: Moment): NgbDateStruct {
     return this.dateConvertService.convertMomentToNgbDate(day);
   }
+
+  public getStyleForGridPerMonth(): string {
+    const days = this.date$.value.daysInMonth();
+    return `30px 240px repeat(${days}, 1fr)`;
+  }
 }
