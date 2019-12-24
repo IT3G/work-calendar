@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "description": "",
   "engines": {
-    "node": "12.x"
+    "node": "12.x",
+    "yarn": "1.19.x"
   },
   "author": "",
   "license": "MIT",
