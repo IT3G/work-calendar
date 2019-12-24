@@ -1,4 +1,5 @@
 @import 'src/app/shared/styles/color';
+@import 'src/app/shared/styles/scroll';
 
 $borderColor: #e3e3e3;
 
@@ -16,6 +17,17 @@ $borderColor: #e3e3e3;
   overflow: auto;
   margin-top: 20px;
 }
+
+.table-header {
+  padding-right: 5px;
+}
+
+.table-scrolled {
+  height: calc(100vh - 500px);
+  @extend .scrollbar;
+}
+
+
 .month_title {
   text-align: center;
 }
@@ -38,7 +50,7 @@ $borderColor: #e3e3e3;
 
 .row-item {
   display: grid;
-  grid-template-columns: 240px repeat(35, 30px);
+  grid-template-columns: 30px 240px repeat(31, 1fr);
 }
 
 .title {
@@ -111,10 +123,11 @@ mat-form-field {
 }
 
 .number {
-  position: absolute;
-  right: calc(100% + -10px);
+  //position: absolute;
+  //right: calc(100% + -10px);
   text-align: right;
   color: #9c9a9a;
   font-size: 14px;
   margin-top: 1px;
+  padding-right: 5px;
 }

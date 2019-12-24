@@ -14,7 +14,8 @@
 
       <div class="table"
            *ngIf="(monthData$ | async) as monthData">
-        <div class="row-item">
+        <div class="row-item table-header">
+          <div class="number"></div>
           <div class="title header">Сотрудник</div>
           <div class="day header"
                *ngFor="let date of (monthDays$ | async)"
@@ -26,22 +27,28 @@
             <div>{{ date | datePipe: 'ddd' }}</div>
           </div>
         </div>
-        <div *ngFor="let data of (monthData | presenceFilter:filtersForm?.value:(date$ | async)); index as i"
-             class="row-item">
-          <div class="number">{{i + 1}}.</div>
-          <div class="title">
-            <div>
-              <a
-                [routerLink]="['/presence', data.employee.mailNickname]">{{ data.employee?.username?.split(' ')[0] }} {{ data.employee?.username?.split(' ')[1] }}
-              </a>
+
+
+        <div class="table-scrolled">
+          <div *ngFor="let data of (monthData | presenceFilter:filtersForm?.value:(date$ | async)); index as i"
+               class="row-item">
+            <div class="number">{{i + 1}}.</div>
+            <div class="title">
+              <div>
+                <a
+                  [routerLink]="['/presence', data.employee.mailNickname]">{{ data.employee?.username?.split(' ')[0] }} {{ data.employee?.username?.split(' ')[1] }}
+                </a>
+              </div>
+              <div class="jobPosition">{{ data.employee?.jobPosition?.name }}</div>
             </div>
-            <div class="jobPosition">{{ data.employee?.jobPosition?.name }}</div>
+            <div *ngFor="let task of data.tasks"
+                 [matTooltip]="task.comment"
+                 class="day {{ task?.type ? dayType[(task?.type)] : '' }}"
+                 [ngClass]="convertDate(task.dateStart) | isHolidayData: (holidays$ | async)"></div>
           </div>
-          <div *ngFor="let task of data.tasks"
-               [matTooltip]="task.comment"
-               class="day {{ task?.type ? dayType[(task?.type)] : '' }}"
-               [ngClass]="convertDate(task.dateStart) | isHolidayData: (holidays$ | async)"></div>
         </div>
+
+
       </div>
       <div class="agenda__wrapper">
         <app-agenda [isLineView]="true"></app-agenda>
