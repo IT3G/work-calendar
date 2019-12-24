@@ -8,10 +8,11 @@ import { ConfigurationComponent } from './components/configuration/configuration
 import { DictionaryAdminComponent } from './components/dictionary-admin/dictionary-admin.component';
 import { EmployeeAddComponent } from './components/employee-list/employee-add/employee-add.component';
 import { EmployeeListComponent } from './components/employee-list/employee-list.component';
-import { AddPopupComponent } from './components/popups/add-popup/add-popup.component';
-import { HolidaysComponent } from './components/holidays/holidays.component';
 import { CalendarBlockComponent } from './components/holidays/calendar-block/calendar-block.component';
+import { HolidaysComponent } from './components/holidays/holidays.component';
 import { HolidaysYearFilterPipe } from './components/holidays/pipes/holidays-year-filter.pipe';
+import { AddPopupComponent } from './components/popups/add-popup/add-popup.component';
+import { SubdivisionAdmComponent } from './components/subdivision-adm/subdivision-adm.component';
 
 const routes: Routes = [
   { path: 'employee-list', component: EmployeeListComponent },
@@ -28,12 +29,11 @@ const components = [
   ConfigurationComponent,
   DictionaryAdminComponent,
   HolidaysComponent,
-  CalendarBlockComponent
+  CalendarBlockComponent,
+  SubdivisionAdmComponent
 ];
 
-const pieps = [
-  HolidaysYearFilterPipe,
-];
+const pieps = [HolidaysYearFilterPipe];
 
 const entryComponents = [AddPopupComponent, EmployeeAddComponent];
 
