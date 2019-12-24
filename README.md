@@ -8,7 +8,7 @@
 Worktime planning tool.
 
 ## --> [LIVE-DEMO](https://enrey.github.io/work-calendar/) <--
-login:1, password: 1, or register
+login: 1, password: 1, or register
 
 ## Developer
 
