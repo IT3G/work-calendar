@@ -14,7 +14,7 @@
 
       <div class="table"
            *ngIf="(monthData$ | async) as monthData">
-        <div class="row-item table-header">
+        <div class="row-item table-header" [ngStyle]="{'grid-template-columns': getStyleForGridPerMonth()}">
           <div class="number"></div>
           <div class="title header">Сотрудник</div>
           <div class="day header"
@@ -31,7 +31,7 @@
 
         <div class="table-scrolled">
           <div *ngFor="let data of (monthData | presenceFilter:filtersForm?.value:(date$ | async)); index as i"
-               class="row-item">
+               class="row-item" [ngStyle]="{'grid-template-columns': getStyleForGridPerMonth()}">
             <div class="number">{{i + 1}}.</div>
             <div class="title">
               <div>
