@@ -16,12 +16,6 @@ export class DayTypeGetterService {
       const lastTask = existedTask[0];
 
       dayType = lastTask.type;
-    } else if (dt.weekday() === 5 || dt.weekday() === 6) {
-      dayType = 6;
-    }
-
-    if ((dayType === DayType.COMMON && dt.weekday() === 5) || (dt.weekday() === 6 && dayType === DayType.COMMON)) {
-      dayType = 6;
     }
     return dayType;
   }
