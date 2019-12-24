@@ -15,14 +15,8 @@ Worktime planning tool.
 
 2. Run '/database/docker-compose up --build' to start MongoDB
 
-3. !!! Modify config file '\backend\environments\test.env' file or create new, ala 'dev.env' !!!
+3. !!! Create config file '\backend\environments\dev.env', use 'test.env' as example !!!
 
-4. Run '/backend/npm run start:dev' to run Node backend
+4. Run '/backend/npm run start:dev' to run Node backend.
 
-5. Run '/frontend/yarn start' to run frontend
-
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+5. Run '/frontend/yarn start' to run frontend. Navigate to `http://localhost:4200/`.
