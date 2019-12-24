@@ -15,14 +15,6 @@
     width: 2rem;
   }
   .custom-day.selected {
-    outline: none;
-  }
-  .custom-day.hasTask {
-    outline: none;
-    background-color: blue;
-    color: white;
-  }
-  .selected {
     border: 1px solid black;
   }
   .custom-day {
@@ -30,6 +22,12 @@
     border: 1px solid white;
     &.type_COMMON {
       background-color: #ffffff;
+    }
+    &.day_HOLIDAY {
+      background-color: $holiday;
+    }
+    &.day_PRE_HOLIDAY {
+      background-color: $pre-holiday;
     }
     &.type_CUSTOM {
       background-color: #90caf9;
@@ -45,14 +43,7 @@
     &.type_SICK {
       background-color: #ffe082;
     }
-    &.day_WORK {
-    }
-    &.day_HOLIDAY {
-      background-color: $holiday;
-    }
-    &.day_PRE_HOLIDAY {
-      background-color: $pre-holiday;
-    }
+
   }
 }
 .date-picker {
