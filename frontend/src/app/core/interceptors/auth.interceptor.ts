@@ -27,6 +27,7 @@ export class AuthInterceptor implements HttpInterceptor {
       catchError((err: HttpErrorResponse) => {
         if (err && err.status === UNAUTHORIZED) {
           this.context.setCurrentUser(null);
+          localStorage.removeItem('Authorization');
           this.router.navigateByUrl('/login');
         }
 
