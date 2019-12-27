@@ -1,0 +1,25 @@
+export interface AuthSetting {
+  DATABASE_URL: string;
+  MAIL_HOST: string;
+  APP_PORT: number;
+  MAIL_SENDER_NAME: string;
+  MAIL_SENDER_ADDRESS: string;
+  LDAP_FILTER: string;
+  MAIL_POSTFIX: string;
+  READER_DOMAIN_NAME: string;
+  READER_PASSWORD: string;
+  LDAP_SERVER_URL: string;
+  LDAP_SUFFIX: string;
+  FEATURE_AVATAR_SOURCE: 'NO' | 'CONFLUENCE';
+  FEATURE_AUTH_TYPE: 'PASSWORD' | 'LDAP';
+  CONFLUENCE_BASE_URL: string;
+  CONFLUENCE_LOGIN: string;
+  CONFLUENCE_PASSWORD: string;
+  FEATURE_SEND_MAIL: 'NO' | 'YES';
+  JWT_SECRET_KEY: string;
+  JWT_EXPIRES: string;
+  UNAUTH_URLS: string;
+  PRINT_COMPANY_NAME: string;
+  PRINT_HEAD_MANAGER_POSITION: string;
+  PRINT_HEAD_MANAGER_NAME: string;
+}
