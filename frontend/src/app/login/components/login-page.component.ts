@@ -8,6 +8,7 @@ import { EmployeeApiService } from '../../core/services/employee-api.service';
 import { ContextStoreService } from '../../core/store/context-store.service';
 import { EmployeeStoreService } from '../../core/store/employee-store.service';
 import { Employee } from '../../shared/models/employee.model';
+import { AuthSetting } from '../../shared/models/auth-setting.model';
 
 @Component({
   selector: 'app-login-page',
@@ -17,7 +18,7 @@ import { Employee } from '../../shared/models/employee.model';
 export class LoginPageComponent implements OnInit {
   public errorMessage: string;
   public loginForm: FormGroup;
-  public hasRegistration$: Observable<boolean>;
+  public settings$: Observable<AuthSetting>;
 
   constructor(
     private authService: AuthApiService,
@@ -25,13 +26,13 @@ export class LoginPageComponent implements OnInit {
     private employeeStoreService: EmployeeStoreService,
     private employeeApiService: EmployeeApiService,
     private router: Router
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.initForm();
-    this.hasRegistration$ = this.contextStoreService.settings$.pipe(
+    this.settings$ = this.contextStoreService.settings$.pipe(
       filter(s => !!s),
-      map(s => s.FEATURE_AUTH_TYPE === 'PASSWORD')
     );
   }
 

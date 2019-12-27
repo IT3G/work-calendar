@@ -14,7 +14,7 @@ import { HolidaysModel } from '../../../shared/models/holidays.model';
 export class CalendarComponent implements OnInit {
   @Input() tasks: TaskModel[];
 
-  @Input() holidays: HolidaysModel;
+  @Input() holidays: HolidaysModel[];
 
   public selectedDate: NgbDateStruct;
 

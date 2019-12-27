@@ -8,8 +8,8 @@
           placeholder="E-Mail"
           autocomplete="off"
           formControlName="username">
-        <span matSuffix
-          class="input-login__suffix">@it2g.ru</span>
+        <span matSuffix *ngIf='(settings$ | async)?.FEATURE_AUTH_TYPE !== "PASSWORD"'
+          class="input-login__suffix">{{(settings$ | async)?.MAIL_POSTFIX}}</span>
       </mat-form-field>
     </div>
     <div class="form-group">
@@ -30,7 +30,7 @@
           (click)="login()"
           [disabled]="loginForm.invalid">Войти</button>
       </div>
-      <div *ngIf='hasRegistration$ | async'>
+      <div *ngIf='(settings$ | async)?.FEATURE_AUTH_TYPE === "PASSWORD"'>
         <button type="submit"
           mat-raised-button
           color="primary"

@@ -9,6 +9,7 @@ import { Employee } from '../../../shared/models/employee.model';
 import { TaskModel } from '../../../shared/models/tasks.models';
 import { HolidaysModel } from '../../../shared/models/holidays.model';
 import { HolidaysApiService } from '../../../core/services/holidays-api.service';
+import { AuthSetting } from '../../../shared/models/auth-setting.model';
 
 @Component({
   selector: 'app-presence',

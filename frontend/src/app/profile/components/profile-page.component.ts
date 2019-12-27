@@ -15,6 +15,7 @@ import { DictionaryModel } from '../../shared/models/dictionary.model';
 import { Employee } from '../../shared/models/employee.model';
 import { TaskModel } from '../../shared/models/tasks.models';
 import { SendingMailService } from '../../shared/services/sending-mail.service';
+import { AuthSetting } from '../../shared/models/auth-setting.model';
 
 @Component({
   selector: 'app-team',
@@ -39,6 +40,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   public subdivisions: DictionaryModel[];
   public users$: Observable<Employee[]>;
   public mailingAddresses: Employee[];
+  public settings$: Observable<AuthSetting>;
+
   constructor(
     private contextStoreService: ContextStoreService,
     private employeeApiService: EmployeeApiService,
@@ -55,6 +58,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.getUserInfo();
     this.isAdmin$ = this.contextStoreService.isCurrentUserAdmin$();
     this.dictionaryApi.getAll('project').subscribe(p => (this.projects = p));
+    this.settings$ = this.contextStoreService.settings$.pipe(
+      filter(s => !!s),
+    );
   }
 
   ngOnDestroy() {
