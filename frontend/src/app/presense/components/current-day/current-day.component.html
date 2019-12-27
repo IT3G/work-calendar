@@ -10,13 +10,6 @@
       <ngx-avatar size="28"
                   value="{{ selectedUser.username | usernamePipe }}"></ngx-avatar>
     </ng-template>
-
-
-
-
-<!--    <ngx-avatar size="28" [src]="selectedUser | avatarSource" value="{{ selectedUser.username | usernamePipe }}">-->
-<!--    </ngx-avatar>-->
-    &nbsp;
     <a [routerLink]="['/profile', selectedUser.mailNickname]">
       {{ selectedUser.username }}
     </a>
