@@ -8,8 +8,8 @@
           placeholder="E-Mail"
           autocomplete="off"
           formControlName="username">
-        <span matSuffix
-          class="input-login__suffix">@it2g.ru</span>
+        <span matSuffix *ngIf='!(hasRegistration$ | async)'
+          class="input-login__suffix">{{(settings$ | async)?.MAIL_POSTFIX}}</span>
       </mat-form-field>
     </div>
     <div class="form-group">
