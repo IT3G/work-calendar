@@ -35,7 +35,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   public taskHistory$: Observable<TaskModel[]>;
   public activity: TaskModel[];
   public dayType = DayType;
-  public displayedColumns: string[] = ['dateCreate', 'date', 'who', 'type', 'comment'];
   public jobPositions: DictionaryModel[];
   public subdivisions: DictionaryModel[];
   public users$: Observable<Employee[]>;
