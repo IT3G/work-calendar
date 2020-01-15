@@ -1,5 +1,5 @@
 <div class="container"
-  *ngIf="selectedUser as user">
+     *ngIf="selectedUser as user">
   <div class="row">
     <div class="col-md-2">
       <div *ngIf="(settings$ | async)?.FEATURE_AVATAR_SOURCE === 'CONFLUENCE'; else noAvatar">
@@ -27,7 +27,7 @@
                       <input matInput
                              value="{{ user.username }}"
                              autocomplete="off"
-                             formControlName="username" />
+                             formControlName="username"/>
                     </mat-form-field>
                   </div>
                   <div class="title">email:</div>
@@ -36,7 +36,7 @@
                       <input matInput
                              value="{{ user.email }}"
                              autocomplete="off"
-                             formControlName="email" />
+                             formControlName="email"/>
                     </mat-form-field>
                   </div>
                   <div class="title">дата выхода:</div>
@@ -45,7 +45,7 @@
                       <input matInput
                              autocomplete="off"
                              formControlName="whenCreated"
-                             [matDatepicker]="pickerCreate" />
+                             [matDatepicker]="pickerCreate"/>
                       <mat-datepicker-toggle matSuffix
                                              [for]="pickerCreate"></mat-datepicker-toggle>
                       <mat-datepicker #pickerCreate></mat-datepicker>
@@ -57,7 +57,7 @@
                       <input matInput
                              value="{{ user.location }}"
                              autocomplete="off"
-                             formControlName="location" />
+                             formControlName="location"/>
                     </mat-form-field>
                   </div>
 
@@ -103,7 +103,7 @@
                                autocomplete="off"
                                [formControl]="projectFormGroup.get('dateStart')"
                                [matDatepicker]="pickerFrom"
-                               placeholder="c" />
+                               placeholder="c"/>
                         <mat-datepicker-toggle matSuffix
                                                [for]="pickerFrom"></mat-datepicker-toggle>
                         <mat-datepicker #pickerFrom></mat-datepicker>
@@ -113,7 +113,7 @@
                                autocomplete="off"
                                [formControl]="projectFormGroup.get('dateEnd')"
                                [matDatepicker]="pickerTo"
-                               placeholder="по" />
+                               placeholder="по"/>
                         <mat-datepicker-toggle matSuffix
                                                [for]="pickerTo"></mat-datepicker-toggle>
                         <mat-datepicker #pickerTo></mat-datepicker>
@@ -136,7 +136,7 @@
                       <input matInput
                              value="{{ user.telNumber }}"
                              autocomplete="off"
-                             formControlName="telNumber" />
+                             formControlName="telNumber"/>
                     </mat-form-field>
                   </div>
                   <div class="title"
@@ -183,17 +183,73 @@
           <ng-template ngbTabContent>
 
             <div class="subscriptions">
-              <div *ngIf='mailingAddresses.length' class="subscription">
-                <div class="title">Подписан я: </div>
-                <div class='scroll'>
-                  <div *ngFor="let user of mailingAddresses">{{user.username}}</div>
+
+              <div class="subscription">
+                <div class="title">
+                  Подписан я:
+                  <div class="counter">{{following?.length}}</div>
+                </div>
+                <div *ngFor="let user of following" class="follow-item">
+                  {{user?.followingId?.username}}
+                  <i (click)="removeFollow(user._id)"
+                     class="fa fa-remove icon-btn"
+                     title="Отписаться"
+                     aria-hidden="true"></i>
+                </div>
+
+                <div class="add-subscriptions">
+                  <mat-form-field class="form-inline">
+                    <mat-select [formControl]=followForm [placeholder]="'Добавить подписку на'">
+                      <mat-option>Сбросить</mat-option>
+                      <mat-option *ngFor="let user of (users$ | async)"
+                                  [value]="user._id">{{
+                        user?.username
+                        }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <button
+                    [disabled]="!followForm.value"
+                    mat-mini-fab
+                    color="primary"
+                    (click)="addFollow()">
+                    <i class="fa fa-plus"
+                       aria-hidden="true"></i>
+                  </button>
                 </div>
               </div>
 
-              <div *ngIf='mailingAddresses.length' class="subscription">
-                <div class="title">Подписаны на меня:</div>
-                <div class='scroll'>
-                  <div *ngFor="let user of mailingAddresses">{{user.username}}</div>
+              <div class="subscription">
+                <div class="title">
+                  Подписаны на меня:
+                  <div class="counter">{{followers?.length}}</div>
+                </div>
+                <div *ngFor="let user of followers" class="follow-item">
+                  {{user?.followerId?.username}}
+                  <i *ngIf="isAdmin$ | async"
+                     (click)="removeFollow(user._id)"
+                     class="fa fa-remove icon-btn"
+                     title="Отписаться"
+                     aria-hidden="true"></i>
+                </div>
+
+                <div class="add-subscriptions">
+                  <mat-form-field class="form-inline">
+                    <mat-select [formControl]=followForm [placeholder]="'Добавить подписку на'">
+                      <mat-option>Сбросить</mat-option>
+                      <mat-option *ngFor="let user of (users$ | async)"
+                                  [value]="user._id">{{
+                        user?.username
+                        }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <button
+                    [disabled]="!followForm.value"
+                    mat-mini-fab
+                    color="primary"
+                    (click)="addFollow()">
+                    <i class="fa fa-plus"
+                       aria-hidden="true"></i>
+                  </button>
                 </div>
               </div>
             </div>
@@ -226,7 +282,9 @@
               </table>
             </div>
 
-            <ng-template #emptyHistory><div class="empty-history">Нет истории изменений.</div></ng-template>
+            <ng-template #emptyHistory>
+              <div class="empty-history">Нет истории изменений.</div>
+            </ng-template>
           </ng-template>
         </ngb-tab>
       </ngb-tabset>

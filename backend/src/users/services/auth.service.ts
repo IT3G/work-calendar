@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as crypto from 'crypto';
-import { UserEntity } from 'src/entity/entities/login.entity.model';
 import { Config } from '../../config/config';
 import { JwtSignModel } from '../models/jwt-sign.model';
 import { LoginModel } from '../models/login.model';
 import { LdapService } from './ldap.service';
 import { UsersService } from './users.service';
+import { UserEntity } from '../../entity/entities/user.entity.model';
 
 @Injectable()
 export class AuthService {
@@ -32,7 +32,7 @@ export class AuthService {
   private async authLocal(credentials: LoginModel): Promise<UserEntity> {
     const user = await this.usersService.getUserByLogin(credentials.username);
 
-    if (user && user.hashPswd === crypto.createHmac('sha256', credentials.password).digest('hex')) {
+    if (user && user.hashPassword === crypto.createHmac('sha256', credentials.password).digest('hex')) {
       return Promise.resolve(user);
     }
 

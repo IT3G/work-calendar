@@ -2,7 +2,7 @@ import { Body, Controller, Get, HttpStatus, Post, Req, Res } from '@nestjs/commo
 import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
 import { Request, Response } from 'express';
 import { Config } from '../config/config';
-import { UsersService } from '../users/services/users.service';
+import { UsersService } from './services/users.service';
 import { LoginModel } from './models/login.model';
 import { AuthService } from './services/auth.service';
 import { LdapService } from './services/ldap.service';
@@ -21,7 +21,7 @@ export class AuthController {
   async auth(@Res() res: Response, @Body() credentials: LoginModel) {
     try {
       const user = await this.authService.auth(credentials);
-      user.hashPswd = `Bearer ${this.authService.getJWTbyUser(user)}`;
+      user.hashPassword = `Bearer ${this.authService.getJWTbyUser(user)}`;
       res.status(HttpStatus.OK).send(user);
     } catch (e) {
       res.status(HttpStatus.NOT_ACCEPTABLE).send('e');

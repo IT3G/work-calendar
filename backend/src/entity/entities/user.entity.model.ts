@@ -17,5 +17,5 @@ export interface UserEntity extends Document {
   subdivision: SubdivisionEntity;
   jobPosition: JobPositionEntity;
   authType?: string;
-  hashPswd?: string;
+  hashPassword?: string;
 }

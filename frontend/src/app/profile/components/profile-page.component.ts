@@ -16,6 +16,8 @@ import { Employee } from '../../shared/models/employee.model';
 import { TaskModel } from '../../shared/models/tasks.models';
 import { SendingMailService } from '../../shared/services/sending-mail.service';
 import { AuthSetting } from '../../shared/models/auth-setting.model';
+import { FollowApiService } from '../../core/services/follow-api.service';
+import { FollowModel } from '../../shared/models/follow.model';
 
 @Component({
   selector: 'app-team',
@@ -25,6 +27,7 @@ import { AuthSetting } from '../../shared/models/auth-setting.model';
 export class ProfilePageComponent implements OnInit, OnDestroy {
   public selectedUser: Employee;
   public profileForm: FormGroup;
+  public followForm: FormControl;
   public isAdmin$: Observable<boolean>;
   public isEdit = false;
   public canEdit = true;
@@ -35,8 +38,13 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   public taskHistory$: Observable<TaskModel[]>;
   public activity: TaskModel[];
   public dayType = DayType;
+
   public jobPositions: DictionaryModel[];
   public subdivisions: DictionaryModel[];
+
+  public following: FollowModel[];
+  public followers: FollowModel[];
+
   public users$: Observable<Employee[]>;
   public mailingAddresses: Employee[];
   public settings$: Observable<AuthSetting>;
@@ -47,18 +55,22 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     private employeeStoreService: EmployeeStoreService,
     private route: ActivatedRoute,
     private dictionaryApi: DictionaryApiService,
+    private followApi: FollowApiService,
     private taskApi: TaskApiService,
     private fb: FormBuilder,
     private sendingMail: SendingMailService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.users$ = this.employeeApiService.loadAllEmployees();
+    this.followForm = new FormControl();
+
     this.getUserInfo();
     this.isAdmin$ = this.contextStoreService.isCurrentUserAdmin$();
     this.dictionaryApi.getAll('project').subscribe(p => (this.projects = p));
     this.settings$ = this.contextStoreService.settings$.pipe(
-      filter(s => !!s),
+      filter(s => !!s)
     );
   }
 
@@ -121,6 +133,20 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     });
   }
 
+  public addFollow() {
+    const data: FollowModel = {
+      followingId: this.followForm.value,
+      followerId: this.selectedUser._id,
+      projectId: null
+    };
+
+    this.followApi.addFollow(data).subscribe();
+  }
+
+  public removeFollow(id: string) {
+    this.followApi.removeFollow(id).subscribe();
+  }
+
   public cancelEdit(): void {
     this.profileForm.disable();
     this.isEdit = false;
@@ -129,6 +155,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   public getAvatarSrc() {
     return `${environment.baseUrl}/avatar?login=` + this.login;
   }
+
 
   private getUserInfo(): void {
     const jobPositions$ = this.dictionaryApi.getAll('jobPosition');
@@ -145,6 +172,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       } else {
         this.getUserFromApi();
       }
+
     });
   }
 
@@ -155,6 +183,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         this.setSelectedUser(user);
         this.canEdit = false;
         this.loadTasks(user.mailNickname);
+        this.loadFollow(user._id);
         this.mailingAddresses = this.sendingMail.filterEmployee(this.selectedUser);
       })
     );
@@ -170,6 +199,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           this.setSelectedUser(user);
           this.login = user.mailNickname;
           this.loadTasks(user.mailNickname);
+          this.loadFollow(user._id);
           this.mailingAddresses = this.sendingMail.filterEmployee(this.selectedUser);
         })
     );
@@ -192,6 +222,17 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
             })
             .filter(t => !!t))
       );
+  }
+
+  public loadFollow(userId: string) {
+    const following$ = this.followApi.getMyFollowing(this.selectedUser._id);
+    const followers$ = this.followApi.getMyFollowers(this.selectedUser._id);
+
+    forkJoin([ following$, followers$]).subscribe(([following, followers]) => {
+      this.following = following;
+      this.followers = followers;
+    });
+
   }
 
   private initForm(user: Employee): void {

@@ -58,7 +58,7 @@ export class LdapService implements OnApplicationShutdown {
       subdivision: null,
       jobPosition: null,
       authType: 'LDAP',
-      hashPswd: null,
+      hashPassword: null,
     };
   }
 

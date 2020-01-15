@@ -1,5 +1,5 @@
 export class SendMailRequestModel {
-  adress: string[];
+  address: string[];
   author: string;
   date: string;
   user: string;

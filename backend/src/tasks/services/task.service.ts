@@ -9,13 +9,11 @@ export class TaskService {
   constructor(@InjectModel('Tasks') private readonly taskModel: Model<TaskEntity>) {}
 
   async getTasks(): Promise<TaskResponseModel[]> {
-    const users = await this.taskModel.find().exec();
-    return users;
+    return await this.taskModel.find().exec();
   }
 
   async getTasksByAuthor(author: string): Promise<TaskResponseModel[]> {
-    const users = await this.taskModel.find({ employeeCreated: author }).exec();
-    return users;
+    return await this.taskModel.find({ employeeCreated: author }).exec();
   }
 
   async addTask(task: TaskResponseModel): Promise<TaskResponseModel> {

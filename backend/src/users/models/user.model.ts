@@ -31,5 +31,5 @@ export class UserModel {
   @ApiModelProperty()
   authType?: string;
   @ApiModelProperty()
-  hashPswd?: string;
+  hashPassword?: string;
 }

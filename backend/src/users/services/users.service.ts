@@ -2,42 +2,38 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as crypto from 'crypto';
 import { Model } from 'mongoose';
-import { UserEntity } from '../../entity/entities/login.entity.model';
 import { LoginModel } from '../models/login.model';
 import { UserModel } from '../models/user.model';
+import { UserEntity } from '../../entity/entities/user.entity.model';
 
 @Injectable()
 export class UsersService {
   constructor(@InjectModel('Users') private readonly userModel: Model<UserEntity>) {}
 
   async getUsers(): Promise<UserEntity[]> {
-    const users = await this.userModel
+    return await this.userModel
       .find()
       .populate('jobPosition')
       .populate('subdivision')
       .sort({ username: 'asc' })
       .exec();
-    return users;
   }
 
   async getUserByLogin(mailNickname: string): Promise<UserEntity> {
     const employeeRegex = new RegExp(`^${mailNickname}$`, 'i');
-    const user = await this.userModel
+    return await this.userModel
       .findOne({ mailNickname: employeeRegex })
       .populate('jobPosition')
       .populate('subdivision')
       .exec();
-
-    return user;
   }
 
   async getUserById(id: string): Promise<UserEntity> {
-    const user = await this.userModel
+    return await this.userModel
       .findById(id)
       .populate('jobPosition')
       .populate('subdivision')
       .exec();
-    return user;
   }
 
   async addUser(userInfo: UserModel): Promise<UserEntity> {
@@ -61,7 +57,7 @@ export class UsersService {
       subdivision: null,
       jobPosition: null,
       authType: 'hash',
-      hashPswd: crypto.createHmac('sha256', userInfo.password).digest('hex'),
+      hashPassword: crypto.createHmac('sha256', userInfo.password).digest('hex'),
     };
 
     const newUser = await this.userModel.create(data);
@@ -70,6 +66,10 @@ export class UsersService {
 
   async updateUserByLogin(login: string, data: UserModel): Promise<UserEntity> {
     const result = await this.userModel.updateOne({ mailNickname: login }, { ...data });
+
+    // ToDo: здесь обновить подписки
+    // проект без _id новый
+
     return result;
   }
 }

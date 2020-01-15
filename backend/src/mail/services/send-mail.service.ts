@@ -6,7 +6,7 @@ const config = getConfig();
 
 @Injectable()
 export class SendMailService {
-  constructor(private config: Config) {}
+  constructor(private configMail: Config) {}
 
   public async sendMail(data: SendMailRequestModel): Promise<string> {
     if (config.FEATURE_SEND_MAIL !== 'YES') {
@@ -16,12 +16,12 @@ export class SendMailService {
     process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 
     const transporter = nodemailer.createTransport({
-      host: this.config.MAIL_HOST,
+      host: this.configMail.MAIL_HOST,
       port: 25,
-      secure: false
+      secure: false,
     });
 
-    const users = data.adress.join(',');
+    const users = data.address.join(',');
 
     let message = `Пользователь ${data.author} изменил присутсвие на <b>${data.date}</b> для ${data.user} на <u>${data.status}</u>`;
 
@@ -33,11 +33,11 @@ export class SendMailService {
       message = message + `<br><br>${data.comment}`;
     }
 
-    let info = await transporter.sendMail({
-      from: `${this.config.MAIL_SENDER_NAME}<${this.config.MAIL_SENDER_ADDRESS}>`,
+    const info = await transporter.sendMail({
+      from: `${this.configMail.MAIL_SENDER_NAME}<${this.configMail.MAIL_SENDER_ADDRESS}>`,
       to: users,
       subject: 'Изменение присутствия',
-      html: message
+      html: message,
     });
 
     return info.messageId;

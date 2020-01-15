@@ -136,8 +136,54 @@ button {
 
 .subscriptions {
   display: flex;
+  margin-bottom: 50px;
 
   .subscription {
-    width: 40%;
+    width: 100%;
+    margin-right: 50px;
+
+    .title {
+      padding-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .counter {
+        width: 40px;
+        height: 40px;
+        background-color: #d1ecf1;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 40px;
+        margin-right: 8px;
+      }
+    }
   }
+
+  .follow-item {
+    display: flex;
+    justify-content: space-between;
+
+    padding: 5px 20px 5px 5px;
+    border-bottom: 1px solid #dee2e6;
+  }
+}
+
+.icon-btn {
+  color: #dee2e6;
+  &:hover {
+    color: black;
+    cursor: pointer;
+  }
+}
+
+
+.add-subscriptions {
+  display: flex;
+  align-items: center;
+  padding-top: 20px;
+}
+
+.form-inline {
+  padding-right: 10px;
 }

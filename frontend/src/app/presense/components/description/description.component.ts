@@ -85,7 +85,7 @@ export class DescriptionComponent implements OnInit {
       this.tasksStoreService.update();
     });
 
-    if (sendingMail.adress.length) {
+    if (sendingMail.address.length) {
       this.mailApiService.sendMail(sendingMail).subscribe(key => console.log(key));
     }
   }
@@ -158,8 +158,8 @@ export class DescriptionComponent implements OnInit {
       .filter(emp => this.contextStoreService.getCurrentUser().email !== emp.email)
       .map(emp => emp.email);
 
-    const obj = {
-      adress: mailingAddresses,
+    return {
+      address: mailingAddresses,
       author: this.contextStoreService.getCurrentUser().username,
       date: moment(formValue.dateStart).format('DD.MM.YYYY'),
       dateEnd: formValue.dateEnd ? moment(formValue.dateEnd).format('DD.MM.YYYY') : null,
@@ -167,7 +167,5 @@ export class DescriptionComponent implements OnInit {
       status: this.getTitle(formValue.type.id),
       comment: formValue.comment
     };
-
-    return obj;
   }
 }
