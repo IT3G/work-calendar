@@ -29,4 +29,5 @@ export class FollowService {
   async delete(id: number): Promise<FollowerModel> {
     return await this.followModel.findByIdAndDelete(id);
   }
+
 }

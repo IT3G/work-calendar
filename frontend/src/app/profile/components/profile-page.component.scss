@@ -8,12 +8,13 @@
   color: rgb(148, 148, 148);
 }
 
-::ng-deep .tab-pane {
+
+::ng-deep .mat-tab-body {
   padding: 20px 10px;
 }
 
 .tab-scroll-content {
-  max-height: calc(100vh - 250px);
+  max-height: calc(100vh - 260px);
   @extend .scrollbar;
 }
 .profile-form {

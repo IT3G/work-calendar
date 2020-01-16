@@ -13,182 +13,181 @@
       </ng-template>
     </div>
     <div class="col-md-10 wrapper">
-      <ngb-tabset>
-        <ngb-tab title="Личные данные">
-          <ng-template ngbTabContent>
-            <div class="tab-scroll-content">
-              <div class="profile-form"
-                   [formGroup]="profileForm"
-                   (keydown.enter)="onUpdateProfile()">
-                <div class="grid">
-                  <div class="title">фамилия, имя:</div>
-                  <div class="form-group">
-                    <mat-form-field>
-                      <input matInput
-                             value="{{ user.username }}"
-                             autocomplete="off"
-                             formControlName="username"/>
-                    </mat-form-field>
-                  </div>
-                  <div class="title">email:</div>
-                  <div class="form-group">
-                    <mat-form-field>
-                      <input matInput
-                             value="{{ user.email }}"
-                             autocomplete="off"
-                             formControlName="email"/>
-                    </mat-form-field>
-                  </div>
-                  <div class="title">дата выхода:</div>
-                  <div class="form-group">
-                    <mat-form-field class="control control-date">
-                      <input matInput
-                             autocomplete="off"
-                             formControlName="whenCreated"
-                             [matDatepicker]="pickerCreate"/>
-                      <mat-datepicker-toggle matSuffix
-                                             [for]="pickerCreate"></mat-datepicker-toggle>
-                      <mat-datepicker #pickerCreate></mat-datepicker>
-                    </mat-form-field>
-                  </div>
-                  <div class="title">город:</div>
-                  <div class="form-group">
-                    <mat-form-field>
-                      <input matInput
-                             value="{{ user.location }}"
-                             autocomplete="off"
-                             formControlName="location"/>
-                    </mat-form-field>
-                  </div>
 
-                  <div class="title">подразделение:</div>
-                  <div class="form-group">
-                    <mat-form-field>
-                      <mat-select formControlName="subdivision">
-                        <mat-option *ngFor="let subdivision of subdivisions"
-                                    [value]="subdivision">
-                          {{ subdivision?.name }}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
+      <mat-tab-group [animationDuration]="0">
+        <mat-tab label="Личные данные">
+          <div class="tab-scroll-content">
+            <div class="profile-form"
+                 [formGroup]="profileForm"
+                 (keydown.enter)="onUpdateProfile()">
+              <div class="grid">
+                <div class="title">фамилия, имя:</div>
+                <div class="form-group">
+                  <mat-form-field>
+                    <input matInput
+                           value="{{ user.username }}"
+                           autocomplete="off"
+                           formControlName="username"/>
+                  </mat-form-field>
+                </div>
+                <div class="title">email:</div>
+                <div class="form-group">
+                  <mat-form-field>
+                    <input matInput
+                           value="{{ user.email }}"
+                           autocomplete="off"
+                           formControlName="email"/>
+                  </mat-form-field>
+                </div>
+                <div class="title">дата выхода:</div>
+                <div class="form-group">
+                  <mat-form-field class="control control-date">
+                    <input matInput
+                           autocomplete="off"
+                           formControlName="whenCreated"
+                           [matDatepicker]="pickerCreate"/>
+                    <mat-datepicker-toggle matSuffix
+                                           [for]="pickerCreate"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerCreate></mat-datepicker>
+                  </mat-form-field>
+                </div>
+                <div class="title">город:</div>
+                <div class="form-group">
+                  <mat-form-field>
+                    <input matInput
+                           value="{{ user.location }}"
+                           autocomplete="off"
+                           formControlName="location"/>
+                  </mat-form-field>
+                </div>
 
-                  <div class="title">позиция:</div>
-                  <div class="form-group">
+                <div class="title">подразделение:</div>
+                <div class="form-group">
+                  <mat-form-field>
+                    <mat-select formControlName="subdivision">
+                      <mat-option *ngFor="let subdivision of subdivisions"
+                                  [value]="subdivision">
+                        {{ subdivision?.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div class="title">позиция:</div>
+                <div class="form-group">
+                  <mat-form-field>
+                    <mat-select formControlName="jobPosition">
+                      <mat-option *ngFor="let jobPosition of jobPositions"
+                                  [value]="jobPosition">{{
+                        jobPosition?.name
+                        }}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                </div>
+
+                <div class="title">проекты:</div>
+                <div class="form-group project">
+                  <div *ngFor="let projectFormGroup of projectFormArray.controls; index as i"
+                       class="project-grid">
                     <mat-form-field>
-                      <mat-select formControlName="jobPosition">
-                        <mat-option *ngFor="let jobPosition of jobPositions"
-                                    [value]="jobPosition">{{
-                          jobPosition?.name
+                      <mat-select [formControl]="projectFormGroup.get('project')">
+                        <mat-option *ngFor="let project of (projects)"
+                                    [value]="project._id">{{
+                          project.name
                           }}</mat-option>
                       </mat-select>
                     </mat-form-field>
-
-                  </div>
-
-                  <div class="title">проекты:</div>
-                  <div class="form-group project">
-                    <div *ngFor="let projectFormGroup of projectFormArray.controls; index as i"
-                         class="project-grid">
-                      <mat-form-field>
-                        <mat-select [formControl]="projectFormGroup.get('project')">
-                          <mat-option *ngFor="let project of (projects)"
-                                      [value]="project._id">{{
-                            project.name
-                            }}</mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                      <mat-form-field class="control">
-                        <input matInput
-                               autocomplete="off"
-                               [formControl]="projectFormGroup.get('dateStart')"
-                               [matDatepicker]="pickerFrom"
-                               placeholder="c"/>
-                        <mat-datepicker-toggle matSuffix
-                                               [for]="pickerFrom"></mat-datepicker-toggle>
-                        <mat-datepicker #pickerFrom></mat-datepicker>
-                      </mat-form-field>
-                      <mat-form-field class="control">
-                        <input matInput
-                               autocomplete="off"
-                               [formControl]="projectFormGroup.get('dateEnd')"
-                               [matDatepicker]="pickerTo"
-                               placeholder="по"/>
-                        <mat-datepicker-toggle matSuffix
-                                               [for]="pickerTo"></mat-datepicker-toggle>
-                        <mat-datepicker #pickerTo></mat-datepicker>
-                      </mat-form-field>
-                      <div class="delete"
-                           *ngIf="isEdit"
-                           (click)="removeFormGroupProject(i)"></div>
-                    </div>
-                    <div class="add"
-                         [class.add-margin]="!projectFormArray.controls.length"
-                         *ngIf="isEdit"
-                         (click)="addProjectFromGroup()">
-                      <div class="add-btn"></div>
-                      <span class="span-project">добавить проект</span>
-                    </div>
-                  </div>
-                  <div class="title">телефон:</div>
-                  <div class="form-group">
-                    <mat-form-field>
+                    <mat-form-field class="control">
                       <input matInput
-                             value="{{ user.telNumber }}"
                              autocomplete="off"
-                             formControlName="telNumber"/>
+                             [formControl]="projectFormGroup.get('dateStart')"
+                             [matDatepicker]="pickerFrom"
+                             placeholder="c"/>
+                      <mat-datepicker-toggle matSuffix
+                                             [for]="pickerFrom"></mat-datepicker-toggle>
+                      <mat-datepicker #pickerFrom></mat-datepicker>
                     </mat-form-field>
+                    <mat-form-field class="control">
+                      <input matInput
+                             autocomplete="off"
+                             [formControl]="projectFormGroup.get('dateEnd')"
+                             [matDatepicker]="pickerTo"
+                             placeholder="по"/>
+                      <mat-datepicker-toggle matSuffix
+                                             [for]="pickerTo"></mat-datepicker-toggle>
+                      <mat-datepicker #pickerTo></mat-datepicker>
+                    </mat-form-field>
+                    <div class="delete"
+                         *ngIf="isEdit"
+                         (click)="removeFormGroupProject(i)"></div>
                   </div>
-                  <div class="title"
-                       *ngIf="(isAdmin$ | async)">админ:
+                  <div class="add"
+                       [class.add-margin]="!projectFormArray.controls.length"
+                       *ngIf="isEdit"
+                       (click)="addProjectFromGroup()">
+                    <div class="add-btn"></div>
+                    <span class="span-project">добавить проект</span>
                   </div>
-                  <div *ngIf="(isAdmin$ | async)"
-                       class="form-group checkbox">
-                    <mat-checkbox color="primary"
-                                  formControlName="isAdmin"></mat-checkbox>
-                  </div>
-                  <div class="title">в рассылке:</div>
-                  <div class="form-group checkbox">
-                    <mat-checkbox color="primary"
-                                  formControlName="hasMailing"></mat-checkbox>
-                  </div>
-                  <div class="form-footer">
-                    <button type="submit"
-                            mat-raised-button
-                            color="primary"
-                            *ngIf="!isEdit && (canEdit || (isAdmin$ | async))"
-                            (click)="editStart()">
-                      Редактировать
-                    </button>
-                    <button type="submit"
-                            mat-raised-button
-                            color="primary"
-                            *ngIf="isEdit"
-                            [disabled]="profileForm.invalid"
-                            (click)="onUpdateProfile()">
-                      Сохранить
-                    </button>
-                    <button mat-raised-button
-                            *ngIf="isEdit"
-                            (click)="cancelEdit()">Отмена
-                    </button>
-                  </div>
+                </div>
+                <div class="title">телефон:</div>
+                <div class="form-group">
+                  <mat-form-field>
+                    <input matInput
+                           value="{{ user.telNumber }}"
+                           autocomplete="off"
+                           formControlName="telNumber"/>
+                  </mat-form-field>
+                </div>
+                <div class="title"
+                     *ngIf="(isAdmin$ | async)">админ:
+                </div>
+                <div *ngIf="(isAdmin$ | async)"
+                     class="form-group checkbox">
+                  <mat-checkbox color="primary"
+                                formControlName="isAdmin"></mat-checkbox>
+                </div>
+                <div class="title">в рассылке:</div>
+                <div class="form-group checkbox">
+                  <mat-checkbox color="primary"
+                                formControlName="hasMailing"></mat-checkbox>
+                </div>
+                <div class="form-footer">
+                  <button type="submit"
+                          mat-raised-button
+                          color="primary"
+                          *ngIf="!isEdit && (canEdit || (isAdmin$ | async))"
+                          (click)="editStart()">
+                    Редактировать
+                  </button>
+                  <button type="submit"
+                          mat-raised-button
+                          color="primary"
+                          *ngIf="isEdit"
+                          [disabled]="profileForm.invalid"
+                          (click)="onUpdateProfile()">
+                    Сохранить
+                  </button>
+                  <button mat-raised-button
+                          *ngIf="isEdit"
+                          (click)="cancelEdit()">Отмена
+                  </button>
                 </div>
               </div>
             </div>
+          </div>
 
-          </ng-template>
-        </ngb-tab>
-        <ngb-tab title="Подписки">
-          <ng-template ngbTabContent>
+        </mat-tab>
+        <mat-tab label="Подписки">
+          <div class="subscriptions">
 
-            <div class="subscriptions">
+            <div class="subscription">
+              <div class="title">
+                Подписан я:
+                <div class="counter">{{following?.length}}</div>
+              </div>
 
-              <div class="subscription">
-                <div class="title">
-                  Подписан я:
-                  <div class="counter">{{following?.length}}</div>
-                </div>
+              <div *ngIf="following?.length; else emptyFollow">
                 <div *ngFor="let user of following" class="follow-item">
                   {{user?.followingId?.username}}
                   <i (click)="removeFollow(user._id)"
@@ -196,98 +195,102 @@
                      title="Отписаться"
                      aria-hidden="true"></i>
                 </div>
-
-                <div class="add-subscriptions">
-                  <mat-form-field class="form-inline">
-                    <mat-select [formControl]=followForm [placeholder]="'Добавить подписку на'">
-                      <mat-option>Сбросить</mat-option>
-                      <mat-option *ngFor="let user of (users$ | async)"
-                                  [value]="user._id">{{
-                        user?.username
-                        }}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                  <button
-                    [disabled]="!followForm.value"
-                    mat-mini-fab
-                    color="primary"
-                    (click)="addFollow()">
-                    <i class="fa fa-plus"
-                       aria-hidden="true"></i>
-                  </button>
-                </div>
               </div>
 
-              <div class="subscription">
-                <div class="title">
-                  Подписаны на меня:
-                  <div class="counter">{{followers?.length}}</div>
-                </div>
+              <div class="add-subscriptions">
+                <mat-form-field class="form-inline">
+                  <mat-select [formControl]=followingForm [placeholder]="'Добавить подписку'">
+                    <mat-option>Сбросить</mat-option>
+                    <mat-option *ngFor="let user of (users$ | async)"
+                                [value]="user._id">{{
+                      user?.username
+                      }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <button
+                  [disabled]="!followingForm.value"
+                  mat-mini-fab
+                  color="primary"
+                  (click)="addFollowing()">
+                  <i class="fa fa-plus"
+                     aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="subscription">
+              <div class="title">
+                Подписаны на меня:
+                <div class="counter">{{followers?.length}}</div>
+              </div>
+              <div *ngIf="followers?.length; else emptyFollow">
                 <div *ngFor="let user of followers" class="follow-item">
                   {{user?.followerId?.username}}
-                  <i *ngIf="isAdmin$ | async"
-                     (click)="removeFollow(user._id)"
+                  <i (click)="removeFollow(user._id)"
                      class="fa fa-remove icon-btn"
                      title="Отписаться"
                      aria-hidden="true"></i>
                 </div>
+              </div>
 
-                <div class="add-subscriptions">
-                  <mat-form-field class="form-inline">
-                    <mat-select [formControl]=followForm [placeholder]="'Добавить подписку на'">
-                      <mat-option>Сбросить</mat-option>
-                      <mat-option *ngFor="let user of (users$ | async)"
-                                  [value]="user._id">{{
-                        user?.username
-                        }}</mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                  <button
-                    [disabled]="!followForm.value"
-                    mat-mini-fab
-                    color="primary"
-                    (click)="addFollow()">
-                    <i class="fa fa-plus"
-                       aria-hidden="true"></i>
-                  </button>
-                </div>
+
+              <div class="add-subscriptions">
+                <mat-form-field class="form-inline">
+                  <mat-select [formControl]=followerForm [placeholder]="'Добавить подписчика'">
+                    <mat-option>Сбросить</mat-option>
+                    <mat-option *ngFor="let user of (users$ | async)"
+                                [value]="user._id">{{
+                      user?.username
+                      }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <button
+                  [disabled]="!followerForm.value"
+                  mat-mini-fab
+                  color="primary"
+                  (click)="addFollower()">
+                  <i class="fa fa-plus"
+                     aria-hidden="true"></i>
+                </button>
               </div>
             </div>
-          </ng-template>
-        </ngb-tab>
-        <ngb-tab title="История">
-          <ng-template ngbTabContent>
-            <table class="history-table" *ngIf="activity as taskHistory; else emptyHistory">
-              <tr>
-                <td class="change-date">Дата изменения</td>
-                <td class="date">Дата</td>
-                <td class="employee">Кому</td>
-                <td class="type">Вид</td>
-                <td class="comment">Комментарий</td>
+
+            <ng-template #emptyFollow>Нет подписок.</ng-template>
+          </div>
+
+        </mat-tab>
+        <mat-tab label="История">
+          <table class="history-table" *ngIf="activity as taskHistory; else emptyHistory">
+            <tr>
+              <td class="change-date">Дата изменения</td>
+              <td class="date">Дата</td>
+              <td class="employee">Кому</td>
+              <td class="type">Вид</td>
+              <td class="comment">Комментарий</td>
+            </tr>
+          </table>
+          <div class="tab-scroll-content"
+               *ngIf="activity as taskHistory">
+            <table class="history-table">
+              <tr *ngFor="let element of taskHistory$ | async">
+                <td class="change-date">{{ element.dtCreated | datePipe: 'DD MMMM, HH:mm' }}</td>
+                <td class="date">
+                  {{ element.dateStart | datePipe: 'DD MMMM' }}
+                  <span *ngIf="hasDateRange(element)"> по {{ element.dateEnd | datePipe: 'DD MMMM' }} </span>
+                </td>
+                <td class="employee">{{ element.employee }}</td>
+                <td class="type">{{ dayType[element.type] | taskType }}</td>
+                <td class="comment">{{ element.comment }}</td>
               </tr>
             </table>
-            <div class="tab-scroll-content"
-                 *ngIf="activity as taskHistory">
-              <table class="history-table">
-                <tr *ngFor="let element of taskHistory$ | async">
-                  <td class="change-date">{{ element.dtCreated | datePipe: 'DD MMMM, HH:mm' }}</td>
-                  <td class="date">
-                    {{ element.dateStart | datePipe: 'DD MMMM' }}
-                    <span *ngIf="hasDateRange(element)"> по {{ element.dateEnd | datePipe: 'DD MMMM' }} </span>
-                  </td>
-                  <td class="employee">{{ element.employee }}</td>
-                  <td class="type">{{ dayType[element.type] | taskType }}</td>
-                  <td class="comment">{{ element.comment }}</td>
-                </tr>
-              </table>
-            </div>
+          </div>
 
-            <ng-template #emptyHistory>
-              <div class="empty-history">Нет истории изменений.</div>
-            </ng-template>
+          <ng-template #emptyHistory>
+            <div class="empty-history">Нет истории изменений.</div>
           </ng-template>
-        </ngb-tab>
-      </ngb-tabset>
+        </mat-tab>
+      </mat-tab-group>
+
     </div>
   </div>
 

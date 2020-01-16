@@ -27,7 +27,6 @@ import { FollowModel } from '../../shared/models/follow.model';
 export class ProfilePageComponent implements OnInit, OnDestroy {
   public selectedUser: Employee;
   public profileForm: FormGroup;
-  public followForm: FormControl;
   public isAdmin$: Observable<boolean>;
   public isEdit = false;
   public canEdit = true;
@@ -44,6 +43,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   public following: FollowModel[];
   public followers: FollowModel[];
+  public followingForm: FormControl;
+  public followerForm: FormControl;
 
   public users$: Observable<Employee[]>;
   public mailingAddresses: Employee[];
@@ -64,7 +65,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.users$ = this.employeeApiService.loadAllEmployees();
-    this.followForm = new FormControl();
+    this.followingForm = new FormControl();
+    this.followerForm = new FormControl();
 
     this.getUserInfo();
     this.isAdmin$ = this.contextStoreService.isCurrentUserAdmin$();
@@ -81,6 +83,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   public createProjectsFormGroup(project?: any): FormGroup {
     const group = this.fb.group({
+      // _id: project._id ,
       project: null,
       dateStart: null,
       dateEnd: null
@@ -133,18 +136,28 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     });
   }
 
-  public addFollow() {
+  public addFollowing() {
     const data: FollowModel = {
-      followingId: this.followForm.value,
+      followingId: this.followingForm.value,
       followerId: this.selectedUser._id,
       projectId: null
     };
 
-    this.followApi.addFollow(data).subscribe();
+    this.followApi.addFollow(data).subscribe(res => this.loadFollow());
+  }
+
+  public addFollower() {
+    const data: FollowModel = {
+      followingId: this.selectedUser._id,
+      followerId: this.followerForm.value,
+      projectId: null
+    };
+
+    this.followApi.addFollow(data).subscribe(res => this.loadFollow());
   }
 
   public removeFollow(id: string) {
-    this.followApi.removeFollow(id).subscribe();
+    this.followApi.removeFollow(id).subscribe(res => this.loadFollow());
   }
 
   public cancelEdit(): void {
@@ -183,7 +196,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         this.setSelectedUser(user);
         this.canEdit = false;
         this.loadTasks(user.mailNickname);
-        this.loadFollow(user._id);
+        this.loadFollow();
         this.mailingAddresses = this.sendingMail.filterEmployee(this.selectedUser);
       })
     );
@@ -199,7 +212,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           this.setSelectedUser(user);
           this.login = user.mailNickname;
           this.loadTasks(user.mailNickname);
-          this.loadFollow(user._id);
+          this.loadFollow();
           this.mailingAddresses = this.sendingMail.filterEmployee(this.selectedUser);
         })
     );
@@ -224,7 +237,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       );
   }
 
-  public loadFollow(userId: string) {
+  public loadFollow() {
     const following$ = this.followApi.getMyFollowing(this.selectedUser._id);
     const followers$ = this.followApi.getMyFollowers(this.selectedUser._id);
 

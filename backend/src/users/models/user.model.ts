@@ -3,13 +3,20 @@ import { DictionaryModel } from '../../dictionary/models/dictionary.model';
 
 export class UserModel {
   @ApiModelProperty()
+  id: string;
+  @ApiModelProperty()
   username: string;
   @ApiModelProperty()
   location: string;
   @ApiModelProperty()
   position: string;
   @ApiModelProperty()
-  projects: string[];
+  projects: Array<{
+    _id: string;
+    dateStart: string;
+    dateEnd: string;
+    project: string;
+  }>;
   @ApiModelProperty()
   whenCreated: string;
   @ApiModelProperty()
