@@ -1,13 +1,16 @@
-import { Body, Controller, Get, HttpStatus, NotFoundException, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, NotFoundException, Param, Post, Res, HttpCode } from '@nestjs/common';
 import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
 import { UserModel } from './models/user.model';
 import { UsersService } from './services/users.service';
+import { UserEntity } from '../entity/entities/user.entity.model';
+import { FollowService } from './services/follow.service';
 
 @ApiBearerAuth()
 @ApiUseTags('Users')
 @Controller('users')
 export class UsersController {
-  constructor(private userService: UsersService) {}
+  constructor(private userService: UsersService, private followService: FollowService) {
+  }
 
   @Get()
   async getUsers(@Res() res) {
@@ -34,11 +37,16 @@ export class UsersController {
   }
 
   @Post('/login/:login')
-  async editUserByLogin(@Res() res, @Param('login') login, @Body() data: UserModel) {
-    const editedUser = await this.userService.updateUserByLogin(login, data);
-    if (!editedUser) {
+  @HttpCode(HttpStatus.OK)
+  async editUserByLogin(@Param('login') login, @Body() data: UserModel): Promise<void> {
+    const prevData = await this.userService.getUserById(data.id);
+
+    if (!prevData) {
       throw new NotFoundException('User does not exist!');
     }
-    return res.status(HttpStatus.OK).json(editedUser);
+
+    await this.userService.updateUserByLogin(login, data);
+
+    await this.followService.updateFollowForProject(prevData, data);
   }
 }

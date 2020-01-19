@@ -14,6 +14,7 @@ import { UsersService } from './services/users.service';
 import { UsersController } from './users.controller';
 import { FollowController } from './follow.controller';
 import { FollowService } from './services/follow.service';
+import { EventEmitter } from 'events';
 
 const config = getConfig();
 

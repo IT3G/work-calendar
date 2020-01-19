@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Document, Model } from 'mongoose';
+import { Model } from 'mongoose';
 import { FollowEntity } from '../../entity/entities/follow.entity.model';
 import { FollowerModel } from '../models/follow.model';
+import { UserEntity } from '../../entity/entities/user.entity.model';
+import { UserModel } from '../models/user.model';
 
 @Injectable()
 export class FollowService {
@@ -30,4 +32,22 @@ export class FollowService {
     return await this.followModel.findByIdAndDelete(id);
   }
 
+  public updateFollowForProject({ projects: prevProjects }: UserEntity, { projects: currentProjects }: UserModel) {
+    const prevProjectIds = prevProjects.map(item => item.project);
+    const prevProjectIdsSet = new Set(prevProjectIds);
+
+    const currentProjectIds = currentProjects.map(item => item.project);
+    const currentProjectIdsSet = new Set(currentProjectIds);
+
+    const addedProjects = currentProjects.filter(item => {
+      return !prevProjectIdsSet.has(item.project);
+    });
+
+    const removedProjects = prevProjects.filter(item => {
+      return !currentProjectIdsSet.has(item.project);
+    });
+
+    // tslint:disable-next-line:no-console
+    console.log(addedProjects);
+  }
 }

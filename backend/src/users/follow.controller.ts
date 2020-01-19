@@ -1,6 +1,5 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Res } from '@nestjs/common';
 import { FollowService } from './services/follow.service';
-import { FollowerResponseModel } from '../../dist/follow/models/follow.request.model';
 import { FollowerModel } from './models/follow.model';
 import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
 

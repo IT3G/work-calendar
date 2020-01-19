@@ -5,11 +5,7 @@ export const UserSchema = new Schema({
   location: String,
   position: String,
   projects: [
-    {
-      dateStart: String,
-      dateEnd: String,
-      project: { type: Schema.Types.ObjectId, ref: 'Project' },
-    },
+    { type: Schema.Types.Mixed, ref: 'AddedProject' },
   ],
   whenCreated: String,
   email: String,
