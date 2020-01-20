@@ -41,8 +41,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   public jobPositions: DictionaryModel[];
   public subdivisions: DictionaryModel[];
 
-  public following: FollowModel[];
-  public followers: FollowModel[];
+  public following: Employee[];
+  public followers: Employee[];
   public followingForm: FormControl;
   public followerForm: FormControl;
 
@@ -136,11 +136,12 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     });
   }
 
+
   public addFollowing() {
     const data: FollowModel = {
       followingId: this.followingForm.value,
       followerId: this.selectedUser._id,
-      projectId: null
+      followType: 'add'
     };
 
     this.followApi.addFollow(data).subscribe(res => this.loadFollow());
@@ -150,14 +151,36 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     const data: FollowModel = {
       followingId: this.selectedUser._id,
       followerId: this.followerForm.value,
-      projectId: null
+      followType: 'add'
     };
 
     this.followApi.addFollow(data).subscribe(res => this.loadFollow());
   }
 
-  public removeFollow(id: string) {
-    this.followApi.removeFollow(id).subscribe(res => this.loadFollow());
+  public removeFollowing() {
+    const data: FollowModel = {
+      followingId: this.followingForm.value,
+      followerId: this.selectedUser._id,
+      followType: 'remove'
+    };
+
+    this.followApi.addFollow(data).subscribe(res => this.loadFollow());
+  }
+
+  public removeFollower() {
+    const data: FollowModel = {
+      followingId: this.selectedUser._id,
+      followerId: this.followerForm.value,
+      followType: 'remove'
+    };
+
+    this.followApi.addFollow(data).subscribe(res => this.loadFollow());
+  }
+
+
+
+  public deleteFollow(id: string) {
+    this.followApi.deleteFollow(id).subscribe(res => this.loadFollow());
   }
 
   public cancelEdit(): void {
@@ -241,7 +264,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     const following$ = this.followApi.getMyFollowing(this.selectedUser._id);
     const followers$ = this.followApi.getMyFollowers(this.selectedUser._id);
 
-    forkJoin([ following$, followers$]).subscribe(([following, followers]) => {
+    forkJoin([following$, followers$]).subscribe(([following, followers]) => {
       this.following = following;
       this.followers = followers;
     });

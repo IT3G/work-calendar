@@ -189,10 +189,10 @@
 
               <div *ngIf="following?.length; else emptyFollow">
                 <div *ngFor="let user of following" class="follow-item">
-                  {{user?.followingId?.username}}
-                  <i (click)="removeFollow(user._id)"
+                  {{user?.username}}
+                  <i (click)="removeFollowing()"
                      class="fa fa-remove icon-btn"
-                     title="Отписаться"
+                     title="Исключить пользователя из подписки"
                      aria-hidden="true"></i>
                 </div>
               </div>
@@ -216,6 +216,12 @@
                      aria-hidden="true"></i>
                 </button>
               </div>
+
+              <div class="title">
+                Удалены из подписки:
+                <div class="counter">{{following?.length}}</div>
+              </div>
+
             </div>
 
             <div class="subscription">
@@ -225,10 +231,10 @@
               </div>
               <div *ngIf="followers?.length; else emptyFollow">
                 <div *ngFor="let user of followers" class="follow-item">
-                  {{user?.followerId?.username}}
-                  <i *ngIf="isAdmin$ | async" (click)="removeFollow(user._id)"
+                  {{user?.username}}
+                  <i *ngIf="isAdmin$ | async" (click)="removeFollower(user._id)"
                      class="fa fa-remove icon-btn"
-                     title="Отписаться"
+                     title="Исключить пользователя из подписки"
                      aria-hidden="true"></i>
                 </div>
               </div>

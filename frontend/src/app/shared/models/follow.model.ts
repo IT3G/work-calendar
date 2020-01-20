@@ -4,5 +4,7 @@ export interface FollowModel {
   _id?: string;
   followerId: string | Employee;
   followingId: string | Employee;
-  projectId?: string;
+  followType: FollowType;
 }
+
+export type FollowType = 'add' | 'remove';

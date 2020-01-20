@@ -1,4 +1,5 @@
 import { ApiModelProperty } from '@nestjs/swagger';
+import { FollowType } from '../../entity/entities/follow.entity.model';
 
 export class FollowerModel {
   @ApiModelProperty()
@@ -8,5 +9,5 @@ export class FollowerModel {
   @ApiModelProperty()
   followingId: string; // тот, за кем следят
   @ApiModelProperty()
-  projectId: string;
+  followType: FollowType;
 }

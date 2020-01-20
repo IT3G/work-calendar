@@ -9,7 +9,7 @@ import { FollowService } from './services/follow.service';
 @ApiUseTags('Users')
 @Controller('users')
 export class UsersController {
-  constructor(private userService: UsersService, private followService: FollowService) {
+  constructor(private userService: UsersService) {
   }
 
   @Get()
@@ -40,14 +40,10 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   async editUserByLogin(@Param('login') login, @Body() data: UserModel): Promise<void> {
     const prevData = await this.userService.getUserById(data.id);
-    const allUsers = await this.userService.getUsers();
-
     if (!prevData) {
       throw new NotFoundException('User does not exist!');
     }
 
     await this.userService.updateUserByLogin(login, data);
-
-    await this.followService.updateFollowForProject(prevData, data, allUsers);
   }
 }
