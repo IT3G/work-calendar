@@ -1,5 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { DictionaryModel } from '../../dictionary/models/dictionary.model';
+import { AddedProjectModel } from './added-project.model';
 
 export class UserModel {
   @ApiModelProperty()
@@ -11,12 +12,7 @@ export class UserModel {
   @ApiModelProperty()
   position: string;
   @ApiModelProperty()
-  projects: Array<{
-    _id: string;
-    dateStart: string;
-    dateEnd: string;
-    project: string;
-  }>;
+  projects: AddedProjectModel[];
   @ApiModelProperty()
   whenCreated: string;
   @ApiModelProperty()

@@ -36,7 +36,7 @@ export class FollowController {
 
   @Delete('/:id')
   async delete(@Res() res, @Param('id') id) {
-    const result = await this.followService.delete(id);
+    const result = await this.followService.removeFollow(id);
 
     return res.status(HttpStatus.OK).json(result);
   }

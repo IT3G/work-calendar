@@ -226,7 +226,7 @@
               <div *ngIf="followers?.length; else emptyFollow">
                 <div *ngFor="let user of followers" class="follow-item">
                   {{user?.followerId?.username}}
-                  <i (click)="removeFollow(user._id)"
+                  <i *ngIf="isAdmin$ | async" (click)="removeFollow(user._id)"
                      class="fa fa-remove icon-btn"
                      title="Отписаться"
                      aria-hidden="true"></i>
@@ -234,7 +234,7 @@
               </div>
 
 
-              <div class="add-subscriptions">
+              <div *ngIf="isAdmin$ | async" class="add-subscriptions">
                 <mat-form-field class="form-inline">
                   <mat-select [formControl]=followerForm [placeholder]="'Добавить подписчика'">
                     <mat-option>Сбросить</mat-option>

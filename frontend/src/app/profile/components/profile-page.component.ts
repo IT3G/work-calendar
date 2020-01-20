@@ -83,7 +83,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   public createProjectsFormGroup(project?: any): FormGroup {
     const group = this.fb.group({
-      // _id: project._id ,
       project: null,
       dateStart: null,
       dateEnd: null
@@ -133,6 +132,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       this.cancelEdit();
       this.contextStoreService.update();
       this.employeeStoreService.update();
+      this.loadFollow();
     });
   }
 

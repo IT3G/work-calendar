@@ -40,6 +40,7 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   async editUserByLogin(@Param('login') login, @Body() data: UserModel): Promise<void> {
     const prevData = await this.userService.getUserById(data.id);
+    const allUsers = await this.userService.getUsers();
 
     if (!prevData) {
       throw new NotFoundException('User does not exist!');
@@ -47,6 +48,6 @@ export class UsersController {
 
     await this.userService.updateUserByLogin(login, data);
 
-    await this.followService.updateFollowForProject(prevData, data);
+    await this.followService.updateFollowForProject(prevData, data, allUsers);
   }
 }

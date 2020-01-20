@@ -2,9 +2,11 @@ import { ApiModelProperty } from '@nestjs/swagger';
 
 export class FollowerModel {
   @ApiModelProperty()
-  followerId: string;
+  _id?: string;
   @ApiModelProperty()
-  followingId: string;
+  followerId: string; // тот, кто следит
+  @ApiModelProperty()
+  followingId: string; // тот, за кем следят
   @ApiModelProperty()
   projectId: string;
 }
