@@ -192,7 +192,9 @@
                   {{user?.username}}
                   <div>
                     <i class="fa fa-eye icon-btn"
-                       title="Получать уведомления постоянно"
+                       [ngClass]="{'active-eye': isAddedUser(user?._id)}"
+                       [title]="isAddedUser(user?._id) ? 'Вы подписаны на этого пользователя. Отписаться?' : 'Получать уведомления постоянно'"
+                       (click)="toggleFollow(user?._id)"
                        aria-hidden="true"></i>
                     <i class="fa fa-ban icon-btn"  (click)="removeFollowing(user._id)"
                        title="Исключить пользователя из подписки"
@@ -217,7 +219,7 @@
                   [disabled]="!followingForm.value"
                   mat-mini-fab
                   color="primary"
-                  (click)="addFollowing()">
+                  (click)="addFollowingByForm()">
                   <i class="fa fa-plus"
                      aria-hidden="true"></i>
                 </button>
@@ -233,9 +235,10 @@
                   {{user?.followingId?.username}}
                   <div>
                     <i class="fa fa-eye icon-btn"
-                       title="Получать уведомления постоянно"
+                       title="Получать уведомления постоянно (и разбанить)"
+                       (click)="toggleFollow(user?._id)"
                        aria-hidden="true"></i>
-                    <i class="fa fa-ban icon-btn icon-active" (click)="deleteFollowing(user._id)"
+                    <i class="fa fa-ban icon-btn ban-active" (click)="deleteFollowing(user._id)"
                        title="Вернуть в общий список"
                        aria-hidden="true"></i>
                   </div>
@@ -252,7 +255,7 @@
               <div *ngIf="followers?.length; else emptyFollow">
                 <div *ngFor="let user of followers" class="follow-item">
                   {{user?.username}}
-                  <i *ngIf="isAdmin$ | async" (click)="deleteFollow()"
+                  <i *ngIf="isAdmin$ | async" (click)="deleteFollowing(user?._id)"
                      class="fa fa-remove icon-btn"
                      title="Исключить пользователя из подписки"
                      aria-hidden="true"></i>

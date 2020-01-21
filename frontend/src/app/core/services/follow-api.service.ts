@@ -20,6 +20,10 @@ export class FollowApiService {
     return this.http.get<FollowModel[]>(`${environment.baseUrl}/follow/remove-following/${user}`);
   }
 
+  public getMyAddedFollowing(user: string): Observable<FollowModel[]> {
+    return this.http.get<FollowModel[]>(`${environment.baseUrl}/follow/add-following/${user}`);
+  }
+
   public getMyFollowers(user: string): Observable<Employee[]> {
     return this.http.get<Employee[]>(`${environment.baseUrl}/follow/follower/${user}`);
   }

@@ -12,16 +12,16 @@ export class FollowService {
   constructor(@InjectModel('Follow') private readonly followModel: Model<FollowEntity>) {
   }
 
-  async getMyFollowing(userId: UserModel, allUsers: UserModel[]): Promise<UserModel[]> {
+  async getMyFollowing(currentUser: UserModel, allUsers: UserModel[]): Promise<UserModel[]> {
 
-    const followingByProjects = this.filterUsers(userId, allUsers);
+    const followingByProjects = this.filterUsers(currentUser, allUsers);
 
     const addedFollowing = await this.followModel
-      .find({ followerId: userId, followType: 'add' })
+      .find({ followerId: currentUser, followType: 'add' })
       .exec();
 
     const removedFollowing = await this.followModel
-      .find({ followerId: userId, followType: 'remove' })
+      .find({ followerId: currentUser, followType: 'remove' })
       .exec();
 
     const addedUsers = addedFollowing.map(item => item.followingId);
@@ -30,17 +30,20 @@ export class FollowService {
     let result = followingByProjects;
 
     if (addedUsers.length > 0) {
-      const newArr = addedUsers.map(item => {
-        const alreadyInList = followingByProjects.some(() => item === userId.id);
-        if (!alreadyInList) {
+      const newArr = addedUsers
+        .filter(element => !followingByProjects.some((elem) => element.toString() === elem.id));
+
+      if (newArr.length > 0) {
+        const userArr = newArr.map(item => {
           return allUsers.find(el => {
             return el.id.toString() === item.toString();
           });
-        }
-        return;
-      });
+        });
 
-      result = [...followingByProjects, ...newArr];
+        result = [...followingByProjects, ...userArr];
+      }
+
+      return result;
     }
 
     if (removedUsers.length > 0) {
@@ -59,8 +62,15 @@ export class FollowService {
   }
 
   async getMyRemovedFollowing(userId: UserModel): Promise<FollowEntity[]> {
-    return  await this.followModel
+    return await this.followModel
       .find({ followerId: userId, followType: 'remove' })
+      .populate('followingId')
+      .exec();
+  }
+
+  async getMyAddFollowing(userId: UserModel): Promise<FollowEntity[]> {
+    return await this.followModel
+      .find({ followerId: userId, followType: 'add' })
       .populate('followingId')
       .exec();
   }

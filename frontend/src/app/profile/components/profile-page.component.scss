@@ -164,8 +164,9 @@ button {
   .follow-item {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
-    padding: 5px 20px 5px 5px;
+    padding: 5px 10px 5px 5px;
     border-bottom: 1px solid #dee2e6;
   }
 }
@@ -174,12 +175,32 @@ button {
   color: #dee2e6;
   margin: 0 3px;
 
-  &.icon-active {
-    color: #f05772;
+  &.fa-eye:hover {
+    color: rgb(144, 202, 249);
+  }
+
+  &.fa-ban:hover {
+    color: rgb(239, 154, 154);
+  }
+
+  &.ban-active {
+    color: rgb(239, 154, 154);
+  }
+
+  &.ban-active:hover {
+    color: #dee2e6;
+  }
+
+  &.active-eye {
+    color: rgb(144, 202, 249);
+  }
+
+  &.active-eye:hover {
+    color: #dee2e6;
   }
 
   &:hover {
-    color: black;
+    color: #333131;
     cursor: pointer;
   }
 }
@@ -188,7 +209,7 @@ button {
 .add-subscriptions {
   display: flex;
   align-items: center;
-  padding-top: 20px;
+  padding: 20px 8px 0 0;
 }
 
 .form-inline {

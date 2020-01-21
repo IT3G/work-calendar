@@ -26,6 +26,13 @@ export class FollowController {
     return res.status(HttpStatus.OK).json(removedFollowing);
   }
 
+  @Get('/add-following/:id')
+  async getMyAddFollowing(@Res() res, @Param('id') userId) {
+    const currentUser = await this.userService.getUserById(userId);
+    const addFollowing = await this.followService.getMyAddFollowing(currentUser);
+    return res.status(HttpStatus.OK).json(addFollowing);
+  }
+
   @Get('/follower/:id')
   async getMyFollowers(@Res() res, @Param('id') userId) {
     const users = await this.userService.getUsers();
