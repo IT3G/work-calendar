@@ -190,10 +190,15 @@
               <div *ngIf="following?.length; else emptyFollow">
                 <div *ngFor="let user of following" class="follow-item">
                   {{user?.username}}
-                  <i (click)="removeFollowing()"
-                     class="fa fa-remove icon-btn"
-                     title="Исключить пользователя из подписки"
-                     aria-hidden="true"></i>
+                  <div>
+                    <i class="fa fa-eye icon-btn"
+                       title="Получать уведомления постоянно"
+                       aria-hidden="true"></i>
+                    <i class="fa fa-ban icon-btn"  (click)="removeFollowing(user._id)"
+                       title="Исключить пользователя из подписки"
+                       aria-hidden="true"></i>
+                  </div>
+
                 </div>
               </div>
 
@@ -201,7 +206,8 @@
                 <mat-form-field class="form-inline">
                   <mat-select [formControl]=followingForm [placeholder]="'Добавить подписку'">
                     <mat-option>Сбросить</mat-option>
-                    <mat-option *ngFor="let user of (users$ | async)"
+                    <mat-option
+                      *ngFor="let user of (users$ | async) | followUsersFilter: following : removedFollowing"
                                 [value]="user._id">{{
                       user?.username
                       }}</mat-option>
@@ -218,8 +224,22 @@
               </div>
 
               <div class="title">
-                Удалены из подписки:
-                <div class="counter">{{following?.length}}</div>
+                Никогда не получать уведомления от:
+                <div class="counter">{{removedFollowing?.length}}</div>
+              </div>
+
+              <div *ngIf="removedFollowing?.length; else emptyBlackList">
+                <div *ngFor="let user of removedFollowing" class="follow-item">
+                  {{user?.followingId?.username}}
+                  <div>
+                    <i class="fa fa-eye icon-btn"
+                       title="Получать уведомления постоянно"
+                       aria-hidden="true"></i>
+                    <i class="fa fa-ban icon-btn icon-active" (click)="deleteFollowing(user._id)"
+                       title="Вернуть в общий список"
+                       aria-hidden="true"></i>
+                  </div>
+                </div>
               </div>
 
             </div>
@@ -232,7 +252,7 @@
               <div *ngIf="followers?.length; else emptyFollow">
                 <div *ngFor="let user of followers" class="follow-item">
                   {{user?.username}}
-                  <i *ngIf="isAdmin$ | async" (click)="removeFollower(user._id)"
+                  <i *ngIf="isAdmin$ | async" (click)="deleteFollow()"
                      class="fa fa-remove icon-btn"
                      title="Исключить пользователя из подписки"
                      aria-hidden="true"></i>
@@ -259,9 +279,16 @@
                      aria-hidden="true"></i>
                 </button>
               </div>
+
+              <div class="title">
+                От вас не приходят уведомления к:
+                <div class="counter"></div>
+              </div>
+
             </div>
 
             <ng-template #emptyFollow>Нет подписок.</ng-template>
+            <ng-template #emptyBlackList>Нет заблокированных подписок.</ng-template>
           </div>
 
         </mat-tab>

@@ -42,6 +42,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   public subdivisions: DictionaryModel[];
 
   public following: Employee[];
+  public removedFollowing: FollowModel[];
   public followers: Employee[];
   public followingForm: FormControl;
   public followerForm: FormControl;
@@ -136,7 +137,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     });
   }
 
-
   public addFollowing() {
     const data: FollowModel = {
       followingId: this.followingForm.value,
@@ -147,19 +147,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.followApi.addFollow(data).subscribe(res => this.loadFollow());
   }
 
-  public addFollower() {
+  public removeFollowing(id: string) {
     const data: FollowModel = {
-      followingId: this.selectedUser._id,
-      followerId: this.followerForm.value,
-      followType: 'add'
-    };
-
-    this.followApi.addFollow(data).subscribe(res => this.loadFollow());
-  }
-
-  public removeFollowing() {
-    const data: FollowModel = {
-      followingId: this.followingForm.value,
+      followingId: id,
       followerId: this.selectedUser._id,
       followType: 'remove'
     };
@@ -167,21 +157,11 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.followApi.addFollow(data).subscribe(res => this.loadFollow());
   }
 
-  public removeFollower() {
-    const data: FollowModel = {
-      followingId: this.selectedUser._id,
-      followerId: this.followerForm.value,
-      followType: 'remove'
-    };
 
-    this.followApi.addFollow(data).subscribe(res => this.loadFollow());
-  }
-
-
-
-  public deleteFollow(id: string) {
+  public deleteFollowing(id: string) {
     this.followApi.deleteFollow(id).subscribe(res => this.loadFollow());
   }
+
 
   public cancelEdit(): void {
     this.profileForm.disable();
@@ -191,7 +171,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   public getAvatarSrc() {
     return `${environment.baseUrl}/avatar?login=` + this.login;
   }
-
 
   private getUserInfo(): void {
     const jobPositions$ = this.dictionaryApi.getAll('jobPosition');
@@ -263,9 +242,11 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   public loadFollow() {
     const following$ = this.followApi.getMyFollowing(this.selectedUser._id);
     const followers$ = this.followApi.getMyFollowers(this.selectedUser._id);
+    const removedFollowers$ = this.followApi.getMyRemovedFollowing(this.selectedUser._id);
 
-    forkJoin([following$, followers$]).subscribe(([following, followers]) => {
+    forkJoin([following$, removedFollowers$, followers$]).subscribe(([following, removed, followers]) => {
       this.following = following;
+      this.removedFollowing = removed;
       this.followers = followers;
     });
 

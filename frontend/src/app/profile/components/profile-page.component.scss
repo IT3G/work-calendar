@@ -172,6 +172,12 @@ button {
 
 .icon-btn {
   color: #dee2e6;
+  margin: 0 3px;
+
+  &.icon-active {
+    color: #f05772;
+  }
+
   &:hover {
     color: black;
     cursor: pointer;

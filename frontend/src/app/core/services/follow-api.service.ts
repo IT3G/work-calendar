@@ -12,12 +12,12 @@ export class FollowApiService {
   constructor(private http: HttpClient) {
   }
 
-  public getAllFollow(): Observable<FollowModel[]> {
-    return this.http.get<FollowModel[]>(`${environment.baseUrl}/follow`);
-  }
-
   public getMyFollowing(user: string): Observable<Employee[]> {
     return this.http.get<Employee[]>(`${environment.baseUrl}/follow/following/${user}`);
+  }
+
+  public getMyRemovedFollowing(user: string): Observable<FollowModel[]> {
+    return this.http.get<FollowModel[]>(`${environment.baseUrl}/follow/remove-following/${user}`);
   }
 
   public getMyFollowers(user: string): Observable<Employee[]> {
