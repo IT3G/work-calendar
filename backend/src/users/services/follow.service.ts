@@ -1,80 +1,62 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { FollowEntity } from '../../entity/entities/follow.entity.model';
+import { FollowEntity, FollowType } from '../../entity/entities/follow.entity.model';
 import { FollowerModel } from '../models/follow.model';
-import { UserModel } from '../models/user.model';
 import * as moment from 'moment';
-import { AddedProjectModel } from '../models/added-project.model';
+import { UserEntity } from '../../entity/entities/user.entity.model';
 
 @Injectable()
 export class FollowService {
   constructor(@InjectModel('Follow') private readonly followModel: Model<FollowEntity>) {
   }
 
-  async getMyFollowing(currentUser: UserModel, allUsers: UserModel[]): Promise<UserModel[]> {
+  async getAll(userId: string): Promise<FollowEntity[]> {
+    return await this.followModel
+      .find({ $or: [{ followerId: userId }, { followingId: userId }] })
+      .populate('followingId')
+      .populate('followerId')
+      .exec();
+  }
 
-    const followingByProjects = this.filterUsers(currentUser, allUsers);
+  async getMyFollowing(currentUser: UserEntity, allUsers: UserEntity[]): Promise<UserEntity[]> {
+
+    const followingByProjects = this.matchUsersAndActiveProjects(currentUser, allUsers);
 
     const addedFollowing = await this.followModel
-      .find({ followerId: currentUser, followType: 'add' })
+      .find({ followerId: currentUser.id, followType: FollowType.add })
       .exec();
 
     const removedFollowing = await this.followModel
-      .find({ followerId: currentUser, followType: 'remove' })
+      .find({ followerId: currentUser.id, followType: FollowType.remove })
       .exec();
 
     const addedUsers = addedFollowing.map(item => item.followingId);
     const removedUsers = removedFollowing.map(item => item.followingId);
 
-    let result = followingByProjects;
+    let result = this.addUserToArr(addedUsers, followingByProjects, allUsers);
 
-    if (addedUsers.length > 0) {
-      const newArr = addedUsers
-        .filter(element => !followingByProjects.some((elem) => element.toString() === elem.id));
-
-      if (newArr.length > 0) {
-        const userArr = newArr.map(item => {
-          return allUsers.find(el => {
-            return el.id.toString() === item.toString();
-          });
-        });
-
-        result = [...followingByProjects, ...userArr];
-      }
-
-      return result;
-    }
-
-    if (removedUsers.length > 0) {
-      return result.filter(user => {
-        return !removedUsers.some((el) => el.toString() === user.id);
-      });
-    }
+    result = this.removeUsersFromArr(removedUsers, result);
+    result = this.removeMyselfFromArr(currentUser.id, result);
 
     return result;
   }
 
-  async getMyFollowers(userId: UserModel, allUsers: UserModel[]): Promise<UserModel[]> {
-    const addedFollowers = await this.followModel.find({ followingId: userId }).populate('followerId').exec();
-    const followingByProjects: UserModel[] = this.filterUsers(userId, allUsers);
-    return followingByProjects;
-  }
-
-  async getMyRemovedFollowing(userId: UserModel): Promise<FollowEntity[]> {
+  async getMyRemovedFollowing(userId: string): Promise<FollowEntity[]> {
     return await this.followModel
-      .find({ followerId: userId, followType: 'remove' })
+      .find({ followerId: userId, followType: FollowType.remove })
       .populate('followingId')
+      .populate('followerId')
       .exec();
   }
 
-  async getMyAddFollowing(userId: UserModel): Promise<FollowEntity[]> {
+  async getMyAddedFollowing(userId: string): Promise<FollowEntity[]> {
     return await this.followModel
-      .find({ followerId: userId, followType: 'add' })
+      .find({ followerId: userId, followType: FollowType.add })
       .populate('followingId')
+      .populate('followerId')
       .exec();
   }
-
 
   async addFollow(data: FollowerModel): Promise<FollowEntity> {
     const newFollow = await this.followModel.create(data);
@@ -82,108 +64,95 @@ export class FollowService {
   }
 
   async deleteFollow(id: string): Promise<FollowEntity> {
-    return await this.followModel.findByIdAndDelete(id);
+    return this.followModel.findByIdAndDelete(id);
   }
 
+  async getMyFollowers(currentUser: UserEntity, allUsers: UserEntity[]): Promise<UserEntity[]> {
+    const followersByProjects = this.matchUsersAndActiveProjects(currentUser, allUsers);
 
-  private filterUsers(selectedUser: UserModel, allUsers: UserModel[]): UserModel[] {
-    return allUsers.filter(
-      // взяли всех пользователей и для каждого делаем:
-      user =>
+    const addedFollowersArr = await this.followModel
+      .find({ followingId: currentUser.id, followType: FollowType.add })
+      .exec();
+
+    const removedFollowersArr = await this.followModel
+      .find({ followingId: currentUser.id, followType: FollowType.remove })
+      .exec();
+
+    const addedUsers = addedFollowersArr.map(item => item.followerId);
+    const removedUsers = removedFollowersArr.map(item => item.followerId);
+
+    let result = this.addUserToArr(addedUsers, followersByProjects, allUsers);
+
+    result = this.removeUsersFromArr(removedUsers, result);
+    result = this.removeMyselfFromArr(currentUser.id, result);
+
+    return result;
+  }
+
+  // Добавление пользователя в массив
+  // проверяем, если он уже там есть, вернем массив
+  // если его там нет, добавим
+  private addUserToArr(addedUsers: string[], mainArr: UserEntity[], allUsers: UserEntity[]): UserEntity[] {
+
+    if (addedUsers.length === 0) {
+      return mainArr;
+    }
+
+    const usersAbsentInMainArr = addedUsers
+      .filter(element => !mainArr.some((elem) => element === elem.id));
+
+    if (usersAbsentInMainArr.length === 0) {
+      return mainArr;
+    }
+
+    const userArr = usersAbsentInMainArr.map(item => {
+      return allUsers.find(el => {
+        return el.id === item;
+      });
+    });
+
+    return [...mainArr, ...userArr];
+  }
+
+  private removeUsersFromArr(removedUsers: string[], mainArr: UserEntity[]): UserEntity[] {
+    if (removedUsers.length === 0) {
+      return mainArr;
+    }
+
+    return mainArr.filter(user => {
+      return !removedUsers.some((el) => {
+        return el === user.id;
+      });
+    });
+  }
+
+  private removeMyselfFromArr(userId: string, arr: UserEntity[]) {
+    return arr.filter(el => el.id !== userId);
+  }
+
+  private matchUsersAndActiveProjects(selectedUser: UserEntity, allUsers: UserEntity[]): UserEntity[] {
+    return allUsers
+      .filter((user) =>
         (user.projects
+          .filter((p) => p.project)
           // выбрали проекты, активные на текущий момент
-          .filter(p => this.isActive(p))
+          .filter((p) => this.isActive(p))
           // из активных проектов проверили, есть ли хоть один:
           .some((activeProject) => {
+
             return selectedUser.projects
               // у выбранного пользователя отфильтровали активные на текущий момент
               .filter(p => this.isActive(p))
               // проверили совпадение активных проектов для проекта у пользователя и активного пользователя
-              .some(project => project.project === activeProject.project);
+              .some(project => {
+                return project.project.equals(activeProject.project);
+              });
           })));
   }
 
-  private isActive(p: AddedProjectModel): boolean {
+  private isActive(p): boolean {
     p.dateStart = p.dateStart ? p.dateStart : moment('1900-01-01').format();
     p.dateEnd = p.dateEnd ? p.dateEnd : moment('2100-01-01').format();
     return moment().isBetween(p.dateStart, p.dateEnd);
   }
-
-
-  // async updateFollowForProject({ projects: prevProjects, _id: currentUserId }: UserEntity, { projects: currentProjects }: UserModel, allUsers: UserEntity[]) {
-  //   const prevProjectIdsSet = this.getSetProject(prevProjects);
-  //   const currentProjectIdsSet = this.getSetProject(currentProjects);
-  //
-  //   const addedProjects = currentProjects.filter(item => {
-  //     return !prevProjectIdsSet.has(item.project);
-  //   });
-  //
-  //   const removedProjects = prevProjects.filter(item => {
-  //     return !currentProjectIdsSet.has(item.project);
-  //   });
-  //
-  //   this.createFollowings(addedProjects, currentUserId, allUsers);
-  //   this.removeFollowings(removedProjects, currentUserId);
-  // }
-
-  // private createFollowings(addedProjects: AddedProjectModel[], currentUserId: string, allUsers: UserEntity[]) {
-  //   return addedProjects.forEach(project => {
-  //     const users = this.getUsersForProject(project.project, allUsers);
-  //
-  //     users.forEach(user => {
-  //       this.createTwoWayFollow(currentUserId, project.project, user.id);
-  //     });
-  //   });
-  // }
-
-  // private removeFollowings(removedProjects: AddedProjectModel[], currentUserId: string) {
-  //   removedProjects.forEach(project => {
-  //     this.removeFollowByProject(project.project, currentUserId);
-  //   });
-  // }
-
-  // async removeFollowByProject(projectId: string, currentUser: string): Promise<void> {
-  //   const followers = await this.getFollowesByProject(projectId);
-  //   const onlyCurrentUserFollowes = followers.filter(item => {
-  //     return item.followingId.toString() === currentUser.toString()
-  //       || item.followerId.toString() === currentUser.toString();
-  //   });
-  //
-  //   onlyCurrentUserFollowes.forEach(follow => (
-  //     this.removeFollow(follow._id)
-  //   ));
-  // }
-
-  // async createTwoWayFollow(follower: string, project: string, following: string): Promise<void> {
-  //   const data = {
-  //     followerId: follower,
-  //     followingId: following,
-  //     projectId: project,
-  //   };
-  //   const dataBack = {
-  //     followerId: following,
-  //     followingId: follower,
-  //     projectId: project,
-  //   };
-  //
-  //   await this.addFollow(data);
-  //   await this.addFollow(dataBack);
-  // }
-
-  // private getSetProject(projects): Set<string> {
-  //   const projectIds = projects.map(item => item.project);
-  //   return new Set(projectIds);
-  // }
-
-  // private isProjectActiveToday(project: AddedProjectModel): boolean {
-  //   project.dateStart = project.dateStart ? project.dateStart : moment('1900-01-01').format();
-  //   project.dateEnd = project.dateEnd ? project.dateEnd : moment('2100-01-01').format();
-  //   return moment().isBetween(project.dateStart, project.dateEnd);
-  // }
-
-  // private getUsersForProject(projectId: string, users: UserEntity[]): UserEntity[] {
-  //   return users.filter(emp => {
-  //     return emp.projects.some(p => p.project === projectId);
-  //   });
-  // }
 }

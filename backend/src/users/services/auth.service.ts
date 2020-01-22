@@ -14,9 +14,8 @@ export class AuthService {
     private readonly ldapService: LdapService,
     private readonly usersService: UsersService,
     private jwtService: JwtService,
-    private config: Config
-  ) {
-  }
+    private config: Config,
+  ) {}
 
   async auth(credentials: LoginModel) {
     let user: UserEntity;
@@ -33,22 +32,28 @@ export class AuthService {
   private async authLocal(credentials: LoginModel): Promise<UserEntity> {
     const user = await this.usersService.getUserByLogin(credentials.username);
 
-    if (user && user.hashPassword !== crypto.createHmac('sha256', credentials.password).digest('hex')) {
-      throw new Error('USER NOT FOUND');
+    if (user && user.hashPassword === crypto.createHmac('sha256', credentials.password).digest('hex')) {
+      return Promise.resolve(user);
     }
 
-    return user;
+    return Promise.reject('USER NOT FOUND');
   }
 
   private async authLdap(credentials: LoginModel): Promise<UserEntity> {
     const user = await this.usersService.getUserByLogin(credentials.username);
+
     const ldapResult = await this.ldapService.auth(credentials);
 
     if (!ldapResult) {
       return Promise.reject('USER NOT FOUND');
     }
 
-    return user || this.usersService.addUser(ldapResult);
+    if (user) {
+      return Promise.resolve(user);
+    } else {
+      const newUser = await this.usersService.addUser(ldapResult);
+      return Promise.resolve(newUser);
+    }
   }
 
   getJWTbyUser(user: UserEntity): string {
@@ -57,7 +62,7 @@ export class AuthService {
       username: user.username,
       location: user.location,
       position: user.position,
-      email: user.email
+      email: user.email,
     };
 
     return this.jwtService.sign(sign);
@@ -69,55 +74,6 @@ export class AuthService {
     }
 
     const res: JwtSignModel = this.jwtService.verify(jwt);
-    const user = await this.usersService.getUserByLogin(res.mailNickname);
-    return user;
-  }
-
-
-  async doSmth(): Promise<string> {
-    if ('odd') {
-      return Promise.resolve('odd');
-    }
-
-    await this.test();
-
-    return Promise.reject('Fuck you');
-  }
-
-  doSmth3(): Promise<string> {
-    if ('odd') {
-      return Promise.resolve('odd');
-    }
-
-    this.test().then((data) => {
-      // do smth with data
-    });
-
-    return Promise.reject('Fuck you');
-  }
-
-
-  async doSmth2(): Promise<string> {
-    if ('odd') {
-      return 'odd';
-    }
-
-    throw new Error('Fuck you');
-  }
-
-
-  doSmth4(): Promise<string> {
-    return new Promise((resolve, reject) => {
-
-      if ('odd') {
-        resolve('odd');
-      }
-
-      reject('Fuck you');
-    });
-  }
-
-  async test() {
-    const test = await this.doSmth2();
+    return await this.usersService.getUserByLogin(res.mailNickname);
   }
 }

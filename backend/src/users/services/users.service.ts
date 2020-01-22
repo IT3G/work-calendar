@@ -9,7 +9,7 @@ import { InjectModel } from '@nestjs/mongoose';
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectModel('Users') private readonly userModel: Model<UserEntity>,
+    @InjectModel('Users') private readonly userModel: Model<UserEntity>
   ) {
   }
 
@@ -61,7 +61,7 @@ export class UsersService {
       subdivision: null,
       jobPosition: null,
       authType: 'hash',
-      hashPassword: crypto.createHmac('sha256', userInfo.password).digest('hex'),
+      hashPassword: crypto.createHmac('sha256', userInfo.password).digest('hex')
     };
 
     const newUser = await this.userModel.create(data);

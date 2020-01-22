@@ -12,20 +12,20 @@ export class FollowApiService {
   constructor(private http: HttpClient) {
   }
 
-  public getMyFollowing(user: string): Observable<Employee[]> {
-    return this.http.get<Employee[]>(`${environment.baseUrl}/follow/following/${user}`);
+  public getAllForMe(userId: string): Observable<FollowModel[]> {
+    return this.http.get<FollowModel[]>(`${environment.baseUrl}/follow/follow-all/${userId}`);
   }
 
-  public getMyRemovedFollowing(user: string): Observable<FollowModel[]> {
-    return this.http.get<FollowModel[]>(`${environment.baseUrl}/follow/remove-following/${user}`);
+  public getMyFollowing(userId: string): Observable<Employee[]> {
+    return this.http.get<Employee[]>(`${environment.baseUrl}/follow/following/${userId}`);
   }
 
-  public getMyAddedFollowing(user: string): Observable<FollowModel[]> {
-    return this.http.get<FollowModel[]>(`${environment.baseUrl}/follow/add-following/${user}`);
+  public getMyRemovedFollowing(userId: string): Observable<FollowModel[]> {
+    return this.http.get<FollowModel[]>(`${environment.baseUrl}/follow/remove-following/${userId}`);
   }
 
-  public getMyFollowers(user: string): Observable<Employee[]> {
-    return this.http.get<Employee[]>(`${environment.baseUrl}/follow/follower/${user}`);
+  public getMyAddedFollowing(userId: string): Observable<FollowModel[]> {
+    return this.http.get<FollowModel[]>(`${environment.baseUrl}/follow/add-following/${userId}`);
   }
 
   public addFollow(data: FollowModel): Observable<any> {
@@ -34,5 +34,9 @@ export class FollowApiService {
 
   public deleteFollow(id: string): Observable<any> {
     return this.http.delete<FollowModel>(`${environment.baseUrl}/follow/${id}`);
+  }
+
+  public getMyFollowers(userId: string): Observable<Employee[]> {
+    return this.http.get<Employee[]>(`${environment.baseUrl}/follow/follower/${userId}`);
   }
 }

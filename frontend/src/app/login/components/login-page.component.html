@@ -20,7 +20,6 @@
           autocomplete="off"
           formControlName="password">
       </mat-form-field>
-      <label class="response-message error">{{errorMessage}}</label>
     </div>
     <div class="form-footer">
       <div>
@@ -35,6 +34,10 @@
           mat-raised-button
           color="primary"
           routerLink='/registration'>Регистрация</button></div>
+    </div>
+    <div *ngIf="errorMessage" class="response-message error">
+      <div><b>Ошибка:</b></div>
+      <div>{{errorMessage}}</div>
     </div>
   </div>
 </div>

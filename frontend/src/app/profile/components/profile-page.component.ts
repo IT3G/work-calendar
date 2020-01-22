@@ -43,10 +43,12 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   public following: Employee[];
   public followers: Employee[];
+
   public removedFollowing: FollowModel[];
   public addedFollowing: FollowModel[];
+  public allForMe: FollowModel[];
+
   public followingForm: FormControl;
-  public followerForm: FormControl;
 
   public users$: Observable<Employee[]>;
   public mailingAddresses: Employee[];
@@ -68,7 +70,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.users$ = this.employeeApiService.loadAllEmployees();
     this.followingForm = new FormControl();
-    this.followerForm = new FormControl();
 
     this.getUserInfo();
     this.isAdmin$ = this.contextStoreService.isCurrentUserAdmin$();
@@ -138,10 +139,10 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     });
   }
 
-  public addFollowingByForm() {
+  public addFollowingByForm(): void {
     const data: FollowModel = {
       followingId: this.followingForm.value,
-      followerId: this.selectedUser._id,
+      followerId: this.selectedUser,
       followType: 'add'
     };
 
@@ -149,21 +150,21 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.followingForm.reset();
   }
 
-  public toggleFollow(id: string) {
-    const isUserRemoved = this.removedFollowing.some(item => item.followingId._id === id);
+  public toggleFollow(user: Employee) {
+    const isUserRemoved = this.removedFollowing.some(item => item.followingId._id === user._id);
 
     if (isUserRemoved) {
-      const follow = this.removedFollowing.find(item => item.followingId._id === id);
-      this.deleteFollowing(follow._id);
+      const followId = this.removedFollowing.find(item => item.followingId._id === user._id)._id;
+      this.deleteFollowing(followId);
     }
 
-    if (this.isAddedUser(id)) {
-      const follow = this.addedFollowing.find(item => item.followingId._id === id);
+    if (this.isAddedUser(user)) {
+      const follow = this.addedFollowing.find(item => item.followingId._id === user._id);
       this.deleteFollowing(follow._id);
     } else {
       const data: FollowModel = {
-        followingId: id,
-        followerId: this.selectedUser._id,
+        followingId: user,
+        followerId: this.selectedUser,
         followType: 'add'
       };
 
@@ -171,21 +172,35 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     }
   }
 
-  public removeFollowing(id: string) {
+  public removeFollowing(user: Employee) {
+
+    if (this.isAddedUser(user)) {
+      const follow = this.addedFollowing.find(item => item.followingId._id === user._id);
+      this.deleteFollowing(follow._id);
+    }
+
     const data: FollowModel = {
-      followingId: id,
-      followerId: this.selectedUser._id,
+      followingId: user,
+      followerId: this.selectedUser,
       followType: 'remove'
     };
 
     this.followApi.addFollow(data).subscribe(res => this.loadFollow());
   }
 
+  public getIRemoved(): Employee[] {
+    if (this.allForMe && this.allForMe.length > 0) {
+      return this.allForMe.filter(item => {
+        return item.followingId._id === this.selectedUser._id;
+      }).map(item => item.followerId);
+    }
+
+    return [];
+  }
 
   public deleteFollowing(id: string) {
     this.followApi.deleteFollow(id).subscribe(res => this.loadFollow());
   }
-
 
   public cancelEdit(): void {
     this.profileForm.disable();
@@ -268,19 +283,24 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     const followers$ = this.followApi.getMyFollowers(this.selectedUser._id);
     const removedFollowers$ = this.followApi.getMyRemovedFollowing(this.selectedUser._id);
     const addedFollowers$ = this.followApi.getMyAddedFollowing(this.selectedUser._id);
+    const allForMe$ = this.followApi.getAllForMe(this.selectedUser._id);
 
-    forkJoin([following$, removedFollowers$, followers$, addedFollowers$]).subscribe(([following, removed, followers, added]) => {
+    forkJoin([following$, removedFollowers$, followers$, addedFollowers$, allForMe$]).subscribe(([following, removed, followers, added, all]) => {
       this.following = following;
       this.removedFollowing = removed;
       this.followers = followers;
       this.addedFollowing = added;
+      this.allForMe = all;
     });
   }
 
-  public isAddedUser(userID: string): boolean {
+  public isAddedUser(user: Employee): boolean {
+    if (this.addedFollowing.length === 0) {
+      return false;
+    }
+
     return this.addedFollowing.some(item => {
-      const test = item.followingId as Employee;
-      return test._id === userID;
+      return item.followingId._id === user._id;
     });
   }
 

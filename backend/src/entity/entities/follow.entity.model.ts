@@ -6,4 +6,7 @@ export interface FollowEntity extends Document  {
   followType: FollowType; // тип подписки добавлен или в черном списке )))
 }
 
-export type FollowType = 'add' | 'remove';
+export enum FollowType {
+  add = 'add',
+  remove = 'remove',
+}

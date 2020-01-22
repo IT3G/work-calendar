@@ -11,6 +11,12 @@ export class FollowController {
   constructor(private followService: FollowService, private userService: UsersService) {
   }
 
+  @Get('/follow-all/:id')
+  async getAllForMe(@Res() res, @Param('id') userId) {
+    const following = await this.followService.getAll(userId);
+    return res.status(HttpStatus.OK).json(following);
+  }
+
   @Get('/following/:id')
   async getMyFollowing(@Res() res, @Param('id') userId) {
     const users = await this.userService.getUsers();
@@ -20,25 +26,15 @@ export class FollowController {
   }
 
   @Get('/remove-following/:id')
-  async getMyRemoveFollowing(@Res() res, @Param('id') userId) {
-    const currentUser = await this.userService.getUserById(userId);
-    const removedFollowing = await this.followService.getMyRemovedFollowing(currentUser);
+  async getMyRemovedFollowing(@Res() res, @Param('id') userId) {
+    const removedFollowing = await this.followService.getMyRemovedFollowing(userId);
     return res.status(HttpStatus.OK).json(removedFollowing);
   }
 
   @Get('/add-following/:id')
-  async getMyAddFollowing(@Res() res, @Param('id') userId) {
-    const currentUser = await this.userService.getUserById(userId);
-    const addFollowing = await this.followService.getMyAddFollowing(currentUser);
+  async getMyAddedFollowing(@Res() res, @Param('id') userId) {
+    const addFollowing = await this.followService.getMyAddedFollowing(userId);
     return res.status(HttpStatus.OK).json(addFollowing);
-  }
-
-  @Get('/follower/:id')
-  async getMyFollowers(@Res() res, @Param('id') userId) {
-    const users = await this.userService.getUsers();
-    const currentUser = await this.userService.getUserById(userId);
-    const followers = await this.followService.getMyFollowers(currentUser, users);
-    return res.status(HttpStatus.OK).json(followers);
   }
 
   @Post()
@@ -48,9 +44,17 @@ export class FollowController {
   }
 
   @Delete('/:id')
-  async delete(@Res() res, @Param('id') id) {
+  async deleteFollow(@Res() res, @Param('id') id) {
     const result = await this.followService.deleteFollow(id);
 
     return res.status(HttpStatus.OK).json(result);
+  }
+
+  @Get('/follower/:id')
+  async getMyFollowers(@Res() res, @Param('id') userId) {
+    const users = await this.userService.getUsers();
+    const currentUser = await this.userService.getUserById(userId);
+    const followers = await this.followService.getMyFollowers(currentUser, users);
+    return res.status(HttpStatus.OK).json(followers);
   }
 }

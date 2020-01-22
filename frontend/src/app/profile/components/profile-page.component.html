@@ -192,11 +192,11 @@
                   {{user?.username}}
                   <div>
                     <i class="fa fa-eye icon-btn"
-                       [ngClass]="{'active-eye': isAddedUser(user?._id)}"
-                       [title]="isAddedUser(user?._id) ? 'Вы подписаны на этого пользователя. Отписаться?' : 'Получать уведомления постоянно'"
-                       (click)="toggleFollow(user?._id)"
+                       [ngClass]="{'active-eye': isAddedUser(user)}"
+                       [title]="isAddedUser(user) ? 'Вы подписаны на этого пользователя. Отписаться?' : 'Получать уведомления постоянно'"
+                       (click)="toggleFollow(user)"
                        aria-hidden="true"></i>
-                    <i class="fa fa-ban icon-btn"  (click)="removeFollowing(user._id)"
+                    <i class="fa fa-ban icon-btn" (click)="removeFollowing(user)"
                        title="Исключить пользователя из подписки"
                        aria-hidden="true"></i>
                   </div>
@@ -210,7 +210,7 @@
                     <mat-option>Сбросить</mat-option>
                     <mat-option
                       *ngFor="let user of (users$ | async) | followUsersFilter: following : removedFollowing"
-                                [value]="user._id">{{
+                      [value]="user._id">{{
                       user?.username
                       }}</mat-option>
                   </mat-select>
@@ -235,8 +235,8 @@
                   {{user?.followingId?.username}}
                   <div>
                     <i class="fa fa-eye icon-btn"
-                       title="Получать уведомления постоянно (и разбанить)"
-                       (click)="toggleFollow(user?._id)"
+                       title="Получать уведомления постоянно"
+                       (click)="toggleFollow(user?.followingId)"
                        aria-hidden="true"></i>
                     <i class="fa fa-ban icon-btn ban-active" (click)="deleteFollowing(user._id)"
                        title="Вернуть в общий список"
@@ -244,7 +244,6 @@
                   </div>
                 </div>
               </div>
-
             </div>
 
             <div class="subscription">
@@ -255,39 +254,18 @@
               <div *ngIf="followers?.length; else emptyFollow">
                 <div *ngFor="let user of followers" class="follow-item">
                   {{user?.username}}
-                  <i *ngIf="isAdmin$ | async" (click)="deleteFollowing(user?._id)"
-                     class="fa fa-remove icon-btn"
-                     title="Исключить пользователя из подписки"
-                     aria-hidden="true"></i>
                 </div>
-              </div>
-
-
-              <div *ngIf="isAdmin$ | async" class="add-subscriptions">
-                <mat-form-field class="form-inline">
-                  <mat-select [formControl]=followerForm [placeholder]="'Добавить подписчика'">
-                    <mat-option>Сбросить</mat-option>
-                    <mat-option *ngFor="let user of (users$ | async)"
-                                [value]="user._id">{{
-                      user?.username
-                      }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <button
-                  [disabled]="!followerForm.value"
-                  mat-mini-fab
-                  color="primary"
-                  (click)="addFollower()">
-                  <i class="fa fa-plus"
-                     aria-hidden="true"></i>
-                </button>
               </div>
 
               <div class="title">
                 От вас не приходят уведомления к:
-                <div class="counter"></div>
+                <div class="counter">{{getIRemoved().length}}</div>
               </div>
-
+              <div *ngIf="getIRemoved().length; else emptyBlackList">
+                <div *ngFor="let user of getIRemoved()" class="follow-item">
+                  {{user?.username}}
+                </div>
+              </div>
             </div>
 
             <ng-template #emptyFollow>Нет подписок.</ng-template>

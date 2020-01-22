@@ -24,7 +24,7 @@ export class AuthController {
       user.hashPassword = `Bearer ${this.authService.getJWTbyUser(user)}`;
       res.status(HttpStatus.OK).send(user);
     } catch (e) {
-      res.status(HttpStatus.NOT_ACCEPTABLE).send('e');
+      res.status(HttpStatus.NOT_ACCEPTABLE).send(e.message ? e.message : e);
     }
   }
 

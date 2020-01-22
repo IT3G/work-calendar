@@ -14,8 +14,7 @@ export class FollowUsersFilterPipe implements PipeTransform {
 
     const followingArr = following.map(item => item._id);
     const removedArr = removed.map(el => {
-      const test = el.followingId as Employee;
-      return test._id;
+      return el.followingId._id;
     });
 
     const commonArr = [...followingArr, ...removedArr];
