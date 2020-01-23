@@ -81,6 +81,7 @@ export class FollowService {
     const addedUsers = addedFollowersArr.map(item => item.followerId);
     const removedUsers = removedFollowersArr.map(item => item.followerId);
 
+
     let result = this.addUserToArr(addedUsers, followersByProjects, allUsers);
 
     result = this.removeUsersFromArr(removedUsers, result);
@@ -99,7 +100,7 @@ export class FollowService {
     }
 
     const usersAbsentInMainArr = addedUsers
-      .filter(element => !mainArr.some((elem) => element === elem.id));
+      .filter(element => !mainArr.some((elem) => element.toString() === elem.id.toString()));
 
     if (usersAbsentInMainArr.length === 0) {
       return mainArr;
@@ -107,7 +108,7 @@ export class FollowService {
 
     const userArr = usersAbsentInMainArr.map(item => {
       return allUsers.find(el => {
-        return el.id === item;
+        return el.id.toString() === item.toString();
       });
     });
 
@@ -121,13 +122,13 @@ export class FollowService {
 
     return mainArr.filter(user => {
       return !removedUsers.some((el) => {
-        return el === user.id;
+        return el.toString() === user.id.toString();
       });
     });
   }
 
   private removeMyselfFromArr(userId: string, arr: UserEntity[]) {
-    return arr.filter(el => el.id !== userId);
+    return arr.filter(el => el.id.toString() !== userId.toString());
   }
 
   private matchUsersAndActiveProjects(selectedUser: UserEntity, allUsers: UserEntity[]): UserEntity[] {
@@ -145,7 +146,12 @@ export class FollowService {
               .filter(p => this.isActive(p))
               // проверили совпадение активных проектов для проекта у пользователя и активного пользователя
               .some(project => {
-                return project.project.equals(activeProject.project);
+                // return project.project.equals(activeProject.project);
+                if (project.project && activeProject.project) {
+                  return project.project.toString() === activeProject.project.toString();
+                }
+
+                return false;
               });
           })));
   }

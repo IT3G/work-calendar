@@ -17,7 +17,7 @@ import { TaskModel } from '../../shared/models/tasks.models';
 import { SendingMailService } from '../../shared/services/sending-mail.service';
 import { AuthSetting } from '../../shared/models/auth-setting.model';
 import { FollowApiService } from '../../core/services/follow-api.service';
-import { FollowModel } from '../../shared/models/follow.model';
+import { FollowModel} from '../../shared/models/follow.model';
 
 @Component({
   selector: 'app-team',
@@ -191,7 +191,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   public getIRemoved(): Employee[] {
     if (this.allForMe && this.allForMe.length > 0) {
       return this.allForMe.filter(item => {
-        return item.followingId._id === this.selectedUser._id;
+        return item.followingId._id === this.selectedUser._id && item.followType === 'remove';
       }).map(item => item.followerId);
     }
 
