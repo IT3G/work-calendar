@@ -5,10 +5,30 @@ import { FollowEntity, FollowType } from '../../entity/entities/follow.entity.mo
 import { FollowerModel } from '../models/follow.model';
 import * as moment from 'moment';
 import { UserEntity } from '../../entity/entities/user.entity.model';
+import { UsersService } from './users.service';
+
+export interface UserFollow {
+  following: UserEntity[];
+  followers: UserEntity[];
+  allForUser: FollowEntity[];
+}
 
 @Injectable()
 export class FollowService {
-  constructor(@InjectModel('Follow') private readonly followModel: Model<FollowEntity>) {
+  constructor(@InjectModel('Follow') private readonly followModel: Model<FollowEntity>,
+              private userService: UsersService) {
+  }
+
+  async getUserFollow(userId: string): Promise<UserFollow> {
+    const following = this.getMyFollowing(userId);
+    const followers = this.getMyFollowers(userId);
+    const allForUser = this.getAll(userId);
+
+    return {
+      following: await following,
+      followers: await followers,
+      allForUser: await allForUser,
+    };
   }
 
   async getAll(userId: string): Promise<FollowEntity[]> {
@@ -19,9 +39,16 @@ export class FollowService {
       .exec();
   }
 
-  async getMyFollowing(currentUser: UserEntity, allUsers: UserEntity[]): Promise<UserEntity[]> {
+  async getMyFollowing(currentUserId: string): Promise<UserEntity[]> {
 
-    const followingByProjects = this.matchUsersAndActiveProjects(currentUser, allUsers);
+    const allUsers = await this.userService.getUsers();
+    const currentUser = await this.userService.getUserById(currentUserId);
+
+    let followingByProjects = this.matchUsersAndActiveProjects(currentUser, allUsers);
+
+    if (!currentUser.projects.length) {
+      followingByProjects = allUsers;
+    }
 
     const addedFollowing = await this.followModel
       .find({ followerId: currentUser.id, followType: FollowType.add })
@@ -67,7 +94,10 @@ export class FollowService {
     return this.followModel.findByIdAndDelete(id);
   }
 
-  async getMyFollowers(currentUser: UserEntity, allUsers: UserEntity[]): Promise<UserEntity[]> {
+  async getMyFollowers(currentUserId: string): Promise<UserEntity[]> {
+
+    const allUsers = await this.userService.getUsers();
+    const currentUser = await this.userService.getUserById(currentUserId);
     const followersByProjects = this.matchUsersAndActiveProjects(currentUser, allUsers);
 
     const addedFollowersArr = await this.followModel
@@ -80,7 +110,6 @@ export class FollowService {
 
     const addedUsers = addedFollowersArr.map(item => item.followerId);
     const removedUsers = removedFollowersArr.map(item => item.followerId);
-
 
     let result = this.addUserToArr(addedUsers, followersByProjects, allUsers);
 

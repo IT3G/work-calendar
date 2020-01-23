@@ -40,7 +40,8 @@ const avatarServiceProvider = {
     }),
   ],
   controllers: [UsersController, AuthController, AvatarsController, FollowController],
-  providers: [UsersService, LdapService, FollowService, AuthService, avatarServiceProvider, { provide: Config, useValue: config }],
+  providers: [UsersService, FollowService, LdapService, FollowService, AuthService, avatarServiceProvider, { provide: Config, useValue: config }],
+  exports: [UsersService, FollowService],
 })
 export class UsersModule {
   configure(consumer: MiddlewareConsumer) {

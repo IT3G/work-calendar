@@ -2,13 +2,18 @@ import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Res } from '@ne
 import { FollowService } from './services/follow.service';
 import { FollowerModel } from './models/follow.model';
 import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
-import { UsersService } from './services/users.service';
 
 @ApiBearerAuth()
 @ApiUseTags('Follow')
 @Controller('follow')
 export class FollowController {
-  constructor(private followService: FollowService, private userService: UsersService) {
+  constructor(private followService: FollowService) {
+  }
+
+  @Get('/user-follow/:id')
+  async getUserFollow(@Res() res, @Param('id') userId) {
+    const userFollow = await this.followService.getUserFollow(userId);
+    return res.status(HttpStatus.OK).json(userFollow);
   }
 
   @Get('/follow-all/:id')
@@ -19,9 +24,7 @@ export class FollowController {
 
   @Get('/following/:id')
   async getMyFollowing(@Res() res, @Param('id') userId) {
-    const users = await this.userService.getUsers();
-    const currentUser = await this.userService.getUserById(userId);
-    const following = await this.followService.getMyFollowing(currentUser, users);
+    const following = await this.followService.getMyFollowing(userId);
     return res.status(HttpStatus.OK).json(following);
   }
 
@@ -52,9 +55,7 @@ export class FollowController {
 
   @Get('/follower/:id')
   async getMyFollowers(@Res() res, @Param('id') userId) {
-    const users = await this.userService.getUsers();
-    const currentUser = await this.userService.getUserById(userId);
-    const followers = await this.followService.getMyFollowers(currentUser, users);
+    const followers = await this.followService.getMyFollowers(userId);
     return res.status(HttpStatus.OK).json(followers);
   }
 }

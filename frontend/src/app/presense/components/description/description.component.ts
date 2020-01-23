@@ -5,18 +5,14 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { MailApiService } from '../../../core/services/mail-api.service';
 import { TaskApiService } from '../../../core/services/task-api.service';
 import { ContextStoreService } from '../../../core/store/context-store.service';
 import { TasksStoreService } from '../../../core/store/tasks-store.service';
 import { AgendaColors } from '../../../shared/const/agenda-colors.const';
 import { AgendaColorsModel } from '../../../shared/models/agenda-colors.model';
 import { Employee } from '../../../shared/models/employee.model';
-import { SendMailRequestModel } from '../../../shared/models/send-mail.request.model';
-import { SendingTaskModel } from '../../../shared/models/sending-task.model';
 import { TaskModel } from '../../../shared/models/tasks.models';
 import { PrintHelperService } from '../../../shared/services/print-helper.service';
-import { SendingMailService } from '../../../shared/services/sending-mail.service';
 import { SnackbarService } from '../../../shared/services/snackbar.service';
 import { TaskMapperService } from '../../../shared/services/task-mapper.service';
 
@@ -39,9 +35,7 @@ export class DescriptionComponent implements OnInit {
     private contextStoreService: ContextStoreService,
     private taskApiService: TaskApiService,
     private fb: FormBuilder,
-    private mailApiService: MailApiService,
     private tasksStoreService: TasksStoreService,
-    private sendingMail: SendingMailService,
     private taskMapperService: TaskMapperService,
     private printHelperService: PrintHelperService,
     private http: HttpClient
@@ -68,7 +62,6 @@ export class DescriptionComponent implements OnInit {
       return;
     }
     const val = this.form.getRawValue();
-    const sendingMail = this.bundleToSendingMail(val);
     const taskFormVal: TaskModel = {
       type: val.type.id,
       dateStart: moment(val.dateStart),
@@ -85,9 +78,6 @@ export class DescriptionComponent implements OnInit {
       this.tasksStoreService.update();
     });
 
-    if (sendingMail.address.length) {
-      this.mailApiService.sendMail(sendingMail).subscribe(key => console.log(key));
-    }
   }
 
   public printStatement(): void {
@@ -110,14 +100,6 @@ export class DescriptionComponent implements OnInit {
     this.http.get('assets/html/print-vacation.html', { responseType: 'text' }).subscribe((html: string) => {
       this.printHelperService.printStatement(html, this.selectedUser.username, dateStart, dateEnd);
     });
-  }
-
-  public getTitle(id: number): string {
-    return AgendaColors.find(o => o.id === id).title;
-  }
-
-  public changeDateStart(date: NgbDateStruct): void {
-    this.contextStoreService.setCurrentDate(moment(date));
   }
 
   public resetComment(): void {
@@ -150,22 +132,5 @@ export class DescriptionComponent implements OnInit {
         this.form.get('comment').setValue(res, { emitEvent: false });
       })
     );
-  }
-
-  private bundleToSendingMail(formValue: SendingTaskModel): SendMailRequestModel {
-    const mailingAddresses = this.sendingMail
-      .filterEmployee(this.selectedUser)
-      .filter(emp => this.contextStoreService.getCurrentUser().email !== emp.email)
-      .map(emp => emp.email);
-
-    return {
-      address: mailingAddresses,
-      author: this.contextStoreService.getCurrentUser().username,
-      date: moment(formValue.dateStart).format('DD.MM.YYYY'),
-      dateEnd: formValue.dateEnd ? moment(formValue.dateEnd).format('DD.MM.YYYY') : null,
-      user: this.selectedUser.username,
-      status: this.getTitle(formValue.type.id),
-      comment: formValue.comment
-    };
   }
 }

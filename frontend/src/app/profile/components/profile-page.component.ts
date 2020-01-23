@@ -14,10 +14,9 @@ import { DayType } from '../../shared/const/day-type.const';
 import { DictionaryModel } from '../../shared/models/dictionary.model';
 import { Employee } from '../../shared/models/employee.model';
 import { TaskModel } from '../../shared/models/tasks.models';
-import { SendingMailService } from '../../shared/services/sending-mail.service';
 import { AuthSetting } from '../../shared/models/auth-setting.model';
 import { FollowApiService } from '../../core/services/follow-api.service';
-import { FollowModel} from '../../shared/models/follow.model';
+import { FollowModel } from '../../shared/models/follow.model';
 
 @Component({
   selector: 'app-team',
@@ -44,14 +43,13 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   public following: Employee[];
   public followers: Employee[];
 
-  public removedFollowing: FollowModel[];
-  public addedFollowing: FollowModel[];
-  public allForMe: FollowModel[];
+  public removedFromMe: FollowModel[];
+  public addedForMe: FollowModel[];
+  public IRemovedFrom: FollowModel[];
 
   public followingForm: FormControl;
 
   public users$: Observable<Employee[]>;
-  public mailingAddresses: Employee[];
   public settings$: Observable<AuthSetting>;
 
   constructor(
@@ -62,8 +60,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     private dictionaryApi: DictionaryApiService,
     private followApi: FollowApiService,
     private taskApi: TaskApiService,
-    private fb: FormBuilder,
-    private sendingMail: SendingMailService
+    private fb: FormBuilder
   ) {
   }
 
@@ -135,7 +132,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       this.cancelEdit();
       this.contextStoreService.update();
       this.employeeStoreService.update();
-      this.loadFollow();
+      this.loadFollow(this.selectedUser._id);
     });
   }
 
@@ -146,20 +143,20 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       followType: 'add'
     };
 
-    this.followApi.addFollow(data).subscribe(res => this.loadFollow());
+    this.followApi.addFollow(data).subscribe(res => this.loadFollow(this.selectedUser._id));
     this.followingForm.reset();
   }
 
   public toggleFollow(user: Employee) {
-    const isUserRemoved = this.removedFollowing.some(item => item.followingId._id === user._id);
+    const isUserRemoved = this.removedFromMe.some(item => item.followingId._id === user._id);
 
     if (isUserRemoved) {
-      const followId = this.removedFollowing.find(item => item.followingId._id === user._id)._id;
+      const followId = this.removedFromMe.find(item => item.followingId._id === user._id)._id;
       this.deleteFollowing(followId);
     }
 
     if (this.isAddedUser(user)) {
-      const follow = this.addedFollowing.find(item => item.followingId._id === user._id);
+      const follow = this.addedForMe.find(item => item.followingId._id === user._id);
       this.deleteFollowing(follow._id);
     } else {
       const data: FollowModel = {
@@ -168,14 +165,14 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         followType: 'add'
       };
 
-      this.followApi.addFollow(data).subscribe(res => this.loadFollow());
+      this.followApi.addFollow(data).subscribe(res => this.loadFollow(this.selectedUser._id));
     }
   }
 
   public removeFollowing(user: Employee) {
 
     if (this.isAddedUser(user)) {
-      const follow = this.addedFollowing.find(item => item.followingId._id === user._id);
+      const follow = this.addedForMe.find(item => item.followingId._id === user._id);
       this.deleteFollowing(follow._id);
     }
 
@@ -185,21 +182,11 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       followType: 'remove'
     };
 
-    this.followApi.addFollow(data).subscribe(res => this.loadFollow());
-  }
-
-  public getIRemoved(): Employee[] {
-    if (this.allForMe && this.allForMe.length > 0) {
-      return this.allForMe.filter(item => {
-        return item.followingId._id === this.selectedUser._id && item.followType === 'remove';
-      }).map(item => item.followerId);
-    }
-
-    return [];
+    this.followApi.addFollow(data).subscribe(res => this.loadFollow(this.selectedUser._id));
   }
 
   public deleteFollowing(id: string) {
-    this.followApi.deleteFollow(id).subscribe(res => this.loadFollow());
+    this.followApi.deleteFollow(id).subscribe(res => this.loadFollow(this.selectedUser._id));
   }
 
   public cancelEdit(): void {
@@ -237,8 +224,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         this.setSelectedUser(user);
         this.canEdit = false;
         this.loadTasks(user.mailNickname);
-        this.loadFollow();
-        this.mailingAddresses = this.sendingMail.filterEmployee(this.selectedUser);
+        this.loadFollow(user._id);
       })
     );
   }
@@ -253,8 +239,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           this.setSelectedUser(user);
           this.login = user.mailNickname;
           this.loadTasks(user.mailNickname);
-          this.loadFollow();
-          this.mailingAddresses = this.sendingMail.filterEmployee(this.selectedUser);
+          this.loadFollow(user._id);
         })
     );
   }
@@ -278,28 +263,28 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       );
   }
 
-  public loadFollow() {
-    const following$ = this.followApi.getMyFollowing(this.selectedUser._id);
-    const followers$ = this.followApi.getMyFollowers(this.selectedUser._id);
-    const removedFollowers$ = this.followApi.getMyRemovedFollowing(this.selectedUser._id);
-    const addedFollowers$ = this.followApi.getMyAddedFollowing(this.selectedUser._id);
-    const allForMe$ = this.followApi.getAllForMe(this.selectedUser._id);
+  public loadFollow(userId: string) {
+    this.getCurrentUserSub.add(
+      this.followApi.getUserFollow(userId).subscribe(res => {
+        this.following = res.following;
+        this.followers = res.followers;
 
-    forkJoin([following$, removedFollowers$, followers$, addedFollowers$, allForMe$]).subscribe(([following, removed, followers, added, all]) => {
-      this.following = following;
-      this.removedFollowing = removed;
-      this.followers = followers;
-      this.addedFollowing = added;
-      this.allForMe = all;
-    });
+        this.removedFromMe = res.allForUser
+          .filter(follow => follow.followType === 'remove' && follow.followerId._id === this.selectedUser._id);
+        this.addedForMe = res.allForUser
+          .filter(follow => follow.followType === 'add' && follow.followerId._id === this.selectedUser._id);
+        this.IRemovedFrom = res.allForUser
+          .filter(item => item.followingId._id === this.selectedUser._id && item.followType === 'remove');
+      })
+    );
   }
 
   public isAddedUser(user: Employee): boolean {
-    if (this.addedFollowing.length === 0) {
+    if (this.addedForMe.length === 0) {
       return false;
     }
 
-    return this.addedFollowing.some(item => {
+    return this.addedForMe.some(item => {
       return item.followingId._id === user._id;
     });
   }

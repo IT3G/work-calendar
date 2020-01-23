@@ -1,14 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { Config, getConfig } from '../../config/config';
 import { SendMailRequestModel } from '../models/send-mail.request.model';
+
 const nodemailer = require('nodemailer');
 const config = getConfig();
 
 @Injectable()
 export class SendMailService {
-  constructor(private configMail: Config) {}
+  constructor(private configMail: Config) {
+  }
 
   public async sendMail(data: SendMailRequestModel): Promise<string> {
+
     if (config.FEATURE_SEND_MAIL !== 'YES') {
       return;
     }
@@ -18,7 +21,7 @@ export class SendMailService {
     const transporter = nodemailer.createTransport({
       host: this.configMail.MAIL_HOST,
       port: 25,
-      secure: false,
+      secure: false
     });
 
     const users = data.address.join(',');
@@ -37,7 +40,7 @@ export class SendMailService {
       from: `${this.configMail.MAIL_SENDER_NAME}<${this.configMail.MAIL_SENDER_ADDRESS}>`,
       to: users,
       subject: 'Изменение присутствия',
-      html: message,
+      html: message
     });
 
     return info.messageId;
