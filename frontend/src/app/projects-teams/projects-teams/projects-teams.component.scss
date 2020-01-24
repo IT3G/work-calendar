@@ -1,0 +1,22 @@
+@import 'src/app/shared/styles/scroll';
+
+.container {
+  margin-top: 35px;
+}
+
+.project-cell {
+  width: 50px;
+}
+
+.project-table {
+  td {
+    padding: 5px;
+    border: 1px solid #dee2e6;
+  }
+}
+
+.table-title {
+  td {
+    vertical-align: super;
+  }
+}

@@ -11,6 +11,11 @@
   </a>
   <a class="nav-item"
     *ngIf="(isAuth$ | async)"
+    routerLink="/projects-teams"
+    routerLinkActive="active">Проекты
+  </a>
+  <a class="nav-item"
+    *ngIf="(isAuth$ | async)"
     routerLink="/profile"
     routerLinkActive="active">Профиль
   </a>

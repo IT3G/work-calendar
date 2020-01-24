@@ -1,0 +1,20 @@
+<div class="container">
+
+  <table class="project-table">
+    <tr class="table-title">
+      <td></td>
+      <td *ngFor="let project of projects">
+        {{project.name}}
+      </td>
+    </tr>
+    <tr *ngFor="let loc of location">
+      <td>
+        {{loc}}
+      </td>
+      <td class="project-cell" *ngFor="let project of projects">
+        <div>{{ users | userForLocation: loc | userForProjects: project._id }}</div>
+      </td>
+    </tr>
+  </table>
+
+</div>

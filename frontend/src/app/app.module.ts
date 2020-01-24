@@ -22,6 +22,7 @@ import { AppRoutingModule } from './routing/app-routing.module';
 import { AppLoadService } from './shared/services/app-load.service';
 import { SharedModule } from './shared/shared.module';
 import { TeamPresenseModule } from './team-presense/team-presense.module';
+import { ProjectsTeamsModule } from './projects-teams/projects-teams.module';
 
 registerLocaleData(localeRu);
 moment.locale('ru');
@@ -40,6 +41,7 @@ export function onInit(appLoadService: AppLoadService) {
     PresenseModule,
     ProfileModule,
     TeamPresenseModule,
+    ProjectsTeamsModule,
     CommonModule,
     AppRoutingModule,
     BrowserAnimationsModule,
