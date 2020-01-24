@@ -17,11 +17,11 @@ const url = `${config.DATABASE_URL}`;
     UsersModule,
     TasksModule,
     HolidaysModule,
+    DictionaryModule,
+    SettingsModule,
     MongooseModule.forRoot(url, {
       useNewUrlParser: true,
     }),
-    DictionaryModule,
-    SettingsModule,
   ],
   providers: [{ provide: Config, useValue: config }],
 })

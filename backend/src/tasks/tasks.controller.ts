@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpStatus, Param, Post, Res } from '@nestjs/common';
-import { TaskResponseModel } from './models/task.request.model';
 import { TaskService } from './services/task.service';
 import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
+import { TaskModel } from './models/task.model';
 
 @ApiBearerAuth()
 @ApiUseTags('Tasks')
@@ -22,7 +22,7 @@ export class TasksController {
   }
 
   @Post()
-  async addTask(@Res() res, @Body() task: TaskResponseModel) {
+  async addTask(@Res() res, @Body() task: TaskModel) {
     const newTask = await this.taskService.addTask(task);
     return res.status(HttpStatus.OK).json(newTask);
   }

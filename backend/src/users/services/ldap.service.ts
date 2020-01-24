@@ -44,6 +44,7 @@ export class LdapService implements OnApplicationShutdown {
 
   private mapToSendOnClient(attributes: Array<{ type: string; data: string }>): UserModel {
     return {
+      id: null,
       username: this.getAttribute(attributes, 'cn'),
       location: this.getAttribute(attributes, 'l'),
       position: this.getAttribute(attributes, 'title'),
@@ -58,7 +59,7 @@ export class LdapService implements OnApplicationShutdown {
       subdivision: null,
       jobPosition: null,
       authType: 'LDAP',
-      hashPswd: null,
+      hashPassword: null,
     };
   }
 

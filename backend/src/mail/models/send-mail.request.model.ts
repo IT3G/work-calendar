@@ -2,7 +2,7 @@ import { ApiModelProperty } from '@nestjs/swagger';
 
 export class SendMailRequestModel {
   @ApiModelProperty()
-  adress: string[];
+  address: string[];
   @ApiModelProperty()
   author: string;
   @ApiModelProperty()

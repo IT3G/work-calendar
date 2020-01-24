@@ -1,15 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { Config, getConfig } from '../../config/config';
+import { Config } from '../../config/config';
 import { SendMailRequestModel } from '../models/send-mail.request.model';
-const nodemailer = require('nodemailer');
-const config = getConfig();
+
+import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class SendMailService {
-  constructor(private config: Config) {}
+  constructor(private config: Config) {
+  }
 
   public async sendMail(data: SendMailRequestModel): Promise<string> {
-    if (config.FEATURE_SEND_MAIL !== 'YES') {
+
+    if (this.config.FEATURE_SEND_MAIL !== 'YES') {
       return;
     }
 
@@ -21,7 +23,7 @@ export class SendMailService {
       secure: false
     });
 
-    const users = data.adress.join(',');
+    const users = data.address.join(',');
 
     let message = `Пользователь ${data.author} изменил присутсвие на <b>${data.date}</b> для ${data.user} на <u>${data.status}</u>`;
 
@@ -33,7 +35,7 @@ export class SendMailService {
       message = message + `<br><br>${data.comment}`;
     }
 
-    let info = await transporter.sendMail({
+    const info = await transporter.sendMail({
       from: `${this.config.MAIL_SENDER_NAME}<${this.config.MAIL_SENDER_ADDRESS}>`,
       to: users,
       subject: 'Изменение присутствия',

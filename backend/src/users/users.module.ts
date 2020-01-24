@@ -12,6 +12,9 @@ import { DefaultAvatarsService } from './services/avatars/default-avatars.servic
 import { LdapService } from './services/ldap.service';
 import { UsersService } from './services/users.service';
 import { UsersController } from './users.controller';
+import { FollowController } from './follow.controller';
+import { FollowService } from './services/follow.service';
+import { EventEmitter } from 'events';
 
 const config = getConfig();
 
@@ -24,7 +27,7 @@ const avatarServiceProvider = {
       return new DefaultAvatarsService(http);
     }
   },
-  inject: [HttpService, Config]
+  inject: [HttpService, Config],
 };
 
 @Module({
@@ -33,11 +36,12 @@ const avatarServiceProvider = {
     HttpModule,
     JwtModule.register({
       secret: config.JWT_SECRET_KEY,
-      signOptions: { expiresIn: config.JWT_EXPIRES }
-    })
+      signOptions: { expiresIn: config.JWT_EXPIRES },
+    }),
   ],
-  controllers: [UsersController, AuthController, AvatarsController],
-  providers: [UsersService, LdapService, AuthService, avatarServiceProvider, { provide: Config, useValue: config }]
+  controllers: [UsersController, AuthController, AvatarsController, FollowController],
+  providers: [UsersService, FollowService, LdapService, FollowService, AuthService, avatarServiceProvider, { provide: Config, useValue: config }],
+  exports: [UsersService, FollowService],
 })
 export class UsersModule {
   configure(consumer: MiddlewareConsumer) {
