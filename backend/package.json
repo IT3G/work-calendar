@@ -4,7 +4,7 @@
   "description": "",
   "engines": {
     "node": "12.x",
-    "yarn": "1.19.x"
+    "yarn": "1.x"
   },
   "author": "",
   "license": "MIT",
