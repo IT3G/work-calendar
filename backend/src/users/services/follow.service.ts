@@ -20,14 +20,14 @@ export class FollowService {
   }
 
   async getUserFollow(userId: string): Promise<UserFollow> {
-    const following = this.getMyFollowing(userId);
-    const followers = this.getMyFollowers(userId);
-    const allForUser = this.getAll(userId);
+    const following = await this.getMyFollowing(userId);
+    const followers = await this.getMyFollowers(userId);
+    const allForUser = await this.getAll(userId);
 
     return {
-      following: await following,
-      followers: await followers,
-      allForUser: await allForUser,
+      following,
+      followers,
+      allForUser
     };
   }
 
@@ -46,20 +46,19 @@ export class FollowService {
 
     let followingByProjects = this.matchUsersAndActiveProjects(currentUser, allUsers);
 
+    /** Если у пользователя нет проектов, то он подписан на всех */
     if (!currentUser.projects.length) {
       followingByProjects = allUsers;
     }
 
     const addedFollowing = await this.followModel
-      .find({ followerId: currentUser.id, followType: FollowType.add })
-      .exec();
+      .find({ followerId: currentUser.id, followType: FollowType.add });
 
     const removedFollowing = await this.followModel
-      .find({ followerId: currentUser.id, followType: FollowType.remove })
-      .exec();
+      .find({ followerId: currentUser.id, followType: FollowType.remove });
 
-    const addedUsers = addedFollowing.map(item => item.followingId);
-    const removedUsers = removedFollowing.map(item => item.followingId);
+    const addedUsers = addedFollowing.map(item => item.followingId).map(u => u.toString());
+    const removedUsers = removedFollowing.map(item => item.followingId).map(u => u.toString());
 
     let result = this.addUserToArr(addedUsers, followingByProjects, allUsers);
 
@@ -67,22 +66,6 @@ export class FollowService {
     result = this.removeMyselfFromArr(currentUser.id, result);
 
     return result;
-  }
-
-  async getMyRemovedFollowing(userId: string): Promise<FollowEntity[]> {
-    return await this.followModel
-      .find({ followerId: userId, followType: FollowType.remove })
-      .populate('followingId')
-      .populate('followerId')
-      .exec();
-  }
-
-  async getMyAddedFollowing(userId: string): Promise<FollowEntity[]> {
-    return await this.followModel
-      .find({ followerId: userId, followType: FollowType.add })
-      .populate('followingId')
-      .populate('followerId')
-      .exec();
   }
 
   async addFollow(data: FollowerModel): Promise<FollowEntity> {
@@ -101,15 +84,13 @@ export class FollowService {
     const followersByProjects = this.matchUsersAndActiveProjects(currentUser, allUsers);
 
     const addedFollowersArr = await this.followModel
-      .find({ followingId: currentUser.id, followType: FollowType.add })
-      .exec();
+      .find({ followingId: currentUser.id, followType: FollowType.add });
 
     const removedFollowersArr = await this.followModel
-      .find({ followingId: currentUser.id, followType: FollowType.remove })
-      .exec();
+      .find({ followingId: currentUser.id, followType: FollowType.remove });
 
-    const addedUsers = addedFollowersArr.map(item => item.followerId);
-    const removedUsers = removedFollowersArr.map(item => item.followerId);
+    const addedUsers = addedFollowersArr.map(item => item.followerId).map(u => u.toString());
+    const removedUsers = removedFollowersArr.map(item => item.followerId).map(u => u.toString());
 
     let result = this.addUserToArr(addedUsers, followersByProjects, allUsers);
 
@@ -124,65 +105,51 @@ export class FollowService {
   // если его там нет, добавим
   private addUserToArr(addedUsers: string[], mainArr: UserEntity[], allUsers: UserEntity[]): UserEntity[] {
 
-    if (addedUsers.length === 0) {
+    if (!addedUsers.length) {
       return mainArr;
     }
 
     const usersAbsentInMainArr = addedUsers
-      .filter(element => !mainArr.some((elem) => element.toString() === elem.id.toString()));
+      .filter(element => !mainArr.some((elem) => element === elem.id));
 
-    if (usersAbsentInMainArr.length === 0) {
+    if (!usersAbsentInMainArr.length) {
       return mainArr;
     }
 
     const userArr = usersAbsentInMainArr.map(item => {
-      return allUsers.find(el => {
-        return el.id.toString() === item.toString();
-      });
+      return allUsers.find(el => el.id === item);
     });
 
     return [...mainArr, ...userArr];
   }
 
   private removeUsersFromArr(removedUsers: string[], mainArr: UserEntity[]): UserEntity[] {
-    if (removedUsers.length === 0) {
+    if (!removedUsers.length) {
       return mainArr;
     }
 
-    return mainArr.filter(user => {
-      return !removedUsers.some((el) => {
-        return el.toString() === user.id.toString();
-      });
-    });
+    return mainArr.filter(user => !removedUsers.includes(user.id));
   }
 
   private removeMyselfFromArr(userId: string, arr: UserEntity[]) {
-    return arr.filter(el => el.id.toString() !== userId.toString());
+    return arr.filter(el => el.id !== userId.toString());
   }
 
   private matchUsersAndActiveProjects(selectedUser: UserEntity, allUsers: UserEntity[]): UserEntity[] {
-    return allUsers
-      .filter((user) =>
-        (user.projects
-          .filter((p) => p.project)
-          // выбрали проекты, активные на текущий момент
-          .filter((p) => this.isActive(p))
-          // из активных проектов проверили, есть ли хоть один:
-          .some((activeProject) => {
+    const selectedUserActiveProjects = this.getActiveUserProjects(selectedUser);
 
-            return selectedUser.projects
-              // у выбранного пользователя отфильтровали активные на текущий момент
-              .filter(p => this.isActive(p))
-              // проверили совпадение активных проектов для проекта у пользователя и активного пользователя
-              .some(project => {
-                // return project.project.equals(activeProject.project);
-                if (project.project && activeProject.project) {
-                  return project.project.toString() === activeProject.project.toString();
-                }
+    return allUsers.filter((user) => {
+      const userActiveProjects = this.getActiveUserProjects(user);
 
-                return false;
-              });
-          })));
+      return userActiveProjects.some(pr => selectedUserActiveProjects.includes(pr));
+    });
+  }
+
+  private getActiveUserProjects(user: UserEntity): string[] {
+    return user.projects
+      .filter(p => this.isActive(p))
+      .filter(p => p.project)
+      .map(p => p.project.toString());
   }
 
   private isActive(p): boolean {

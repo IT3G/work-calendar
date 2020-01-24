@@ -1,6 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 
-export class TaskResponseModel {
+export class TaskModel {
   @ApiModelProperty()
   comment: string;
   @ApiModelProperty()

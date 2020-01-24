@@ -280,13 +280,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   }
 
   public isAddedUser(user: Employee): boolean {
-    if (this.addedForMe.length === 0) {
-      return false;
-    }
-
-    return this.addedForMe.some(item => {
-      return item.followingId._id === user._id;
-    });
+    return this.addedForMe && this.addedForMe.some(item => item.followingId._id === user._id);
   }
 
   private initForm(user: Employee): void {

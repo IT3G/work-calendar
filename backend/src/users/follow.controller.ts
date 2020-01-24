@@ -16,30 +16,6 @@ export class FollowController {
     return res.status(HttpStatus.OK).json(userFollow);
   }
 
-  @Get('/follow-all/:id')
-  async getAllForMe(@Res() res, @Param('id') userId) {
-    const following = await this.followService.getAll(userId);
-    return res.status(HttpStatus.OK).json(following);
-  }
-
-  @Get('/following/:id')
-  async getMyFollowing(@Res() res, @Param('id') userId) {
-    const following = await this.followService.getMyFollowing(userId);
-    return res.status(HttpStatus.OK).json(following);
-  }
-
-  @Get('/remove-following/:id')
-  async getMyRemovedFollowing(@Res() res, @Param('id') userId) {
-    const removedFollowing = await this.followService.getMyRemovedFollowing(userId);
-    return res.status(HttpStatus.OK).json(removedFollowing);
-  }
-
-  @Get('/add-following/:id')
-  async getMyAddedFollowing(@Res() res, @Param('id') userId) {
-    const addFollowing = await this.followService.getMyAddedFollowing(userId);
-    return res.status(HttpStatus.OK).json(addFollowing);
-  }
-
   @Post()
   async addFollow(@Res() res, @Body() data: FollowerModel) {
     const newFollow = await this.followService.addFollow(data);
@@ -51,11 +27,5 @@ export class FollowController {
     const result = await this.followService.deleteFollow(id);
 
     return res.status(HttpStatus.OK).json(result);
-  }
-
-  @Get('/follower/:id')
-  async getMyFollowers(@Res() res, @Param('id') userId) {
-    const followers = await this.followService.getMyFollowers(userId);
-    return res.status(HttpStatus.OK).json(followers);
   }
 }

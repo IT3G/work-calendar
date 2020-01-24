@@ -68,7 +68,7 @@ export class UsersService {
     return newUser.save();
   }
 
-  async updateUserByLogin(login: string, data: UserModel): Promise<void> {
-    await this.userModel.updateOne({ mailNickname: login }, { ...data });
+  async updateUserByLogin(login: string, data: UserModel): Promise<UserEntity> {
+    return await this.userModel.updateOne({ mailNickname: login }, { ...data });
   }
 }

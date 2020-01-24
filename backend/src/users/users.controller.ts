@@ -37,13 +37,13 @@ export class UsersController {
   }
 
   @Post('/login/:login')
-  @HttpCode(HttpStatus.OK)
-  async editUserByLogin(@Param('login') login, @Body() data: UserModel): Promise<void> {
-    const prevData = await this.userService.getUserById(data.id);
-    if (!prevData) {
+  async editUserByLogin(@Res() res, @Param('login') login, @Body() data: UserModel) {
+    const editedUser = await this.userService.updateUserByLogin(login, data);
+
+    if (!editedUser) {
       throw new NotFoundException('User does not exist!');
     }
 
-    await this.userService.updateUserByLogin(login, data);
+    return res.status(HttpStatus.OK).json(editedUser);
   }
 }

@@ -1,25 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import { Config, getConfig } from '../../config/config';
+import { Config } from '../../config/config';
 import { SendMailRequestModel } from '../models/send-mail.request.model';
 
-const nodemailer = require('nodemailer');
-const config = getConfig();
+import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class SendMailService {
-  constructor(private configMail: Config) {
+  constructor(private config: Config) {
   }
 
   public async sendMail(data: SendMailRequestModel): Promise<string> {
 
-    if (config.FEATURE_SEND_MAIL !== 'YES') {
+    if (this.config.FEATURE_SEND_MAIL !== 'YES') {
       return;
     }
 
     process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
 
     const transporter = nodemailer.createTransport({
-      host: this.configMail.MAIL_HOST,
+      host: this.config.MAIL_HOST,
       port: 25,
       secure: false
     });
@@ -37,7 +36,7 @@ export class SendMailService {
     }
 
     const info = await transporter.sendMail({
-      from: `${this.configMail.MAIL_SENDER_NAME}<${this.configMail.MAIL_SENDER_ADDRESS}>`,
+      from: `${this.config.MAIL_SENDER_NAME}<${this.config.MAIL_SENDER_ADDRESS}>`,
       to: users,
       subject: 'Изменение присутствия',
       html: message
