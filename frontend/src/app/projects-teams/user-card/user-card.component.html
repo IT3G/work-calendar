@@ -13,7 +13,11 @@
     </ng-template>
   </div>
 
-  <div class="user-name">{{user.username}}</div>
+  <a class="user-name" [routerLink]="['/presence', user.mailNickname]">
+    <div *ngFor="let nameItem of user.username | usernameToArr">
+      {{ nameItem }}
+    </div>
+  </a>
 </div>
 
 

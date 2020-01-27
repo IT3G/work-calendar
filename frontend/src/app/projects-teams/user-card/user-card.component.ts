@@ -26,5 +26,4 @@ export class UserCardComponent implements OnInit {
       filter(s => !!s)
     );
   }
-
 }

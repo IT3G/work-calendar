@@ -14,7 +14,7 @@
 
   td {
     padding: 5px;
-    width: 122px;
+    width: 232px;
     border: 1px solid #dee2e6;
     vertical-align: super;
   }
@@ -23,9 +23,29 @@
 .table-title {
   padding-right: 5px;
   margin: 30px auto 0;
+  color: #212529;
+  font-weight: bolder;
+
+  td {
+   text-align: center;
+  }
 }
 
 .tab-scroll-content {
   max-height: calc(100vh - 260px);
   @extend .scrollbar;
+}
+
+.users-wrapper {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.project-name {
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: bolder;
+  color: #212529;
 }

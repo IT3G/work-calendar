@@ -60,4 +60,8 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
       });
   }
 
+  public getLink(id: string): string {
+    const date = moment().format('MM-YYYY');
+    return `#/team-presence?date=${date}&name=&project=${id}`;
+  }
 }

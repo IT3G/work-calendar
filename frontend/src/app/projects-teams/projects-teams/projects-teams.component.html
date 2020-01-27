@@ -2,13 +2,12 @@
   <app-month-selector [date]="date$ | async"
                       (nextMonth)="nextMonth()"
                       (prevMonth)="prevMonth()"></app-month-selector>
-
   <div class="table-title">
     <table class="project-table">
       <tr>
         <td></td>
-        <td *ngFor="let project of projects">
-          {{project.name}}
+        <td *ngFor="let loc of location">
+          {{loc}}
         </td>
       </tr>
     </table>
@@ -16,19 +15,24 @@
   </div>
   <div class="tab-scroll-content">
     <table class="project-table">
-      <tr *ngFor="let loc of location">
+      <tr *ngFor="let project of projects">
         <td>
-          {{loc}}
+          <div class="project-name">
+            <a [href]="getLink(project._id)">
+              {{project.name}}
+            </a>
+          </div>
         </td>
-        <td class="project-cell" *ngFor="let project of projects">
-          <div
-            *ngFor="let user of users | userForLocation: loc | userForProjects: project | activeProjectForDatePipe: (date$ | async) :project">
-            <app-user-card [user]="user"></app-user-card>
+        <td class="project-cell" *ngFor="let loc of location">
+          <div class="users-wrapper">
+            <div
+              *ngFor="let user of users | userForLocation: loc | userForProjects: project | activeProjectForDatePipe: (date$ | async) :project">
+              <app-user-card [user]="user"></app-user-card>
+            </div>
           </div>
         </td>
       </tr>
     </table>
   </div>
-
 
 </div>
