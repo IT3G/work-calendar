@@ -19,6 +19,8 @@ import { UsernamePipe } from './pipes/username.pipe';
 import { FileInputResetComponent } from './components/file-input-reset/file-input-reset.component';
 import { IsHolidayDataPipe } from './pipes/calendar/is-holidays-data.pipe';
 import { FollowUsersFilterPipe } from './pipes/follow-users-fiter.pipe';
+import { MonthSelectorComponent } from './components/month-selector/month-selector.component';
+import { UsernameToArrPipe } from './pipes/username-to-arr.pipe';
 
 const pipes = [
   UsernamePipe,
@@ -32,14 +34,15 @@ const pipes = [
   IsWeekendDayPipe,
   IsCurrentDayPipe,
   IsHolidayDataPipe,
+  UsernameToArrPipe,
   FollowUsersFilterPipe
 ];
 
 const modules = [MaterialModule, FormsModule, ReactiveFormsModule, AvatarModule, NgbModule, RouterModule];
 
-const components = [AgendaComponent, FileInputResetComponent];
+const components = [AgendaComponent, FileInputResetComponent, MonthSelectorComponent];
 @NgModule({
-  declarations: [...pipes, ...components, FollowUsersFilterPipe],
+  declarations: [...pipes, ...components, FollowUsersFilterPipe, UsernameToArrPipe],
   imports: [CommonModule, ...modules],
   exports: [...pipes, ...modules, ...components]
 })

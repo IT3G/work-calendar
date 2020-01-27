@@ -7,6 +7,7 @@ import { RegistrationComponent } from '../login/registration/registration.compon
 import { PresencePageComponent } from '../presense/components/presence-page/presence-page.component';
 import { ProfilePageComponent } from '../profile/components/profile-page.component';
 import { TeamPresencePageComponent } from '../team-presense/components/team-presence-page/team-presence-page.component';
+import { ProjectsTeamsComponent } from '../projects-teams/projects-teams/projects-teams.component';
 
 const swipebleRoutes: string[] = ['/presence', '/team-presence', '/profile'];
 
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'presence', component: PresencePageComponent, canActivate: [AuthGuard] },
   { path: 'presence/:id', component: PresencePageComponent, canActivate: [AuthGuard] },
   { path: 'team-presence', component: TeamPresencePageComponent, canActivate: [AuthGuard] },
+  { path: 'projects-teams', component: ProjectsTeamsComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginPageComponent },
   { path: 'registration', component: RegistrationComponent },
   { path: 'admin', loadChildren: '../admin/admin.module#AdminModule', canActivate: [AuthGuard, IsAdminGuardService] },
