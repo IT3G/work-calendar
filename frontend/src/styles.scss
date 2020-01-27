@@ -22,4 +22,10 @@ button.calendar:active {
   .container {
     max-width: 1200px !important;
   }
+
+  .container-fit {
+    padding: 30px 0;
+    max-width: fit-content;
+    margin: 0 auto;
+  }
 }

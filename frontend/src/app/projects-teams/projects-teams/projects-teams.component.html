@@ -1,20 +1,34 @@
-<div class="container">
+<div class="container-fit">
+  <app-month-selector [date]="date$ | async"
+                      (nextMonth)="nextMonth()"
+                      (prevMonth)="prevMonth()"></app-month-selector>
 
-  <table class="project-table">
-    <tr class="table-title">
-      <td></td>
-      <td *ngFor="let project of projects">
-        {{project.name}}
-      </td>
-    </tr>
-    <tr *ngFor="let loc of location">
-      <td>
-        {{loc}}
-      </td>
-      <td class="project-cell" *ngFor="let project of projects">
-        <div>{{ users | userForLocation: loc | userForProjects: project._id }}</div>
-      </td>
-    </tr>
-  </table>
+  <div class="table-title">
+    <table class="project-table">
+      <tr>
+        <td></td>
+        <td *ngFor="let project of projects">
+          {{project.name}}
+        </td>
+      </tr>
+    </table>
+
+  </div>
+  <div class="tab-scroll-content">
+    <table class="project-table">
+      <tr *ngFor="let loc of location">
+        <td>
+          {{loc}}
+        </td>
+        <td class="project-cell" *ngFor="let project of projects">
+          <div
+            *ngFor="let user of users | userForLocation: loc | userForProjects: project | activeProjectForDatePipe: (date$ | async) :project">
+            <app-user-card [user]="user"></app-user-card>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
 
 </div>

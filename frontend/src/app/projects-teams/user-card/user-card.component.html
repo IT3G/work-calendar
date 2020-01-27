@@ -1,0 +1,19 @@
+<div class="user-card card-s">
+  <div>
+    <div *ngIf="(settings$ | async)?.FEATURE_AVATAR_SOURCE === 'CONFLUENCE'; else noAvatar">
+      <ngx-avatar [src]="user | avatarSource"
+                  class="avatar-center"
+                  size="50"
+                  value="{{ user.username | usernamePipe }}"></ngx-avatar>
+    </div>
+    <ng-template #noAvatar>
+      <ngx-avatar size="50"
+                  class="avatar-center"
+                  value="{{ user.username | usernamePipe }}"></ngx-avatar>
+    </ng-template>
+  </div>
+
+  <div class="user-name">{{user.username}}</div>
+</div>
+
+

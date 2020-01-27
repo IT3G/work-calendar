@@ -19,6 +19,9 @@ import { UsernamePipe } from './pipes/username.pipe';
 import { FileInputResetComponent } from './components/file-input-reset/file-input-reset.component';
 import { IsHolidayDataPipe } from './pipes/calendar/is-holidays-data.pipe';
 import { FollowUsersFilterPipe } from './pipes/follow-users-fiter.pipe';
+import { TeamPresenceFiltersComponent } from '../team-presense/components/team-presence-page/team-presence-filters/team-presence-filters.component';
+import { MonthSelectorComponent } from './components/month-selector/month-selector.component';
+import { TimeZonesComponent } from './components/time-zones/time-zones.component';
 
 const pipes = [
   UsernamePipe,
@@ -37,9 +40,9 @@ const pipes = [
 
 const modules = [MaterialModule, FormsModule, ReactiveFormsModule, AvatarModule, NgbModule, RouterModule];
 
-const components = [AgendaComponent, FileInputResetComponent];
+const components = [AgendaComponent, FileInputResetComponent, MonthSelectorComponent];
 @NgModule({
-  declarations: [...pipes, ...components, FollowUsersFilterPipe],
+  declarations: [...pipes, ...components, FollowUsersFilterPipe, TimeZonesComponent],
   imports: [CommonModule, ...modules],
   exports: [...pipes, ...modules, ...components]
 })

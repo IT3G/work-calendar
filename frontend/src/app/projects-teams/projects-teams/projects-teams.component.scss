@@ -9,14 +9,23 @@
 }
 
 .project-table {
+  margin: 0 auto;
+  width: 100%;
+
   td {
     padding: 5px;
+    width: 122px;
     border: 1px solid #dee2e6;
+    vertical-align: super;
   }
 }
 
 .table-title {
-  td {
-    vertical-align: super;
-  }
+  padding-right: 5px;
+  margin: 30px auto 0;
+}
+
+.tab-scroll-content {
+  max-height: calc(100vh - 260px);
+  @extend .scrollbar;
 }
