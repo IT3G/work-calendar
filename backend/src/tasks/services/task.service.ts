@@ -8,6 +8,7 @@ import { UsersService } from '../../users/services/users.service';
 import { FollowService } from '../../users/services/follow.service';
 import { TaskModel } from '../models/task.model';
 import { TaskType } from '../models/task-type.enum';
+import * as moment from 'moment';
 
 @Injectable()
 export class TaskService {
@@ -24,6 +25,31 @@ export class TaskService {
 
   async getTasksByAuthor(author: string): Promise<TaskModel[]> {
     return await this.taskModel.find({ employeeCreated: author }).exec();
+  }
+
+  async getTasksByMonth(date: string): Promise<TaskModel[]> {
+    const startOfMonth = moment(date, 'YYYY-MM-DD').clone().startOf('month').format('YYYY-MM-DD');
+    const endOfMonth = moment(date, 'YYYY-MM-DD').clone().endOf('month').format('YYYY-MM-DD');
+
+    return this.taskModel.find({
+      $or:
+        [
+          {
+            dateStart:
+              {
+                $gte: startOfMonth,
+                $lt: endOfMonth,
+              },
+          },
+          {
+            dateEnd:
+              {
+                $gte: startOfMonth,
+                $lt: endOfMonth,
+              },
+          },
+        ],
+    });
   }
 
   async addTask(task: TaskModel): Promise<TaskModel> {
@@ -67,7 +93,7 @@ export class TaskService {
       [TaskType.CUSTOM]: 'Особое',
       [TaskType.LEFT]: 'Отсутствие',
       [TaskType.VACATION]: 'Отпуск',
-      [TaskType.SICK]: 'Болезнь'
+      [TaskType.SICK]: 'Болезнь',
     });
 
     if (taskTypeMap[type]) {
