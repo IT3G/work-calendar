@@ -1,14 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import * as moment from 'moment';
 import { BehaviorSubject, forkJoin, Observable, Subscription } from 'rxjs';
-import { filter, map, switchMap } from 'rxjs/operators';
+import { distinctUntilChanged, map, share, switchMap, tap } from 'rxjs/operators';
 import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
-import { DayType } from '../../../shared/const/day-type.const';
 import { locationsDictionary } from '../../../shared/const/locations-dictionary.const';
 import { DictionaryModel } from '../../../shared/models/dictionary.model';
-import { Employee } from '../../../shared/models/employee.model';
 import { PresenceModel } from '../../../shared/models/presence.page.model';
 import { HolidaysApiService } from '../../../core/services/holidays-api.service';
 import { HolidaysModel } from '../../../shared/models/holidays.model';
@@ -16,7 +14,6 @@ import { DateConvertService } from '../../../shared/services/date-convert.servic
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { TaskApiService } from '../../../core/services/task-api.service';
 import { EmployeeApiService } from '../../../core/services/employee-api.service';
-import { TaskModel } from '../../../shared/models/tasks.models';
 
 @Component({
   selector: 'app-team-presence',
@@ -30,15 +27,10 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     this.qParamsSnapshotMonth ? moment(this.qParamsSnapshotMonth, 'MM-YYYY') : moment()
   );
 
-  public monthData: PresenceModel[];
+  public monthData$: Observable<PresenceModel[]>;
   public monthDays$: Observable<moment.Moment[]>;
-  public dayType = DayType;
 
   public filtersForm: FormGroup;
-
-  public tasks$: Observable<TaskModel[]>;
-
-  private employees: Employee[];
   public holidays: HolidaysModel[];
   public projects: DictionaryModel[];
   public jobPositions: DictionaryModel[];
@@ -65,9 +57,14 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     this.monthDays$ = this.getMonthDays();
 
     this.getCommonData();
-    this.updateTaskData();
-    this.updateQueryParamsOnChange();
 
+    this.monthData$ = this.date$.pipe(
+      map((date) => date.format('YYYY-MM-DD')),
+      distinctUntilChanged(),
+      switchMap((date) => this.tasksApi.loadTasksByMonth(date)),
+      share());
+
+    this.updateQueryParamsOnChange();
   }
 
   ngOnDestroy() {
@@ -75,21 +72,20 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
   }
 
   private getCommonData() {
-    const employees$ = this.employeeApi.loadAllEmployees();
     const holidays$ = this.holidaysApi.getAllHolidays();
     const projects$ = this.dictionaryApi.getAll('project');
     const jobPositions$ = this.dictionaryApi.getAll('jobPosition');
     const subdivisions$ = this.dictionaryApi.getAll('subdivision');
 
-    forkJoin([employees$, holidays$, projects$, jobPositions$, subdivisions$]).subscribe(res => {
-      const [employees, holidays, projects, jobPositions, subdivisions] = res;
+    this.subscription.add(
+      forkJoin([holidays$, projects$, jobPositions$, subdivisions$]).subscribe(res => {
+        const [holidays, projects, jobPositions, subdivisions] = res;
 
-      this.employees = employees;
-      this.holidays = holidays;
-      this.projects = projects;
-      this.jobPositions = jobPositions;
-      this.subdivisions = subdivisions;
-    });
+        this.holidays = holidays;
+        this.projects = projects;
+        this.jobPositions = jobPositions;
+        this.subdivisions = subdivisions;
+      }));
   }
 
   public prevMonth(): void {
@@ -150,27 +146,12 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     }
   }
 
-  private updateTaskData(): void {
-    this.date$.pipe(
-      switchMap((date) => {
-        return this.tasksApi.loadTasksByMonth(date.format('YYYY-MM-DD'));
-      }))
-      .pipe(
-        filter((tasks) => !!(this.employees && this.employees.length && tasks))
-      ).subscribe(tasks => {
-      this.monthData = this.employees.map(emp => {
-        return {
-          employee: emp,
-          tasks: tasks.filter(i => i.employee === emp.mailNickname)
-        };
-      });
-    });
-  }
-
   public convertDate(day: moment.Moment): NgbDateStruct {
     return this.dateConvertService.convertMomentToNgbDate(day);
   }
 
+
+  // ToDo pipe
   public getStyleForGridPerMonth(): string {
     const days = this.date$.value.daysInMonth();
     return `30px 240px repeat(${days}, 1fr)`;

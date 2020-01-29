@@ -6,6 +6,7 @@ import { Employee } from '../../shared/models/employee.model';
 import { SendingTaskModel } from '../../shared/models/sending-task.model';
 import { TaskModel } from '../../shared/models/tasks.models';
 import * as moment from 'moment';
+import { PresenceModel } from '../../shared/models/presence.page.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,7 @@ export class TaskApiService {
     return this.http.get<TaskModel[]>(`${environment.baseUrl}/tasks/tasks-author/${author}`);
   }
 
-  public loadTasksByMonth(date: string): Observable<TaskModel[]> {
-    return this.http.get<TaskModel[]>(`${environment.baseUrl}/tasks/tasks-month/${date}`);
+  public loadTasksByMonth(date: string): Observable<PresenceModel[]> {
+    return this.http.get<PresenceModel[]>(`${environment.baseUrl}/tasks/tasks-month/${date}`);
   }
 }

@@ -9,6 +9,7 @@ import { FollowService } from '../../users/services/follow.service';
 import { TaskModel } from '../models/task.model';
 import { TaskType } from '../models/task-type.enum';
 import * as moment from 'moment';
+import { PresenceModel } from '../models/task-month.model';
 
 @Injectable()
 export class TaskService {
@@ -19,40 +20,89 @@ export class TaskService {
   ) {
   }
 
-  async getTasks(): Promise<TaskModel[]> {
+  async getTasks(): Promise<TaskEntity[]> {
     return await this.taskModel.find().exec();
   }
 
-  async getTasksByAuthor(author: string): Promise<TaskModel[]> {
+  async getTasksByAuthor(author: string): Promise<TaskEntity[]> {
     return await this.taskModel.find({ employeeCreated: author }).exec();
   }
 
-  async getTasksByMonth(date: string): Promise<TaskModel[]> {
-    const startOfMonth = moment(date, 'YYYY-MM-DD').clone().startOf('month').format('YYYY-MM-DD');
-    const endOfMonth = moment(date, 'YYYY-MM-DD').clone().endOf('month').format('YYYY-MM-DD');
+  async getTasksByMonth(date: string): Promise<PresenceModel[]> {
 
-    return this.taskModel.find({
+
+    const startOfMonth = moment(date).clone().startOf('month').format('YYYY-MM-DD');
+    const endOfMonth = moment(date).clone().endOf('month').format('YYYY-MM-DD');
+
+
+    const users = await this.userService.getUsers();
+    // a >= start <= b  || a >= end <= b || start < a && end > b
+    const tasks = await this.taskModel.find({
       $or:
         [
           {
             dateStart:
               {
                 $gte: startOfMonth,
-                $lt: endOfMonth,
-              },
+                $lte: endOfMonth
+              }
           },
           {
             dateEnd:
               {
                 $gte: startOfMonth,
-                $lt: endOfMonth,
-              },
+                $lte: endOfMonth
+              }
           },
-        ],
+          {
+            $and: [
+              {
+                dateStart: {
+                  $lte: startOfMonth
+                }
+              }, {
+                dateEnd: {
+                  $gte: endOfMonth
+                }
+              }
+            ]
+          }
+        ]
     });
+
+
+
+    const result = users.map(employee => {
+      const currentUserTasks = tasks.filter(i => i.employee === employee.mailNickname);
+      const res = {
+        employee,
+        tasks: []
+      };
+
+      const day = moment(date).clone().startOf('month');
+
+      //ToO=DO проверка на отстствие dateEnd - isSame
+      //ToO=DO проверка на отстствие dateEnd
+      while (day.isSameOrBefore(endOfMonth)) {
+        const task = currentUserTasks
+          .filter(i => day.isBetween(moment(i.dateStart), moment(i.dateEnd), 'day'))
+          .sort((a, b) => (moment(a.dtCreated).isAfter(moment(b.dtCreated)) ? -1 : 1));
+
+        const lastTask = task[0] || { dateStart: day };
+
+        res.tasks = [...res.tasks, lastTask];
+
+        day.add(1, 'd');
+      }
+
+      return res;
+    });
+
+
+    return result;
   }
 
-  async addTask(task: TaskModel): Promise<TaskModel> {
+  async addTask(task: TaskModel): Promise<TaskEntity> {
     this.sendMail(task);
 
     return await this.taskModel.create(task);
@@ -93,7 +143,7 @@ export class TaskService {
       [TaskType.CUSTOM]: 'Особое',
       [TaskType.LEFT]: 'Отсутствие',
       [TaskType.VACATION]: 'Отпуск',
-      [TaskType.SICK]: 'Болезнь',
+      [TaskType.SICK]: 'Болезнь'
     });
 
     if (taskTypeMap[type]) {

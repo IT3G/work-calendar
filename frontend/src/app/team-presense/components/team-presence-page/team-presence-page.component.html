@@ -14,7 +14,7 @@
 
 
       <div class="table"
-           *ngIf="monthData?.length">
+           *ngIf="(monthData$ | async)?.length">
         <div class="row-item table-header" [ngStyle]="{'grid-template-columns': getStyleForGridPerMonth()}">
           <div class="number"></div>
           <div class="title header">Сотрудник</div>
@@ -31,7 +31,7 @@
 
 
         <div class="table-scrolled">
-          <div *ngFor="let data of monthData; index as i"
+          <div *ngFor="let data of (monthData$ | async); index as i"
                class="row-item" [ngStyle]="{'grid-template-columns': getStyleForGridPerMonth()}">
             <div class="number">{{i + 1}}.</div>
             <div class="title">
@@ -42,10 +42,9 @@
               </div>
               <div class="jobPosition">{{ data.employee?.jobPosition?.name }}</div>
             </div>
-            <div *ngFor="let date of (monthDays$ | async)">0</div>
-<!--            <div *ngFor="let task of data.tasks"-->
-<!--                 [matTooltip]="task.comment"-->
-<!--                 class="day {{ task?.type ? dayType[(task?.type)] : '' }}"></div>-->
+            <div *ngFor="let task of data.tasks"
+                 [matTooltip]="task.comment"
+                 class="day {{task?.type}}"></div>
           </div>
         </div>
 
