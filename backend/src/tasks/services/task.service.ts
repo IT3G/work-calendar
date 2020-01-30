@@ -88,16 +88,14 @@ export class TaskService {
           .filter(i => day.isBetween(moment(i.dateStart), moment(i.dateEnd), 'day'))
           .sort((a, b) => (moment(a.dtCreated).isAfter(moment(b.dtCreated)) ? -1 : 1));
 
-        const lastTask = task[0] || { dateStart: day };
+        const lastTask = task[0] || { dateStart: day.format('YYYY-MM-DD') };
 
         res.tasks = [...res.tasks, lastTask];
 
         day.add(1, 'd');
       }
-
       return res;
     });
-
 
     return result;
   }

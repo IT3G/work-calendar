@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import * as moment from 'moment';
@@ -11,7 +11,6 @@ import { PresenceModel } from '../../../shared/models/presence.page.model';
 import { HolidaysApiService } from '../../../core/services/holidays-api.service';
 import { HolidaysModel } from '../../../shared/models/holidays.model';
 import { DateConvertService } from '../../../shared/services/date-convert.service';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { TaskApiService } from '../../../core/services/task-api.service';
 import { EmployeeApiService } from '../../../core/services/employee-api.service';
 
@@ -48,7 +47,6 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private dictionaryApi: DictionaryApiService,
     private holidaysApi: HolidaysApiService,
-    private dateConvertService: DateConvertService
   ) {
   }
 
@@ -144,16 +142,5 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     if (filters) {
       this.filtersForm.patchValue(filters);
     }
-  }
-
-  public convertDate(day: moment.Moment): NgbDateStruct {
-    return this.dateConvertService.convertMomentToNgbDate(day);
-  }
-
-
-  // ToDo pipe
-  public getStyleForGridPerMonth(): string {
-    const days = this.date$.value.daysInMonth();
-    return `30px 240px repeat(${days}, 1fr)`;
   }
 }
