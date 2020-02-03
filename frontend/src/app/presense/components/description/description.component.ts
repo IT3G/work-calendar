@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
@@ -23,6 +23,9 @@ import { TaskMapperService } from '../../../shared/services/task-mapper.service'
 })
 export class DescriptionComponent implements OnInit {
   @Input() selectedUser: Employee;
+  @Input() tasks: TaskModel[];
+
+  @Output() onAddTask = new EventEmitter<TaskModel>();
 
   public form: FormGroup;
   public options: AgendaColorsModel[];
@@ -35,7 +38,6 @@ export class DescriptionComponent implements OnInit {
     private contextStoreService: ContextStoreService,
     private taskApiService: TaskApiService,
     private fb: FormBuilder,
-    private tasksStoreService: TasksStoreService,
     private taskMapperService: TaskMapperService,
     private printHelperService: PrintHelperService,
     private http: HttpClient
@@ -75,14 +77,14 @@ export class DescriptionComponent implements OnInit {
 
     this.taskApiService.addTask(mappedForm).subscribe(() => {
       this.snackbar.showSuccessSnackBar('Событие добавлено');
-      this.tasksStoreService.update();
+      this.onAddTask.emit(taskFormVal);
     });
 
   }
 
   public printStatement(): void {
     const formValue = this.form.getRawValue();
-    const originalTasks = this.tasksStoreService.originalTasks$.value;
+    const originalTasks = this.tasks;
     let dateStart = formValue.dateStart;
     let dateEnd = formValue.dateEnd;
 

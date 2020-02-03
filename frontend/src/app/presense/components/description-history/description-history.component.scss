@@ -1,13 +1,28 @@
-.cdk-column-id {
-  padding-right: 40px;
-}
-.mat-table {
-  width: calc(100% - 20px);
-  margin-left: 20px;
-}
 
-.wrapper {
-  height: 400px;
-  overflow: auto;
-  margin-top: 20px;
+.history-table {
+  width: 100%;
+
+  tr:hover {
+    background-color: white;
+  }
+
+  td {
+    padding: 8px 4px;
+    vertical-align: super;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  .change-date {
+    width: 100px;
+  }
+  //
+  //.employee {
+  //  width: 150px;
+  //}
+  //.type {
+  //  width: 110px;
+  //}
+  //.comment {
+  //  width: 200px;
+  //}
 }

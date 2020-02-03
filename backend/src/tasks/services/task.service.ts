@@ -28,6 +28,10 @@ export class TaskService {
     return await this.taskModel.find({ employeeCreated: author }).exec();
   }
 
+  async getTasksByEmployee(employee: string): Promise<TaskEntity[]> {
+    return await this.taskModel.find({ employee }).exec();
+  }
+
   async getTasksByMonth(date: string): Promise<PresenceModel[]> {
 
 
@@ -74,18 +78,22 @@ export class TaskService {
 
     const result = users.map(employee => {
       const currentUserTasks = tasks.filter(i => i.employee === employee.mailNickname);
-      const res = {
-        employee,
-        tasks: []
-      };
-
       const day = moment(date).clone().startOf('month');
 
-      //ToO=DO проверка на отстствие dateEnd - isSame
-      //ToO=DO проверка на отстствие dateEnd
+      const res = {
+        employee,
+        tasks: [],
+      };
+
+
       while (day.isSameOrBefore(endOfMonth)) {
         const task = currentUserTasks
-          .filter(i => day.isBetween(moment(i.dateStart), moment(i.dateEnd), 'day'))
+          .filter(i => {
+            if (i.dateEnd) {
+              return day.isBetween(moment(i.dateStart), moment(i.dateEnd), 'day');
+            }
+            return day.isSame(moment(i.dateStart));
+          })
           .sort((a, b) => (moment(a.dtCreated).isAfter(moment(b.dtCreated)) ? -1 : 1));
 
         const lastTask = task[0] || { dateStart: day.format('YYYY-MM-DD') };

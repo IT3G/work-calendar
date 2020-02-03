@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { DayType } from '../../shared/const/day-type.const';
-import { SendingTaskModel } from '../../shared/models/sending-task.model';
-import { TaskModel } from '../../shared/models/tasks.models';
+import { DayType } from '../const/day-type.const';
+import { SendingTaskModel } from '../models/sending-task.model';
+import { TaskModel } from '../models/tasks.models';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ import { TaskModel } from '../../shared/models/tasks.models';
 export class TaskMapperService {
   constructor() {}
 
-  public mapToTaskModel(tasks: TaskModel[]): TaskModel[] {
+  public mapToTaskModel(tasks: SendingTaskModel[]): TaskModel[] {
     const result = tasks.map(task => {
       return {
         ...task,
@@ -41,13 +41,12 @@ export class TaskMapperService {
       bar.push(task);
     });
 
-    const sortedResult = _.orderBy(bar, ['dtCreated'], ['desc']);
-    return sortedResult;
+    return _.orderBy(bar, ['dtCreated'], ['desc']);
   }
 
   public mapToSendingModel(task: TaskModel): SendingTaskModel {
     return {
-      type: DayType[task.type],
+      type: task.type,
       dateStart: task.dateStart.format('YYYY-MM-DD'),
       dateEnd: task.dateEnd.format('YYYY-MM-DD'),
       employee: task.employee,

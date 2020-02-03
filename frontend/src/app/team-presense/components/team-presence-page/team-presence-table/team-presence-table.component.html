@@ -1,0 +1,24 @@
+<div class="table-header row_{{daysInMonth}}">
+  <div class="number"></div>
+  <div class="title header">Сотрудник</div>
+  <div class="day header"
+       *ngFor="let date of daysHeader"
+       [class.currentDay]="date | isCurrentDayPipe"
+       [ngClass]="date | isHolidayData: holidays">
+    <div>{{ date | datePipe: 'D' }}</div>
+    <div>{{ date | datePipe: 'ddd' }}</div>
+  </div>
+</div>
+<div class="table-scrolled row_{{daysInMonth}}">
+  <ng-container *ngFor="let data of monthData; index as i">
+    <div class="number">{{i + 1}}.</div>
+    <div class="title">
+      <a [routerLink]="['/presence', data.employee.mailNickname]">{{ data.employee?.username}}</a>
+      <div class="jobPosition">{{ data.employee?.jobPosition?.name }}</div>
+    </div>
+    <div *ngFor="let task of data.tasks; index as i"
+         [title]="task?.comment || ''"
+         [ngClass]="(i + 1) | getDateFromIndex:yearAndMonth | isHolidayData: holidays"
+         class="day {{task?.type}}"></div>
+  </ng-container>
+</div>

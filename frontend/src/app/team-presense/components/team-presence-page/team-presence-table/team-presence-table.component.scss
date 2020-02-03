@@ -1,0 +1,138 @@
+@import 'src/app/shared/styles/color';
+@import 'src/app/shared/styles/scroll';
+
+$borderColor: #e3e3e3;
+
+.day {
+  text-align: center;
+  border-right: 1px solid $borderColor;
+  border-bottom: 2px solid $borderColor;
+  min-height: 45px;
+  &.header {
+    border-bottom: 1px solid $borderColor;
+  }
+}
+
+.table-header {
+  padding-right: 6px;
+  display: grid;
+  font-weight: 500;
+  margin-top: 30px;
+
+  &.row_28{
+    grid-template-columns: 30px 240px repeat(28, 1fr)
+  }
+
+  &.row_29{
+    grid-template-columns: 30px 240px repeat(29, 1fr)
+  }
+
+  &.row_30{
+    grid-template-columns: 30px 240px repeat(30, 1fr)
+  }
+
+  &.row_31{
+    grid-template-columns: 30px 240px repeat(31, 1fr)
+  }}
+
+.table-scrolled {
+  max-height: calc(100vh - 450px);
+  min-height: 100px;
+  overflow-y: scroll;
+  @extend .scrollbar;
+
+  display: grid;
+  &.row_28{
+    grid-template-columns: 30px 240px repeat(28, 1fr)
+  }
+
+  &.row_29{
+    grid-template-columns: 30px 240px repeat(29, 1fr)
+  }
+
+  &.row_30{
+    grid-template-columns: 30px 240px repeat(30, 1fr)
+  }
+
+  &.row_31{
+    grid-template-columns: 30px 240px repeat(31, 1fr)
+  }
+}
+
+.title {
+  padding: 0 5px;
+  border-right: 1px solid $borderColor;
+  border-bottom: 2px solid $borderColor;
+  white-space: nowrap;
+}
+
+.day_HOLIDAY {
+  background-color: $holiday;
+}
+
+.day_PRE_HOLIDAY {
+  background-color: $pre-holiday;
+}
+
+.COMMON {
+  background-color: #fafafa;
+}
+
+.COMMON.day_PRE_HOLIDAY {
+  background-color: $pre-holiday;
+}
+
+.COMMON.day_HOLIDAY {
+  background-color: $holiday;
+}
+
+.CUSTOM {
+  background-color: rgb(144, 202, 249);
+}
+
+.LEFT {
+  background-color: #ef9a9a;
+}
+
+.VACATION {
+  background-color: #c5e1a5;
+}
+
+.SICK {
+  background-color: #ffe082;
+}
+
+.agenda__wrapper {
+  margin-top: 70px;
+  display: flex;
+  justify-content: center;
+}
+
+
+mat-form-field {
+  margin-right: 20px;
+}
+
+.jobPosition {
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.currentDay {
+  div:first-of-type {
+    background: #ff3b30;
+    color: white;
+    height: 24px;
+    width: 24px;
+    border-radius: 50%;
+    margin: 0 auto;
+  }
+}
+
+.number {
+  text-align: right;
+  color: #9c9a9a;
+  font-size: 14px;
+  margin-top: 1px;
+  padding-right: 5px;
+}

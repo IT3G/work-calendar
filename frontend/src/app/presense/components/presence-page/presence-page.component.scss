@@ -1,0 +1,21 @@
+.presence-grid {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  grid-template-rows: repeat(2, 1fr);
+  grid-gap: 40px;
+  grid-template-areas:
+    'calendar description'
+    'calendar description-history';
+}
+
+.calendar {
+  grid-area: calendar;
+}
+
+.description {
+  grid-area: description;
+}
+
+.description-history {
+  grid-area: description-history;
+}

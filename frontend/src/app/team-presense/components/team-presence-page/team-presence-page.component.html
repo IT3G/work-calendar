@@ -1,50 +1,24 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
+      <app-team-presence-filters
+        [filtersForm]="filtersForm"
+        [projects]="projects"
+        [jobPositions]="jobPositions"
+        [subdivisions]="subdivisions"
+        [locations]="locations"></app-team-presence-filters>
 
-      <app-team-presence-filters [filtersForm]="filtersForm"
-                                 [projects]="projects"
-                                 [jobPositions]="jobPositions"
-                                 [subdivisions]="subdivisions"
-                                 [locations]="locations"></app-team-presence-filters>
+      <app-month-selector
+        [date]="date$ | async"
+        (nextMonth)="nextMonth()"
+        (prevMonth)="prevMonth()"></app-month-selector>
 
-      <app-month-selector [date]="date$ | async"
-                          (nextMonth)="nextMonth()"
-                          (prevMonth)="prevMonth()"></app-month-selector>
+      <app-team-presence-table
+        [holidays]="holidays"
+        [date]="date$ | async"
+        [monthData]="(monthData$ | async) | presenceFilter:filtersForm?.value:(date$ | async)"
+        [monthDays]="monthDays$ | async"></app-team-presence-table>
 
-
-      <div class="table"
-           *ngIf="(monthData$ | async)?.length">
-        <div class="row-item table-header" [ngStyle]="{'grid-template-columns':  date$ | async | presenceGrid}">
-          <div class="number"></div>
-          <div class="title header">Сотрудник</div>
-          <div class="day header"
-               *ngFor="let date of (monthDays$ | async)"
-               [class.currentDay]="date | isCurrentDayPipe"
-               [ngClass]="date | isHolidayData: holidays">
-            <div class="day-header">
-              <div class="day-wrapper">{{ date | datePipe: 'D' }}</div>
-            </div>
-            <div>{{ date | datePipe: 'ddd' }}</div>
-          </div>
-        </div>
-        <div class="table-scrolled">
-          <div *ngFor="let data of (monthData$ | async); index as i"
-               class="row-item" [ngStyle]="{'grid-template-columns': date$ | async | presenceGrid}">
-            <div class="number">{{i + 1}}.</div>
-            <div class="title">
-              <div>
-                <a [routerLink]="['/presence', data.employee.mailNickname]">{{ data.employee?.username}}</a>
-              </div>
-              <div class="jobPosition">{{ data.employee?.jobPosition?.name }}</div>
-            </div>
-            <div *ngFor="let task of data.tasks"
-                 [matTooltip]="task.comment"
-                 [ngClass]="task.dateStart | isHolidayData: holidays"
-                 class="day {{task?.type}}"></div>
-          </div>
-        </div>
-      </div>
       <div class="agenda__wrapper">
         <app-agenda [isLineView]="true"></app-agenda>
       </div>

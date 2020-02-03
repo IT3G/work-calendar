@@ -42,32 +42,20 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private getInfoFromStore() {
-    // this.getEmployees();
-    // this.getTasks();
-    // this.subscription.add(this.tasksStoreService.updater().subscribe(() => this.getTasks()));
-    // this.subscription.add(this.employeeStoreService.updater().subscribe(() => this.getEmployees()));
+    this.getEmployees();
+    this.subscription.add(this.employeeStoreService.updater().subscribe(() => this.getEmployees()));
     this.subscription.add(
       this.configurationApi.loadSettings().subscribe(res => this.contextStoreService.settings$.next(res))
     );
   }
 
-  // private getTasks(): void {
-  //   this.subscription.add(
-  //     this.taskApiService.loadAllTasks().subscribe((res: TaskModel[]) => {
-  //       this.tasksStoreService.originalTasks$.next(res);
-  //       const result = this.taskMapperService.mapToTaskModel(res);
-  //       this.tasksStoreService.addTasks(result);
-  //     })
-  //   );
-  // }
-  //
-  // private getEmployees(): void {
-  //   this.subscription.add(
-  //     this.employeeApiService.loadAllEmployees().subscribe((key: Employee[]) => {
-  //       this.employeeStoreService.addEmployees(key);
-  //     })
-  //   );
-  // }
+  private getEmployees(): void {
+    this.subscription.add(
+      this.employeeApiService.loadAllEmployees().subscribe((key: Employee[]) => {
+        this.employeeStoreService.addEmployees(key);
+      })
+    );
+  }
 
   /** Добавление версии в заголовок */
   private addGitVersionToPageTitle(): void {

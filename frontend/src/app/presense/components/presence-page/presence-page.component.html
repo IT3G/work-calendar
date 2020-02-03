@@ -1,16 +1,19 @@
 <div class="container"
   *ngIf='selectedUser && (tasks$ | async) '>
-  <div class="row">
-    <div class="col-md-4">
+  <div class="presence-grid">
+    <div class="calendar">
       <app-current-day [selectedUser]="selectedUser"></app-current-day>
       <app-calendar [tasks]='tasks$ | async' [holidays]="holidays$ | async"></app-calendar>
       <app-agenda></app-agenda>
     </div>
-    <div class="col-md-3">
-      <app-description [selectedUser]="selectedUser"></app-description>
+    <div class="description">
+      <app-description
+        [selectedUser]="selectedUser"
+        [tasks]='tasks$ | async'
+        (onAddTask)="onAddTask($event)"></app-description>
     </div>
-    <div class="col-md-5">
-      <app-description-history [tasks$]="tasks$"></app-description-history>
+    <div class="description-history">
+      <app-description-history [tasks]="tasks$ | async"></app-description-history>
     </div>
   </div>
 </div>

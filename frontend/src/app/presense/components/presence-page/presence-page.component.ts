@@ -1,15 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { EmployeeApiService } from '../../../core/services/employee-api.service';
 import { ContextStoreService } from '../../../core/store/context-store.service';
-import { TasksStoreService } from '../../../core/store/tasks-store.service';
 import { Employee } from '../../../shared/models/employee.model';
 import { TaskModel } from '../../../shared/models/tasks.models';
 import { HolidaysModel } from '../../../shared/models/holidays.model';
 import { HolidaysApiService } from '../../../core/services/holidays-api.service';
-import { AuthSetting } from '../../../shared/models/auth-setting.model';
+import { TaskApiService } from '../../../core/services/task-api.service';
+import { TaskMapperService } from '../../../shared/services/task-mapper.service';
 
 @Component({
   selector: 'app-presence',
@@ -18,17 +18,19 @@ import { AuthSetting } from '../../../shared/models/auth-setting.model';
 })
 export class PresencePageComponent implements OnInit, OnDestroy {
   public selectedUser: Employee;
-  public tasks$: Observable<TaskModel[]>;
   public holidays$: Observable<HolidaysModel[]>;
   private getCurrentUserSub = new Subscription();
+  public tasks$ = new BehaviorSubject<TaskModel[]>([]);
 
   constructor(
     private route: ActivatedRoute,
     private contextStoreService: ContextStoreService,
-    private tasksStoreService: TasksStoreService,
+    private tasksApi: TaskApiService,
+    private tasksMapper: TaskMapperService,
     private employeeApiService: EmployeeApiService,
     private holidaysService: HolidaysApiService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.checkRoute();
@@ -39,29 +41,30 @@ export class PresencePageComponent implements OnInit, OnDestroy {
     this.getCurrentUserSub.unsubscribe();
   }
 
-  private searchTasksByUserNickname(mailNickname: string): Observable<TaskModel[]> {
-    return this.tasksStoreService.getTasks().pipe(
-      filter(task => !!task),
-      map((tasksArr: TaskModel[]) => tasksArr.filter(task => task.employee === mailNickname))
-    );
+  public onAddTask(e: TaskModel) {
+    this.tasks$.next([...this.tasks$.value, e]);
   }
 
   private checkRoute(): void {
+    // если есть id, берем юзера по нему, если нету - берем себя
     if (this.route.snapshot.params.id) {
-      this.employeeApiService.searchUserByLogin(this.route.snapshot.params.id).subscribe((res: Employee) => {
-        this.selectedUser = res;
-        this.tasks$ = this.searchTasksByUserNickname(res.mailNickname);
-      });
+      this.getCurrentUserSub.add(
+        this.employeeApiService.searchUserByLogin(this.route.snapshot.params.id)
+          .pipe(
+            tap((res) => this.selectedUser = res),
+            switchMap((res) => this.tasksApi.loadAllTasksByEmployee(res.mailNickname)),
+            map(task => this.tasksMapper.mapToTaskModel(task)),
+          ).subscribe(tasks => this.tasks$.next(tasks))
+      );
     } else {
       this.getCurrentUserSub.add(
-        this.contextStoreService
-          .getCurrentUser$()
-          .pipe(filter(user => !!user))
-          .subscribe(key => {
-            this.selectedUser = key;
-            this.tasks$ = this.searchTasksByUserNickname(key.mailNickname);
-          })
-      );
+        this.contextStoreService.getCurrentUser$()
+          .pipe(
+            filter(user => !!user),
+            tap((res) => this.selectedUser = res),
+            switchMap((res) => this.tasksApi.loadAllTasksByEmployee(res.mailNickname)),
+            map(task => this.tasksMapper.mapToTaskModel(task)),
+          ).subscribe(tasks => this.tasks$.next(tasks)));
     }
   }
 }

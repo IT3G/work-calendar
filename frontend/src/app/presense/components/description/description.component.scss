@@ -1,35 +1,35 @@
 .form-container {
-  max-width: 350px;
-  margin: 0 auto 10px;
-  text-align: center;
+  display: grid;
+  grid-template-areas:
+    'title . '
+    'dates comment'
+    'buttons submitButton';
 }
+
 .title {
   font-size: 19px;
+  grid-area: title;
 }
 
-.date__wrapper {
-  display: flex;
-  margin-bottom: 20px;
-}
-select {
-  width: 160px;
-}
-.date_row {
-  display: flex;
-  margin-right: 10px;
-  align-content: center;
+.dates {
+  grid-area: dates;
 }
 
-.title {
-  margin-right: 10px;
-  display: flex;
-  align-items: center;
+.buttons {
+  grid-area: buttons;
 }
 
+.comment {
+  grid-area: comment;
+}
+
+.submitButton {
+  grid-area: submitButton;
+}
 .control {
   width: 100%;
-  margin-bottom: 10px;
 }
+
 .print {
   color: #007bff !important;
   text-decoration: underline !important;

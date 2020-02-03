@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-month-selector',
@@ -8,7 +9,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 })
 export class MonthSelectorComponent {
   @Input()
-  date: string;
+  date: moment.Moment;
 
   @Output()
   prevMonth = new EventEmitter<void>();

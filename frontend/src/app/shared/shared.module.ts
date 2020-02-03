@@ -21,6 +21,7 @@ import { IsHolidayDataPipe } from './pipes/calendar/is-holidays-data.pipe';
 import { FollowUsersFilterPipe } from './pipes/follow-users-fiter.pipe';
 import { MonthSelectorComponent } from './components/month-selector/month-selector.component';
 import { UsernameToArrPipe } from './pipes/username-to-arr.pipe';
+import { IsHolidayDayForNgbModelPipe } from './pipes/calendar/is-holiday-day-for-ngb-model.pipe';
 
 const pipes = [
   UsernamePipe,
@@ -35,15 +36,18 @@ const pipes = [
   IsCurrentDayPipe,
   IsHolidayDataPipe,
   UsernameToArrPipe,
-  FollowUsersFilterPipe
+  FollowUsersFilterPipe,
+  IsHolidayDayForNgbModelPipe
 ];
 
 const modules = [MaterialModule, FormsModule, ReactiveFormsModule, AvatarModule, NgbModule, RouterModule];
 
 const components = [AgendaComponent, FileInputResetComponent, MonthSelectorComponent];
+
 @NgModule({
-  declarations: [...pipes, ...components, FollowUsersFilterPipe, UsernameToArrPipe],
+  declarations: [...pipes, ...components],
   imports: [CommonModule, ...modules],
   exports: [...pipes, ...modules, ...components]
 })
-export class SharedModule {}
+export class SharedModule {
+}
