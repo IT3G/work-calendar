@@ -12,6 +12,10 @@ export class TaskTypePipe implements PipeTransform {
       return null;
     }
 
-    return AgendaColors.find((agenda: AgendaColorsModel) => agenda.id.toString() === DayType[value].toString()).title;
+    const agendaColor = AgendaColors.find(
+      (agenda: AgendaColorsModel) => agenda.id.toString() === DayType[value].toString()
+    );
+
+    return agendaColor ? agendaColor.title : null;
   }
 }
