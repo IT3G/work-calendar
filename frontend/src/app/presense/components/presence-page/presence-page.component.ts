@@ -46,25 +46,21 @@ export class PresencePageComponent implements OnInit, OnDestroy {
   }
 
   private checkRoute(): void {
-    // если есть id, берем юзера по нему, если нету - берем себя
-    if (this.route.snapshot.params.id) {
-      this.getCurrentUserSub.add(
-        this.employeeApiService.searchUserByLogin(this.route.snapshot.params.id)
-          .pipe(
-            tap((res) => this.selectedUser = res),
-            switchMap((res) => this.tasksApi.loadAllTasksByEmployee(res.mailNickname)),
-            map(task => this.tasksMapper.mapToTaskModel(task)),
-          ).subscribe(tasks => this.tasks$.next(tasks))
-      );
-    } else {
-      this.getCurrentUserSub.add(
-        this.contextStoreService.getCurrentUser$()
-          .pipe(
-            filter(user => !!user),
-            tap((res) => this.selectedUser = res),
-            switchMap((res) => this.tasksApi.loadAllTasksByEmployee(res.mailNickname)),
-            map(task => this.tasksMapper.mapToTaskModel(task)),
-          ).subscribe(tasks => this.tasks$.next(tasks)));
+    this.getCurrentUserSub.add(
+      this.route.params.pipe(
+        switchMap(params => this.getUserByIdOrCurrent(params.id)),
+        tap((res) => this.selectedUser = res),
+        switchMap((res) => this.tasksApi.loadAllTasksByEmployee(res.mailNickname)),
+        map(task => this.tasksMapper.mapToTaskModel(task))
+      ).subscribe(tasks => this.tasks$.next(tasks))
+    );
+  }
+
+  private getUserByIdOrCurrent(id?: string): Observable<Employee> {
+    if (id) {
+      return this.employeeApiService.searchUserByLogin(id);
     }
+
+    return this.contextStoreService.getCurrentUser$().pipe(filter((u) => !!u));
   }
 }

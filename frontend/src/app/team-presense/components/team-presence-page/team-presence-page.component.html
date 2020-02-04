@@ -16,7 +16,7 @@
       <app-team-presence-table
         [holidays]="holidays"
         [date]="date$ | async"
-        [monthData]="(monthData$ | async) | presenceFilter:filtersForm?.value:(date$ | async)"
+        [monthData]="monthData$ | async | presenceFilter:filtersForm?.value:(date$ | async)"
         [monthDays]="monthDays$ | async"></app-team-presence-table>
 
       <div class="agenda__wrapper">

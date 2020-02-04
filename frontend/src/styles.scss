@@ -20,7 +20,6 @@ button.calendar:active {
 
 @media (min-width: 1200px) {
   .container {
-    padding: 30px 0;
     max-width: 1200px !important;
   }
 
@@ -28,5 +27,12 @@ button.calendar:active {
     padding: 30px 0;
     max-width: fit-content;
     margin: 0 auto;
+  }
+}
+
+
+@media (min-width: 576px) {
+  .container.container-adapt {
+    padding: 30px 0;
   }
 }

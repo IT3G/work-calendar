@@ -46,7 +46,7 @@ export class TaskMapperService {
 
   public mapToSendingModel(task: TaskModel): SendingTaskModel {
     return {
-      type: task.type,
+      type: DayType[task.type],
       dateStart: task.dateStart.format('YYYY-MM-DD'),
       dateEnd: task.dateEnd.format('YYYY-MM-DD'),
       employee: task.employee,

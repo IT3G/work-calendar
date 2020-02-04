@@ -1,7 +1,5 @@
-import { DayType } from '../const/day-type.const';
-
 export class SendingTaskModel {
-  type: DayType;
+  type: any;
   dateStart: string;
   dateEnd: string;
   employee: string;

@@ -22,6 +22,7 @@ import { FollowUsersFilterPipe } from './pipes/follow-users-fiter.pipe';
 import { MonthSelectorComponent } from './components/month-selector/month-selector.component';
 import { UsernameToArrPipe } from './pipes/username-to-arr.pipe';
 import { IsHolidayDayForNgbModelPipe } from './pipes/calendar/is-holiday-day-for-ngb-model.pipe';
+import { TaskTypeColorPipe } from './pipes/description-history/task-type-color.pipe';
 
 const pipes = [
   UsernamePipe,
@@ -37,7 +38,8 @@ const pipes = [
   IsHolidayDataPipe,
   UsernameToArrPipe,
   FollowUsersFilterPipe,
-  IsHolidayDayForNgbModelPipe
+  IsHolidayDayForNgbModelPipe,
+  TaskTypeColorPipe
 ];
 
 const modules = [MaterialModule, FormsModule, ReactiveFormsModule, AvatarModule, NgbModule, RouterModule];
@@ -45,7 +47,7 @@ const modules = [MaterialModule, FormsModule, ReactiveFormsModule, AvatarModule,
 const components = [AgendaComponent, FileInputResetComponent, MonthSelectorComponent];
 
 @NgModule({
-  declarations: [...pipes, ...components],
+  declarations: [...pipes, ...components, ],
   imports: [CommonModule, ...modules],
   exports: [...pipes, ...modules, ...components]
 })
