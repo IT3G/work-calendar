@@ -1,0 +1,44 @@
+@media (min-width: 1000px) {
+  .presence-grid {
+    display: grid;
+    grid-template-columns: 300px minmax(500px, 640px);
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 40px;
+    grid-row-gap: 20px;
+    grid-template-areas:
+      'calendar description'
+      'calendar description'
+      'agenda description-history';
+  }
+}
+
+
+@media (min-width: 576px) and (max-width: 999px)  {
+  .presence-grid {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    grid-template-rows: repeat(2, 1fr);
+    grid-column-gap: 20px;
+    grid-row-gap: 10px;
+    grid-template-areas:
+      'calendar description'
+      'agenda agenda'
+      'description-history description-history';
+  }
+}
+
+.calendar {
+  grid-area: calendar;
+}
+
+.agenda {
+  grid-area: agenda;
+}
+
+.description {
+  grid-area: description;
+}
+
+.description-history {
+  grid-area: description-history;
+}

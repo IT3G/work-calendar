@@ -17,6 +17,7 @@ import { TaskModel } from '../../shared/models/tasks.models';
 import { AuthSetting } from '../../shared/models/auth-setting.model';
 import { FollowApiService } from '../../core/services/follow-api.service';
 import { FollowModel } from '../../shared/models/follow.model';
+import { SendingTaskModel } from '../../shared/models/sending-task.model';
 
 @Component({
   selector: 'app-team',
@@ -33,8 +34,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   private getCurrentUserSub = new Subscription();
   private searchUserByLoginSub = new Subscription();
   public projects: DictionaryModel[];
-  public taskHistory$: Observable<TaskModel[]>;
-  public activity: TaskModel[];
+  public taskHistory$: Observable<SendingTaskModel[]>;
+  public activity: SendingTaskModel[];
   public dayType = DayType;
 
   public jobPositions: DictionaryModel[];

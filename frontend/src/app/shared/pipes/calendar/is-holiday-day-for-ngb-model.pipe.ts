@@ -1,18 +1,26 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { HolidaysModel, MonthNumber } from '../../models/holidays.model';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 
 @Pipe({
-  name: 'isHolidayData'
+  name: 'isHolidayDayForNgbModel'
 })
-export class IsHolidayDataPipe implements PipeTransform {
+export class IsHolidayDayForNgbModelPipe implements PipeTransform {
 
-  transform(dateSrc: string, holidays: HolidaysModel[]): string {
+  transform(dateSrc: NgbDateStruct, holidays: HolidaysModel[]): string {
     if (!dateSrc || !(holidays && holidays.length)) {
       return `day_WORK`;
     }
-    const date = moment(dateSrc);
+
+    const dateMoment = {
+      year: dateSrc.year,
+      month: dateSrc.month - 1,
+      day: dateSrc.day
+    };
+
+    const date = moment(dateMoment);
+
     const currentYear = holidays[0].data.find(item => item.year === date.year().toString());
     const monthName = MonthNumber[date.month()];
     const arr = currentYear && currentYear[monthName] && currentYear[monthName].split(',');

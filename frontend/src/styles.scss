@@ -29,3 +29,10 @@ button.calendar:active {
     margin: 0 auto;
   }
 }
+
+
+@media (min-width: 576px) {
+  .container.container-adapt {
+    padding: 30px 0;
+  }
+}

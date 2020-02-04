@@ -15,9 +15,21 @@ export class TasksController {
     return res.status(HttpStatus.OK).json(tasks);
   }
 
-  @Get('/:author')
+  @Get('/tasks-author/:author')
   async getTasksByAuthor(@Res() res, @Param('author') author) {
     const tasks = await this.taskService.getTasksByAuthor(author);
+    return res.status(HttpStatus.OK).json(tasks);
+  }
+
+  @Get('/tasks-employee/:employee')
+  async getTasksByEmployee(@Res() res, @Param('employee') employee) {
+    const tasks = await this.taskService.getTasksByEmployee(employee);
+    return res.status(HttpStatus.OK).json(tasks);
+  }
+
+  @Get('/tasks-month/:date')
+  async getTasksByMonth(@Res() res, @Param('date') date) {
+    const tasks = await this.taskService.getTasksByMonth(date);
     return res.status(HttpStatus.OK).json(tasks);
   }
 

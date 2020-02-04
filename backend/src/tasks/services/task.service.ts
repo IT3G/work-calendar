@@ -8,6 +8,8 @@ import { UsersService } from '../../users/services/users.service';
 import { FollowService } from '../../users/services/follow.service';
 import { TaskModel } from '../models/task.model';
 import { TaskType } from '../models/task-type.enum';
+import * as moment from 'moment';
+import { PresenceModel } from '../models/task-month.model';
 
 @Injectable()
 export class TaskService {
@@ -18,15 +20,95 @@ export class TaskService {
   ) {
   }
 
-  async getTasks(): Promise<TaskModel[]> {
+  async getTasks(): Promise<TaskEntity[]> {
     return await this.taskModel.find().exec();
   }
 
-  async getTasksByAuthor(author: string): Promise<TaskModel[]> {
+  async getTasksByAuthor(author: string): Promise<TaskEntity[]> {
     return await this.taskModel.find({ employeeCreated: author }).exec();
   }
 
-  async addTask(task: TaskModel): Promise<TaskModel> {
+  async getTasksByEmployee(employee: string): Promise<TaskEntity[]> {
+    return await this.taskModel.find({ employee }).exec();
+  }
+
+  async getTasksByMonth(date: string): Promise<PresenceModel[]> {
+
+
+    const startOfMonth = moment(date).clone().startOf('month').format('YYYY-MM-DD');
+    const endOfMonth = moment(date).clone().endOf('month').format('YYYY-MM-DD');
+
+
+    const users = await this.userService.getUsers();
+    // a >= start <= b  || a >= end <= b || start < a && end > b
+    const tasks = await this.taskModel.find({
+      $or:
+        [
+          {
+            dateStart:
+              {
+                $gte: startOfMonth,
+                $lte: endOfMonth
+              }
+          },
+          {
+            dateEnd:
+              {
+                $gte: startOfMonth,
+                $lte: endOfMonth
+              }
+          },
+          {
+            $and: [
+              {
+                dateStart: {
+                  $lte: startOfMonth
+                }
+              }, {
+                dateEnd: {
+                  $gte: endOfMonth
+                }
+              }
+            ]
+          }
+        ]
+    });
+
+
+
+    const result = users.map(employee => {
+      const currentUserTasks = tasks.filter(i => i.employee === employee.mailNickname);
+      const day = moment(date).clone().startOf('month');
+
+      const res = {
+        employee,
+        tasks: [],
+      };
+
+
+      while (day.isSameOrBefore(endOfMonth)) {
+        const task = currentUserTasks
+          .filter(i => {
+            if (i.dateEnd) {
+              return day.isBetween(moment(i.dateStart), moment(i.dateEnd), 'day');
+            }
+            return day.isSame(moment(i.dateStart));
+          })
+          .sort((a, b) => (moment(a.dtCreated).isAfter(moment(b.dtCreated)) ? -1 : 1));
+
+        const lastTask = task[0] || { dateStart: day.format('YYYY-MM-DD') };
+
+        res.tasks = [...res.tasks, lastTask];
+
+        day.add(1, 'd');
+      }
+      return res;
+    });
+
+    return result;
+  }
+
+  async addTask(task: TaskModel): Promise<TaskEntity> {
     this.sendMail(task);
 
     return await this.taskModel.create(task);

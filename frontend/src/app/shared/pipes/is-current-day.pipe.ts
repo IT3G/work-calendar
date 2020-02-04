@@ -6,7 +6,7 @@ import { Moment } from 'moment';
   name: 'isCurrentDayPipe'
 })
 export class IsCurrentDayPipe implements PipeTransform {
-  transform(date: Moment): boolean {
-    return date.isSame(moment(), 'day');
+  transform(date: string): boolean {
+    return moment(date).isSame(moment(), 'day');
   }
 }
