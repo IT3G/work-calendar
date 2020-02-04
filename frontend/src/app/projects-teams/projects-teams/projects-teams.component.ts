@@ -1,13 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import * as moment from 'moment';
 import { BehaviorSubject, forkJoin, Subscription } from 'rxjs';
-import { Employee } from '../../shared/models/employee.model';
+import { DictionaryApiService } from '../../core/services/dictionary-api.service';
 import { EmployeeApiService } from '../../core/services/employee-api.service';
 import { locationsDictionary } from '../../shared/const/locations-dictionary.const';
-import * as moment from 'moment-timezone';
-import { DictionaryApiService } from '../../core/services/dictionary-api.service';
 import { DictionaryModel } from '../../shared/models/dictionary.model';
-import { ActivatedRoute, Router } from '@angular/router';
-
+import { Employee } from '../../shared/models/employee.model';
 
 @Component({
   selector: 'app-projects-teams',
@@ -21,7 +20,6 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
 
   private subscription = new Subscription();
 
-
   private qParamsSnpshotMonth = this.route.snapshot.queryParams.date;
   public date$ = new BehaviorSubject<moment.Moment>(
     this.qParamsSnpshotMonth ? moment(this.qParamsSnpshotMonth, 'MM-YYYY') : moment()
@@ -30,8 +28,8 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private dictionaryApi: DictionaryApiService,
-    private employeeApiService: EmployeeApiService) {
-  }
+    private employeeApiService: EmployeeApiService
+  ) {}
 
   ngOnInit() {
     this.getData();
@@ -53,11 +51,10 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
     const users$ = this.employeeApiService.loadAllEmployees();
     const projects$ = this.dictionaryApi.getAll('project');
 
-    forkJoin([users$, projects$])
-      .subscribe(res => {
-        this.users = res[0];
-        this.projects = res[1];
-      });
+    forkJoin([users$, projects$]).subscribe(res => {
+      this.users = res[0];
+      this.projects = res[1];
+    });
   }
 
   public getLink(id: string): string {
