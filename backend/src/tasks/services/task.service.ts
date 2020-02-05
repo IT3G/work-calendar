@@ -74,15 +74,13 @@ export class TaskService {
         ]
     });
 
-
-
     const result = users.map(employee => {
       const currentUserTasks = tasks.filter(i => i.employee === employee.mailNickname);
       const day = moment(date).clone().startOf('month');
 
       const res = {
         employee,
-        tasks: [],
+        tasks: []
       };
 
 
@@ -90,9 +88,10 @@ export class TaskService {
         const task = currentUserTasks
           .filter(i => {
             if (i.dateEnd) {
-              return day.isBetween(moment(i.dateStart), moment(i.dateEnd), 'day');
+              return day.isBetween(moment(i.dateStart), moment(i.dateEnd), 'day', '[]');
             }
-            return day.isSame(moment(i.dateStart));
+
+            return day.isSame(moment(i.dateStart), 'day');
           })
           .sort((a, b) => (moment(a.dtCreated).isAfter(moment(b.dtCreated)) ? -1 : 1));
 
@@ -104,7 +103,6 @@ export class TaskService {
       }
       return res;
     });
-
     return result;
   }
 
