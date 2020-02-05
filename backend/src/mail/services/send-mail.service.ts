@@ -6,11 +6,9 @@ import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class SendMailService {
-  constructor(private config: Config) {
-  }
+  constructor(private config: Config) {}
 
   public async sendMail(data: SendMailRequestModel): Promise<string> {
-
     if (this.config.FEATURE_SEND_MAIL !== 'YES') {
       return;
     }
@@ -20,7 +18,8 @@ export class SendMailService {
     const transporter = nodemailer.createTransport({
       host: this.config.MAIL_HOST,
       port: 25,
-      secure: false
+      secure: false,
+      tls: { rejectUnauthorized: false }
     });
 
     const users = data.address.join(',');

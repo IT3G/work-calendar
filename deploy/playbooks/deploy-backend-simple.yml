@@ -29,7 +29,7 @@
     - block:
       - name: 'Verify that the new container is serving traffic'
         uri:
-          url: "http://localhost:{{ container_ext_port }}/users/"
+          url: "http://localhost:{{ container_ext_port }}/settings/"
           status_code: 200
         register: container_status
         retries: "10"
