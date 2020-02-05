@@ -1,0 +1,29 @@
+<table class="history-table"
+    *ngIf="activity as taskHistory; else emptyHistory">
+    <tr>
+        <td class="change-date">Дата изменения</td>
+        <td class="date">Дата</td>
+        <td class="employee">Кому</td>
+        <td class="type">Вид</td>
+        <td class="comment">Комментарий</td>
+    </tr>
+</table>
+<div class="tab-scroll-content"
+    *ngIf="activity as taskHistory">
+    <table class="history-table">
+        <tr *ngFor="let element of taskHistory$ | async">
+            <td class="change-date">{{ element.dtCreated | datePipe: 'DD MMMM, HH:mm' }}</td>
+            <td class="date">
+                {{ element.dateStart | datePipe: 'DD MMMM' }}
+                <span *ngIf="hasDateRange(element)"> по {{ element.dateEnd | datePipe: 'DD MMMM' }} </span>
+            </td>
+            <td class="employee">{{ element.employee }}</td>
+            <td class="type">{{ dayType[element.type] | taskType }}</td>
+            <td class="comment">{{ element.comment }}</td>
+        </tr>
+    </table>
+</div>
+
+<ng-template #emptyHistory>
+    <div class="empty-history">Нет истории изменений.</div>
+</ng-template>

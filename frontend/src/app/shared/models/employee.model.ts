@@ -23,4 +23,17 @@ export class Employee {
   subdivision: DictionaryModel;
   jobPosition: DictionaryModel;
   hashPassword: string;
+  projectsNew: ProjectNew[];
+}
+
+class ProjectNew {
+  project_id: string;
+  project_name: string;
+  metadata: ProjectStatsMetadataNew[];
+}
+
+class ProjectStatsMetadataNew {
+  month: number;
+  year: number;
+  percent: number;
 }

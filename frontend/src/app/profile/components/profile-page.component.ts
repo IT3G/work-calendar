@@ -1,23 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import * as moment from 'moment';
-import { combineLatest, forkJoin, Observable, Subscription } from 'rxjs';
+import { forkJoin, Observable, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { DictionaryApiService } from '../../core/services/dictionary-api.service';
 import { EmployeeApiService } from '../../core/services/employee-api.service';
-import { TaskApiService } from '../../core/services/task-api.service';
+import { FollowApiService } from '../../core/services/follow-api.service';
 import { ContextStoreService } from '../../core/store/context-store.service';
 import { EmployeeStoreService } from '../../core/store/employee-store.service';
-import { DayType } from '../../shared/const/day-type.const';
+import { AuthSetting } from '../../shared/models/auth-setting.model';
 import { DictionaryModel } from '../../shared/models/dictionary.model';
 import { Employee } from '../../shared/models/employee.model';
-import { TaskModel } from '../../shared/models/tasks.models';
-import { AuthSetting } from '../../shared/models/auth-setting.model';
-import { FollowApiService } from '../../core/services/follow-api.service';
 import { FollowModel } from '../../shared/models/follow.model';
-import { SendingTaskModel } from '../../shared/models/sending-task.model';
 
 @Component({
   selector: 'app-team',
@@ -34,9 +29,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   private getCurrentUserSub = new Subscription();
   private searchUserByLoginSub = new Subscription();
   public projects: DictionaryModel[];
-  public taskHistory$: Observable<SendingTaskModel[]>;
-  public activity: SendingTaskModel[];
-  public dayType = DayType;
 
   public jobPositions: DictionaryModel[];
   public subdivisions: DictionaryModel[];
@@ -60,10 +52,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private dictionaryApi: DictionaryApiService,
     private followApi: FollowApiService,
-    private taskApi: TaskApiService,
     private fb: FormBuilder
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this.users$ = this.employeeApiService.loadAllEmployees();
@@ -72,9 +62,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.getUserInfo();
     this.isAdmin$ = this.contextStoreService.isCurrentUserAdmin$();
     this.dictionaryApi.getAll('project').subscribe(p => (this.projects = p));
-    this.settings$ = this.contextStoreService.settings$.pipe(
-      filter(s => !!s)
-    );
+    this.settings$ = this.contextStoreService.settings$.pipe(filter(s => !!s));
   }
 
   ngOnDestroy() {
@@ -107,10 +95,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   public removeFormGroupProject(index: number): void {
     this.projectFormArray.removeAt(index);
-  }
-
-  public hasDateRange(task: TaskModel): boolean {
-    return !moment(task.dateStart).isSame(moment(task.dateEnd));
   }
 
   public editStart(): void {
@@ -171,7 +155,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   }
 
   public removeFollowing(user: Employee) {
-
     if (this.isAddedUser(user)) {
       const follow = this.addedForMe.find(item => item.followingId._id === user._id);
       this.deleteFollowing(follow._id);
@@ -214,7 +197,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       } else {
         this.getUserFromApi();
       }
-
     });
   }
 
@@ -224,7 +206,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         this.initForm(user);
         this.setSelectedUser(user);
         this.canEdit = false;
-        this.loadTasks(user.mailNickname);
         this.loadFollow(user._id);
       })
     );
@@ -239,29 +220,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           this.initForm(user);
           this.setSelectedUser(user);
           this.login = user.mailNickname;
-          this.loadTasks(user.mailNickname);
           this.loadFollow(user._id);
         })
     );
-  }
-
-  public loadTasks(user: string): void {
-    this.taskHistory$ = this.taskApi.loadAllTasksByAuthor(user);
-    combineLatest([this.users$, this.taskHistory$])
-      .pipe(filter(([users, tasks]) => !!users.length && !!tasks.length))
-      .subscribe(
-        ([users, tasks]) =>
-          (this.activity = tasks
-            .map(task => {
-              const currentUser = users.find(u => u.mailNickname === task.employee);
-              if (!currentUser) {
-                return;
-              }
-              task.employee = currentUser.username ? currentUser.username : currentUser.mailNickname;
-              return task;
-            })
-            .filter(t => !!t))
-      );
   }
 
   public loadFollow(userId: string) {
@@ -270,12 +231,15 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         this.following = res.following;
         this.followers = res.followers;
 
-        this.removedFromMe = res.allForUser
-          .filter(follow => follow.followType === 'remove' && follow.followerId._id === this.selectedUser._id);
-        this.addedForMe = res.allForUser
-          .filter(follow => follow.followType === 'add' && follow.followerId._id === this.selectedUser._id);
-        this.IRemovedFrom = res.allForUser
-          .filter(item => item.followingId._id === this.selectedUser._id && item.followType === 'remove');
+        this.removedFromMe = res.allForUser.filter(
+          follow => follow.followType === 'remove' && follow.followerId._id === this.selectedUser._id
+        );
+        this.addedForMe = res.allForUser.filter(
+          follow => follow.followType === 'add' && follow.followerId._id === this.selectedUser._id
+        );
+        this.IRemovedFrom = res.allForUser.filter(
+          item => item.followingId._id === this.selectedUser._id && item.followType === 'remove'
+        );
       })
     );
   }
