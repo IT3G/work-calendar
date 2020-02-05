@@ -5,6 +5,7 @@ import { TaskModel } from '../../../shared/models/tasks.models';
 import { DateConvertService } from '../../../shared/services/date-convert.service';
 import { DayTypeGetterService } from '../../../shared/services/day-type-getter.service';
 import { HolidaysModel } from '../../../shared/models/holidays.model';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-calendar',
@@ -13,7 +14,6 @@ import { HolidaysModel } from '../../../shared/models/holidays.model';
 })
 export class CalendarComponent implements OnInit {
   @Input() tasks: TaskModel[];
-
   @Input() holidays: HolidaysModel[];
 
   public selectedDate: NgbDateStruct;

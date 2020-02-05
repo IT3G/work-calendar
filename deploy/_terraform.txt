@@ -10,14 +10,26 @@ sudo yum-config-manager \
 
 sudo yum install docker-ce docker-ce-cli containerd.io
 
+cat /etc/docker/daemon.json
+add unsafe repo
+    {
+        "insecure-registries" : ["10.84.34.155:5000"]
+    }
+
+service docker restart
+
 cat>> dockerdaemon - unsaferepo
-docker login
+
+docker login -u <username> <docker_registry>
 
 sudo systemctl start docker
 
 sudo yum install python36
 echo "alias python=python3" >> ~/.bashrc
 source ~/.bashrc
+
+epel: 
+yum install epel-release
 
 sudo yum install python-pip
 pip2 install docker

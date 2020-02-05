@@ -18,6 +18,11 @@ import { IsWeekendDayPipe } from './pipes/is-weekend-day.pipe';
 import { UsernamePipe } from './pipes/username.pipe';
 import { FileInputResetComponent } from './components/file-input-reset/file-input-reset.component';
 import { IsHolidayDataPipe } from './pipes/calendar/is-holidays-data.pipe';
+import { FollowUsersFilterPipe } from './pipes/follow-users-fiter.pipe';
+import { MonthSelectorComponent } from './components/month-selector/month-selector.component';
+import { UsernameToArrPipe } from './pipes/username-to-arr.pipe';
+import { IsHolidayDayForNgbModelPipe } from './pipes/calendar/is-holiday-day-for-ngb-model.pipe';
+import { TaskTypeColorPipe } from './pipes/description-history/task-type-color.pipe';
 
 const pipes = [
   UsernamePipe,
@@ -30,15 +35,21 @@ const pipes = [
   CurrentProjectsPipe,
   IsWeekendDayPipe,
   IsCurrentDayPipe,
-  IsHolidayDataPipe
+  IsHolidayDataPipe,
+  UsernameToArrPipe,
+  FollowUsersFilterPipe,
+  IsHolidayDayForNgbModelPipe,
+  TaskTypeColorPipe
 ];
 
 const modules = [MaterialModule, FormsModule, ReactiveFormsModule, AvatarModule, NgbModule, RouterModule];
 
-const components = [AgendaComponent, FileInputResetComponent];
+const components = [AgendaComponent, FileInputResetComponent, MonthSelectorComponent];
+
 @NgModule({
-  declarations: [...pipes, ...components],
+  declarations: [...pipes, ...components, ],
   imports: [CommonModule, ...modules],
   exports: [...pipes, ...modules, ...components]
 })
-export class SharedModule {}
+export class SharedModule {
+}

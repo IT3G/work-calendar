@@ -12,6 +12,7 @@ export class Employee {
   mailNickname: string;
   projects: [
     {
+      _id: string;
       project: string;
       dateStart: string;
       dateEnd: string;
@@ -21,5 +22,5 @@ export class Employee {
   hasMailing: boolean;
   subdivision: DictionaryModel;
   jobPosition: DictionaryModel;
-  hashPswd: string;
+  hashPassword: string;
 }

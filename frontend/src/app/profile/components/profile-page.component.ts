@@ -14,8 +14,10 @@ import { DayType } from '../../shared/const/day-type.const';
 import { DictionaryModel } from '../../shared/models/dictionary.model';
 import { Employee } from '../../shared/models/employee.model';
 import { TaskModel } from '../../shared/models/tasks.models';
-import { SendingMailService } from '../../shared/services/sending-mail.service';
 import { AuthSetting } from '../../shared/models/auth-setting.model';
+import { FollowApiService } from '../../core/services/follow-api.service';
+import { FollowModel } from '../../shared/models/follow.model';
+import { SendingTaskModel } from '../../shared/models/sending-task.model';
 
 @Component({
   selector: 'app-team',
@@ -32,14 +34,23 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   private getCurrentUserSub = new Subscription();
   private searchUserByLoginSub = new Subscription();
   public projects: DictionaryModel[];
-  public taskHistory$: Observable<TaskModel[]>;
-  public activity: TaskModel[];
+  public taskHistory$: Observable<SendingTaskModel[]>;
+  public activity: SendingTaskModel[];
   public dayType = DayType;
-  public displayedColumns: string[] = ['dateCreate', 'date', 'who', 'type', 'comment'];
+
   public jobPositions: DictionaryModel[];
   public subdivisions: DictionaryModel[];
+
+  public following: Employee[];
+  public followers: Employee[];
+
+  public removedFromMe: FollowModel[];
+  public addedForMe: FollowModel[];
+  public IRemovedFrom: FollowModel[];
+
+  public followingForm: FormControl;
+
   public users$: Observable<Employee[]>;
-  public mailingAddresses: Employee[];
   public settings$: Observable<AuthSetting>;
 
   constructor(
@@ -48,18 +59,21 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     private employeeStoreService: EmployeeStoreService,
     private route: ActivatedRoute,
     private dictionaryApi: DictionaryApiService,
+    private followApi: FollowApiService,
     private taskApi: TaskApiService,
-    private fb: FormBuilder,
-    private sendingMail: SendingMailService
-  ) {}
+    private fb: FormBuilder
+  ) {
+  }
 
   ngOnInit() {
     this.users$ = this.employeeApiService.loadAllEmployees();
+    this.followingForm = new FormControl();
+
     this.getUserInfo();
     this.isAdmin$ = this.contextStoreService.isCurrentUserAdmin$();
     this.dictionaryApi.getAll('project').subscribe(p => (this.projects = p));
     this.settings$ = this.contextStoreService.settings$.pipe(
-      filter(s => !!s),
+      filter(s => !!s)
     );
   }
 
@@ -119,7 +133,61 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       this.cancelEdit();
       this.contextStoreService.update();
       this.employeeStoreService.update();
+      this.loadFollow(this.selectedUser._id);
     });
+  }
+
+  public addFollowingByForm(): void {
+    const data: FollowModel = {
+      followingId: this.followingForm.value,
+      followerId: this.selectedUser,
+      followType: 'add'
+    };
+
+    this.followApi.addFollow(data).subscribe(res => this.loadFollow(this.selectedUser._id));
+    this.followingForm.reset();
+  }
+
+  public toggleFollow(user: Employee) {
+    const isUserRemoved = this.removedFromMe.some(item => item.followingId._id === user._id);
+
+    if (isUserRemoved) {
+      const followId = this.removedFromMe.find(item => item.followingId._id === user._id)._id;
+      this.deleteFollowing(followId);
+    }
+
+    if (this.isAddedUser(user)) {
+      const follow = this.addedForMe.find(item => item.followingId._id === user._id);
+      this.deleteFollowing(follow._id);
+    } else {
+      const data: FollowModel = {
+        followingId: user,
+        followerId: this.selectedUser,
+        followType: 'add'
+      };
+
+      this.followApi.addFollow(data).subscribe(res => this.loadFollow(this.selectedUser._id));
+    }
+  }
+
+  public removeFollowing(user: Employee) {
+
+    if (this.isAddedUser(user)) {
+      const follow = this.addedForMe.find(item => item.followingId._id === user._id);
+      this.deleteFollowing(follow._id);
+    }
+
+    const data: FollowModel = {
+      followingId: user,
+      followerId: this.selectedUser,
+      followType: 'remove'
+    };
+
+    this.followApi.addFollow(data).subscribe(res => this.loadFollow(this.selectedUser._id));
+  }
+
+  public deleteFollowing(id: string) {
+    this.followApi.deleteFollow(id).subscribe(res => this.loadFollow(this.selectedUser._id));
   }
 
   public cancelEdit(): void {
@@ -146,6 +214,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       } else {
         this.getUserFromApi();
       }
+
     });
   }
 
@@ -156,7 +225,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         this.setSelectedUser(user);
         this.canEdit = false;
         this.loadTasks(user.mailNickname);
-        this.mailingAddresses = this.sendingMail.filterEmployee(this.selectedUser);
+        this.loadFollow(user._id);
       })
     );
   }
@@ -171,7 +240,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           this.setSelectedUser(user);
           this.login = user.mailNickname;
           this.loadTasks(user.mailNickname);
-          this.mailingAddresses = this.sendingMail.filterEmployee(this.selectedUser);
+          this.loadFollow(user._id);
         })
     );
   }
@@ -193,6 +262,26 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
             })
             .filter(t => !!t))
       );
+  }
+
+  public loadFollow(userId: string) {
+    this.getCurrentUserSub.add(
+      this.followApi.getUserFollow(userId).subscribe(res => {
+        this.following = res.following;
+        this.followers = res.followers;
+
+        this.removedFromMe = res.allForUser
+          .filter(follow => follow.followType === 'remove' && follow.followerId._id === this.selectedUser._id);
+        this.addedForMe = res.allForUser
+          .filter(follow => follow.followType === 'add' && follow.followerId._id === this.selectedUser._id);
+        this.IRemovedFrom = res.allForUser
+          .filter(item => item.followingId._id === this.selectedUser._id && item.followType === 'remove');
+      })
+    );
+  }
+
+  public isAddedUser(user: Employee): boolean {
+    return this.addedForMe && this.addedForMe.some(item => item.followingId._id === user._id);
   }
 
   private initForm(user: Employee): void {

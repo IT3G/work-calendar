@@ -1,23 +1,31 @@
+@import 'src/app/shared/styles/scroll';
+
 .container {
   margin-top: 35px;
 }
-.sendings {
-  position: absolute;
-  right: 10px;
-  top: 0;
-  max-width: 260px;
-}
+
 .text-right {
   color: rgb(148, 148, 148);
 }
+
+
+::ng-deep .mat-tab-body {
+  padding: 20px 10px;
+}
+
+.tab-scroll-content {
+  max-height: calc(100vh - 260px);
+  @extend .scrollbar;
+}
 .profile-form {
-  margin-top: -10px;
+  margin-top: 30px;
+  padding-left: 20px;
+  max-width: 400px;
 }
 .form-group {
   margin-bottom: -16px;
 }
 .form-footer {
-  margin-top: 36px;
   margin-top: 36px;
   display: flex;
   justify-content: space-around;
@@ -43,10 +51,7 @@ button {
     margin-right: 0;
   }
 }
-table {
-  width: 100%;
-  margin-top: 50px;
-}
+
 .project-grid {
   display: grid;
   grid-template-columns: 180px 130px 130px 20px;
@@ -89,14 +94,124 @@ table {
 .mat-form-field {
   width: 100%;
 }
-.scroll {
-  max-height: 560px;
-  overflow-y: auto;
+
+.history-table {
+  width: 100%;
+
+  tr:hover {
+    background-color: white;
+  }
+
+  td {
+    padding: 8px 4px;
+    vertical-align: super;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  .change-date {
+    width: 110px;
+  }
+
+  .date {
+    width: 110px;
+  }
+  .employee {
+    width: 150px;
+  }
+  .type {
+    width: 110px;
+  }
+  .comment {
+    width: 200px;
+  }
 }
 
-@media (max-width: 1200px) {
-  .sendings {
-    position: static;
-    max-width: 100%;
+
+.empty-history {
+  text-align: center;
+  color: #b9b7b7;
+  padding: 20px 0;
+}
+
+
+
+.subscriptions {
+  display: flex;
+  margin-bottom: 50px;
+
+  .subscription {
+    width: 100%;
+    margin-right: 50px;
+
+    .title {
+      padding-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .counter {
+        width: 40px;
+        height: 40px;
+        background-color: #d1ecf1;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 40px;
+        margin-right: 8px;
+      }
+    }
   }
+
+  .follow-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 5px 10px 5px 5px;
+    border-bottom: 1px solid #dee2e6;
+  }
+}
+
+.icon-btn {
+  color: #dee2e6;
+  margin: 0 3px;
+
+  &.fa-eye:hover {
+    color: rgb(144, 202, 249);
+  }
+
+  &.fa-ban:hover {
+    color: rgb(239, 154, 154);
+  }
+
+  &.ban-active {
+    color: rgb(239, 154, 154);
+  }
+
+  &.ban-active:hover {
+    color: #dee2e6;
+  }
+
+  &.active-eye {
+    color: rgb(144, 202, 249);
+  }
+
+  &.active-eye:hover {
+    color: #dee2e6;
+  }
+
+  &:hover {
+    color: #333131;
+    cursor: pointer;
+  }
+}
+
+
+.add-subscriptions {
+  display: flex;
+  align-items: center;
+  padding: 20px 8px 0 0;
+}
+
+.form-inline {
+  padding-right: 10px;
 }

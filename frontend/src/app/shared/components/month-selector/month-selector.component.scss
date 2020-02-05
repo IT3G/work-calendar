@@ -5,10 +5,24 @@
 }
 
 .button-change-month {
-  color: #007bff;
   cursor: pointer;
   font-size: 21px;
   line-height: 34px;
+  width: 34px;
+  text-align: center;
+  border-radius: 50%;
+
+  i {
+    color: #dee2e6;
+  }
+
+  &:hover {
+    background-color: white;
+
+    i {
+      color: #007bff;
+    }
+  }
 }
 
 .current-month {

@@ -4,7 +4,7 @@
   "description": "",
   "engines": {
     "node": "12.x",
-    "yarn": "1.19.x"
+    "yarn": "1.x"
   },
   "author": "",
   "license": "MIT",
@@ -41,6 +41,7 @@
     "dotenv": "^8.2.0",
     "i": "^0.3.6",
     "ldapjs": "^1.0.2",
+    "lodash-es": "^4.17.15",
     "mongoose": "^5.7.7",
     "nest": "^0.1.6",
     "nodemailer": "^6.3.1",
@@ -51,7 +52,7 @@
     "swagger-ui-express": "^4.1.2"
   },
   "devDependencies": {
-    "@nestjs/cli": "^6.11.1",
+    "@nestjs/cli": "^6.14.0",
     "@nestjs/schematics": "^6.7.0",
     "@nestjs/testing": "^6.7.1",
     "@types/cookie-parser": "^1.4.2",

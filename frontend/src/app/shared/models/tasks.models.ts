@@ -1,5 +1,5 @@
-import { Moment } from 'moment';
 import { DayType } from '../const/day-type.const';
+import { Moment } from 'moment';
 
 export class TaskModel {
   type: DayType;

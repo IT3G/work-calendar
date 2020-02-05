@@ -18,10 +18,16 @@
   bottom: -4px;
 }
 .response-message {
-  display: block;
-  position: absolute;
-  bottom: 45px;
+  padding: 5px 10px;
+  margin-top: 20px;
+  max-width: 50%;
 }
+
+.response-message.error {
+  color: #f05772;
+}
+
+
 .form-footer {
   margin-top: 10px;
   display: flex;
