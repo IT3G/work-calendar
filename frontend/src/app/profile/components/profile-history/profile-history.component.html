@@ -1,5 +1,4 @@
-<table class="history-table"
-    *ngIf="activity as taskHistory; else emptyHistory">
+<table class="history-table">
     <tr>
         <td class="change-date">Дата изменения</td>
         <td class="date">Дата</td>
@@ -8,8 +7,7 @@
         <td class="comment">Комментарий</td>
     </tr>
 </table>
-<div class="tab-scroll-content"
-    *ngIf="activity as taskHistory">
+<div class="tab-scroll-content">
     <table class="history-table">
         <tr *ngFor="let element of taskHistory$ | async">
             <td class="change-date">{{ element.dtCreated | datePipe: 'DD MMMM, HH:mm' }}</td>

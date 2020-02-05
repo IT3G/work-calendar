@@ -1,177 +1,25 @@
 <div class="container"
-    *ngIf="selectedUser as user">
+    *ngIf="selectedUser">
     <div class="row">
         <div class="col-md-2">
             <div *ngIf="(settings$ | async)?.FEATURE_AVATAR_SOURCE === 'CONFLUENCE'; else noAvatar">
-                <ngx-avatar [src]="user | avatarSource"
+                <ngx-avatar [src]="selectedUser | avatarSource"
                     size="160"
-                    value="{{ user.username | usernamePipe }}"></ngx-avatar>
+                    value="{{ selectedUser.username | usernamePipe }}"></ngx-avatar>
             </div>
             <ng-template #noAvatar>
                 <ngx-avatar size="160"
-                    value="{{ user.username | usernamePipe }}"></ngx-avatar>
+                    value="{{ selectedUser.username | usernamePipe }}"></ngx-avatar>
             </ng-template>
         </div>
         <div class="col-md-10 wrapper">
 
             <mat-tab-group [animationDuration]="0">
                 <mat-tab label="Личные данные">
-                    <div class="tab-scroll-content">
-                        <div class="profile-form"
-                            [formGroup]="profileForm"
-                            (keydown.enter)="onUpdateProfile()">
-                            <div class="grid">
-                                <div class="title">фамилия, имя:</div>
-                                <div class="form-group">
-                                    <mat-form-field>
-                                        <input matInput
-                                            value="{{ user.username }}"
-                                            autocomplete="off"
-                                            formControlName="username" />
-                                    </mat-form-field>
-                                </div>
-                                <div class="title">email:</div>
-                                <div class="form-group">
-                                    <mat-form-field>
-                                        <input matInput
-                                            value="{{ user.email }}"
-                                            autocomplete="off"
-                                            formControlName="email" />
-                                    </mat-form-field>
-                                </div>
-                                <div class="title">дата выхода:</div>
-                                <div class="form-group">
-                                    <mat-form-field class="control control-date">
-                                        <input matInput
-                                            autocomplete="off"
-                                            formControlName="whenCreated"
-                                            [matDatepicker]="pickerCreate" />
-                                        <mat-datepicker-toggle matSuffix
-                                            [for]="pickerCreate"></mat-datepicker-toggle>
-                                        <mat-datepicker #pickerCreate></mat-datepicker>
-                                    </mat-form-field>
-                                </div>
-                                <div class="title">город:</div>
-                                <div class="form-group">
-                                    <mat-form-field>
-                                        <input matInput
-                                            value="{{ user.location }}"
-                                            autocomplete="off"
-                                            formControlName="location" />
-                                    </mat-form-field>
-                                </div>
-
-                                <div class="title">подразделение:</div>
-                                <div class="form-group">
-                                    <mat-form-field>
-                                        <mat-select formControlName="subdivision">
-                                            <mat-option *ngFor="let subdivision of subdivisions"
-                                                [value]="subdivision">
-                                                {{ subdivision?.name }}
-                                            </mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-                                </div>
-
-                                <div class="title">позиция:</div>
-                                <div class="form-group">
-                                    <mat-form-field>
-                                        <mat-select formControlName="jobPosition">
-                                            <mat-option *ngFor="let jobPosition of jobPositions"
-                                                [value]="jobPosition">{{
-                        jobPosition?.name
-                        }}</mat-option>
-                                        </mat-select>
-                                    </mat-form-field>
-
-                                </div>
-
-                                <div class="title">проекты:</div>
-                                <div class="form-group project">
-                                    <div *ngFor="let projectFormGroup of projectFormArray.controls; index as i"
-                                        class="project-grid">
-                                        <mat-form-field>
-                                            <mat-select [formControl]="projectFormGroup.get('project')">
-                                                <mat-option *ngFor="let project of (projects)"
-                                                    [value]="project._id">{{
-                          project.name
-                          }}</mat-option>
-                                            </mat-select>
-                                        </mat-form-field>
-                                        <mat-form-field class="control">
-                                            <input matInput
-                                                autocomplete="off"
-                                                [formControl]="projectFormGroup.get('dateStart')"
-                                                [matDatepicker]="pickerFrom"
-                                                placeholder="c" />
-                                            <mat-datepicker-toggle matSuffix
-                                                [for]="pickerFrom"></mat-datepicker-toggle>
-                                            <mat-datepicker #pickerFrom></mat-datepicker>
-                                        </mat-form-field>
-                                        <mat-form-field class="control">
-                                            <input matInput
-                                                autocomplete="off"
-                                                [formControl]="projectFormGroup.get('dateEnd')"
-                                                [matDatepicker]="pickerTo"
-                                                placeholder="по" />
-                                            <mat-datepicker-toggle matSuffix
-                                                [for]="pickerTo"></mat-datepicker-toggle>
-                                            <mat-datepicker #pickerTo></mat-datepicker>
-                                        </mat-form-field>
-                                        <div class="delete"
-                                            *ngIf="isEdit"
-                                            (click)="removeFormGroupProject(i)"></div>
-                                    </div>
-                                    <div class="add"
-                                        [class.add-margin]="!projectFormArray.controls.length"
-                                        *ngIf="isEdit"
-                                        (click)="addProjectFromGroup()">
-                                        <div class="add-btn"></div>
-                                        <span class="span-project">добавить проект</span>
-                                    </div>
-                                </div>
-                                <div class="title">телефон:</div>
-                                <div class="form-group">
-                                    <mat-form-field>
-                                        <input matInput
-                                            value="{{ user.telNumber }}"
-                                            autocomplete="off"
-                                            formControlName="telNumber" />
-                                    </mat-form-field>
-                                </div>
-                                <div class="title"
-                                    *ngIf="(isAdmin$ | async)">админ:
-                                </div>
-                                <div *ngIf="(isAdmin$ | async)"
-                                    class="form-group checkbox">
-                                    <mat-checkbox color="primary"
-                                        formControlName="isAdmin"></mat-checkbox>
-                                </div>
-                                <div class="form-footer">
-                                    <button type="submit"
-                                        mat-raised-button
-                                        color="primary"
-                                        *ngIf="!isEdit && (canEdit || (isAdmin$ | async))"
-                                        (click)="editStart()">
-                                        Редактировать
-                                    </button>
-                                    <button type="submit"
-                                        mat-raised-button
-                                        color="primary"
-                                        *ngIf="isEdit"
-                                        [disabled]="profileForm.invalid"
-                                        (click)="onUpdateProfile()">
-                                        Сохранить
-                                    </button>
-                                    <button mat-raised-button
-                                        *ngIf="isEdit"
-                                        (click)="cancelEdit()">Отмена
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
+                    <app-profile-form [selectedUser]="selectedUser"
+                        [isAdmin]="isAdmin$|async"
+                        [canEdit]="canEdit"
+                        (updateProfile)="onUpdateProfile($event)"></app-profile-form>
                 </mat-tab>
                 <mat-tab label="Подписки">
                     <app-profile-subscriptions [selectedUser]="selectedUser"
@@ -181,11 +29,9 @@
                         (deleteFollowing)="deleteFollowing($event)"></app-profile-subscriptions>
                 </mat-tab>
                 <mat-tab label="История">
-                    <app-profile-history [userLogin]="selectedUser?.mailNickname"
-                        [users$]="users$"></app-profile-history>
+                    <app-profile-history [userLogin]="selectedUser?.mailNickname"></app-profile-history>
                 </mat-tab>
             </mat-tab-group>
-
         </div>
     </div>
 
