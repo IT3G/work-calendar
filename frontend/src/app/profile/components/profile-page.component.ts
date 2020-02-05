@@ -12,7 +12,7 @@ import { EmployeeStoreService } from '../../core/store/employee-store.service';
 import { AuthSetting } from '../../shared/models/auth-setting.model';
 import { DictionaryModel } from '../../shared/models/dictionary.model';
 import { Employee } from '../../shared/models/employee.model';
-import { FollowModel } from '../../shared/models/follow.model';
+import { FollowModel, UserFollow } from '../../shared/models/follow.model';
 
 @Component({
   selector: 'app-team',
@@ -33,17 +33,10 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   public jobPositions: DictionaryModel[];
   public subdivisions: DictionaryModel[];
 
-  public following: Employee[];
-  public followers: Employee[];
-
-  public removedFromMe: FollowModel[];
-  public addedForMe: FollowModel[];
-  public IRemovedFrom: FollowModel[];
-
-  public followingForm: FormControl;
-
   public users$: Observable<Employee[]>;
   public settings$: Observable<AuthSetting>;
+
+  public userFollow: UserFollow;
 
   constructor(
     private contextStoreService: ContextStoreService,
@@ -57,7 +50,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.users$ = this.employeeApiService.loadAllEmployees();
-    this.followingForm = new FormControl();
 
     this.getUserInfo();
     this.isAdmin$ = this.contextStoreService.isCurrentUserAdmin$();
@@ -121,51 +113,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     });
   }
 
-  public addFollowingByForm(): void {
-    const data: FollowModel = {
-      followingId: this.followingForm.value,
-      followerId: this.selectedUser,
-      followType: 'add'
-    };
-
-    this.followApi.addFollow(data).subscribe(res => this.loadFollow(this.selectedUser._id));
-    this.followingForm.reset();
-  }
-
-  public toggleFollow(user: Employee) {
-    const isUserRemoved = this.removedFromMe.some(item => item.followingId._id === user._id);
-
-    if (isUserRemoved) {
-      const followId = this.removedFromMe.find(item => item.followingId._id === user._id)._id;
-      this.deleteFollowing(followId);
-    }
-
-    if (this.isAddedUser(user)) {
-      const follow = this.addedForMe.find(item => item.followingId._id === user._id);
-      this.deleteFollowing(follow._id);
-    } else {
-      const data: FollowModel = {
-        followingId: user,
-        followerId: this.selectedUser,
-        followType: 'add'
-      };
-
-      this.followApi.addFollow(data).subscribe(res => this.loadFollow(this.selectedUser._id));
-    }
-  }
-
-  public removeFollowing(user: Employee) {
-    if (this.isAddedUser(user)) {
-      const follow = this.addedForMe.find(item => item.followingId._id === user._id);
-      this.deleteFollowing(follow._id);
-    }
-
-    const data: FollowModel = {
-      followingId: user,
-      followerId: this.selectedUser,
-      followType: 'remove'
-    };
-
+  public addFollow(data: FollowModel): void {
     this.followApi.addFollow(data).subscribe(res => this.loadFollow(this.selectedUser._id));
   }
 
@@ -226,26 +174,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   }
 
   public loadFollow(userId: string) {
-    this.getCurrentUserSub.add(
-      this.followApi.getUserFollow(userId).subscribe(res => {
-        this.following = res.following;
-        this.followers = res.followers;
-
-        this.removedFromMe = res.allForUser.filter(
-          follow => follow.followType === 'remove' && follow.followerId._id === this.selectedUser._id
-        );
-        this.addedForMe = res.allForUser.filter(
-          follow => follow.followType === 'add' && follow.followerId._id === this.selectedUser._id
-        );
-        this.IRemovedFrom = res.allForUser.filter(
-          item => item.followingId._id === this.selectedUser._id && item.followType === 'remove'
-        );
-      })
-    );
-  }
-
-  public isAddedUser(user: Employee): boolean {
-    return this.addedForMe && this.addedForMe.some(item => item.followingId._id === user._id);
+    this.getCurrentUserSub.add(this.followApi.getUserFollow(userId).subscribe(res => (this.userFollow = res)));
   }
 
   private initForm(user: Employee): void {
