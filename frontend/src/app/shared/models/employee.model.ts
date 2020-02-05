@@ -1,4 +1,5 @@
 import { DictionaryModel } from './dictionary.model';
+import { ProjectNew } from './project-new';
 
 export class Employee {
   _id: string;
@@ -24,16 +25,4 @@ export class Employee {
   jobPosition: DictionaryModel;
   hashPassword: string;
   projectsNew: ProjectNew[];
-}
-
-class ProjectNew {
-  project_id: string;
-  project_name: string;
-  metadata: ProjectStatsMetadataNew[];
-}
-
-class ProjectStatsMetadataNew {
-  month: number;
-  year: number;
-  percent: number;
 }
