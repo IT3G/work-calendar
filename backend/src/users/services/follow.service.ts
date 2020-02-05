@@ -81,7 +81,9 @@ export class FollowService {
 
     const allUsers = await this.userService.getUsers();
     const currentUser = await this.userService.getUserById(currentUserId);
+
     const followersByProjects = this.matchUsersAndActiveProjects(currentUser, allUsers);
+    const followersByEmptyProject = allUsers.filter(user => !user.projects.length);
 
     const addedFollowersArr = await this.followModel
       .find({ followingId: currentUser.id, followType: FollowType.add });
@@ -92,7 +94,7 @@ export class FollowService {
     const addedUsers = addedFollowersArr.map(item => item.followerId).map(u => u.toString());
     const removedUsers = removedFollowersArr.map(item => item.followerId).map(u => u.toString());
 
-    let result = this.addUserToArr(addedUsers, followersByProjects, allUsers);
+    let result = this.addUserToArr(addedUsers, [...followersByProjects, ...followersByEmptyProject], allUsers);
 
     result = this.removeUsersFromArr(removedUsers, result);
     result = this.removeMyselfFromArr(currentUser.id, result);

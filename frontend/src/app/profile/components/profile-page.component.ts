@@ -267,17 +267,50 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   public loadFollow(userId: string) {
     this.getCurrentUserSub.add(
       this.followApi.getUserFollow(userId).subscribe(res => {
-        this.following = res.following;
-        this.followers = res.followers;
+        this.following = this.sortEmployee(res.following);
+        this.followers = this.sortEmployee(res.followers);
 
-        this.removedFromMe = res.allForUser
+        const removedFromMe = res.allForUser
           .filter(follow => follow.followType === 'remove' && follow.followerId._id === this.selectedUser._id);
-        this.addedForMe = res.allForUser
+        const addedForMe = res.allForUser
           .filter(follow => follow.followType === 'add' && follow.followerId._id === this.selectedUser._id);
-        this.IRemovedFrom = res.allForUser
+        const iRemovedFrom = res.allForUser
           .filter(item => item.followingId._id === this.selectedUser._id && item.followType === 'remove');
+
+        this.removedFromMe = this.sortFollowModel(removedFromMe, 'followingId');
+        this.addedForMe = this.sortFollowModel(addedForMe, 'followerId');
+        this.IRemovedFrom = this.sortFollowModel(iRemovedFrom, 'followerId');
       })
     );
+  }
+
+  private sortEmployee(users: Employee[]): Employee[] {
+
+    return users.sort((a, b) => {
+      const nameA = a.username.toLowerCase();
+      const nameB = b.username.toLowerCase();
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+      return 0;
+    });
+  }
+
+  private sortFollowModel(users: FollowModel[], type: string): FollowModel[] {
+    return users.sort((a, b) => {
+      const nameA = a[type].username.toLowerCase();
+      const nameB = b[type].username.toLowerCase();
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+      return 0;
+    });
   }
 
   public isAddedUser(user: Employee): boolean {
