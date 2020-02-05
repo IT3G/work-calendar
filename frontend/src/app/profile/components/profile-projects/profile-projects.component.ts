@@ -35,7 +35,7 @@ export class ProfileProjectsComponent implements AfterViewInit {
 
     const datasets: ChartDataSets[] = this.projects.map((p, i) => ({
       label: p.project_name,
-      steppedLine: 'middle',
+      steppedLine: 'middle' as ("middle"),
       backgroundColor: `${this.colors[i]} 1)`,
       borderWidth: 1,
       data: datesPeriod.map(d => {
