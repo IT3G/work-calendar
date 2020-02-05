@@ -4,6 +4,6 @@ import { SendMailService } from './services/send-mail.service';
 
 @Module({
   providers: [SendMailService, { provide: Config, useValue: getConfig() }],
-  exports: [SendMailService],
+  exports: [SendMailService]
 })
 export class MailModule {}

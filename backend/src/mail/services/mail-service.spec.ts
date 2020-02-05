@@ -14,7 +14,7 @@ describe('Mail Service', () => {
     sendMailService = new SendMailService(configRaw);
   });
 
-  it('Can Send', async () => {
+  xit('Can Send', async () => {
     // TODO: change address to ur SMTP domain name before run
     const mailData: SendMailRequestModel = {
       address: ['test@test.ru'],
