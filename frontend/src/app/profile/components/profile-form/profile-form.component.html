@@ -1,0 +1,110 @@
+<div class="tab-scroll-content">
+    <div class="profile-form"
+        [formGroup]="profileForm"
+        (keydown.enter)="onUpdateProfile()">
+        <div class="grid">
+            <div class="title">фамилия, имя:</div>
+            <div class="form-group">
+                <mat-form-field>
+                    <input matInput
+                        value="{{ selectedUser.username }}"
+                        autocomplete="off"
+                        formControlName="username" />
+                </mat-form-field>
+            </div>
+            <div class="title">email:</div>
+            <div class="form-group">
+                <mat-form-field>
+                    <input matInput
+                        value="{{ selectedUser.email }}"
+                        autocomplete="off"
+                        formControlName="email" />
+                </mat-form-field>
+            </div>
+            <div class="title">дата выхода:</div>
+            <div class="form-group">
+                <mat-form-field class="control control-date">
+                    <input matInput
+                        autocomplete="off"
+                        formControlName="whenCreated"
+                        [matDatepicker]="pickerCreate" />
+                    <mat-datepicker-toggle matSuffix
+                        [for]="pickerCreate"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerCreate></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="title">город:</div>
+            <div class="form-group">
+                <mat-form-field>
+                    <input matInput
+                        value="{{ selectedUser.location }}"
+                        autocomplete="off"
+                        formControlName="location" />
+                </mat-form-field>
+            </div>
+
+            <div class="title">подразделение:</div>
+            <div class="form-group">
+                <mat-form-field>
+                    <mat-select formControlName="subdivision">
+                        <mat-option *ngFor="let subdivision of subdivisions"
+                            [value]="subdivision">
+                            {{ subdivision?.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div class="title">позиция:</div>
+            <div class="form-group">
+                <mat-form-field>
+                    <mat-select formControlName="jobPosition">
+                        <mat-option *ngFor="let jobPosition of jobPositions"
+                            [value]="jobPosition">{{jobPosition?.name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+            </div>
+
+
+            <div class="title">телефон:</div>
+            <div class="form-group">
+                <mat-form-field>
+                    <input matInput
+                        value="{{ selectedUser.telNumber }}"
+                        autocomplete="off"
+                        formControlName="telNumber" />
+                </mat-form-field>
+            </div>
+            <div class="title"
+                *ngIf="isAdmin">админ:
+            </div>
+            <div *ngIf="isAdmin"
+                class="form-group checkbox">
+                <mat-checkbox color="primary"
+                    formControlName="isAdmin"></mat-checkbox>
+            </div>
+            <div class="form-footer">
+                <button type="submit"
+                    mat-raised-button
+                    color="primary"
+                    *ngIf="!isEdit && (canEdit || isAdmin)"
+                    (click)="editStart()">
+                    Редактировать
+                </button>
+                <button type="submit"
+                    mat-raised-button
+                    color="primary"
+                    *ngIf="isEdit"
+                    [disabled]="profileForm.invalid"
+                    (click)="onUpdateProfile()">
+                    Сохранить
+                </button>
+                <button mat-raised-button
+                    *ngIf="isEdit"
+                    (click)="cancelEdit()">Отмена
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

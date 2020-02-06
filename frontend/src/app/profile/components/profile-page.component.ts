@@ -1,23 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import * as moment from 'moment';
-import { combineLatest, forkJoin, Observable, Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
-import { DictionaryApiService } from '../../core/services/dictionary-api.service';
 import { EmployeeApiService } from '../../core/services/employee-api.service';
-import { TaskApiService } from '../../core/services/task-api.service';
+import { FollowApiService } from '../../core/services/follow-api.service';
 import { ContextStoreService } from '../../core/store/context-store.service';
 import { EmployeeStoreService } from '../../core/store/employee-store.service';
-import { DayType } from '../../shared/const/day-type.const';
+import { AuthSetting } from '../../shared/models/auth-setting.model';
 import { DictionaryModel } from '../../shared/models/dictionary.model';
 import { Employee } from '../../shared/models/employee.model';
-import { TaskModel } from '../../shared/models/tasks.models';
-import { AuthSetting } from '../../shared/models/auth-setting.model';
-import { FollowApiService } from '../../core/services/follow-api.service';
-import { FollowModel } from '../../shared/models/follow.model';
-import { SendingTaskModel } from '../../shared/models/sending-task.model';
+import { FollowModel, UserFollow } from '../../shared/models/follow.model';
 
 @Component({
   selector: 'app-team',
@@ -26,60 +20,37 @@ import { SendingTaskModel } from '../../shared/models/sending-task.model';
 })
 export class ProfilePageComponent implements OnInit, OnDestroy {
   public selectedUser: Employee;
-  public profileForm: FormGroup;
   public isAdmin$: Observable<boolean>;
   public isEdit = false;
-  public canEdit = true;
+  public canEdit = false;
   private login: string;
   private getCurrentUserSub = new Subscription();
-  private searchUserByLoginSub = new Subscription();
   public projects: DictionaryModel[];
-  public taskHistory$: Observable<SendingTaskModel[]>;
-  public activity: SendingTaskModel[];
-  public dayType = DayType;
-
-  public jobPositions: DictionaryModel[];
-  public subdivisions: DictionaryModel[];
-
-  public following: Employee[];
-  public followers: Employee[];
-
-  public removedFromMe: FollowModel[];
-  public addedForMe: FollowModel[];
-  public IRemovedFrom: FollowModel[];
-
-  public followingForm: FormControl;
 
   public users$: Observable<Employee[]>;
   public settings$: Observable<AuthSetting>;
+
+  public userFollow: UserFollow;
 
   constructor(
     private contextStoreService: ContextStoreService,
     private employeeApiService: EmployeeApiService,
     private employeeStoreService: EmployeeStoreService,
     private route: ActivatedRoute,
-    private dictionaryApi: DictionaryApiService,
     private followApi: FollowApiService,
-    private taskApi: TaskApiService,
     private fb: FormBuilder
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     this.users$ = this.employeeApiService.loadAllEmployees();
-    this.followingForm = new FormControl();
 
     this.getUserInfo();
     this.isAdmin$ = this.contextStoreService.isCurrentUserAdmin$();
-    this.dictionaryApi.getAll('project').subscribe(p => (this.projects = p));
-    this.settings$ = this.contextStoreService.settings$.pipe(
-      filter(s => !!s)
-    );
+    this.settings$ = this.contextStoreService.settings$.pipe(filter(s => !!s));
   }
 
   ngOnDestroy() {
     this.getCurrentUserSub.unsubscribe();
-    this.searchUserByLoginSub.unsubscribe();
   }
 
   public createProjectsFormGroup(project?: any): FormGroup {
@@ -96,93 +67,15 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     return group;
   }
 
-  public get projectFormArray(): FormArray {
-    return this.profileForm.get('projects') as FormArray;
-  }
-
-  public addProjectFromGroup(): void {
-    const formArray = this.projectFormArray;
-    formArray.controls.push(this.createProjectsFormGroup());
-  }
-
-  public removeFormGroupProject(index: number): void {
-    this.projectFormArray.removeAt(index);
-  }
-
-  public hasDateRange(task: TaskModel): boolean {
-    return !moment(task.dateStart).isSame(moment(task.dateEnd));
-  }
-
-  public editStart(): void {
-    this.profileForm.get('projects').enable();
-    this.profileForm.get('location').enable();
-    this.profileForm.get('telNumber').enable();
-
-    this.profileForm.get('hasMailing').enable();
-
-    if (this.contextStoreService.getCurrentUser().isAdmin) {
-      this.profileForm.get('subdivision').enable();
-      this.profileForm.get('jobPosition').enable();
-      this.profileForm.get('isAdmin').enable();
-    }
-    this.isEdit = true;
-  }
-
-  public onUpdateProfile(): void {
-    this.employeeApiService.updateUserInfo(this.login, this.profileForm.getRawValue()).subscribe(() => {
-      this.cancelEdit();
+  public onUpdateProfile(employee: Employee): void {
+    this.employeeApiService.updateUserInfo(this.login, employee).subscribe(() => {
       this.contextStoreService.update();
       this.employeeStoreService.update();
       this.loadFollow(this.selectedUser._id);
     });
   }
 
-  public addFollowingByForm(): void {
-    const data: FollowModel = {
-      followingId: this.followingForm.value,
-      followerId: this.selectedUser,
-      followType: 'add'
-    };
-
-    this.followApi.addFollow(data).subscribe(res => this.loadFollow(this.selectedUser._id));
-    this.followingForm.reset();
-  }
-
-  public toggleFollow(user: Employee) {
-    const isUserRemoved = this.removedFromMe.some(item => item.followingId._id === user._id);
-
-    if (isUserRemoved) {
-      const followId = this.removedFromMe.find(item => item.followingId._id === user._id)._id;
-      this.deleteFollowing(followId);
-    }
-
-    if (this.isAddedUser(user)) {
-      const follow = this.addedForMe.find(item => item.followingId._id === user._id);
-      this.deleteFollowing(follow._id);
-    } else {
-      const data: FollowModel = {
-        followingId: user,
-        followerId: this.selectedUser,
-        followType: 'add'
-      };
-
-      this.followApi.addFollow(data).subscribe(res => this.loadFollow(this.selectedUser._id));
-    }
-  }
-
-  public removeFollowing(user: Employee) {
-
-    if (this.isAddedUser(user)) {
-      const follow = this.addedForMe.find(item => item.followingId._id === user._id);
-      this.deleteFollowing(follow._id);
-    }
-
-    const data: FollowModel = {
-      followingId: user,
-      followerId: this.selectedUser,
-      followType: 'remove'
-    };
-
+  public addFollow(data: FollowModel): void {
     this.followApi.addFollow(data).subscribe(res => this.loadFollow(this.selectedUser._id));
   }
 
@@ -190,41 +83,24 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.followApi.deleteFollow(id).subscribe(res => this.loadFollow(this.selectedUser._id));
   }
 
-  public cancelEdit(): void {
-    this.profileForm.disable();
-    this.isEdit = false;
-  }
-
   public getAvatarSrc() {
     return `${environment.baseUrl}/avatar?login=` + this.login;
   }
 
   private getUserInfo(): void {
-    const jobPositions$ = this.dictionaryApi.getAll('jobPosition');
-    const subdivisions$ = this.dictionaryApi.getAll('subdivision');
-
-    forkJoin([jobPositions$, subdivisions$]).subscribe(res => {
-      const [jobPositions, subdivisions] = res;
-      this.jobPositions = jobPositions;
-      this.subdivisions = subdivisions;
-
-      this.login = this.route.snapshot.params.id;
-      if (!this.login) {
-        this.getUserFromStore();
-      } else {
-        this.getUserFromApi();
-      }
-
-    });
+    this.login = this.route.snapshot.params.id;
+    if (!this.login) {
+      this.getUserFromStore();
+      this.canEdit = true;
+    } else {
+      this.getUserFromApi();
+    }
   }
 
   private getUserFromApi() {
-    this.searchUserByLoginSub.add(
+    this.getCurrentUserSub.add(
       this.employeeApiService.searchUserByLogin(this.login).subscribe((user: Employee) => {
-        this.initForm(user);
         this.setSelectedUser(user);
-        this.canEdit = false;
-        this.loadTasks(user.mailNickname);
         this.loadFollow(user._id);
       })
     );
@@ -236,105 +112,15 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         .getCurrentUser$()
         .pipe(filter(user => !!user))
         .subscribe(user => {
-          this.initForm(user);
           this.setSelectedUser(user);
           this.login = user.mailNickname;
-          this.loadTasks(user.mailNickname);
           this.loadFollow(user._id);
         })
     );
   }
 
-  public loadTasks(user: string): void {
-    this.taskHistory$ = this.taskApi.loadAllTasksByAuthor(user);
-    combineLatest([this.users$, this.taskHistory$])
-      .pipe(filter(([users, tasks]) => !!users.length && !!tasks.length))
-      .subscribe(
-        ([users, tasks]) =>
-          (this.activity = tasks
-            .map(task => {
-              const currentUser = users.find(u => u.mailNickname === task.employee);
-              if (!currentUser) {
-                return;
-              }
-              task.employee = currentUser.username ? currentUser.username : currentUser.mailNickname;
-              return task;
-            })
-            .filter(t => !!t))
-      );
-  }
-
   public loadFollow(userId: string) {
-    this.getCurrentUserSub.add(
-      this.followApi.getUserFollow(userId).subscribe(res => {
-        this.following = this.sortEmployee(res.following);
-        this.followers = this.sortEmployee(res.followers);
-
-        const removedFromMe = res.allForUser
-          .filter(follow => follow.followType === 'remove' && follow.followerId._id === this.selectedUser._id);
-        const addedForMe = res.allForUser
-          .filter(follow => follow.followType === 'add' && follow.followerId._id === this.selectedUser._id);
-        const iRemovedFrom = res.allForUser
-          .filter(item => item.followingId._id === this.selectedUser._id && item.followType === 'remove');
-
-        this.removedFromMe = this.sortFollowModel(removedFromMe, 'followingId');
-        this.addedForMe = this.sortFollowModel(addedForMe, 'followerId');
-        this.IRemovedFrom = this.sortFollowModel(iRemovedFrom, 'followerId');
-      })
-    );
-  }
-
-  private sortEmployee(users: Employee[]): Employee[] {
-
-    return users.sort((a, b) => {
-      const nameA = a.username.toLowerCase();
-      const nameB = b.username.toLowerCase();
-      if (nameA < nameB) {
-        return -1;
-      }
-      if (nameA > nameB) {
-        return 1;
-      }
-      return 0;
-    });
-  }
-
-  private sortFollowModel(users: FollowModel[], type: string): FollowModel[] {
-    return users.sort((a, b) => {
-      const nameA = a[type].username.toLowerCase();
-      const nameB = b[type].username.toLowerCase();
-      if (nameA < nameB) {
-        return -1;
-      }
-      if (nameA > nameB) {
-        return 1;
-      }
-      return 0;
-    });
-  }
-
-  public isAddedUser(user: Employee): boolean {
-    return this.addedForMe && this.addedForMe.some(item => item.followingId._id === user._id);
-  }
-
-  private initForm(user: Employee): void {
-    const jobPosition = this.jobPositions.find(jp => user.jobPosition && jp._id === user.jobPosition._id);
-    const subdivision = this.subdivisions.find(sd => user.subdivision && sd._id === user.subdivision._id);
-
-    this.profileForm = this.fb.group({
-      id: new FormControl(user._id),
-      username: new FormControl(user.username),
-      email: new FormControl(user.email),
-      projects: this.fb.array(user.projects.map(project => this.createProjectsFormGroup(project))),
-      location: new FormControl(user.location),
-      telNumber: new FormControl(user.telNumber),
-      isAdmin: new FormControl(user.isAdmin),
-      hasMailing: new FormControl(user.hasMailing),
-      jobPosition: new FormControl(jobPosition),
-      subdivision: new FormControl(subdivision),
-      whenCreated: new FormControl(user.whenCreated)
-    });
-    this.profileForm.disable();
+    this.getCurrentUserSub.add(this.followApi.getUserFollow(userId).subscribe(res => (this.userFollow = res)));
   }
 
   private setSelectedUser(user: Employee): void {
