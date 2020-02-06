@@ -38,19 +38,29 @@ export class ProfileSubscriptionsComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.userFollow && changes.userFollow.currentValue) {
-      this.following = this.userFollow.following;
-      this.followers = this.userFollow.followers;
+      this.following = this.userFollow.following.sort((a, b) => this.sortEmployee(a, b));
+      this.followers = this.userFollow.followers.sort((a, b) => this.sortEmployee(a, b));
 
-      this.removedFromMe = this.userFollow.allForUser.filter(
-        follow => follow.followType === 'remove' && follow.followerId._id === this.selectedUser._id
-      );
-      this.addedForMe = this.userFollow.allForUser.filter(
-        follow => follow.followType === 'add' && follow.followerId._id === this.selectedUser._id
-      );
-      this.IRemovedFrom = this.userFollow.allForUser.filter(
-        item => item.followingId._id === this.selectedUser._id && item.followType === 'remove'
-      );
+      this.removedFromMe = this.userFollow.allForUser
+        .filter(follow => follow.followType === 'remove' && follow.followerId._id === this.selectedUser._id)
+        .sort((a, b) => this.sortFollowModel(a, b, 'followingId'));
+
+      this.addedForMe = this.userFollow.allForUser
+        .filter(follow => follow.followType === 'add' && follow.followerId._id === this.selectedUser._id)
+        .sort((a, b) => this.sortFollowModel(a, b, 'followerId'));
+
+      this.IRemovedFrom = this.userFollow.allForUser
+        .filter(item => item.followingId._id === this.selectedUser._id && item.followType === 'remove')
+        .sort((a, b) => this.sortFollowModel(a, b, 'followerId'));
     }
+  }
+
+  private sortEmployee(a: Employee, b: Employee): number {
+    return a.username.toLowerCase().localeCompare(b.username.toLowerCase());
+  }
+
+  private sortFollowModel(a: FollowModel, b: FollowModel, type: string): number {
+    return a[type].username.toLowerCase().localeCompare(b[type].username.toLowerCase());
   }
 
   public isAddedUser(user: Employee): boolean {

@@ -69,10 +69,9 @@ export class ProfileProjectsComponent implements AfterViewInit {
     const firstMetadata = appProjectsMetadata[0];
     const lastMetadata = appProjectsMetadata[appProjectsMetadata.length - 1];
     const additionalMonths = 1;
+    const monthsPeriod = lastMetadata.diff(firstMetadata, 'months') + additionalMonths;
 
-    return Array.from(Array(lastMetadata.diff(firstMetadata, 'months') + additionalMonths).keys()).map(i =>
-      firstMetadata.clone().add(i, 'month')
-    );
+    return Array.from(Array(monthsPeriod).keys()).map(i => firstMetadata.clone().add(i, 'month'));
   }
 
   private generateBarChart(datasets: ChartDataSets[]) {

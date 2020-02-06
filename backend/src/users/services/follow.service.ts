@@ -59,12 +59,9 @@ export class FollowService {
     const addedUsers = addedFollowing.map(item => item.followingId).map(u => u.toString());
     const removedUsers = removedFollowing.map(item => item.followingId).map(u => u.toString());
 
-    let result = this.addUserToArr(addedUsers, followingByProjects, allUsers);
-
-    result = this.removeUsersFromArr(removedUsers, result);
-    result = this.removeMyselfFromArr(currentUser.id, result);
-
-    return result;
+    return this.addUserToArr(addedUsers, followingByProjects, allUsers)
+      .filter(u => this.removeMyselfFromArr(u.id, currentUser.id))
+      .filter(u => this.removeUsersFromArr(removedUsers, u.id));
   }
 
   async addFollow(data: FollowerModel): Promise<FollowEntity> {
@@ -93,12 +90,9 @@ export class FollowService {
     const addedUsers = addedFollowersArr.map(item => item.followerId).map(u => u.toString());
     const removedUsers = removedFollowersArr.map(item => item.followerId).map(u => u.toString());
 
-    let result = this.addUserToArr(addedUsers, [...followersByProjects, ...followersByEmptyProject], allUsers);
-
-    result = this.removeUsersFromArr(removedUsers, result);
-    result = this.removeMyselfFromArr(currentUser.id, result);
-
-    return result;
+    return this.addUserToArr(addedUsers, [...followersByProjects, ...followersByEmptyProject], allUsers)
+      .filter(u => this.removeMyselfFromArr(u.id, currentUser.id))
+      .filter(u => this.removeUsersFromArr(removedUsers, u.id));
   }
 
   // Добавление пользователя в массив
@@ -122,16 +116,12 @@ export class FollowService {
     return [...mainArr, ...userArr];
   }
 
-  private removeUsersFromArr(removedUsers: string[], mainArr: UserEntity[]): UserEntity[] {
-    if (!removedUsers.length) {
-      return mainArr;
-    }
-
-    return mainArr.filter(user => !removedUsers.includes(user.id));
+  private removeUsersFromArr(removedUsers: string[], userId: string): boolean {
+    return !removedUsers.includes(userId.toString());
   }
 
-  private removeMyselfFromArr(userId: string, arr: UserEntity[]) {
-    return arr.filter(el => el.id !== userId.toString());
+  private removeMyselfFromArr(userId: string, myId: string) {
+    return userId.toString() !== myId.toString();
   }
 
   private matchUsersAndActiveProjects(selectedUser: UserEntity, allUsers: UserEntity[]): UserEntity[] {
