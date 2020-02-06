@@ -6,6 +6,7 @@ import { FollowerModel } from '../models/follow.model';
 import * as moment from 'moment';
 import { UserEntity } from '../../entity/entities/user.entity.model';
 import { UsersService } from './users.service';
+import { ProjectNewMetadataEntity } from '../../entity/entities/project-new-metadata.entity';
 
 export interface UserFollow {
   following: UserEntity[];
@@ -15,9 +16,10 @@ export interface UserFollow {
 
 @Injectable()
 export class FollowService {
-  constructor(@InjectModel('Follow') private readonly followModel: Model<FollowEntity>,
-              private userService: UsersService) {
-  }
+  constructor(
+    @InjectModel('Follow') private readonly followModel: Model<FollowEntity>,
+    private userService: UsersService
+  ) {}
 
   async getUserFollow(userId: string): Promise<UserFollow> {
     const following = await this.getMyFollowing(userId);
@@ -40,22 +42,19 @@ export class FollowService {
   }
 
   async getMyFollowing(currentUserId: string): Promise<UserEntity[]> {
-
     const allUsers = await this.userService.getUsers();
     const currentUser = await this.userService.getUserById(currentUserId);
 
     let followingByProjects = this.matchUsersAndActiveProjects(currentUser, allUsers);
 
     /** Если у пользователя нет проектов, то он подписан на всех */
-    if (!currentUser.projects.length) {
+    if (!currentUser.projectsNew.length) {
       followingByProjects = allUsers;
     }
 
-    const addedFollowing = await this.followModel
-      .find({ followerId: currentUser.id, followType: FollowType.add });
+    const addedFollowing = await this.followModel.find({ followerId: currentUser.id, followType: FollowType.add });
 
-    const removedFollowing = await this.followModel
-      .find({ followerId: currentUser.id, followType: FollowType.remove });
+    const removedFollowing = await this.followModel.find({ followerId: currentUser.id, followType: FollowType.remove });
 
     const addedUsers = addedFollowing.map(item => item.followingId).map(u => u.toString());
     const removedUsers = removedFollowing.map(item => item.followingId).map(u => u.toString());
@@ -78,18 +77,18 @@ export class FollowService {
   }
 
   async getMyFollowers(currentUserId: string): Promise<UserEntity[]> {
-
     const allUsers = await this.userService.getUsers();
     const currentUser = await this.userService.getUserById(currentUserId);
 
     const followersByProjects = this.matchUsersAndActiveProjects(currentUser, allUsers);
-    const followersByEmptyProject = allUsers.filter(user => !user.projects.length);
+    const followersByEmptyProject = allUsers.filter(user => !user.projectsNew.length);
 
-    const addedFollowersArr = await this.followModel
-      .find({ followingId: currentUser.id, followType: FollowType.add });
+    const addedFollowersArr = await this.followModel.find({ followingId: currentUser.id, followType: FollowType.add });
 
-    const removedFollowersArr = await this.followModel
-      .find({ followingId: currentUser.id, followType: FollowType.remove });
+    const removedFollowersArr = await this.followModel.find({
+      followingId: currentUser.id,
+      followType: FollowType.remove
+    });
 
     const addedUsers = addedFollowersArr.map(item => item.followerId).map(u => u.toString());
     const removedUsers = removedFollowersArr.map(item => item.followerId).map(u => u.toString());
@@ -106,13 +105,11 @@ export class FollowService {
   // проверяем, если он уже там есть, вернем массив
   // если его там нет, добавим
   private addUserToArr(addedUsers: string[], mainArr: UserEntity[], allUsers: UserEntity[]): UserEntity[] {
-
     if (!addedUsers.length) {
       return mainArr;
     }
 
-    const usersAbsentInMainArr = addedUsers
-      .filter(element => !mainArr.some((elem) => element === elem.id));
+    const usersAbsentInMainArr = addedUsers.filter(element => !mainArr.some(elem => element === elem.id));
 
     if (!usersAbsentInMainArr.length) {
       return mainArr;
@@ -140,7 +137,7 @@ export class FollowService {
   private matchUsersAndActiveProjects(selectedUser: UserEntity, allUsers: UserEntity[]): UserEntity[] {
     const selectedUserActiveProjects = this.getActiveUserProjects(selectedUser);
 
-    return allUsers.filter((user) => {
+    return allUsers.filter(user => {
       const userActiveProjects = this.getActiveUserProjects(user);
 
       return userActiveProjects.some(pr => selectedUserActiveProjects.includes(pr));
@@ -148,15 +145,14 @@ export class FollowService {
   }
 
   private getActiveUserProjects(user: UserEntity): string[] {
-    return user.projects
-      .filter(p => this.isActive(p))
-      .filter(p => p.project)
-      .map(p => p.project.toString());
+    const currentDate = moment();
+    return user.projectsNew
+      .filter(p => p.metadata.some(m => currentDate.isSame(this.mapMetadataToDate(m), 'month')))
+      .filter(p => p.project_id)
+      .map(p => p.project_id.toString());
   }
 
-  private isActive(p): boolean {
-    p.dateStart = p.dateStart ? p.dateStart : moment('1900-01-01').format();
-    p.dateEnd = p.dateEnd ? p.dateEnd : moment('2100-01-01').format();
-    return moment().isBetween(p.dateStart, p.dateEnd);
+  private mapMetadataToDate(m: ProjectNewMetadataEntity): moment.Moment {
+    return moment(`${m.month}-${m.year}`, 'M-YYYY');
   }
 }

@@ -1,7 +1,8 @@
-import { Document, Schema } from 'mongoose';
+import { Document } from 'mongoose';
 import { JobPositionEntity } from './job-position.entity.model';
 import { SubdivisionEntity } from './subdivision.entity.model';
 import { ProjectEntity } from './project.entity.model';
+import { ProjectNewEntity } from './project-new.entity';
 
 export interface UserEntity extends Document {
   id: string;
@@ -15,6 +16,7 @@ export interface UserEntity extends Document {
       project: ProjectEntity;
     }
   ];
+  projectsNew: ProjectNewEntity[];
   whenCreated: string;
   email: string;
   telNumber: string;
@@ -27,3 +29,4 @@ export interface UserEntity extends Document {
   authType?: string;
   hashPassword?: string;
 }
+

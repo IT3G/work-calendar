@@ -3,6 +3,7 @@ import * as moment from 'moment';
 import { DictionaryModel } from '../../shared/models/dictionary.model';
 import { Employee } from '../../shared/models/employee.model';
 import { ProjectNew } from '../../shared/models/project-new';
+import { NewProjectUtils } from '../../shared/utils/new-project.utils';
 
 @Pipe({
   name: 'activeProjectForDatePipe'
@@ -19,6 +20,6 @@ export class ActiveProjectForDatePipe implements PipeTransform {
   }
 
   private isProjectAtMonth(p: ProjectNew, date: moment.Moment): boolean {
-    return p.metadata.some(m => moment(`${m.month}-${m.year}`, 'M-YYYY').isSame(date, 'month'));
+    return p.metadata.some(m => NewProjectUtils.mapMetadataToDate(m).isSame(date, 'month'));
   }
 }

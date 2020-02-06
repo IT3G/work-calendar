@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular
 import { Chart, ChartDataSets } from 'chart.js';
 import * as moment from 'moment';
 import { ProjectNew, ProjectStatsMetadataNew } from '../../../shared/models/project-new';
+import { NewProjectUtils } from '../../../shared/utils/new-project.utils';
 
 @Component({
   selector: 'app-profile-projects',
@@ -43,7 +44,7 @@ export class ProfileProjectsComponent implements AfterViewInit {
       backgroundColor: `${this.colors[i]} 1)`,
       borderWidth: 1,
       data: datesPeriod.map(d => {
-        const fromMetadata = p.metadata.find(m => d.isSame(this.mapMetadataToDate(m), 'months'));
+        const fromMetadata = p.metadata.find(m => d.isSame(NewProjectUtils.mapMetadataToDate(m), 'months'));
 
         return {
           x: d,
@@ -58,7 +59,7 @@ export class ProfileProjectsComponent implements AfterViewInit {
   private getProjectsMaxPeriod(projects: ProjectNew[] = []): moment.Moment[] {
     const appProjectsMetadata = projects
       .reduce((acc, i) => [...acc, ...i.metadata], [])
-      .map(m => this.mapMetadataToDate(m))
+      .map(m => NewProjectUtils.mapMetadataToDate(m))
       .sort((a, b) => (a.isBefore(b) ? -1 : 1));
 
     if (!appProjectsMetadata || !appProjectsMetadata.length) {
@@ -72,10 +73,6 @@ export class ProfileProjectsComponent implements AfterViewInit {
     return Array.from(Array(lastMetadata.diff(firstMetadata, 'months') + additionalMonths).keys()).map(i =>
       firstMetadata.clone().add(i, 'month')
     );
-  }
-
-  private mapMetadataToDate(m: ProjectStatsMetadataNew): moment.Moment {
-    return moment(`${m.month}-${m.year}`, 'M-YYYY');
   }
 
   private generateBarChart(datasets: ChartDataSets[]) {

@@ -4,6 +4,7 @@ import { Moment } from 'moment';
 import { PresenceModel } from '../../shared/models/presence.page.model';
 import { PresenceFiltersFormModel } from '../models/presence-filters-form.model';
 import { ProjectNew } from '../../shared/models/project-new';
+import { NewProjectUtils } from '../../shared/utils/new-project.utils';
 @Pipe({
   name: 'presenceFilter'
 })
@@ -52,6 +53,6 @@ export class PresenceFilterPipe implements PipeTransform {
   }
 
   private isProjectAtMonth(p: ProjectNew, date: Moment): boolean {
-    return p.metadata.some(m => moment(`${m.month}-${m.year}`, 'M-YYYY').isSame(date, 'month'));
+    return p.metadata.some(m => NewProjectUtils.mapMetadataToDate(m).isSame(date, 'month'));
   }
 }
