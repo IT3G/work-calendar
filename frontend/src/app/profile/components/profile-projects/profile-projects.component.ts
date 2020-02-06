@@ -13,7 +13,7 @@ export class ProfileProjectsComponent implements AfterViewInit {
   chart: ElementRef;
 
   @Input()
-  projects: ProjectNew[];
+  projects: ProjectNew[] = [];
 
   private readonly colors = [
     'rgba(119, 227, 200,',
@@ -31,6 +31,10 @@ export class ProfileProjectsComponent implements AfterViewInit {
   constructor() {}
 
   ngAfterViewInit() {
+    if (!this.projects) {
+      return;
+    }
+
     const datesPeriod = this.getProjectsMaxPeriod(this.projects);
 
     const datasets: ChartDataSets[] = this.projects.map((p, i) => ({
