@@ -15,14 +15,14 @@
         <div class="col-md-10 wrapper">
 
             <mat-tab-group [animationDuration]="0">
-                <mat-tab label="Проекты">
-                    <app-profile-projects [projects]="selectedUser.projectsNew"></app-profile-projects>
-                </mat-tab>
                 <mat-tab label="Личные данные">
                     <app-profile-form [selectedUser]="selectedUser"
                         [isAdmin]="isAdmin$|async"
                         [canEdit]="canEdit"
                         (updateProfile)="onUpdateProfile($event)"></app-profile-form>
+                </mat-tab>
+                <mat-tab label="Проекты">
+                    <app-profile-projects [projects]="selectedUser.projectsNew"></app-profile-projects>
                 </mat-tab>
                 <mat-tab label="Подписки">
                     <app-profile-subscriptions [selectedUser]="selectedUser"

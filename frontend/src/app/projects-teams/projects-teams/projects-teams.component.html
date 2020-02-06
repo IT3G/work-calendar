@@ -26,7 +26,7 @@
         <td class="project-cell" *ngFor="let loc of location">
           <div class="users-wrapper">
             <div
-              *ngFor="let user of users | userForLocation: loc | userForProjects: project | activeProjectForDatePipe: (date$ | async) :project">
+              *ngFor="let user of users | userForLocation: loc | activeProjectForDatePipe: (date$ | async) :project">
               <app-user-card [user]="user"></app-user-card>
             </div>
           </div>

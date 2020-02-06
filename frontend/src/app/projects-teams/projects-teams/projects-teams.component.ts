@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import { BehaviorSubject, forkJoin, Subscription } from 'rxjs';
 import { DictionaryApiService } from '../../core/services/dictionary-api.service';
@@ -26,7 +26,6 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
   );
   constructor(
     private route: ActivatedRoute,
-    private router: Router,
     private dictionaryApi: DictionaryApiService,
     private employeeApiService: EmployeeApiService
   ) {}

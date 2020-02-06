@@ -3,7 +3,7 @@ import * as moment from 'moment';
 import { Moment } from 'moment';
 import { PresenceModel } from '../../shared/models/presence.page.model';
 import { PresenceFiltersFormModel } from '../models/presence-filters-form.model';
-
+import { ProjectNew } from '../../shared/models/project-new';
 @Pipe({
   name: 'presenceFilter'
 })
@@ -40,39 +40,18 @@ export class PresenceFilterPipe implements PipeTransform {
     }
 
     if (filter.project) {
-      const monthStart = date.clone().startOf('month');
-      const monthEnd = date.clone().endOf('month');
-
-      res = res.filter(i => {
-        if (!i.employee.projects) {
-          return false;
-        }
-
-        const selectedProjects = i.employee.projects.filter(p => p.project === filter.project);
-        if (!selectedProjects.length) {
-          return false;
-        }
-
-        return selectedProjects.some(p => {
-          if (p.dateStart && p.dateEnd) {
-            return (
-              moment(p.dateStart).isBetween(monthStart, monthEnd) || moment(p.dateEnd).isBetween(monthStart, monthEnd)
-            );
-          }
-
-          if (p.dateStart) {
-            return monthEnd.isSameOrAfter(p.dateStart);
-          }
-
-          if (p.dateEnd) {
-            return monthStart.isSameOrBefore(p.dateEnd);
-          }
-
-          return true;
-        });
-      });
+      res = res.filter(
+        p =>
+          p.employee &&
+          p.employee.projectsNew &&
+          p.employee.projectsNew.some(p => p.project_id === filter.project && this.isProjectAtMonth(p, date))
+      );
     }
 
     return res;
+  }
+
+  private isProjectAtMonth(p: ProjectNew, date: Moment): boolean {
+    return p.metadata.some(m => moment(`${m.month}-${m.year}`, 'M-YYYY').isSame(date, 'month'));
   }
 }

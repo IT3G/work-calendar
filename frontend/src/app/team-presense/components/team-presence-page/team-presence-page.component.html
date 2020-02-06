@@ -1,27 +1,24 @@
 <div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      <app-team-presence-filters
-        [filtersForm]="filtersForm"
-        [projects]="projects"
-        [jobPositions]="jobPositions"
-        [subdivisions]="subdivisions"
-        [locations]="locations"></app-team-presence-filters>
+    <div class="row">
+        <div class="col-md-12">
+            <app-team-presence-filters [filtersForm]="filtersForm"
+                [projects]="projects"
+                [jobPositions]="jobPositions"
+                [subdivisions]="subdivisions"
+                [locations]="locations"></app-team-presence-filters>
 
-      <app-month-selector
-        [date]="date$ | async"
-        (nextMonth)="nextMonth()"
-        (prevMonth)="prevMonth()"></app-month-selector>
+            <app-month-selector [date]="date$ | async"
+                (nextMonth)="nextMonth()"
+                (prevMonth)="prevMonth()"></app-month-selector>
 
-      <app-team-presence-table
-        [holidays]="holidays"
-        [date]="date$ | async"
-        [monthData]="monthData$ | async | presenceFilter:filtersForm?.value:(date$ | async)"
-        [monthDays]="monthDays$ | async"></app-team-presence-table>
+            <app-team-presence-table [holidays]="holidays"
+                [date]="date$ | async"
+                [monthData]="monthData$ | async | presenceFilter:filtersForm?.value:(date$ | async)"
+                [monthDays]="monthDays$ | async"></app-team-presence-table>
 
-      <div class="agenda__wrapper">
-        <app-agenda [isLineView]="true"></app-agenda>
-      </div>
+            <div class="agenda__wrapper">
+                <app-agenda [isLineView]="true"></app-agenda>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
