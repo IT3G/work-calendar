@@ -3,7 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import localeRu from '@angular/common/locales/ru';
 import { APP_INITIALIZER, LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material';
+import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
@@ -18,11 +18,11 @@ import { CustomDateAdapter } from './core/services/custom-date-adapter.service';
 import { LoginModule } from './login/login.module';
 import { PresenseModule } from './presense/presense.module';
 import { ProfileModule } from './profile/profile.module';
+import { ProjectsTeamsModule } from './projects-teams/projects-teams.module';
 import { AppRoutingModule } from './routing/app-routing.module';
 import { AppLoadService } from './shared/services/app-load.service';
 import { SharedModule } from './shared/shared.module';
 import { TeamPresenseModule } from './team-presense/team-presense.module';
-import { ProjectsTeamsModule } from './projects-teams/projects-teams.module';
 
 registerLocaleData(localeRu);
 moment.locale('ru');
@@ -49,7 +49,10 @@ export function onInit(appLoadService: AppLoadService) {
     ReactiveFormsModule,
     SharedModule,
     RouterModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      registrationStrategy: 'registerImmediately'
+    })
   ],
   exports: [],
   providers: [

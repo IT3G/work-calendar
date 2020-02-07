@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { filter, first, switchMap, tap } from 'rxjs/operators';
 import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
@@ -70,7 +70,7 @@ export class DictionaryAdminComponent implements OnInit, OnDestroy {
       .pipe(
         first(),
         filter(res => !!res),
-        switchMap(res => {
+        switchMap((res: DictionaryModel) => {
           if (res._id) {
             return this.dictionaryApi.update(this.dictionaryControl.value, res);
           }

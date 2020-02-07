@@ -1,12 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { combineLatest, Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { ContextStoreService } from '../../../core/store/context-store.service';
-import { EmployeeStoreService } from '../../../core/store/employee-store.service';
+import { SendingTaskModel } from '../../../shared/models/sending-task.model';
 import { TaskModel } from '../../../shared/models/tasks.models';
 import { TaskMapperService } from '../../../shared/services/task-mapper.service';
-import { el } from '@angular/platform-browser/testing/src/browser_util';
-import { SendingTaskModel } from '../../../shared/models/sending-task.model';
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-description-history',
