@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
@@ -26,6 +26,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   private login: string;
   private getCurrentUserSub = new Subscription();
   public projects: DictionaryModel[];
+  public selectedTabIndex = this.route.snapshot.queryParams.tab || 0;
 
   public users$: Observable<Employee[]>;
   public settings$: Observable<AuthSetting>;
@@ -37,6 +38,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     private employeeApiService: EmployeeApiService,
     private employeeStoreService: EmployeeStoreService,
     private route: ActivatedRoute,
+    private router:Router,
     private followApi: FollowApiService,
     private fb: FormBuilder
   ) {}
@@ -51,20 +53,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.getCurrentUserSub.unsubscribe();
-  }
-
-  public createProjectsFormGroup(project?: any): FormGroup {
-    const group = this.fb.group({
-      project: null,
-      dateStart: null,
-      dateEnd: null
-    });
-
-    if (project) {
-      group.patchValue(project);
-    }
-
-    return group;
   }
 
   public onUpdateProfile(employee: Employee): void {
@@ -85,6 +73,12 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   public getAvatarSrc() {
     return `${environment.baseUrl}/avatar?login=` + this.login;
+  }
+
+  public tabChange(id: number) {
+    this.router.navigate([], {
+      queryParams: { ...this.route.snapshot.queryParams, tab: id }
+    });
   }
 
   private getUserInfo(): void {

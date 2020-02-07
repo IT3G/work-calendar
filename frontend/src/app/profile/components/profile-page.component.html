@@ -14,7 +14,7 @@
         </div>
         <div class="col-md-10 wrapper">
 
-            <mat-tab-group [animationDuration]="0">
+            <mat-tab-group [animationDuration]="0" [selectedIndex]="selectedTabIndex" (selectedIndexChange)="tabChange($event)">
                 <mat-tab label="Личные данные">
                     <app-profile-form [selectedUser]="selectedUser"
                         [isAdmin]="isAdmin$|async"
