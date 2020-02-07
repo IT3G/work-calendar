@@ -49,7 +49,10 @@ export function onInit(appLoadService: AppLoadService) {
     ReactiveFormsModule,
     SharedModule,
     RouterModule,
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      registrationStrategy: 'registerImmediately'
+    })
   ],
   exports: [],
   providers: [
