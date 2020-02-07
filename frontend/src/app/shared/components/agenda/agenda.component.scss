@@ -48,6 +48,6 @@
   align-items: center;
 }
 
-/deep/ .mat-tooltip {
+::ng-deep.mat-tooltip {
   font-size: 14px;
 }
