@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { DayType } from '../../const/day-type.const';
-import { TaskModel } from '../../models/tasks.models';
+import { TaskModel } from '../../models/tasks.model';
 import { DateConvertService } from '../../services/date-convert.service';
 import { DayTypeGetterService } from '../../services/day-type-getter.service';
 

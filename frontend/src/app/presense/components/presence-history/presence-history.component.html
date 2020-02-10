@@ -5,7 +5,7 @@
 
 <ng-template ngFor
     let-task
-    [ngForOf]="tasks">
+    [ngForOf]="tasks | sortTasksByDateStart">
     <div class="element start">{{task.dateStart | date: 'dd MMMM yyyy'}}</div>
     <div class="element end">{{task.dateEnd | date: 'dd MMMM yyyy'}}</div>
     <div class="element type">

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { TaskModel } from '../../../shared/models/tasks.models';
+import { TaskModel } from '../../../shared/models/tasks.model';
 
 @Component({
   selector: 'app-presence-history',

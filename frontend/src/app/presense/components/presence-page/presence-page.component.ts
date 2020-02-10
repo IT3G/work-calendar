@@ -5,7 +5,7 @@ import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { EmployeeApiService } from '../../../core/services/employee-api.service';
 import { ContextStoreService } from '../../../core/store/context-store.service';
 import { Employee } from '../../../shared/models/employee.model';
-import { TaskModel } from '../../../shared/models/tasks.models';
+import { TaskModel } from '../../../shared/models/tasks.model';
 import { HolidaysModel } from '../../../shared/models/holidays.model';
 import { HolidaysApiService } from '../../../core/services/holidays-api.service';
 import { TaskApiService } from '../../../core/services/task-api.service';

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Moment } from 'moment';
 import { DayType } from '../const/day-type.const';
-import { TaskModel } from '../models/tasks.models';
+import { TaskModel } from '../models/tasks.model';
 
 @Injectable({
   providedIn: 'root'

@@ -9,7 +9,7 @@ import { ContextStoreService } from './core/store/context-store.service';
 import { EmployeeStoreService } from './core/store/employee-store.service';
 import { TasksStoreService } from './core/store/tasks-store.service';
 import { Employee } from './shared/models/employee.model';
-import { TaskModel } from './shared/models/tasks.models';
+import { TaskModel } from './shared/models/tasks.model';
 import { TaskMapperService } from './shared/services/task-mapper.service';
 
 @Component({

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ContextStoreService } from '../../../core/store/context-store.service';
-import { TaskModel } from '../../../shared/models/tasks.models';
+import { TaskModel } from '../../../shared/models/tasks.model';
 import { DateConvertService } from '../../../shared/services/date-convert.service';
 import { DayTypeGetterService } from '../../../shared/services/day-type-getter.service';
 import { HolidaysModel } from '../../../shared/models/holidays.model';

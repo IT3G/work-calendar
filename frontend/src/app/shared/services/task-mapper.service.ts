@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { DayType } from '../const/day-type.const';
 import { SendingTaskModel } from '../models/sending-task.model';
-import { TaskModel } from '../models/tasks.models';
+import { TaskModel } from '../models/tasks.model';
 
 @Injectable({
   providedIn: 'root'

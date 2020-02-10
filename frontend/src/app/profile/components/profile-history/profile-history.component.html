@@ -9,7 +9,7 @@
 </table>
 <div class="tab-scroll-content">
     <table class="history-table">
-        <tr *ngFor="let element of taskHistory$ | async">
+        <tr *ngFor="let element of taskHistory$ | async | sortTasksByDateStart">
             <td class="change-date">{{ element.dtCreated | datePipe: 'DD MMMM, HH:mm' }}</td>
             <td class="date">
                 {{ element.dateStart | datePipe: 'DD MMMM' }}

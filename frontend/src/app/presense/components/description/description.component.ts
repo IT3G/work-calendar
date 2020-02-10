@@ -11,7 +11,7 @@ import { TasksStoreService } from '../../../core/store/tasks-store.service';
 import { AgendaColors } from '../../../shared/const/agenda-colors.const';
 import { AgendaColorsModel } from '../../../shared/models/agenda-colors.model';
 import { Employee } from '../../../shared/models/employee.model';
-import { TaskModel } from '../../../shared/models/tasks.models';
+import { TaskModel } from '../../../shared/models/tasks.model';
 import { PrintHelperService } from '../../../shared/services/print-helper.service';
 import { SnackbarService } from '../../../shared/services/snackbar.service';
 import { TaskMapperService } from '../../../shared/services/task-mapper.service';
