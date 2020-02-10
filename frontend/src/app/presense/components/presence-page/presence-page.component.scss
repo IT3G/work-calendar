@@ -1,10 +1,28 @@
 :host {
-  width: 1200px;
+  min-width: 900px;
+  max-width: 1200px;
   margin: 20px auto;
   display: grid;
-  grid-template-columns: 350px 1fr;
+  grid-template-columns: 300px 1fr;
+  grid-gap: 20px;
+  grid-template-areas:
+    'title title'
+    'calendar description'
+    'agenda agenda';
+}
+
+.title {
+  grid-area: title;
 }
 
 .calendar {
-  padding: 0 30px;
+  grid-area: calendar;
+}
+
+.agenda {
+  grid-area: agenda;
+}
+
+.description {
+  grid-area: description;
 }

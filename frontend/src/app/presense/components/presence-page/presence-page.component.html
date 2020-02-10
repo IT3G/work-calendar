@@ -1,19 +1,19 @@
 <ng-container *ngIf="selectedUser && (tasks$ | async)">
 
-    <div class="calendar">
-        <app-current-day [selectedUser]="selectedUser"></app-current-day>
-        <app-calendar [tasks]='tasks$ | async'
-            [holidays]="holidays$ | async"></app-calendar>
-        <app-agenda class="agenda"></app-agenda>
-    </div>
 
+    <app-current-day class="title"
+        [selectedUser]="selectedUser"></app-current-day>
+
+    <app-calendar class="calendar"
+        [tasks]='tasks$ | async'
+        [holidays]="holidays$ | async"></app-calendar>
+
+    <app-agenda class="agenda"
+        [isLineView]="true"></app-agenda>
 
     <app-description class="description"
         [selectedUser]="selectedUser"
         [tasks]='tasks$ | async'
         (onAddTask)="onAddTask($event)"></app-description>
-
-    <!-- <app-description-history class="description-history"
-        [tasks]="tasks$ | async"></app-description-history> -->
 
 </ng-container>
