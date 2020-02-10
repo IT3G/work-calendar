@@ -7,5 +7,6 @@ export interface TaskEntity extends Document {
   dtCreated: string;
   employee: string;
   type: string;
+  approved: boolean;
   employeeCreated: string;
 }

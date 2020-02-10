@@ -70,6 +70,7 @@ export class DescriptionComponent implements OnInit {
       employee: this.selectedUser.mailNickname,
       comment: val.comment,
       dtCreated: moment().toISOString(),
+      approved: false,
       employeeCreated: this.contextStoreService.getCurrentUser().mailNickname
     };
 

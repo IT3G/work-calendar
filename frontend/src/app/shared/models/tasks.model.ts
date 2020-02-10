@@ -8,5 +8,6 @@ export class TaskModel {
   employee: string;
   comment: string;
   dtCreated: string;
+  approved: boolean;
   employeeCreated: string;
 }

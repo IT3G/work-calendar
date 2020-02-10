@@ -33,7 +33,7 @@ export class DictionaryBaseController {
     return res.status(HttpStatus.OK).json(result);
   }
 
-  @Put('')
+  @Put()
   async update(@Res() res, @Body() request: DictionaryModel) {
     const result = await this.apiService.update( request);
 

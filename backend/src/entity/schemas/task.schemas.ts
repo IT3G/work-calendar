@@ -7,5 +7,6 @@ export const TaskSchema = new Schema({
   dtCreated: String,
   employee: String,
   type: String,
+  approved: Boolean,
   employeeCreated: String,
 });

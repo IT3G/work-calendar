@@ -23,10 +23,23 @@
   }
 }
 
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
 .fa {
   cursor: pointer;
+  padding: 0 5px;
   transition: transform ease-in 0.1s;
-  &:hover {
+  &:hover:not(.disabled) {
     transform: scale(1.2);
   }
+}
+
+.fa-check-circle {
+  font-size: 25px;
+  color: green;
+  cursor: default;
 }

@@ -32,6 +32,10 @@ export class TaskApiService {
     return this.http.get<PresenceModel[]>(`${environment.baseUrl}/tasks/tasks-month/${date}`);
   }
 
+  public update(id: string, task: Partial<TaskModel>): Observable<TaskModel> {
+    return this.http.put<TaskModel>(`${environment.baseUrl}/tasks/${id}`, task);
+  }
+
   public deleteById(taskId: string): Observable<PresenceModel[]> {
     return this.http.delete<PresenceModel[]>(`${environment.baseUrl}/tasks/${taskId}`);
   }

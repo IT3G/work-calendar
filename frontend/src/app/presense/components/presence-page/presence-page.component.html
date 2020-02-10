@@ -15,6 +15,9 @@
         [tasks]="tasks"
         (onAddTask)="onAddTask($event)"></app-description>
 
-    <app-presence-history class="history" [tasks]="tasks" (deleteTask)="deleteTask($event)"></app-presence-history>
+    <app-presence-history class="history"
+        [tasks]="tasks"
+        (approve)="approveTask($event)"
+        (deleteTask)="deleteTask($event)"></app-presence-history>
 
 </ng-container>

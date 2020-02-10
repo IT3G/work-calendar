@@ -57,6 +57,14 @@ export class PresencePageComponent implements OnInit, OnDestroy {
     );
   }
 
+  public approveTask(id: string) {
+    this.tasksApi.update(id, { approved: true }).subscribe(res => {
+      console.log(res);
+      const task = this.tasks.find(t => t._id === id);
+      task.approved = true;
+    });
+  }
+
   public deleteTask(id: string) {
     this.tasksApi.deleteById(id).subscribe(() => this.updateTasks(this.tasks.filter(t => t._id !== id)));
   }

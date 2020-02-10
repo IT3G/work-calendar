@@ -16,7 +16,21 @@
         </div>
     </div>
     <div class="element comment">{{task.comment}}</div>
+
     <div class="element buttons">
+        <ng-container *ngIf="task.type === dayTypes.VACATION">
+            <i *ngIf="task.approved; else approveBtn"
+                title="Отпуск согласован"
+                class="fa disabled fa-check-circle"
+                aria-hidden="true"></i>
+
+            <ng-template #approveBtn>
+                <i class="fa fa-check"
+                    aria-hidden="true"
+                    (click)="approve.emit(task._id)"></i>
+            </ng-template>
+        </ng-container>
+
         <i (click)="deleteTask.emit(task._id)"
             class="fa fa-times"
             aria-hidden="true"></i>

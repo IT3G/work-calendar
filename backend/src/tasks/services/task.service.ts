@@ -32,6 +32,11 @@ export class TaskService {
     return await this.taskModel.find({ employee }).exec();
   }
 
+  async udpdateOne(id: string, task: Partial<TaskModel>): Promise<TaskEntity> {
+    await this.taskModel.findByIdAndUpdate(id, task);
+    return await this.taskModel.findById(id);
+  }
+
   async deleteById(id: string): Promise<TaskEntity> {
     return await this.taskModel.findByIdAndDelete(id);
   }
@@ -117,10 +122,7 @@ export class TaskService {
 
     const { _id = null, ...newTask } = task;
 
-    const res = await this.taskModel.create(newTask);
-
-    console.log(res);
-    return res;
+    return await this.taskModel.create(newTask);
   }
 
   private async sendMail(task: TaskModel): Promise<void> {

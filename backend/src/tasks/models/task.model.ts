@@ -16,5 +16,7 @@ export class TaskModel {
   @ApiModelProperty()
   type: string;
   @ApiModelProperty()
+  approved: boolean;
+  @ApiModelProperty()
   employeeCreated: string;
 }
