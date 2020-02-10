@@ -63,6 +63,7 @@ export class DescriptionComponent implements OnInit {
     }
     const val = this.form.getRawValue();
     const taskFormVal: TaskModel = {
+      _id: null,
       type: val.type.id,
       dateStart: this.formatDate(val.dateStart),
       dateEnd: val.dateEnd ? this.formatDate(val.dateEnd) : this.formatDate(val.dateStart),
@@ -72,9 +73,9 @@ export class DescriptionComponent implements OnInit {
       employeeCreated: this.contextStoreService.getCurrentUser().mailNickname
     };
 
-    this.taskApiService.addTask(taskFormVal).subscribe(() => {
+    this.taskApiService.addTask(taskFormVal).subscribe(res => {
       this.snackbar.showSuccessSnackBar('Событие добавлено');
-      this.onAddTask.emit(taskFormVal);
+      this.onAddTask.emit(res);
     });
   }
 

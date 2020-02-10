@@ -2,6 +2,8 @@ import { ApiModelProperty } from '@nestjs/swagger';
 
 export class TaskModel {
   @ApiModelProperty()
+  _id: string;
+  @ApiModelProperty()
   comment: string;
   @ApiModelProperty()
   dateEnd: string;

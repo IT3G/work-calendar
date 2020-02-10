@@ -2,6 +2,7 @@
 <div class="header element end">По</div>
 <div class="header element type">Тип</div>
 <div class="header element comment">Комментарий</div>
+<div class="header element"></div>
 
 <ng-template ngFor
     let-task
@@ -15,5 +16,9 @@
         </div>
     </div>
     <div class="element comment">{{task.comment}}</div>
-
+    <div class="element buttons">
+        <i (click)="deleteTask.emit(task._id)"
+            class="fa fa-times"
+            aria-hidden="true"></i>
+    </div>
 </ng-template>

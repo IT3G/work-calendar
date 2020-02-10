@@ -1,6 +1,6 @@
 :host {
   display: grid;
-  grid-template-columns: 200px 200px 150px 1fr;
+  grid-template-columns: 200px 200px 150px 1fr 100px;
 }
 
 .header {
@@ -20,5 +20,13 @@
   & .type-badge {
     padding: 3px 10px;
     border-radius: 5px;
+  }
+}
+
+.fa {
+  cursor: pointer;
+  transition: transform ease-in 0.1s;
+  &:hover {
+    transform: scale(1.2);
   }
 }

@@ -10,8 +10,7 @@ import { TaskModel } from '../../shared/models/tasks.model';
   providedIn: 'root'
 })
 export class TaskApiService {
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
   public addTask(task: TaskModel): Observable<any> {
     return this.http.post<Employee>(`${environment.baseUrl}/tasks`, task);
@@ -31,5 +30,9 @@ export class TaskApiService {
 
   public loadTasksByMonth(date: string): Observable<PresenceModel[]> {
     return this.http.get<PresenceModel[]>(`${environment.baseUrl}/tasks/tasks-month/${date}`);
+  }
+
+  public deleteById(taskId: string): Observable<PresenceModel[]> {
+    return this.http.delete<PresenceModel[]>(`${environment.baseUrl}/tasks/${taskId}`);
   }
 }

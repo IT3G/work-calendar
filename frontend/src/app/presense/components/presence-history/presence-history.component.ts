@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TaskModel } from '../../../shared/models/tasks.model';
 
 @Component({
@@ -10,4 +10,6 @@ export class PresenceHistoryComponent {
   @Input()
   tasks: TaskModel[];
 
+  @Output()
+  deleteTask = new EventEmitter<string>();
 }

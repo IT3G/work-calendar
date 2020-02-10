@@ -20,8 +20,8 @@ export class PresencePageComponent implements OnInit, OnDestroy {
   public selectedUser: Employee;
   public holidays$: Observable<HolidaysModel[]>;
   private getCurrentUserSub = new Subscription();
-  public tasks$ = new BehaviorSubject<TaskModel[]>([]);
-  public tasksToCalendar$ = new BehaviorSubject<TaskModel[]>([]);
+  public tasks: TaskModel[] = [];
+  public tasksToCalendar: TaskModel[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -42,8 +42,7 @@ export class PresencePageComponent implements OnInit, OnDestroy {
   }
 
   public onAddTask(e: TaskModel) {
-    this.tasks$.next([...this.tasks$.value, e]);
-    this.tasksToCalendar$.next(this.tasksMapper.mapTasksToCalendar([...this.tasks$.value, e]));
+    this.updateTasks([...this.tasks, e]);
   }
 
   private checkRoute(): void {
@@ -54,11 +53,12 @@ export class PresencePageComponent implements OnInit, OnDestroy {
           tap(res => (this.selectedUser = res)),
           switchMap(res => this.tasksApi.loadAllTasksByEmployee(res.mailNickname))
         )
-        .subscribe(tasks => {
-          this.tasks$.next(tasks);
-          this.tasksToCalendar$.next(this.tasksMapper.mapTasksToCalendar(tasks));
-        })
+        .subscribe(tasks => this.updateTasks(tasks))
     );
+  }
+
+  public deleteTask(id: string) {
+    this.tasksApi.deleteById(id).subscribe(() => this.updateTasks(this.tasks.filter(t => t._id !== id)));
   }
 
   private getUserByIdOrCurrent(id?: string): Observable<Employee> {
@@ -67,5 +67,10 @@ export class PresencePageComponent implements OnInit, OnDestroy {
     }
 
     return this.contextStoreService.getCurrentUser$().pipe(filter(u => !!u));
+  }
+
+  private updateTasks(tasks: TaskModel[]) {
+    this.tasks = tasks;
+    this.tasksToCalendar = this.tasksMapper.mapTasksToCalendar(this.tasks);
   }
 }
