@@ -3,7 +3,6 @@ import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { TaskApiService } from '../../../core/services/task-api.service';
 import { DayType } from '../../../shared/const/day-type.const';
-import { SendingTaskModel } from '../../../shared/models/sending-task.model';
 import { TaskModel } from '../../../shared/models/tasks.model';
 
 
@@ -17,8 +16,8 @@ export class ProfileHistoryComponent implements OnInit {
   userLogin: string;
 
   public dayType = DayType;
-  public taskHistory$: Observable<SendingTaskModel[]>;
-  public activity: SendingTaskModel[];
+  public taskHistory$: Observable<TaskModel[]>;
+  public activity: TaskModel[];
 
   constructor(private taskApi: TaskApiService) {}
 

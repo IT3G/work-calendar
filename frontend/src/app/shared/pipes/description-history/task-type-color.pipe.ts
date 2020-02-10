@@ -7,7 +7,7 @@ import { DayType } from '../../const/day-type.const';
   name: 'taskTypeColor'
 })
 export class TaskTypeColorPipe implements PipeTransform {
-  transform(value: number): string {
+  transform(value: string): string {
     if (!value) {
       return '';
     }

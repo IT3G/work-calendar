@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Moment } from 'moment';
 import { DayType } from '../const/day-type.const';
 import { TaskModel } from '../models/tasks.model';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +15,7 @@ export class DayTypeGetterService {
       return dayType;
     }
     const existedTask = tasks.filter((i: TaskModel) => dt.isSame(i.dateStart, 'day'));
-    existedTask.sort((a, b) => (a.dtCreated.isAfter(b.dtCreated) ? -1 : 1));
-
+    existedTask.sort((a, b) => (moment(a.dtCreated).isAfter(moment(b.dtCreated)) ? -1 : 1));
 
     if (existedTask.length) {
       const lastTask = existedTask[0];

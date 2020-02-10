@@ -14,7 +14,6 @@ import { Employee } from '../../../shared/models/employee.model';
 import { TaskModel } from '../../../shared/models/tasks.model';
 import { PrintHelperService } from '../../../shared/services/print-helper.service';
 import { SnackbarService } from '../../../shared/services/snackbar.service';
-import { TaskMapperService } from '../../../shared/services/task-mapper.service';
 
 @Component({
   selector: 'app-description',
@@ -38,7 +37,6 @@ export class DescriptionComponent implements OnInit {
     private contextStoreService: ContextStoreService,
     private taskApiService: TaskApiService,
     private fb: FormBuilder,
-    private taskMapperService: TaskMapperService,
     private printHelperService: PrintHelperService,
     private http: HttpClient
   ) {}
@@ -66,20 +64,18 @@ export class DescriptionComponent implements OnInit {
     const val = this.form.getRawValue();
     const taskFormVal: TaskModel = {
       type: val.type.id,
-      dateStart: moment(val.dateStart),
-      dateEnd: val.dateEnd ? moment(val.dateEnd) : moment(val.dateStart),
+      dateStart: this.formatDate(val.dateStart),
+      dateEnd: val.dateEnd ? this.formatDate(val.dateEnd) : this.formatDate(val.dateStart),
       employee: this.selectedUser.mailNickname,
       comment: val.comment,
-      dtCreated: moment(),
+      dtCreated: moment().toISOString(),
       employeeCreated: this.contextStoreService.getCurrentUser().mailNickname
     };
-    const mappedForm = this.taskMapperService.mapToSendingModel(taskFormVal);
 
-    this.taskApiService.addTask(mappedForm).subscribe(() => {
+    this.taskApiService.addTask(taskFormVal).subscribe(() => {
       this.snackbar.showSuccessSnackBar('Событие добавлено');
       this.onAddTask.emit(taskFormVal);
     });
-
   }
 
   public printStatement(): void {
@@ -134,5 +130,9 @@ export class DescriptionComponent implements OnInit {
         this.form.get('comment').setValue(res, { emitEvent: false });
       })
     );
+  }
+
+  private formatDate(date: string): string {
+    return moment(date).format('YYYY-MM-DD');
   }
 }

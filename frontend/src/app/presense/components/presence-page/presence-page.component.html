@@ -1,11 +1,10 @@
 <ng-container *ngIf="selectedUser && (tasks$ | async)">
 
-
     <app-current-day class="title"
         [selectedUser]="selectedUser"></app-current-day>
 
     <app-calendar class="calendar"
-        [tasks]='tasks$ | async'
+        [tasks]='tasksToCalendar$ | async'
         [holidays]="holidays$ | async"></app-calendar>
 
     <app-agenda class="agenda"
