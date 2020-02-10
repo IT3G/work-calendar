@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
@@ -10,7 +10,7 @@ import { Employee } from '../../../shared/models/employee.model';
   templateUrl: './profile-form.component.html',
   styleUrls: ['./profile-form.component.scss']
 })
-export class ProfileFormComponent implements OnInit {
+export class ProfileFormComponent implements OnChanges {
   @Input()
   selectedUser: Employee;
 
@@ -30,9 +30,11 @@ export class ProfileFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private dictionaryApi: DictionaryApiService) {}
 
-  ngOnInit() {
-    this.initForm(this.selectedUser);
-    this.getUserInfo();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.selectedUser && changes.selectedUser.currentValue) {
+      this.initForm(this.selectedUser);
+      this.getUserInfo();
+    }
   }
 
   public editStart(): void {

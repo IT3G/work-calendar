@@ -1,4 +1,13 @@
-import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  ViewChild,
+  OnChanges,
+  SimpleChange,
+  SimpleChanges
+} from '@angular/core';
 import { Chart, ChartDataSets } from 'chart.js';
 import * as moment from 'moment';
 import { ProjectNew, ProjectStatsMetadataNew } from '../../../shared/models/project-new';
@@ -9,8 +18,8 @@ import { NewProjectUtils } from '../../../shared/utils/new-project.utils';
   templateUrl: './profile-projects.component.html',
   styleUrls: ['./profile-projects.component.scss']
 })
-export class ProfileProjectsComponent implements AfterViewInit {
-  @ViewChild('chart')
+export class ProfileProjectsComponent implements OnChanges {
+  @ViewChild('chart', { static: false })
   chart: ElementRef;
 
   @Input()
@@ -29,18 +38,22 @@ export class ProfileProjectsComponent implements AfterViewInit {
     'rgba(91, 52, 36,'
   ];
 
-  constructor() {}
+  constructor(private elRef: ElementRef) {}
 
-  ngAfterViewInit() {
-    if (!this.projects) {
-      return;
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.projects && changes.projects.currentValue) {
+      const datesPeriod = this.getProjectsMaxPeriod(this.projects);
+
+      const datasets: ChartDataSets[] = this.generateDatasetsFromProjects(this.projects, datesPeriod);
+
+      this.generateBarChart(datasets);
     }
+  }
 
-    const datesPeriod = this.getProjectsMaxPeriod(this.projects);
-
-    const datasets: ChartDataSets[] = this.projects.map((p, i) => ({
+  private generateDatasetsFromProjects(projects: ProjectNew[], datesPeriod: moment.Moment[]) {
+    return projects.map((p, i) => ({
       label: p.project_name,
-      steppedLine: 'middle' as ('middle'),
+      steppedLine: 'middle' as 'middle',
       backgroundColor: `${this.colors[i]} 1)`,
       borderWidth: 1,
       data: datesPeriod.map(d => {
@@ -52,8 +65,6 @@ export class ProfileProjectsComponent implements AfterViewInit {
         };
       })
     }));
-
-    this.generateBarChart(datasets);
   }
 
   private getProjectsMaxPeriod(projects: ProjectNew[] = []): moment.Moment[] {
@@ -75,7 +86,11 @@ export class ProfileProjectsComponent implements AfterViewInit {
   }
 
   private generateBarChart(datasets: ChartDataSets[]) {
-    var myChart = new Chart(this.chart.nativeElement.getContext('2d'), {
+    const canvas = document.createElement('canvas');
+    this.elRef.nativeElement.innerHTML = '';
+    this.elRef.nativeElement.appendChild(canvas);
+
+    var myChart = new Chart(canvas.getContext('2d'), {
       type: 'line',
       data: {
         datasets
