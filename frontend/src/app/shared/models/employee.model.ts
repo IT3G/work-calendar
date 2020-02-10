@@ -9,6 +9,8 @@ export class Employee {
   whenCreated: string;
   email: string;
   telNumber: string;
+  telegram: string;
+  skype: string;
   physicalDeliveryOfficeName: string;
   mailNickname: string;
   projects: [

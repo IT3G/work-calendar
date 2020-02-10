@@ -27,6 +27,8 @@ export const UserSchema = new Schema({
   whenCreated: String,
   email: String,
   telNumber: String,
+  telegram: String,
+  skype: String,
   physicalDeliveryOfficeName: String,
   mailNickname: String,
   isAdmin: Boolean,

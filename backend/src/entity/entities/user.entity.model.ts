@@ -20,6 +20,8 @@ export interface UserEntity extends Document {
   whenCreated: string;
   email: string;
   telNumber: string;
+  skype: string;
+  telegram: string;
   physicalDeliveryOfficeName: string;
   mailNickname: string;
   isAdmin: boolean;
@@ -29,4 +31,3 @@ export interface UserEntity extends Document {
   authType?: string;
   hashPassword?: string;
 }
-

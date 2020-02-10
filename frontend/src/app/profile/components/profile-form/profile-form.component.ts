@@ -38,6 +38,8 @@ export class ProfileFormComponent implements OnInit {
   public editStart(): void {
     this.profileForm.get('location').enable();
     this.profileForm.get('telNumber').enable();
+    this.profileForm.get('skype').enable();
+    this.profileForm.get('telegram').enable();
     this.profileForm.get('hasMailing').enable();
 
     if (this.isAdmin) {
@@ -60,16 +62,18 @@ export class ProfileFormComponent implements OnInit {
 
   private initForm(user: Employee): void {
     this.profileForm = this.fb.group({
-      id: new FormControl(user._id),
-      username: new FormControl(user.username),
-      email: new FormControl(user.email),
-      location: new FormControl(user.location),
-      telNumber: new FormControl(user.telNumber),
-      isAdmin: new FormControl(user.isAdmin),
-      hasMailing: new FormControl(user.hasMailing),
-      jobPosition: new FormControl(null),
-      subdivision: new FormControl(null),
-      whenCreated: new FormControl(user.whenCreated)
+      id: [user._id],
+      username: [user.username],
+      email: [user.email],
+      location: [user.location],
+      telNumber: [user.telNumber],
+      skype: [user.skype],
+      telegram: [user.telegram],
+      isAdmin: [user.isAdmin],
+      hasMailing: [user.hasMailing],
+      jobPosition: [null],
+      subdivision: [null],
+      whenCreated: [user.whenCreated]
     });
     this.profileForm.disable();
   }
