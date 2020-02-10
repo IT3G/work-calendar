@@ -19,15 +19,22 @@
 
     <div class="element buttons">
         <ng-container *ngIf="task.type === dayTypes.VACATION">
-            <i *ngIf="task.approved; else approveBtn"
-                title="Отпуск согласован"
-                class="fa disabled fa-check-circle"
-                aria-hidden="true"></i>
+
+            <i title="Подтвердить согласование отпуска"
+                class="fa fa-check"
+                *ngIf="!task.approved; else approveBtn"
+                aria-hidden="true"
+                (click)="openApproveDialog(task._id)"></i>
 
             <ng-template #approveBtn>
-                <i class="fa fa-check"
-                    aria-hidden="true"
-                    (click)="openApproveDialog(task._id)"></i>
+                <i title="Отпуск согласован"
+                    class="fa disabled fa-check-circle"
+                    aria-hidden="true"></i>
+
+                <i (click)="printStatement(task)"
+                    title="Распечатать заявление на отпуск"
+                    class="fa fa-print"
+                    aria-hidden="true"></i>
             </ng-template>
         </ng-container>
 

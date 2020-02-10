@@ -16,6 +16,7 @@
         (onAddTask)="onAddTask($event)"></app-description>
 
     <app-presence-history class="history"
+        [user]="selectedUser"
         [tasks]="tasks"
         (approve)="approveTask($event)"
         (deleteTask)="deleteTask($event)"></app-presence-history>

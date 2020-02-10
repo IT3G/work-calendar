@@ -36,9 +36,7 @@ export class DescriptionComponent implements OnInit {
     private snackbar: SnackbarService,
     private contextStoreService: ContextStoreService,
     private taskApiService: TaskApiService,
-    private fb: FormBuilder,
-    private printHelperService: PrintHelperService,
-    private http: HttpClient
+    private fb: FormBuilder
   ) {}
 
   ngOnInit() {
@@ -77,28 +75,6 @@ export class DescriptionComponent implements OnInit {
     this.taskApiService.addTask(taskFormVal).subscribe(res => {
       this.snackbar.showSuccessSnackBar('Событие добавлено');
       this.onAddTask.emit(res);
-    });
-  }
-
-  public printStatement(): void {
-    const formValue = this.form.getRawValue();
-    const originalTasks = this.tasks;
-    let dateStart = formValue.dateStart;
-    let dateEnd = formValue.dateEnd;
-
-    const currentTask = originalTasks
-      .filter(
-        task =>
-          task.employee === this.selectedUser.mailNickname &&
-          moment(dateStart).isBetween(moment(task.dateStart), moment(task.dateEnd), null, '[]')
-      )
-      .sort((a, b) => (moment(a.dtCreated).isAfter(b.dtCreated) ? -1 : 1))[0];
-
-    dateEnd = currentTask.dateEnd;
-    dateStart = currentTask.dateStart;
-
-    this.http.get('assets/html/print-vacation.html', { responseType: 'text' }).subscribe((html: string) => {
-      this.printHelperService.printStatement(html, this.selectedUser.username, dateStart, dateEnd);
     });
   }
 
