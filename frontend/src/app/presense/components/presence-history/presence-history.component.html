@@ -27,11 +27,11 @@
             <ng-template #approveBtn>
                 <i class="fa fa-check"
                     aria-hidden="true"
-                    (click)="approve.emit(task._id)"></i>
+                    (click)="openApproveDialog(task._id)"></i>
             </ng-template>
         </ng-container>
 
-        <i (click)="deleteTask.emit(task._id)"
+        <i (click)="openDeleteDialog(task._id)"
             class="fa fa-times"
             aria-hidden="true"></i>
     </div>
