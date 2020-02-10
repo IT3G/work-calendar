@@ -1,0 +1,23 @@
+:host {
+  display: grid;
+  grid-template-columns: 200px 200px 150px 1fr;
+}
+
+.header {
+  font-weight: bold;
+  padding: 10px !important;
+}
+
+.element {
+  padding: 10px;
+  border-bottom: 1px solid lightgray;
+}
+
+.type {
+  padding: 7px 10px;
+
+  & .type-badge {
+    padding: 3px 10px;
+    border-radius: 5px;
+  }
+}

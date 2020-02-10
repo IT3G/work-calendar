@@ -13,7 +13,9 @@
 
     <app-description class="description"
         [selectedUser]="selectedUser"
-        [tasks]='tasks$ | async'
+        [tasks]="tasks$ | async"
         (onAddTask)="onAddTask($event)"></app-description>
+
+    <app-presence-history class="history" [tasks]="tasks$ | async"></app-presence-history>
 
 </ng-container>

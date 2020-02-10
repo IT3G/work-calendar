@@ -13,7 +13,7 @@ export class TaskTypePipe implements PipeTransform {
     }
 
     const agendaColor = AgendaColors.find(
-      (agenda: AgendaColorsModel) => agenda.id.toString() === DayType[value].toString()
+      (agenda: AgendaColorsModel) => agenda.id === value
     );
 
     return agendaColor ? agendaColor.title : null;
