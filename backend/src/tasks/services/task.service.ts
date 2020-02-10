@@ -129,7 +129,7 @@ export class TaskService {
     try {
       const userSubject = await this.userService.getUserByLogin(task.employee);
       const userCreated = await this.userService.getUserByLogin(task.employeeCreated);
-      const userFollowers = await this.followService.getMyFollowers(userSubject.id);
+      const userFollowers = await this.followService.getUserFollowers(userSubject.id);
       let addressesArray = userFollowers.map(user => user.email);
 
       if (userSubject.id.toString() !== userCreated.id.toString()) {

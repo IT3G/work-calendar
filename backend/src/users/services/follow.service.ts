@@ -7,6 +7,7 @@ import * as moment from 'moment';
 import { UserEntity } from '../../entity/entities/user.entity.model';
 import { UsersService } from './users.service';
 import { ProjectNewMetadataEntity } from '../../entity/entities/project-new-metadata.entity';
+import { ProjectNewEntity } from '../../entity/entities/project-new.entity';
 
 export interface UserFollow {
   following: UserEntity[];
@@ -22,9 +23,9 @@ export class FollowService {
   ) {}
 
   async getUserFollow(userId: string): Promise<UserFollow> {
-    const following = await this.getMyFollowing(userId);
-    const followers = await this.getMyFollowers(userId);
-    const allForUser = await this.getAll(userId);
+    const following = await this.getUserFollowing(userId);
+    const followers = await this.getUserFollowers(userId);
+    const allForUser = await this.getAllStaticFollowsForUser(userId);
 
     return {
       following,
@@ -33,7 +34,8 @@ export class FollowService {
     };
   }
 
-  async getAll(userId: string): Promise<FollowEntity[]> {
+  /** Получение всех ручных подписок пользователя */
+  async getAllStaticFollowsForUser(userId: string): Promise<FollowEntity[]> {
     return await this.followModel
       .find({ $or: [{ followerId: userId }, { followingId: userId }] })
       .populate('followingId')
@@ -41,26 +43,27 @@ export class FollowService {
       .exec();
   }
 
-  async getMyFollowing(currentUserId: string): Promise<UserEntity[]> {
+  /** Получение людей на которых подписан пользователь */
+  async getUserFollowing(userId: string): Promise<UserEntity[]> {
     const allUsers = await this.userService.getUsers();
-    const currentUser = await this.userService.getUserById(currentUserId);
+    const user = await this.userService.getUserById(userId);
 
-    let followingByProjects = this.matchUsersAndActiveProjects(currentUser, allUsers);
+    let followingByProjects = this.matchUsersAndActiveProjects(user, allUsers);
 
     /** Если у пользователя нет проектов, то он подписан на всех */
-    if (!currentUser.projectsNew.length) {
+    if (!this.haveProjectsInCurrentMonth(user.projectsNew)) {
       followingByProjects = allUsers;
     }
 
-    const addedFollowing = await this.followModel.find({ followerId: currentUser.id, followType: FollowType.add });
+    const addedFollowing = await this.followModel.find({ followerId: user.id, followType: FollowType.add });
 
-    const removedFollowing = await this.followModel.find({ followerId: currentUser.id, followType: FollowType.remove });
+    const removedFollowing = await this.followModel.find({ followerId: user.id, followType: FollowType.remove });
 
     const addedUsers = addedFollowing.map(item => item.followingId).map(u => u.toString());
     const removedUsers = removedFollowing.map(item => item.followingId).map(u => u.toString());
 
     return this.addUserToArr(addedUsers, followingByProjects, allUsers)
-      .filter(u => this.removeMyselfFromArr(u.id, currentUser.id))
+      .filter(u => this.removeMyselfFromArr(u.id, user.id))
       .filter(u => this.removeUsersFromArr(removedUsers, u.id));
   }
 
@@ -73,17 +76,18 @@ export class FollowService {
     return this.followModel.findByIdAndDelete(id);
   }
 
-  async getMyFollowers(currentUserId: string): Promise<UserEntity[]> {
+  /** Получение людей подписанных на пользователя */
+  async getUserFollowers(userId: string): Promise<UserEntity[]> {
     const allUsers = await this.userService.getUsers();
-    const currentUser = await this.userService.getUserById(currentUserId);
+    const user = await this.userService.getUserById(userId);
 
-    const followersByProjects = this.matchUsersAndActiveProjects(currentUser, allUsers);
-    const followersByEmptyProject = allUsers.filter(user => !user.projectsNew.length);
+    const followersByProjects = this.matchUsersAndActiveProjects(user, allUsers);
+    const followersByEmptyProject = allUsers.filter(user => !this.haveProjectsInCurrentMonth(user.projectsNew));
 
-    const addedFollowersArr = await this.followModel.find({ followingId: currentUser.id, followType: FollowType.add });
+    const addedFollowersArr = await this.followModel.find({ followingId: user.id, followType: FollowType.add });
 
     const removedFollowersArr = await this.followModel.find({
-      followingId: currentUser.id,
+      followingId: user.id,
       followType: FollowType.remove
     });
 
@@ -91,7 +95,7 @@ export class FollowService {
     const removedUsers = removedFollowersArr.map(item => item.followerId).map(u => u.toString());
 
     return this.addUserToArr(addedUsers, [...followersByProjects, ...followersByEmptyProject], allUsers)
-      .filter(u => this.removeMyselfFromArr(u.id, currentUser.id))
+      .filter(u => this.removeMyselfFromArr(u.id, user.id))
       .filter(u => this.removeUsersFromArr(removedUsers, u.id));
   }
 
@@ -140,6 +144,11 @@ export class FollowService {
       .filter(p => p.metadata.some(m => currentDate.isSame(this.mapMetadataToDate(m), 'month')))
       .filter(p => p.project_id)
       .map(p => p.project_id.toString());
+  }
+
+  private haveProjectsInCurrentMonth(projects: ProjectNewEntity[]): boolean {
+    const currentDate = moment();
+    return projects.some(p => p.metadata.some(m => currentDate.isSame(this.mapMetadataToDate(m), 'month')));
   }
 
   private mapMetadataToDate(m: ProjectNewMetadataEntity): moment.Moment {
