@@ -13,12 +13,12 @@ import { PresenceModel } from '../models/task-month.model';
 
 @Injectable()
 export class TaskService {
-  constructor(@InjectModel('Tasks') private readonly taskModel: Model<TaskEntity>,
-              private sendMailService: SendMailService,
-              private userService: UsersService,
-              private followService: FollowService
-  ) {
-  }
+  constructor(
+    @InjectModel('Tasks') private readonly taskModel: Model<TaskEntity>,
+    private sendMailService: SendMailService,
+    private userService: UsersService,
+    private followService: FollowService
+  ) {}
 
   async getTasks(): Promise<TaskEntity[]> {
     return await this.taskModel.find().exec();
@@ -32,57 +32,68 @@ export class TaskService {
     return await this.taskModel.find({ employee }).exec();
   }
 
+  async udpdateOne(id: string, task: Partial<TaskModel>): Promise<TaskEntity> {
+    await this.taskModel.findByIdAndUpdate(id, task);
+    return await this.taskModel.findById(id);
+  }
+
+  async deleteById(id: string): Promise<TaskEntity> {
+    return await this.taskModel.findByIdAndDelete(id);
+  }
+
   async getTasksByMonth(date: string): Promise<PresenceModel[]> {
-
-
-    const startOfMonth = moment(date).clone().startOf('month').format('YYYY-MM-DD');
-    const endOfMonth = moment(date).clone().endOf('month').format('YYYY-MM-DD');
-
+    const startOfMonth = moment(date)
+      .clone()
+      .startOf('month')
+      .format('YYYY-MM-DD');
+    const endOfMonth = moment(date)
+      .clone()
+      .endOf('month')
+      .format('YYYY-MM-DD');
 
     const users = await this.userService.getUsers();
     // a >= start <= b  || a >= end <= b || start < a && end > b
     const tasks = await this.taskModel.find({
-      $or:
-        [
-          {
-            dateStart:
-              {
-                $gte: startOfMonth,
-                $lte: endOfMonth
-              }
-          },
-          {
-            dateEnd:
-              {
-                $gte: startOfMonth,
-                $lte: endOfMonth
-              }
-          },
-          {
-            $and: [
-              {
-                dateStart: {
-                  $lte: startOfMonth
-                }
-              }, {
-                dateEnd: {
-                  $gte: endOfMonth
-                }
-              }
-            ]
+      $or: [
+        {
+          dateStart: {
+            $gte: startOfMonth,
+            $lte: endOfMonth
           }
-        ]
+        },
+        {
+          dateEnd: {
+            $gte: startOfMonth,
+            $lte: endOfMonth
+          }
+        },
+        {
+          $and: [
+            {
+              dateStart: {
+                $lte: startOfMonth
+              }
+            },
+            {
+              dateEnd: {
+                $gte: endOfMonth
+              }
+            }
+          ]
+        }
+      ]
     });
 
     const result = users.map(employee => {
       const currentUserTasks = tasks.filter(i => i.employee === employee.mailNickname);
-      const day = moment(date).clone().startOf('month');
+      const day = moment(date)
+        .clone()
+        .startOf('month');
 
       const res = {
         employee,
         tasks: []
       };
-
 
       while (day.isSameOrBefore(endOfMonth)) {
         const task = currentUserTasks
@@ -109,7 +120,9 @@ export class TaskService {
   async addTask(task: TaskModel): Promise<TaskEntity> {
     this.sendMail(task);
 
-    return await this.taskModel.create(task);
+    const { _id = null, ...newTask } = task;
+
+    return await this.taskModel.create(newTask);
   }
 
   private async sendMail(task: TaskModel): Promise<void> {

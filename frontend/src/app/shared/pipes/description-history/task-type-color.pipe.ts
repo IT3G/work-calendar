@@ -7,18 +7,12 @@ import { DayType } from '../../const/day-type.const';
   name: 'taskTypeColor'
 })
 export class TaskTypeColorPipe implements PipeTransform {
-  transform(value: number): string {
+  transform(value: string): string {
     if (!value) {
       return '';
     }
-    const result = AgendaColors.find((agenda: AgendaColorsModel) => {
-      return agenda.id.toString() === DayType[value].toString();
-    }).color;
+    const result = AgendaColors.find((agenda: AgendaColorsModel) => agenda.id === value);
 
-    if (!result) {
-      return '';
-    }
-
-    return result;
+    return result ? result.color : '';
   }
 }

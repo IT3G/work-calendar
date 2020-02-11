@@ -4,13 +4,9 @@ import { Subscription } from 'rxjs';
 import { ConfigurationApiService } from './core/services/configuration-api.service';
 import { EmployeeApiService } from './core/services/employee-api.service';
 import { GitInfoService } from './core/services/git-info.service';
-import { TaskApiService } from './core/services/task-api.service';
 import { ContextStoreService } from './core/store/context-store.service';
 import { EmployeeStoreService } from './core/store/employee-store.service';
-import { TasksStoreService } from './core/store/tasks-store.service';
 import { Employee } from './shared/models/employee.model';
-import { TaskModel } from './shared/models/tasks.models';
-import { TaskMapperService } from './shared/services/task-mapper.service';
 
 @Component({
   selector: 'app-root',
@@ -24,11 +20,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private title: Title,
     private gitInfo: GitInfoService,
     private contextStoreService: ContextStoreService,
-    private taskApiService: TaskApiService,
     private employeeApiService: EmployeeApiService,
     private employeeStoreService: EmployeeStoreService,
-    private tasksStoreService: TasksStoreService,
-    private taskMapperService: TaskMapperService,
     private configurationApi: ConfigurationApiService
   ) {}
 

@@ -1,49 +1,7 @@
-@media (min-width: 1000px) {
-  .form-container {
-    display: grid;
-    grid-template-rows: 70px 70px 1fr 1fr;
-    grid-template-columns: 300px minmax(200px, 300px);
-    grid-column-gap: 40px;
-    grid-template-areas:
-      'datesFrom comment '
-      'datesFor comment'
-      'buttons comment'
-      'submitButton comment';
-  }
-
-  .comment {
-    textarea {
-      height: 161px;
-      max-height: 161px;
-    }
-  }
-}
-
-@media (min-width: 576px) and (max-width: 999px) {
-  .form-container {
-    display: grid;
-    grid-template-rows: 70px 70px 1fr 1fr 1fr;
-    grid-template-columns: 1fr;
-    grid-column-gap: 0;
-    grid-template-areas:
-      'datesFrom'
-      'datesFor'
-      'comment'
-      'buttons'
-      'submitButton';
-  }
-
-  .comment {
-    textarea {
-      height: auto;
-      max-height: available;
-    }
-  }
-}
-
-
 .comment {
-  grid-area: comment;
+  & textarea {
+    min-height: 60px;
+  }
 }
 
 .control {
@@ -62,27 +20,27 @@
   grid-area: datesFor;
 }
 
-
-
-.submitButton {
-  grid-area: submitButton;
-  align-self: center;
-}
-
-
 .print {
   color: #007bff !important;
   text-decoration: underline !important;
   cursor: pointer;
 }
 
+.submit-button {
+  grid-area: submitButton;
+  align-self: center;
+}
 
 .clear-button {
   position: absolute;
-  top: 0;
+  top: -25px;
   right: 0;
 
   .icon-btn {
     color: gray;
   }
+}
+
+.comment-textarea {
+  resize: none;
 }

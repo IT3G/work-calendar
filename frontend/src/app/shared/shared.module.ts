@@ -23,6 +23,8 @@ import { MonthSelectorComponent } from './components/month-selector/month-select
 import { UsernameToArrPipe } from './pipes/username-to-arr.pipe';
 import { IsHolidayDayForNgbModelPipe } from './pipes/calendar/is-holiday-day-for-ngb-model.pipe';
 import { TaskTypeColorPipe } from './pipes/description-history/task-type-color.pipe';
+import { SortTasksByDateStartPipe } from './pipes/sort-tasks-by-date-start.pipe';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 const pipes = [
   UsernamePipe,
@@ -39,17 +41,20 @@ const pipes = [
   UsernameToArrPipe,
   FollowUsersFilterPipe,
   IsHolidayDayForNgbModelPipe,
-  TaskTypeColorPipe
+  TaskTypeColorPipe,
+  SortTasksByDateStartPipe
 ];
 
-const modules = [MaterialModule, FormsModule, ReactiveFormsModule, AvatarModule, NgbModule, RouterModule];
+const modules = [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule, AvatarModule, NgbModule, RouterModule];
 
 const components = [AgendaComponent, FileInputResetComponent, MonthSelectorComponent];
+/** Приватные компоненты попапов наружу предоставлять через сервисы */
+const privateComponents = [ConfirmDialogComponent];
 
 @NgModule({
-  declarations: [...pipes, ...components, ],
-  imports: [CommonModule, ...modules],
+  declarations: [...pipes, ...components, ...privateComponents],
+  imports: [...modules],
+  entryComponents: [...privateComponents],
   exports: [...pipes, ...modules, ...components]
 })
-export class SharedModule {
-}
+export class SharedModule {}

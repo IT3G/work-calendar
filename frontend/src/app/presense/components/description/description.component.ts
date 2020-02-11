@@ -11,10 +11,9 @@ import { TasksStoreService } from '../../../core/store/tasks-store.service';
 import { AgendaColors } from '../../../shared/const/agenda-colors.const';
 import { AgendaColorsModel } from '../../../shared/models/agenda-colors.model';
 import { Employee } from '../../../shared/models/employee.model';
-import { TaskModel } from '../../../shared/models/tasks.models';
+import { TaskModel } from '../../../shared/models/tasks.model';
 import { PrintHelperService } from '../../../shared/services/print-helper.service';
 import { SnackbarService } from '../../../shared/services/snackbar.service';
-import { TaskMapperService } from '../../../shared/services/task-mapper.service';
 
 @Component({
   selector: 'app-description',
@@ -37,10 +36,7 @@ export class DescriptionComponent implements OnInit {
     private snackbar: SnackbarService,
     private contextStoreService: ContextStoreService,
     private taskApiService: TaskApiService,
-    private fb: FormBuilder,
-    private taskMapperService: TaskMapperService,
-    private printHelperService: PrintHelperService,
-    private http: HttpClient
+    private fb: FormBuilder
   ) {}
 
   ngOnInit() {
@@ -65,42 +61,20 @@ export class DescriptionComponent implements OnInit {
     }
     const val = this.form.getRawValue();
     const taskFormVal: TaskModel = {
+      _id: null,
       type: val.type.id,
-      dateStart: moment(val.dateStart),
-      dateEnd: val.dateEnd ? moment(val.dateEnd) : moment(val.dateStart),
+      dateStart: this.formatDate(val.dateStart),
+      dateEnd: val.dateEnd ? this.formatDate(val.dateEnd) : this.formatDate(val.dateStart),
       employee: this.selectedUser.mailNickname,
       comment: val.comment,
-      dtCreated: moment(),
+      dtCreated: moment().toISOString(),
+      approved: false,
       employeeCreated: this.contextStoreService.getCurrentUser().mailNickname
     };
-    const mappedForm = this.taskMapperService.mapToSendingModel(taskFormVal);
 
-    this.taskApiService.addTask(mappedForm).subscribe(() => {
+    this.taskApiService.addTask(taskFormVal).subscribe(res => {
       this.snackbar.showSuccessSnackBar('Событие добавлено');
-      this.onAddTask.emit(taskFormVal);
-    });
-
-  }
-
-  public printStatement(): void {
-    const formValue = this.form.getRawValue();
-    const originalTasks = this.tasks;
-    let dateStart = formValue.dateStart;
-    let dateEnd = formValue.dateEnd;
-
-    const currentTask = originalTasks
-      .filter(
-        task =>
-          task.employee === this.selectedUser.mailNickname &&
-          moment(dateStart).isBetween(moment(task.dateStart), moment(task.dateEnd), null, '[]')
-      )
-      .sort((a, b) => (moment(a.dtCreated).isAfter(b.dtCreated) ? -1 : 1))[0];
-
-    dateEnd = currentTask.dateEnd;
-    dateStart = currentTask.dateStart;
-
-    this.http.get('assets/html/print-vacation.html', { responseType: 'text' }).subscribe((html: string) => {
-      this.printHelperService.printStatement(html, this.selectedUser.username, dateStart, dateEnd);
+      this.onAddTask.emit(res);
     });
   }
 
@@ -134,5 +108,9 @@ export class DescriptionComponent implements OnInit {
         this.form.get('comment').setValue(res, { emitEvent: false });
       })
     );
+  }
+
+  private formatDate(date: string): string {
+    return moment(date).format('YYYY-MM-DD');
   }
 }

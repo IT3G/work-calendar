@@ -1,9 +1,10 @@
-.day {
-  text-align: center;
+:host {
+  display: grid;
+  grid-template-columns: 300px 1fr;
   font-size: 19px;
-  margin-bottom: 10px;
+  align-items: center;
+  justify-content: center;
 }
-
 
 .user-link {
   display: flex;
@@ -13,4 +14,9 @@
 
 .avatar {
   margin-right: 10px;
+}
+
+.title {
+  margin: 0;
+  justify-self: center;
 }

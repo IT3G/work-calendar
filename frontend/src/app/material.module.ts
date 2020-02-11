@@ -70,7 +70,8 @@ const materialModules = [
   MatTabsModule,
   MatToolbarModule,
   MatTooltipModule,
-  MatTreeModule
+  MatTreeModule,
+  MatDialogModule
 ];
 
 @NgModule({

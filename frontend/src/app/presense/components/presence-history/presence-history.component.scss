@@ -1,0 +1,47 @@
+:host {
+  display: grid;
+  grid-template-columns: 200px 200px 150px 1fr 120px;
+}
+
+.header {
+  font-weight: bold;
+  padding: 10px !important;
+  cursor: pointer;
+}
+
+.element {
+  padding: 10px;
+  border-bottom: 1px solid lightgray;
+}
+
+.type {
+  padding: 7px 10px;
+
+  & .type-badge {
+    padding: 3px 10px;
+    border-radius: 5px;
+  }
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.fa {
+  cursor: pointer;
+  padding: 0 5px;
+  width: 30px;
+  text-align: center;
+  transition: transform ease-in 0.1s;
+  &:hover:not(.disabled) {
+    transform: scale(1.2);
+  }
+}
+
+.fa-check-circle {
+  font-size: 25px;
+  color: green;
+  cursor: default;
+}

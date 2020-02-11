@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ContextStoreService } from '../../../core/store/context-store.service';
-import { TaskModel } from '../../../shared/models/tasks.models';
+import { TaskModel } from '../../../shared/models/tasks.model';
 import { DateConvertService } from '../../../shared/services/date-convert.service';
 import { DayTypeGetterService } from '../../../shared/services/day-type-getter.service';
 import { HolidaysModel } from '../../../shared/models/holidays.model';
@@ -12,7 +12,7 @@ import * as moment from 'moment';
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss']
 })
-export class CalendarComponent implements OnInit {
+export class CalendarComponent implements OnChanges {
   @Input() tasks: TaskModel[];
   @Input() holidays: HolidaysModel[];
 
@@ -22,11 +22,12 @@ export class CalendarComponent implements OnInit {
     private contextStoreService: ContextStoreService,
     private dateConvertService: DateConvertService,
     private dayTypeGetterService: DayTypeGetterService
-  ) {
-  }
+  ) {}
 
-  ngOnInit() {
-    this.onDateSelect(this.dateConvertService.convertMomentToNgbDate(this.contextStoreService.getCurrentDate()));
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.tasks && changes.tasks.currentValue) {
+      this.onDateSelect(this.dateConvertService.convertMomentToNgbDate(this.contextStoreService.getCurrentDate()));
+    }
   }
 
   public onDateSelect(date: NgbDateStruct): void {

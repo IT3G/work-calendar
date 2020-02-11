@@ -1,20 +1,24 @@
-<div class="container container-adapt"
-     *ngIf='selectedUser && (tasks$ | async) '>
-  <div class="presence-grid">
-    <div class="calendar">
-      <app-current-day
+<ng-container *ngIf="selectedUser && tasks">
+
+    <app-current-day class="title"
         [selectedUser]="selectedUser"></app-current-day>
-      <app-calendar
-        [tasks]='tasks$ | async' [holidays]="holidays$ | async"></app-calendar>
-    </div>
-    <app-agenda class="agenda"></app-agenda>
-    <app-description
-      class="description"
-      [selectedUser]="selectedUser"
-      [tasks]='tasks$ | async'
-      (onAddTask)="onAddTask($event)"></app-description>
-    <app-description-history
-      class="description-history"
-      [tasks]="tasks$ | async"></app-description-history>
-  </div>
-</div>
+
+    <app-calendar class="calendar"
+        [tasks]='tasksToCalendar'
+        [holidays]="holidays$ | async"></app-calendar>
+
+    <app-agenda class="agenda"
+        [isLineView]="true"></app-agenda>
+
+    <app-description class="description"
+        [selectedUser]="selectedUser"
+        [tasks]="tasks"
+        (onAddTask)="onAddTask($event)"></app-description>
+
+    <app-presence-history class="history"
+        [user]="selectedUser"
+        [tasks]="tasks"
+        (approve)="approveTask($event)"
+        (deleteTask)="deleteTask($event)"></app-presence-history>
+
+</ng-container>

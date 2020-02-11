@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, Post, Res, Delete, Put } from '@nestjs/common';
 import { TaskService } from './services/task.service';
 import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
 import { TaskModel } from './models/task.model';
@@ -37,5 +37,18 @@ export class TasksController {
   async addTask(@Res() res, @Body() task: TaskModel) {
     const newTask = await this.taskService.addTask(task);
     return res.status(HttpStatus.OK).json(newTask);
+  }
+
+  @Put('/:id')
+  async update(@Res() res, @Param('id') id, @Body() task: Partial<TaskModel>) {
+    const newTask = await this.taskService.udpdateOne(id, task);
+    return res.status(HttpStatus.OK).json(newTask);
+  }
+
+  @Delete('/:id')
+  async delete(@Res() res, @Param('id') id) {
+    const result = await this.taskService.deleteById(id);
+
+    return res.status(HttpStatus.OK).json(result);
   }
 }

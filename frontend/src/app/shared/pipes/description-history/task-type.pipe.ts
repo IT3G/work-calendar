@@ -7,13 +7,13 @@ import { DayType } from '../../const/day-type.const';
   name: 'taskType'
 })
 export class TaskTypePipe implements PipeTransform {
-  transform(value: number): any {
+  transform(value: string): string {
     if (!value) {
       return null;
     }
 
     const agendaColor = AgendaColors.find(
-      (agenda: AgendaColorsModel) => agenda.id.toString() === DayType[value].toString()
+      (agenda: AgendaColorsModel) => agenda.id === value
     );
 
     return agendaColor ? agendaColor.title : null;

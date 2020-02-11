@@ -3,19 +3,24 @@ import { incline } from 'lvovich';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { ContextStoreService } from '../../core/store/context-store.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PrintHelperService {
-  constructor(private contextStoreService: ContextStoreService) {}
+  constructor(private contextStoreService: ContextStoreService, private http: HttpClient) {}
 
-  public printStatement(html: string, employee: string, dateStart: string, dateEnd: string) {
-    const content = this.formatHtml(html, employee, dateStart, dateEnd);
-    const popupWin = window.open('', 'self');
-    popupWin.document.open();
-    popupWin.document.write('<html><body onafterprint="window.close()" onload="window.print()">' + content + '</html>');
-    popupWin.document.close();
+  public printStatement(employee: string, dateStart: string, dateEnd: string) {
+    this.http.get('assets/html/print-vacation.html', { responseType: 'text' }).subscribe((html: string) => {
+      const content = this.formatHtml(html, employee, dateStart, dateEnd);
+      const popupWin = window.open('', 'self');
+      popupWin.document.open();
+      popupWin.document.write(
+        '<html><body onafterprint="window.close()" onload="window.print()">' + content + '</html>'
+      );
+      popupWin.document.close();
+    });
   }
 
   private formatHtml(html: string, employee: string, dateStart: string, dateEnd: string): string {
@@ -52,9 +57,7 @@ export class PrintHelperService {
       daysCount
     );
 
-    const footerHtml = `${dayNow[0]}${blocks[12]}${dayNow[1]}${blocks[13]}${dayNow[2]}${blocks[14]}${employee}${
-      blocks[15]
-    }`;
+    const footerHtml = `${dayNow[0]}${blocks[12]}${dayNow[1]}${blocks[13]}${dayNow[2]}${blocks[14]}${employee}${blocks[15]}`;
 
     return `${headersHtml}${dateStartHtml}${dateEndHtml}${daysCountHtml}${footerHtml}`;
   }
@@ -85,8 +88,6 @@ export class PrintHelperService {
     mainManager: string,
     formatEmployee
   ): string {
-    return `${blocks[0]}${companyName}${blocks[1]}${position}${blocks[2]}${mainManager}${blocks[3]}${
-      formatEmployee.last
-    } ${formatEmployee.first}`;
+    return `${blocks[0]}${companyName}${blocks[1]}${position}${blocks[2]}${mainManager}${blocks[3]}${formatEmployee.last} ${formatEmployee.first}`;
   }
 }
