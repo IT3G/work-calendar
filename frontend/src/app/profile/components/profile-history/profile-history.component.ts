@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges, OnChanges } from '@angular/core';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { TaskApiService } from '../../../core/services/task-api.service';
@@ -11,7 +11,7 @@ import { TaskModel } from '../../../shared/models/tasks.model';
   templateUrl: './profile-history.component.html',
   styleUrls: ['./profile-history.component.scss']
 })
-export class ProfileHistoryComponent implements OnInit {
+export class ProfileHistoryComponent implements OnChanges {
   @Input()
   userLogin: string;
 
@@ -21,8 +21,10 @@ export class ProfileHistoryComponent implements OnInit {
 
   constructor(private taskApi: TaskApiService) {}
 
-  ngOnInit() {
-    this.taskHistory$ = this.taskApi.loadAllTasksByAuthor(this.userLogin);
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.userLogin && changes.userLogin.currentValue) {
+      this.taskHistory$ = this.taskApi.loadAllTasksByAuthor(this.userLogin);
+    }
   }
 
   public hasDateRange(task: TaskModel): boolean {

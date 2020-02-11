@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
@@ -10,7 +10,7 @@ import { Employee } from '../../../shared/models/employee.model';
   templateUrl: './profile-form.component.html',
   styleUrls: ['./profile-form.component.scss']
 })
-export class ProfileFormComponent implements OnInit {
+export class ProfileFormComponent implements OnChanges {
   @Input()
   selectedUser: Employee;
 
@@ -30,14 +30,18 @@ export class ProfileFormComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private dictionaryApi: DictionaryApiService) {}
 
-  ngOnInit() {
-    this.initForm(this.selectedUser);
-    this.getUserInfo();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.selectedUser && changes.selectedUser.currentValue) {
+      this.initForm(this.selectedUser);
+      this.getUserInfo();
+    }
   }
 
   public editStart(): void {
     this.profileForm.get('location').enable();
     this.profileForm.get('telNumber').enable();
+    this.profileForm.get('skype').enable();
+    this.profileForm.get('telegram').enable();
     this.profileForm.get('hasMailing').enable();
 
     if (this.isAdmin) {
@@ -60,16 +64,18 @@ export class ProfileFormComponent implements OnInit {
 
   private initForm(user: Employee): void {
     this.profileForm = this.fb.group({
-      id: new FormControl(user._id),
-      username: new FormControl(user.username),
-      email: new FormControl(user.email),
-      location: new FormControl(user.location),
-      telNumber: new FormControl(user.telNumber),
-      isAdmin: new FormControl(user.isAdmin),
-      hasMailing: new FormControl(user.hasMailing),
-      jobPosition: new FormControl(null),
-      subdivision: new FormControl(null),
-      whenCreated: new FormControl(user.whenCreated)
+      id: [user._id],
+      username: [user.username],
+      email: [user.email],
+      location: [user.location],
+      telNumber: [user.telNumber],
+      skype: [user.skype],
+      telegram: [user.telegram],
+      isAdmin: [user.isAdmin],
+      hasMailing: [user.hasMailing],
+      jobPosition: [null],
+      subdivision: [null],
+      whenCreated: [user.whenCreated]
     });
     this.profileForm.disable();
   }

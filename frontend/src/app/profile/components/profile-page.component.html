@@ -1,41 +1,50 @@
-<div class="container"
-    *ngIf="selectedUser">
-    <div class="row">
-        <div class="col-md-2">
-            <div *ngIf="(settings$ | async)?.FEATURE_AVATAR_SOURCE === 'CONFLUENCE'; else noAvatar">
-                <ngx-avatar [src]="selectedUser | avatarSource"
-                    size="160"
-                    value="{{ selectedUser.username | usernamePipe }}"></ngx-avatar>
-            </div>
-            <ng-template #noAvatar>
-                <ngx-avatar size="160"
-                    value="{{ selectedUser.username | usernamePipe }}"></ngx-avatar>
-            </ng-template>
-        </div>
-        <div class="col-md-10 wrapper">
+<ng-container *ngIf="selectedUser">
 
-            <mat-tab-group [animationDuration]="0" [selectedIndex]="selectedTabIndex" (selectedIndexChange)="tabChange($event)">
-                <mat-tab label="Личные данные">
-                    <app-profile-form [selectedUser]="selectedUser"
-                        [isAdmin]="isAdmin$|async"
-                        [canEdit]="canEdit"
-                        (updateProfile)="onUpdateProfile($event)"></app-profile-form>
-                </mat-tab>
-                <mat-tab label="Проекты">
-                    <app-profile-projects [projects]="selectedUser.projectsNew"></app-profile-projects>
-                </mat-tab>
-                <mat-tab label="Подписки">
-                    <app-profile-subscriptions [selectedUser]="selectedUser"
-                        [users$]="users$"
-                        [userFollow]="userFollow"
-                        (addFollow)="addFollow($event)"
-                        (deleteFollowing)="deleteFollowing($event)"></app-profile-subscriptions>
-                </mat-tab>
-                <mat-tab label="История">
-                    <app-profile-history [userLogin]="selectedUser?.mailNickname"></app-profile-history>
-                </mat-tab>
-            </mat-tab-group>
-        </div>
-    </div>
+    <ngx-avatar class="avatar"
+        *ngIf="(settings$ | async)?.FEATURE_AVATAR_SOURCE === 'CONFLUENCE'; else noAvatar"
+        [src]="selectedUser | avatarSource"
+        size="160"
+        value="{{ selectedUser.username | usernamePipe }}"></ngx-avatar>
 
-</div>
+    <ng-template #noAvatar>
+        <ngx-avatar class="avatar"
+            size="160"
+            value="{{ selectedUser.username | usernamePipe }}"></ngx-avatar>
+    </ng-template>
+
+    <button class="presence"
+        [routerLink]="['/presence', selectedUser.mailNickname]"
+        mat-button>
+        Присутствие
+    </button>
+
+    <mat-tab-group class="tabs"
+        [animationDuration]="0"
+        [selectedIndex]="selectedTabIndex"
+        (selectedIndexChange)="tabChange($event)">
+
+        <mat-tab label="Личные данные">
+            <app-profile-form [selectedUser]="selectedUser"
+                [isAdmin]="isAdmin$|async"
+                [canEdit]="canEdit"
+                (updateProfile)="onUpdateProfile($event)"></app-profile-form>
+        </mat-tab>
+
+        <mat-tab label="Проекты">
+            <app-profile-projects [projects]="selectedUser.projectsNew"></app-profile-projects>
+        </mat-tab>
+
+        <mat-tab label="Подписки">
+            <app-profile-subscriptions [selectedUser]="selectedUser"
+                [users$]="users$"
+                [userFollow]="userFollow"
+                (addFollow)="addFollow($event)"
+                (deleteFollowing)="deleteFollowing($event)"></app-profile-subscriptions>
+        </mat-tab>
+
+        <mat-tab label="История">
+            <app-profile-history [userLogin]="selectedUser?.mailNickname"></app-profile-history>
+        </mat-tab>
+    </mat-tab-group>
+
+</ng-container>

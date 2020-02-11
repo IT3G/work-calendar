@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, switchMap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { EmployeeApiService } from '../../core/services/employee-api.service';
 import { FollowApiService } from '../../core/services/follow-api.service';
@@ -24,7 +24,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   public isEdit = false;
   public canEdit = false;
   private login: string;
-  private getCurrentUserSub = new Subscription();
   public projects: DictionaryModel[];
   public selectedTabIndex = this.route.snapshot.queryParams.tab || 0;
 
@@ -33,14 +32,15 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   public userFollow: UserFollow;
 
+  private userSubscriptions = new Subscription();
+
   constructor(
     private contextStoreService: ContextStoreService,
     private employeeApiService: EmployeeApiService,
     private employeeStoreService: EmployeeStoreService,
     private route: ActivatedRoute,
-    private router:Router,
-    private followApi: FollowApiService,
-    private fb: FormBuilder
+    private router: Router,
+    private followApi: FollowApiService
   ) {}
 
   ngOnInit() {
@@ -52,7 +52,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.getCurrentUserSub.unsubscribe();
+    this.userSubscriptions.unsubscribe();
   }
 
   public onUpdateProfile(employee: Employee): void {
@@ -82,42 +82,31 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   }
 
   private getUserInfo(): void {
-    this.login = this.route.snapshot.params.id;
-    if (!this.login) {
-      this.getUserFromStore();
-      this.canEdit = true;
-    } else {
-      this.getUserFromApi();
-    }
-  }
-
-  private getUserFromApi() {
-    this.getCurrentUserSub.add(
-      this.employeeApiService.searchUserByLogin(this.login).subscribe((user: Employee) => {
-        this.setSelectedUser(user);
-        this.loadFollow(user._id);
-      })
-    );
-  }
-
-  private getUserFromStore() {
-    this.getCurrentUserSub.add(
-      this.contextStoreService
-        .getCurrentUser$()
-        .pipe(filter(user => !!user))
+    this.userSubscriptions.add(
+      this.route.params
+        .pipe(
+          switchMap((params: { id?: string }) => (params.id ? this.getUserFromApi(params.id) : this.getUserFromStore()))
+        )
         .subscribe(user => {
-          this.setSelectedUser(user);
+          this.selectedUser = user;
           this.login = user.mailNickname;
           this.loadFollow(user._id);
         })
     );
+    this.userSubscriptions.add(
+      this.route.queryParams.pipe(filter(query => !!query.tab)).subscribe(query => (this.selectedTabIndex = query.tab))
+    );
+  }
+
+  private getUserFromApi(login) {
+    return this.employeeApiService.searchUserByLogin(login);
+  }
+
+  private getUserFromStore() {
+    return this.contextStoreService.getCurrentUser$().pipe(filter(user => !!user));
   }
 
   public loadFollow(userId: string) {
-    this.getCurrentUserSub.add(this.followApi.getUserFollow(userId).subscribe(res => (this.userFollow = res)));
-  }
-
-  private setSelectedUser(user: Employee): void {
-    this.selectedUser = user;
+    this.userSubscriptions.add(this.followApi.getUserFollow(userId).subscribe(res => (this.userFollow = res)));
   }
 }

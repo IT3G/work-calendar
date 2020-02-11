@@ -10,7 +10,8 @@
             <div *ngIf="following?.length; else emptyFollow">
                 <div *ngFor="let user of following"
                     class="follow-item">
-                    {{user?.username}}
+                    <a [routerLink]="['/profile', user.mailNickname]"
+                        [queryParams]="{tab:0}">{{user?.username}}</a>
                     <div>
                         <i class="fa fa-eye icon-btn"
                             [ngClass]="{'active-eye': isAddedUser(user)}"
@@ -77,7 +78,8 @@
             <div *ngIf="followers?.length; else emptyFollow">
                 <div *ngFor="let user of followers"
                     class="follow-item">
-                    {{user?.username}}
+                    <a [routerLink]="['/profile', user.mailNickname]"
+                        [queryParams]="{tab:0}">{{user?.username}}</a>
                 </div>
             </div>
 
