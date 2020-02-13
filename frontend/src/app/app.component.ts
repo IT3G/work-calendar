@@ -11,7 +11,7 @@ import { Employee } from './shared/models/employee.model';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
   public userSession: string;
@@ -22,7 +22,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private contextStoreService: ContextStoreService,
     private employeeApiService: EmployeeApiService,
     private employeeStoreService: EmployeeStoreService,
-    private configurationApi: ConfigurationApiService
+    private configurationApi: ConfigurationApiService,
   ) {}
 
   ngOnInit() {
@@ -38,7 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.getEmployees();
     this.subscription.add(this.employeeStoreService.updater().subscribe(() => this.getEmployees()));
     this.subscription.add(
-      this.configurationApi.loadSettings().subscribe(res => this.contextStoreService.settings$.next(res))
+      this.configurationApi.loadSettings().subscribe((res) => this.contextStoreService.settings$.next(res)),
     );
   }
 
@@ -46,14 +46,14 @@ export class AppComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.employeeApiService.loadAllEmployees().subscribe((key: Employee[]) => {
         this.employeeStoreService.addEmployees(key);
-      })
+      }),
     );
   }
 
   /** Добавление версии в заголовок */
   private addGitVersionToPageTitle(): void {
     const currentTitle = this.title.getTitle();
-    this.gitInfo.getVersionAsString().subscribe(version => {
+    this.gitInfo.getVersionAsString().subscribe((version) => {
       this.title.setTitle(`${currentTitle} (${version})`);
     });
   }
