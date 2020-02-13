@@ -17,7 +17,7 @@ export class TaskService {
     @InjectModel('Tasks') private readonly taskModel: Model<TaskEntity>,
     private sendMailService: SendMailService,
     private userService: UsersService,
-    private followService: FollowService
+    private followService: FollowService,
   ) {}
 
   async getTasks(): Promise<TaskEntity[]> {
@@ -58,46 +58,46 @@ export class TaskService {
         {
           dateStart: {
             $gte: startOfMonth,
-            $lte: endOfMonth
-          }
+            $lte: endOfMonth,
+          },
         },
         {
           dateEnd: {
             $gte: startOfMonth,
-            $lte: endOfMonth
-          }
+            $lte: endOfMonth,
+          },
         },
         {
           $and: [
             {
               dateStart: {
-                $lte: startOfMonth
-              }
+                $lte: startOfMonth,
+              },
             },
             {
               dateEnd: {
-                $gte: endOfMonth
-              }
-            }
-          ]
-        }
-      ]
+                $gte: endOfMonth,
+              },
+            },
+          ],
+        },
+      ],
     });
 
-    const result = users.map(employee => {
-      const currentUserTasks = tasks.filter(i => i.employee === employee.mailNickname);
+    const result = users.map((employee) => {
+      const currentUserTasks = tasks.filter((i) => i.employee === employee.mailNickname);
       const day = moment(date)
         .clone()
         .startOf('month');
 
       const res = {
         employee,
-        tasks: []
+        tasks: [],
       };
 
       while (day.isSameOrBefore(endOfMonth)) {
         const task = currentUserTasks
-          .filter(i => {
+          .filter((i) => {
             if (i.dateEnd) {
               return day.isBetween(moment(i.dateStart), moment(i.dateEnd), 'day', '[]');
             }
@@ -130,7 +130,7 @@ export class TaskService {
       const userSubject = await this.userService.getUserByLogin(task.employee);
       const userCreated = await this.userService.getUserByLogin(task.employeeCreated);
       const userFollowers = await this.followService.getUserFollowers(userSubject.id);
-      let addressesArray = userFollowers.map(user => user.email);
+      let addressesArray = userFollowers.map((user) => user.email);
 
       if (userSubject.id.toString() !== userCreated.id.toString()) {
         addressesArray = [...addressesArray, userSubject.email];
@@ -143,7 +143,7 @@ export class TaskService {
         user: userSubject.username,
         status: this.getTaskTypeName(task.type as TaskType),
         comment: task.comment,
-        dateEnd: task.dateEnd
+        dateEnd: task.dateEnd,
       };
 
       if (addressesArray.length) {
@@ -160,7 +160,7 @@ export class TaskService {
       [TaskType.CUSTOM]: 'Особое',
       [TaskType.LEFT]: 'Отсутствие',
       [TaskType.VACATION]: 'Отпуск',
-      [TaskType.SICK]: 'Болезнь'
+      [TaskType.SICK]: 'Болезнь',
     });
 
     if (taskTypeMap[type]) {

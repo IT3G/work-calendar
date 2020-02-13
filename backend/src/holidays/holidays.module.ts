@@ -8,5 +8,4 @@ import { HolidaysService } from './services/holidays.service';
   controllers: [HolidaysController],
   providers: [HolidaysService],
 })
-export class HolidaysModule {
-}
+export class HolidaysModule {}

@@ -12,7 +12,7 @@ export class SettingsController {
       MAIL_POSTFIX: config.MAIL_POSTFIX,
       PRINT_COMPANY_NAME: config.PRINT_COMPANY_NAME,
       PRINT_HEAD_MANAGER_NAME: config.PRINT_HEAD_MANAGER_NAME,
-      PRINT_HEAD_MANAGER_POSITION: config.PRINT_HEAD_MANAGER_POSITION
+      PRINT_HEAD_MANAGER_POSITION: config.PRINT_HEAD_MANAGER_POSITION,
     };
 
     return res.status(HttpStatus.OK).json(settings);

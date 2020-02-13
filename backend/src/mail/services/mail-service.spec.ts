@@ -23,7 +23,7 @@ describe('Mail Service', () => {
       user: 'Тестовый пользюк',
       status: 'Стандартно',
       comment: 'Без комментариев',
-      dateEnd: '2020-02-02'
+      dateEnd: '2020-02-02',
     };
 
     console.log(mailData);
