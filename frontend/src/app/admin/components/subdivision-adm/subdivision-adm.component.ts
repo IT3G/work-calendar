@@ -23,7 +23,7 @@ export class SubdivisionAdmComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.dictionaryApi.getAll('subdivision').subscribe(res => this.subdivisions$.next(res));
+    this.dictionaryApi.getAll('subdivision').subscribe((res) => this.subdivisions$.next(res));
   }
 
   public openDialog(): void {
@@ -36,10 +36,10 @@ export class SubdivisionAdmComponent implements OnInit {
       .afterClosed()
       .pipe(
         first(),
-        filter(res => !!res),
-        switchMap(res => this.dictionaryApi.add('subdivision', { name: res }))
+        filter((res) => !!res),
+        switchMap((res) => this.dictionaryApi.add('subdivision', { name: res }))
       )
-      .subscribe(res => {
+      .subscribe((res) => {
         this.snackbar.showSuccessSnackBar('Подразделение успешно добавлен');
         this.subdivisions$.next([...this.subdivisions$.value, res]);
       });

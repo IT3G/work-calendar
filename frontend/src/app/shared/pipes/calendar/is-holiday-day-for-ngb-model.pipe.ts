@@ -7,7 +7,6 @@ import * as moment from 'moment';
   name: 'isHolidayDayForNgbModel'
 })
 export class IsHolidayDayForNgbModelPipe implements PipeTransform {
-
   transform(dateSrc: NgbDateStruct, holidays: HolidaysModel[]): string {
     if (!dateSrc || !(holidays && holidays.length)) {
       return `day_WORK`;
@@ -21,7 +20,7 @@ export class IsHolidayDayForNgbModelPipe implements PipeTransform {
 
     const date = moment(dateMoment);
 
-    const currentYear = holidays[0].data.find(item => item.year === date.year().toString());
+    const currentYear = holidays[0].data.find((item) => item.year === date.year().toString());
     const monthName = MonthNumber[date.month()];
     const arr = currentYear && currentYear[monthName] && currentYear[monthName].split(',');
 

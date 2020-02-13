@@ -9,9 +9,9 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => FileInputResetComponent),
-      multi: true,
-    },
-  ],
+      multi: true
+    }
+  ]
 })
 export class FileInputResetComponent implements ControlValueAccessor {
   public file: File;

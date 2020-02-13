@@ -20,7 +20,6 @@ import { EmployeeApiService } from '../../../core/services/employee-api.service'
   styleUrls: ['./team-presence-page.component.scss']
 })
 export class TeamPresencePageComponent implements OnInit, OnDestroy {
-
   private qParamsSnapshotMonth = this.route.snapshot.queryParams.date;
   public date$ = new BehaviorSubject<moment.Moment>(
     this.qParamsSnapshotMonth ? moment(this.qParamsSnapshotMonth, 'MM-YYYY') : moment()
@@ -36,7 +35,6 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
   public subdivisions: DictionaryModel[];
   public locations = locationsDictionary;
 
-
   private subscription = new Subscription();
 
   constructor(
@@ -46,9 +44,8 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     private router: Router,
     private fb: FormBuilder,
     private dictionaryApi: DictionaryApiService,
-    private holidaysApi: HolidaysApiService,
-  ) {
-  }
+    private holidaysApi: HolidaysApiService
+  ) {}
 
   ngOnInit() {
     this.initFilterForm(this.route.snapshot.queryParams);
@@ -60,7 +57,8 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
       map((date) => date.format('YYYY-MM-DD')),
       distinctUntilChanged(),
       switchMap((date) => this.tasksApi.loadTasksByMonth(date)),
-      share());
+      share()
+    );
 
     this.updateQueryParamsOnChange();
   }
@@ -76,14 +74,15 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     const subdivisions$ = this.dictionaryApi.getAll('subdivision');
 
     this.subscription.add(
-      forkJoin([holidays$, projects$, jobPositions$, subdivisions$]).subscribe(res => {
+      forkJoin([holidays$, projects$, jobPositions$, subdivisions$]).subscribe((res) => {
         const [holidays, projects, jobPositions, subdivisions] = res;
 
         this.holidays = holidays;
         this.projects = projects;
         this.jobPositions = jobPositions;
         this.subdivisions = subdivisions;
-      }));
+      })
+    );
   }
 
   public prevMonth(): void {
@@ -96,7 +95,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
 
   private updateQueryParamsOnChange() {
     this.subscription.add(
-      this.date$.subscribe(date =>
+      this.date$.subscribe((date) =>
         this.router.navigate([], {
           queryParams: { ...this.route.snapshot.queryParams, date: moment(date).format('MM-YYYY') }
         })
@@ -104,7 +103,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     );
 
     this.subscription.add(
-      this.filtersForm.valueChanges.subscribe(filters =>
+      this.filtersForm.valueChanges.subscribe((filters) =>
         this.router.navigate([], {
           queryParams: { ...this.route.snapshot.queryParams, ...filters }
         })
@@ -114,7 +113,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
 
   private getMonthDays(): Observable<moment.Moment[]> {
     return this.date$.pipe(
-      map(date => {
+      map((date) => {
         const startOfMonth = date.clone().startOf('month');
         const endOfMonth = date.clone().endOf('month');
 

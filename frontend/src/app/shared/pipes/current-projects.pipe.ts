@@ -16,8 +16,8 @@ export class CurrentProjectsPipe implements PipeTransform {
     const currentDate = moment();
 
     const result = emp.projectsNew
-      .filter(p => p.metadata.some(m => currentDate.isSame(NewProjectUtils.mapMetadataToDate(m), 'month')))
-      .map(p => p.project_name);
+      .filter((p) => p.metadata.some((m) => currentDate.isSame(NewProjectUtils.mapMetadataToDate(m), 'month')))
+      .map((p) => p.project_name);
 
     if (!result.length) {
       return '-';

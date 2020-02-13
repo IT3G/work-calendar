@@ -13,7 +13,7 @@ export class TaskMapperService {
   public mapTasksToCalendar(tasks: TaskModel[]): TaskModel[] {
     const result = [];
 
-    tasks.forEach(task => {
+    tasks.forEach((task) => {
       if (task.dateStart !== task.dateEnd) {
         const lastDay = moment(task.dateEnd);
         let nextDate = moment(task.dateStart);

@@ -30,15 +30,15 @@ export class LoginPageComponent implements OnInit {
 
   ngOnInit() {
     this.initForm();
-    this.settings$ = this.contextStoreService.settings$.pipe(filter(s => !!s));
+    this.settings$ = this.contextStoreService.settings$.pipe(filter((s) => !!s));
   }
 
   public login() {
     const info = this.loginForm.value;
     info.username = info.username.toLowerCase();
     this.authService.login(info).subscribe(
-      res => this.successedLogin(res),
-      err => {
+      (res) => this.successedLogin(res),
+      (err) => {
         this.errorMessage = err;
         console.log(err);
       },

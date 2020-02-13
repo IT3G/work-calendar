@@ -36,7 +36,7 @@ export class CalendarComponent implements OnChanges {
     this.contextStoreService.setCurrentDate(dt);
     this.contextStoreService.setDayType(this.dayTypeGetterService.getDayType(dt, this.tasks));
 
-    const existedTask = this.tasks.find(i => dt.isSame(i.dateStart, 'day'));
+    const existedTask = this.tasks.find((i) => dt.isSame(i.dateStart, 'day'));
     if (existedTask) {
       this.contextStoreService.setComment(existedTask.comment);
     } else {

@@ -8,9 +8,8 @@ describe('CurrentDayComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CurrentDayComponent ]
-    })
-    .compileComponents();
+      declarations: [CurrentDayComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

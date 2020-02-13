@@ -37,7 +37,7 @@ export class TeamPresenceTableComponent implements OnChanges {
   ngOnChanges(simpleChanges: SimpleChanges) {
     if (simpleChanges.monthData && !simpleChanges.monthDays) {
       this.daysInMonth = this.monthDays.length;
-      this.daysHeader = this.monthDays.map(d => d.format());
+      this.daysHeader = this.monthDays.map((d) => d.format());
       this.yearAndMonth = this.date.format('YYYY-MM-');
     }
   }

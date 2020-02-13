@@ -42,15 +42,15 @@ export class ProfileSubscriptionsComponent implements OnChanges {
       this.followers = this.userFollow.followers.sort((a, b) => this.sortEmployee(a, b));
 
       this.removedFromMe = this.userFollow.allForUser
-        .filter(follow => follow.followType === 'remove' && follow.followerId._id === this.selectedUser._id)
+        .filter((follow) => follow.followType === 'remove' && follow.followerId._id === this.selectedUser._id)
         .sort((a, b) => this.sortFollowModel(a, b, 'followingId'));
 
       this.addedForMe = this.userFollow.allForUser
-        .filter(follow => follow.followType === 'add' && follow.followerId._id === this.selectedUser._id)
+        .filter((follow) => follow.followType === 'add' && follow.followerId._id === this.selectedUser._id)
         .sort((a, b) => this.sortFollowModel(a, b, 'followerId'));
 
       this.IRemovedFrom = this.userFollow.allForUser
-        .filter(item => item.followingId._id === this.selectedUser._id && item.followType === 'remove')
+        .filter((item) => item.followingId._id === this.selectedUser._id && item.followType === 'remove')
         .sort((a, b) => this.sortFollowModel(a, b, 'followerId'));
     }
   }
@@ -64,7 +64,7 @@ export class ProfileSubscriptionsComponent implements OnChanges {
   }
 
   public isAddedUser(user: Employee): boolean {
-    return this.addedForMe && this.addedForMe.some(item => item.followingId._id === user._id);
+    return this.addedForMe && this.addedForMe.some((item) => item.followingId._id === user._id);
   }
 
   public addFollowingByForm(): void {
@@ -80,7 +80,7 @@ export class ProfileSubscriptionsComponent implements OnChanges {
 
   public removeFollowing(user: Employee) {
     if (this.isAddedUser(user)) {
-      const follow = this.addedForMe.find(item => item.followingId._id === user._id);
+      const follow = this.addedForMe.find((item) => item.followingId._id === user._id);
       this.deleteFollowing.emit(follow._id);
     }
 
@@ -94,15 +94,15 @@ export class ProfileSubscriptionsComponent implements OnChanges {
   }
 
   public toggleFollow(user: Employee) {
-    const isUserRemoved = this.removedFromMe.some(item => item.followingId._id === user._id);
+    const isUserRemoved = this.removedFromMe.some((item) => item.followingId._id === user._id);
 
     if (isUserRemoved) {
-      const followId = this.removedFromMe.find(item => item.followingId._id === user._id)._id;
+      const followId = this.removedFromMe.find((item) => item.followingId._id === user._id)._id;
       this.deleteFollowing.emit(followId);
     }
 
     if (this.isAddedUser(user)) {
-      const follow = this.addedForMe.find(item => item.followingId._id === user._id);
+      const follow = this.addedForMe.find((item) => item.followingId._id === user._id);
       this.deleteFollowing.emit(follow._id);
     } else {
       const data: FollowModel = {

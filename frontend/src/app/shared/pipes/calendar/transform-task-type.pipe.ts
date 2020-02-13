@@ -9,8 +9,7 @@ import { DayTypeGetterService } from '../../services/day-type-getter.service';
   name: 'transformTaskType'
 })
 export class TransformTaskTypePipe implements PipeTransform {
-  constructor(private dateConvertService: DateConvertService, private dayTypeGetterService: DayTypeGetterService) {
-  }
+  constructor(private dateConvertService: DateConvertService, private dayTypeGetterService: DayTypeGetterService) {}
 
   transform(date: NgbDateStruct, tasks: TaskModel[]): string {
     if (!date) {

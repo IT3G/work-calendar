@@ -6,7 +6,7 @@ import {
   ViewChild,
   OnChanges,
   SimpleChange,
-  SimpleChanges,
+  SimpleChanges
 } from '@angular/core';
 import { Chart, ChartDataSets } from 'chart.js';
 import * as moment from 'moment';
@@ -16,7 +16,7 @@ import { NewProjectUtils } from '../../../shared/utils/new-project.utils';
 @Component({
   selector: 'app-profile-projects',
   templateUrl: './profile-projects.component.html',
-  styleUrls: ['./profile-projects.component.scss'],
+  styleUrls: ['./profile-projects.component.scss']
 })
 export class ProfileProjectsComponent implements OnChanges {
   @ViewChild('chart', { static: false })
@@ -35,7 +35,7 @@ export class ProfileProjectsComponent implements OnChanges {
     'rgba(164, 153, 142,',
     'rgba(89, 166, 94,',
     'rgba(199, 72, 74,',
-    'rgba(91, 52, 36,',
+    'rgba(91, 52, 36,'
   ];
 
   constructor(private elRef: ElementRef) {}
@@ -61,9 +61,9 @@ export class ProfileProjectsComponent implements OnChanges {
 
         return {
           x: d,
-          y: fromMetadata ? fromMetadata.percent : 0,
+          y: fromMetadata ? fromMetadata.percent : 0
         };
-      }),
+      })
     }));
   }
 
@@ -93,7 +93,7 @@ export class ProfileProjectsComponent implements OnChanges {
     const myChart = new Chart(canvas.getContext('2d'), {
       type: 'line',
       data: {
-        datasets,
+        datasets
       },
       options: {
         tooltips: {
@@ -115,8 +115,8 @@ export class ProfileProjectsComponent implements OnChanges {
               const labelAsArray = label.split(' ');
 
               return `${labelAsArray[0]} ${labelAsArray[2]}`.replace(',', '');
-            },
-          },
+            }
+          }
         },
         scales: {
           xAxes: [
@@ -124,24 +124,24 @@ export class ProfileProjectsComponent implements OnChanges {
               type: 'time',
               stacked: true,
               ticks: {
-                reverse: true,
+                reverse: true
               },
               time: {
-                unit: 'month',
-              },
-            },
+                unit: 'month'
+              }
+            }
           ],
           yAxes: [
             {
               stacked: true,
               ticks: {
                 beginAtZero: true,
-                max: 110,
-              },
-            },
-          ],
-        },
-      },
+                max: 110
+              }
+            }
+          ]
+        }
+      }
     });
   }
 }

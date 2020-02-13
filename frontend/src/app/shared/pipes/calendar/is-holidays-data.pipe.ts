@@ -7,13 +7,12 @@ import * as moment from 'moment';
   name: 'isHolidayData'
 })
 export class IsHolidayDataPipe implements PipeTransform {
-
   transform(dateSrc: string, holidays: HolidaysModel[]): string {
     if (!dateSrc || !(holidays && holidays.length)) {
       return `day_WORK`;
     }
     const date = moment(dateSrc);
-    const currentYear = holidays[0].data.find(item => item.year === date.year().toString());
+    const currentYear = holidays[0].data.find((item) => item.year === date.year().toString());
     const monthName = MonthNumber[date.month()];
     const arr = currentYear && currentYear[monthName] && currentYear[monthName].split(',');
 

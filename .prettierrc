@@ -10,6 +10,5 @@
   "insertPragma": false,
   "proseWrap": "preserve",
   "htmlWhitespaceSensitivity": "ignore",
-  "endOfLine": "lf",
-  "trailingComma": "all"
+  "endOfLine": "lf"
 }

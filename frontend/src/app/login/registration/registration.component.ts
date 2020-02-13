@@ -24,11 +24,11 @@ export class RegistrationComponent implements OnInit {
       name: `${formData.lastName} ${formData.firstName}`
     };
     this.authService.registration(obj).subscribe(
-      res => {
+      (res) => {
         this.successRegistration = true;
         this.snackbar.showSuccessSnackBar('Пользователь успешно добавлен');
       },
-      err => this.snackbar.showErrorSnackBar('Произошла ошибка')
+      (err) => this.snackbar.showErrorSnackBar('Произошла ошибка')
     );
   }
 

@@ -50,7 +50,7 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
     const users$ = this.employeeApiService.loadAllEmployees();
     const projects$ = this.dictionaryApi.getAll('project');
 
-    forkJoin([users$, projects$]).subscribe(res => {
+    forkJoin([users$, projects$]).subscribe((res) => {
       this.users = res[0];
       this.projects = res[1];
     });

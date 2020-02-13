@@ -6,7 +6,7 @@ import { PresenceFiltersFormModel } from '../models/presence-filters-form.model'
 import { ProjectNew } from '../../shared/models/project-new';
 import { NewProjectUtils } from '../../shared/utils/new-project.utils';
 @Pipe({
-  name: 'presenceFilter',
+  name: 'presenceFilter'
 })
 export class PresenceFilterPipe implements PipeTransform {
   transform(value: PresenceModel[], filter: PresenceFiltersFormModel, date: Moment): PresenceModel[] {
@@ -22,13 +22,13 @@ export class PresenceFilterPipe implements PipeTransform {
 
     if (filter.name) {
       res = res.filter(
-        (i) => i.employee.username && i.employee.username.toLowerCase().includes(filter.name.toLowerCase()),
+        (i) => i.employee.username && i.employee.username.toLowerCase().includes(filter.name.toLowerCase())
       );
     }
 
     if (filter.location) {
       res = res.filter(
-        (i) => i.employee.location && i.employee.location.toLowerCase() === filter.location.toLocaleLowerCase(),
+        (i) => i.employee.location && i.employee.location.toLowerCase() === filter.location.toLocaleLowerCase()
       );
     }
 
@@ -46,8 +46,8 @@ export class PresenceFilterPipe implements PipeTransform {
           p.employee &&
           p.employee.projectsNew &&
           p.employee.projectsNew.some(
-            (project) => project.project_id === filter.project && this.isProjectAtMonth(project, date),
-          ),
+            (project) => project.project_id === filter.project && this.isProjectAtMonth(project, date)
+          )
       );
     }
 

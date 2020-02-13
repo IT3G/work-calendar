@@ -37,9 +37,9 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.filter = new FormControl();
-    this.ar.queryParams.subscribe(res => this.filter.setValue(res.project));
+    this.ar.queryParams.subscribe((res) => this.filter.setValue(res.project));
     this.projects$ = this.dictionaryApi.getAll('project');
-    this.subscription.add(this.employeeStoreService.getEmployees().subscribe(res => (this.employees = res)));
+    this.subscription.add(this.employeeStoreService.getEmployees().subscribe((res) => (this.employees = res)));
     this.setDisplayedColumns();
   }
 
@@ -53,7 +53,7 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
       data: { login: this.login }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (!result) {
         return;
       }
@@ -63,7 +63,7 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
           this.employeeStoreService.update();
           this.snackbar.showSuccessSnackBar('Пользователь успешно добавлен');
         },
-        error => this.showErrorMessage(error)
+        (error) => this.showErrorMessage(error)
       );
     });
   }

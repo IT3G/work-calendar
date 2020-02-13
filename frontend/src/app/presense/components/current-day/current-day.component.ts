@@ -18,14 +18,10 @@ export class CurrentDayComponent implements OnInit {
   @Input()
   selectedUser: Employee;
 
-
-  constructor(private contextStoreService: ContextStoreService) {
-  }
+  constructor(private contextStoreService: ContextStoreService) {}
 
   ngOnInit() {
     this.currentDate$ = this.contextStoreService.getCurrentDate$();
-    this.settings$ = this.contextStoreService.settings$.pipe(
-      filter(s => !!s)
-    );
+    this.settings$ = this.contextStoreService.settings$.pipe(filter((s) => !!s));
   }
 }

@@ -13,7 +13,9 @@ export class CurrentEmployeePipe implements PipeTransform {
       .getEmployeesSnapshot()
       .find((emp: Employee) => emp.mailNickname === value);
 
-    if (!employee) { return null; }
+    if (!employee) {
+      return null;
+    }
     return `${employee.username.split(' ')[0]} ${employee.username.split(' ')[1][0]}.`;
   }
 }

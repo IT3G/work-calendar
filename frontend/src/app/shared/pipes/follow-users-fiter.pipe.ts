@@ -6,17 +6,16 @@ import { FollowModel } from '../models/follow.model';
   name: 'followUsersFilter'
 })
 export class FollowUsersFilterPipe implements PipeTransform {
-
   transform(users: Employee[] = [], following: Employee[] = [], removed: FollowModel[] = []): Employee[] {
     if (!users) {
       return [];
     }
 
-    const followingArr = following.map(item => item._id);
-    const removedArr = removed.map(el => el.followingId._id);
+    const followingArr = following.map((item) => item._id);
+    const removedArr = removed.map((el) => el.followingId._id);
 
     const commonArr = [...followingArr, ...removedArr];
 
-    return users.filter(user => !commonArr.includes(user._id));
+    return users.filter((user) => !commonArr.includes(user._id));
   }
 }

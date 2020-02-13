@@ -12,12 +12,12 @@ export class IsAdminGuardService implements CanActivate {
 
   public canActivate(): Observable<boolean> {
     return this.contextStoreService.isCurrentUserAdmin$().pipe(
-      tap(u => {
+      tap((u) => {
         if (!u) {
           this.router.navigate(['team-presence']);
         }
       }),
-      filter(u => !!u)
+      filter((u) => !!u)
     );
   }
 }

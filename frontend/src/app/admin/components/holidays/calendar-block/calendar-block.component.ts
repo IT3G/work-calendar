@@ -33,7 +33,7 @@ export enum NamesOfMonth {
   'Сентябрь',
   'Октябрь',
   'Ноябрь',
-  'Декабрь',
+  'Декабрь'
 }
 
 @Component({
@@ -42,7 +42,6 @@ export enum NamesOfMonth {
   styleUrls: ['./calendar-block.component.scss']
 })
 export class CalendarBlockComponent implements OnInit {
-
   @Input()
   days: string;
 
@@ -51,8 +50,7 @@ export class CalendarBlockComponent implements OnInit {
 
   public daysInMonth: number[];
 
-  constructor() {
-  }
+  constructor() {}
 
   ngOnInit() {
     this.daysInMonth = this.getDaysInMonth(this.date);

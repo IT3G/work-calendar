@@ -21,7 +21,7 @@ export class NavigationMenuComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.isAuth$ = this.contextStoreService.getCurrentUser$().pipe(map(user => !!user));
+    this.isAuth$ = this.contextStoreService.getCurrentUser$().pipe(map((user) => !!user));
     this.isAdmin$ = this.contextStoreService.isCurrentUserAdmin$();
   }
 

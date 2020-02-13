@@ -5,12 +5,10 @@ import { HolidaysModel, HolidaysYearModel } from '../../../../shared/models/holi
   name: 'holidaysYearFilterPipe'
 })
 export class HolidaysYearFilterPipe implements PipeTransform {
-
   transform(value: HolidaysYearModel[], year: string): HolidaysYearModel[] {
     if (year === '') {
       return value;
     }
-    return value.filter(item => item.year === year);
+    return value.filter((item) => item.year === year);
   }
-
 }

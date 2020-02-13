@@ -13,19 +13,16 @@ export class AuthGuardService implements CanActivate {
 
   public canActivate(): Observable<boolean> {
     return this.contextStoreService.getCurrentUser$().pipe(
-      tap(u => {
+      tap((u) => {
         if (!u) {
-          this.authApi
-            .getCurrentUser()
-            .subscribe(
-              user => this.contextStoreService.setCurrentUser(user),
-              err => this.router.navigateByUrl('/login')
-            );
+          this.authApi.getCurrentUser().subscribe(
+            (user) => this.contextStoreService.setCurrentUser(user),
+            (err) => this.router.navigateByUrl('/login')
+          );
         }
       }),
-      filter(u => !!u),
-      map(u => !!u)
+      filter((u) => !!u),
+      map((u) => !!u)
     );
   }
-
 }
