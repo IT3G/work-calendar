@@ -2,60 +2,44 @@
   <mat-label>Словарь</mat-label>
   <mat-select [formControl]="dictionaryControl">
     <mat-option>Сбросить</mat-option>
-    <mat-option *ngFor="let dictionaries of dictionariesList"
-      [value]="dictionaries.id">
+    <mat-option *ngFor="let dictionaries of dictionariesList" [value]="dictionaries.id">
       {{ dictionaries.name }}
     </mat-option>
   </mat-select>
 </mat-form-field>
 
-<button mat-raised-button
-  color="primary"
-  [disabled]="!dictionaryControl?.value"
-  (click)="openDialog()">Добавить позицию
+<button mat-raised-button color="primary" [disabled]="!dictionaryControl?.value" (click)="openDialog()">
+  Добавить позицию
 </button>
 
-<table *ngIf="(selectedDictionary$|async)?.length"
+<table
+  *ngIf="(selectedDictionary$ | async)?.length"
   mat-table
-  [dataSource]="selectedDictionary$|async"
+  [dataSource]="selectedDictionary$ | async"
   [trackBy]="trackByFn"
-  class="mat-elevation-z6">
-
+  class="mat-elevation-z6"
+>
   <ng-container matColumnDef="name">
-    <th mat-header-cell
-      *matHeaderCellDef>Позиция</th>
-    <td mat-cell
-      *matCellDef="let dictionary">
-      {{dictionary?.name}}
+    <th mat-header-cell *matHeaderCellDef>Позиция</th>
+    <td mat-cell *matCellDef="let dictionary">
+      {{ dictionary?.name }}
     </td>
   </ng-container>
 
   <ng-container matColumnDef="edit">
-    <th mat-header-cell
-      *matHeaderCellDef></th>
-    <td class="delete"
-      mat-cell
-      *matCellDef="let dictionary"
-      (click)="openDialog(dictionary)">
-      <i class="fa fa-pencil icon-btn"
-        aria-hidden="true"></i>
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td class="delete" mat-cell *matCellDef="let dictionary" (click)="openDialog(dictionary)">
+      <i class="fa fa-pencil icon-btn" aria-hidden="true"></i>
     </td>
   </ng-container>
 
   <ng-container matColumnDef="delete">
-    <th mat-header-cell
-      *matHeaderCellDef></th>
-    <td class="delete"
-      mat-cell
-      *matCellDef="let dictionary"
-      (click)="delete(dictionary)">
-      <i class="fa fa-times icon-btn"
-        aria-hidden="true"></i>
+    <th mat-header-cell *matHeaderCellDef></th>
+    <td class="delete" mat-cell *matCellDef="let dictionary" (click)="delete(dictionary)">
+      <i class="fa fa-times icon-btn" aria-hidden="true"></i>
     </td>
   </ng-container>
 
-  <tr mat-header-row
-    *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row
-    *matRowDef="let row; columns: displayedColumns"></tr>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 </table>

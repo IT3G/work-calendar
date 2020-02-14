@@ -7,7 +7,6 @@ import * as moment from 'moment';
   name: 'isHolidayDayForNgbModel'
 })
 export class IsHolidayDayForNgbModelPipe implements PipeTransform {
-
   transform(dateSrc: NgbDateStruct, holidays: HolidaysModel[]): string {
     if (!dateSrc || !(holidays && holidays.length)) {
       return `day_WORK`;

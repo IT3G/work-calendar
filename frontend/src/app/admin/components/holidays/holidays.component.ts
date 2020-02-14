@@ -6,7 +6,6 @@ import { FormControl } from '@angular/forms';
 import { HolidaysApiService } from '../../../core/services/holidays-api.service';
 import { HolidaysModel, HolidaysRawData, HolidaysYearModel } from '../../../shared/models/holidays.model';
 
-
 @Component({
   selector: 'app-holidays',
   templateUrl: './holidays.component.html',
@@ -22,18 +21,18 @@ export class HolidaysComponent implements OnInit {
 
   public isLoading: Boolean = true;
 
-  constructor(private holidaysService: HolidaysApiService) {
-  }
+  constructor(private holidaysService: HolidaysApiService) {}
 
   ngOnInit() {
     this.fileControl = new FormControl();
     this.filterYear = new Date().getFullYear().toString();
 
-    this.holidaysService.getAllHolidays()
+    this.holidaysService
+      .getAllHolidays()
       .subscribe(res => {
         this.holidays$.next(res[0]);
-      }).add(() => this.isLoading = false);
-
+      })
+      .add(() => (this.isLoading = false));
 
     this.fileControl.valueChanges.subscribe(res => {
       if (res) {
@@ -46,7 +45,6 @@ export class HolidaysComponent implements OnInit {
             if (currentID) {
               this.holidaysService.updateHolidays({ data: this.mapper(result, file), _id: currentID });
               this.holidays$.next({ data: this.mapper(result, file), _id: currentID });
-
             } else {
               this.holidaysService.addHolidays({ data: this.mapper(result, file) }).subscribe();
               this.holidays$.next({ data: this.mapper(result, file) });

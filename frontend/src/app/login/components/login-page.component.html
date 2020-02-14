@@ -1,42 +1,30 @@
 <div class="wrapper">
-  <div class="login-form"
-    [formGroup]="loginForm"
-    (keydown.enter)=login()>
+  <div class="login-form" [formGroup]="loginForm" (keydown.enter)="login()">
     <div class="form-group">
       <mat-form-field>
-        <input matInput
-          placeholder="E-Mail"
-          autocomplete="off"
-          formControlName="username">
-        <span matSuffix *ngIf='(settings$ | async)?.FEATURE_AUTH_TYPE !== "PASSWORD"'
-          class="input-login__suffix">{{(settings$ | async)?.MAIL_POSTFIX}}</span>
+        <input matInput placeholder="E-Mail" autocomplete="off" formControlName="username" />
+        <span matSuffix *ngIf="(settings$ | async)?.FEATURE_AUTH_TYPE !== 'PASSWORD'" class="input-login__suffix">
+          {{ (settings$ | async)?.MAIL_POSTFIX }}
+        </span>
       </mat-form-field>
     </div>
     <div class="form-group">
       <mat-form-field class="example-full-width">
-        <input matInput
-          placeholder="password"
-          type="password"
-          autocomplete="off"
-          formControlName="password">
+        <input matInput placeholder="password" type="password" autocomplete="off" formControlName="password" />
       </mat-form-field>
     </div>
     <div class="form-footer">
       <div>
-        <button type="submit"
-          mat-raised-button
-          color="primary"
-          (click)="login()"
-          [disabled]="loginForm.invalid">Войти</button>
+        <button type="submit" mat-raised-button color="primary" (click)="login()" [disabled]="loginForm.invalid">
+          Войти
+        </button>
       </div>
-      <div *ngIf='(settings$ | async)?.FEATURE_AUTH_TYPE === "PASSWORD"'>
-        <button type="submit"
-          mat-raised-button
-          color="primary"
-          routerLink='/registration'>Регистрация</button></div>
+      <div *ngIf="(settings$ | async)?.FEATURE_AUTH_TYPE === 'PASSWORD'">
+        <button type="submit" mat-raised-button color="primary" routerLink="/registration">Регистрация</button>
+      </div>
     </div>
     <div *ngIf="errorMessage" class="response-message error">
-      Неправильный логин или пароль. 
+      Неправильный логин или пароль.
     </div>
   </div>
 </div>

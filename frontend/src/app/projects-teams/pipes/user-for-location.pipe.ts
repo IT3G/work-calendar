@@ -6,7 +6,6 @@ import { LocationEnum } from '../../shared/models/location.enum';
   name: 'userForLocation'
 })
 export class UserForLocationPipe implements PipeTransform {
-
   transform(users: Employee[], location: LocationEnum): Employee[] {
     if (!users) {
       return [];

@@ -7,8 +7,10 @@ export class CustomDateAdapter extends NativeDateAdapter {
     return 1;
   }
   parse(value: string) {
-    let it = value.split('.');
-    if (it.length == 3) return new Date(+it[2], +it[1] - 1, +it[0], 12);
+    const it = value.split('.');
+    if (it.length === 3) {
+      return new Date(+it[2], +it[1] - 1, +it[0], 12);
+    }
   }
 
   format(date: Date, displayFormat: Object) {

@@ -19,21 +19,22 @@ $borderColor: #e3e3e3;
   font-weight: 500;
   margin-top: 30px;
 
-  &.row_28{
-    grid-template-columns: 30px 240px repeat(28, 1fr)
+  &.row_28 {
+    grid-template-columns: 30px 240px repeat(28, 1fr);
   }
 
-  &.row_29{
-    grid-template-columns: 30px 240px repeat(29, 1fr)
+  &.row_29 {
+    grid-template-columns: 30px 240px repeat(29, 1fr);
   }
 
-  &.row_30{
-    grid-template-columns: 30px 240px repeat(30, 1fr)
+  &.row_30 {
+    grid-template-columns: 30px 240px repeat(30, 1fr);
   }
 
-  &.row_31{
-    grid-template-columns: 30px 240px repeat(31, 1fr)
-  }}
+  &.row_31 {
+    grid-template-columns: 30px 240px repeat(31, 1fr);
+  }
+}
 
 .table-scrolled {
   max-height: calc(100vh - 450px);
@@ -42,20 +43,20 @@ $borderColor: #e3e3e3;
   @extend .scrollbar;
 
   display: grid;
-  &.row_28{
-    grid-template-columns: 30px 240px repeat(28, 1fr)
+  &.row_28 {
+    grid-template-columns: 30px 240px repeat(28, 1fr);
   }
 
-  &.row_29{
-    grid-template-columns: 30px 240px repeat(29, 1fr)
+  &.row_29 {
+    grid-template-columns: 30px 240px repeat(29, 1fr);
   }
 
-  &.row_30{
-    grid-template-columns: 30px 240px repeat(30, 1fr)
+  &.row_30 {
+    grid-template-columns: 30px 240px repeat(30, 1fr);
   }
 
-  &.row_31{
-    grid-template-columns: 30px 240px repeat(31, 1fr)
+  &.row_31 {
+    grid-template-columns: 30px 240px repeat(31, 1fr);
   }
 }
 
@@ -107,7 +108,6 @@ $borderColor: #e3e3e3;
   display: flex;
   justify-content: center;
 }
-
 
 mat-form-field {
   margin-right: 20px;

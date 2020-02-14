@@ -2,5 +2,12 @@
   "useTabs": false,
   "printWidth": 120,
   "tabWidth": 2,
-  "singleQuote": true
+  "singleQuote": true,
+  "semi": true,
+  "bracketSpacing": true,
+  "requirePragma": false,
+  "insertPragma": false,
+  "proseWrap": "preserve",
+  "htmlWhitespaceSensitivity": "ignore",
+  "endOfLine": "lf"
 }

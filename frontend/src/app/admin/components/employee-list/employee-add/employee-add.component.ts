@@ -16,6 +16,8 @@ export class EmployeeAddComponent {
   }
 
   public onEnter(e: KeyboardEvent): void {
-    if (e.keyCode === 13) this.dialogRef.close(this.data.login);
+    if (e.key === 'Enter') {
+      this.dialogRef.close(this.data.login);
+    }
   }
 }

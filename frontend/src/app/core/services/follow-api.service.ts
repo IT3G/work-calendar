@@ -8,8 +8,7 @@ import { FollowModel, UserFollow } from '../../shared/models/follow.model';
   providedIn: 'root'
 })
 export class FollowApiService {
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
   public getUserFollow(userId: string): Observable<UserFollow> {
     return this.http.get<UserFollow>(`${environment.baseUrl}/follow/user-follow/${userId}`);

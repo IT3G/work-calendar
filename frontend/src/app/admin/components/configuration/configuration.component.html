@@ -1,119 +1,85 @@
 <div class="container">
-  <div class="col-md-6 grid"
-    [formGroup]='configForm'>
-
-    <div class='title'>Database user:</div>
+  <div class="col-md-6 grid" [formGroup]="configForm">
+    <div class="title">Database user:</div>
     <div class="form-group">
       <mat-form-field>
-        <input matInput
-          autocomplete="off"
-          formControlName="dbUser">
+        <input matInput autocomplete="off" formControlName="dbUser" />
       </mat-form-field>
     </div>
-    <div class='title'>Database password:</div>
+    <div class="title">Database password:</div>
     <div class="form-group">
       <mat-form-field>
-        <input matInput
-          autocomplete="off"
-          formControlName="dbPassowrd">
+        <input matInput autocomplete="off" formControlName="dbPassowrd" />
       </mat-form-field>
     </div>
-    <div class='title'>Database url:</div>
+    <div class="title">Database url:</div>
     <div class="form-group">
       <mat-form-field>
-        <input matInput
-          autocomplete="off"
-          formControlName="dbUrl">
+        <input matInput autocomplete="off" formControlName="dbUrl" />
       </mat-form-field>
     </div>
-    <div class='title'>Mail host:</div>
+    <div class="title">Mail host:</div>
     <div class="form-group">
       <mat-form-field>
-        <input matInput
-          autocomplete="off"
-          formControlName="mailHost">
+        <input matInput autocomplete="off" formControlName="mailHost" />
       </mat-form-field>
     </div>
-    <div class='title'>Application port:</div>
+    <div class="title">Application port:</div>
     <div class="form-group">
       <mat-form-field>
-        <input matInput
-          autocomplete="off"
-          formControlName="appPort">
+        <input matInput autocomplete="off" formControlName="appPort" />
       </mat-form-field>
     </div>
-    <div class='title'>Mail sender name:</div>
+    <div class="title">Mail sender name:</div>
     <div class="form-group">
       <mat-form-field>
-        <input matInput
-          autocomplete="off"
-          formControlName="mailSenderName">
+        <input matInput autocomplete="off" formControlName="mailSenderName" />
       </mat-form-field>
     </div>
-    <div class='title'>Mail sender adress:</div>
+    <div class="title">Mail sender adress:</div>
     <div class="form-group">
       <mat-form-field>
-        <input matInput
-          autocomplete="off"
-          formControlName="mailSenderAdress">
+        <input matInput autocomplete="off" formControlName="mailSenderAdress" />
       </mat-form-field>
     </div>
-    <div class='title'>Ldap filter:</div>
+    <div class="title">Ldap filter:</div>
     <div class="form-group">
       <mat-form-field>
-        <input matInput
-          autocomplete="off"
-          formControlName="ldapFilter">
+        <input matInput autocomplete="off" formControlName="ldapFilter" />
       </mat-form-field>
     </div>
-    <div class='title'>Mail prefix:</div>
+    <div class="title">Mail prefix:</div>
     <div class="form-group">
       <mat-form-field>
-        <input matInput
-          autocomplete="off"
-          formControlName="mailPrefix">
+        <input matInput autocomplete="off" formControlName="mailPrefix" />
       </mat-form-field>
     </div>
-    <div class='title'>Reader domain name:</div>
+    <div class="title">Reader domain name:</div>
     <div class="form-group">
       <mat-form-field>
-        <input matInput
-          autocomplete="off"
-          formControlName="readerDomainName">
+        <input matInput autocomplete="off" formControlName="readerDomainName" />
       </mat-form-field>
     </div>
-    <div class='title'>Reader password:</div>
+    <div class="title">Reader password:</div>
     <div class="form-group">
       <mat-form-field>
-        <input matInput
-          autocomplete="off"
-          formControlName="readerPassword">
+        <input matInput autocomplete="off" formControlName="readerPassword" />
       </mat-form-field>
     </div>
-    <div class='title'>Server URL:</div>
+    <div class="title">Server URL:</div>
     <div class="form-group">
       <mat-form-field>
-        <input matInput
-          autocomplete="off"
-          formControlName="serverUrl">
+        <input matInput autocomplete="off" formControlName="serverUrl" />
       </mat-form-field>
     </div>
-    <div class='title'>Suffix:</div>
+    <div class="title">Suffix:</div>
     <div class="form-group">
       <mat-form-field>
-        <input matInput
-          autocomplete="off"
-          formControlName="suffix">
+        <input matInput autocomplete="off" formControlName="suffix" />
       </mat-form-field>
     </div>
     <div class="form-footer">
-      <button type="submit"
-        *ngIf='true'
-        mat-raised-button
-        color="primary"
-        (click)="onSaveConfig()">Сохранить
-      </button>
+      <button type="submit" *ngIf="true" mat-raised-button color="primary" (click)="onSaveConfig()">Сохранить</button>
     </div>
-
   </div>
 </div>

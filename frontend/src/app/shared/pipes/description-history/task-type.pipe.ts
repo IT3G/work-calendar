@@ -12,9 +12,7 @@ export class TaskTypePipe implements PipeTransform {
       return null;
     }
 
-    const agendaColor = AgendaColors.find(
-      (agenda: AgendaColorsModel) => agenda.id === value
-    );
+    const agendaColor = AgendaColors.find((agenda: AgendaColorsModel) => agenda.id === value);
 
     return agendaColor ? agendaColor.title : null;
   }

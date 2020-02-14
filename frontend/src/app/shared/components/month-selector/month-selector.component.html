@@ -1,11 +1,8 @@
-<div class="button-change-month"
-  (click)="prevMonth.emit()">
+<div class="button-change-month" (click)="prevMonth.emit()">
   <i class="fa fa-chevron-circle-left"></i>
 </div>
 
-
 <div class="current-month">{{ date.format() | datePipe: 'MMMM YYYY' }}</div>
-<div class="button-change-month"
-  (click)="nextMonth.emit()">
+<div class="button-change-month" (click)="nextMonth.emit()">
   <i class="fa fa-chevron-circle-right"></i>
 </div>

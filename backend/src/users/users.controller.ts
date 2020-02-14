@@ -9,8 +9,7 @@ import { FollowService } from './services/follow.service';
 @ApiUseTags('Users')
 @Controller('users')
 export class UsersController {
-  constructor(private userService: UsersService) {
-  }
+  constructor(private userService: UsersService) {}
 
   @Get()
   async getUsers(@Res() res) {

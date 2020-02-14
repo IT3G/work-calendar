@@ -1,10 +1,5 @@
 <div class="custom-file-input-wrapper">
-  <input
-    #customFileInput
-    class="native-file-input"
-    type="file"
-    id="file-input"
-    accept="{{fileType}}"/>
+  <input #customFileInput class="native-file-input" type="file" id="file-input" accept="{{ fileType }}" />
 
   <div class="custom-upload-file-input">
     <button
@@ -14,8 +9,9 @@
       type="button"
       (click)="customFileInput.click()"
       form="file-input"
-      color="primary">
-      {{buttonText}}
+      color="primary"
+    >
+      {{ buttonText }}
     </button>
 
     <div *ngIf="!!file" class="selected-file-name">
@@ -23,8 +19,7 @@
     </div>
 
     <button *ngIf="!!file" mat-icon-button (click)="onFileReset()" class="close-button">
-      <i class="fa fa-times delete-btn"
-         aria-hidden="true"></i>
+      <i class="fa fa-times delete-btn" aria-hidden="true"></i>
     </button>
     <div class="error-message">
       <ng-content></ng-content>

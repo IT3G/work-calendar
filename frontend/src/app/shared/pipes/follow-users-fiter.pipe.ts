@@ -6,7 +6,6 @@ import { FollowModel } from '../models/follow.model';
   name: 'followUsersFilter'
 })
 export class FollowUsersFilterPipe implements PipeTransform {
-
   transform(users: Employee[] = [], following: Employee[] = [], removed: FollowModel[] = []): Employee[] {
     if (!users) {
       return [];

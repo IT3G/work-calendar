@@ -90,7 +90,7 @@ export class ProfileProjectsComponent implements OnChanges {
     this.elRef.nativeElement.innerHTML = '';
     this.elRef.nativeElement.appendChild(canvas);
 
-    var myChart = new Chart(canvas.getContext('2d'), {
+    const myChart = new Chart(canvas.getContext('2d'), {
       type: 'line',
       data: {
         datasets

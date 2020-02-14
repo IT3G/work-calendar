@@ -7,8 +7,7 @@ import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
 @ApiUseTags('Follow')
 @Controller('follow')
 export class FollowController {
-  constructor(private followService: FollowService) {
-  }
+  constructor(private followService: FollowService) {}
 
   @Get('/user-follow/:id')
   async getUserFollow(@Res() res, @Param('id') userId) {

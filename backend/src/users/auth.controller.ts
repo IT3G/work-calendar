@@ -15,7 +15,7 @@ export class AuthController {
     private ldapService: LdapService,
     private usersService: UsersService,
     private authService: AuthService,
-    private config: Config,
+    private config: Config
   ) {}
   @Post()
   async auth(@Res() res: Response, @Body() credentials: LoginModel) {

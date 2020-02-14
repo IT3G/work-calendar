@@ -8,8 +8,7 @@ import { HolidaysModel } from '../../shared/models/holidays.model';
   providedIn: 'root'
 })
 export class HolidaysApiService {
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
   public getAllHolidays(): Observable<HolidaysModel[]> {
     return this.http.get<HolidaysModel[]>(`${environment.baseUrl}/holidays`);
   }

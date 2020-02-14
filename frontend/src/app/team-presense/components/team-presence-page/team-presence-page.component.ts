@@ -20,7 +20,6 @@ import { EmployeeApiService } from '../../../core/services/employee-api.service'
   styleUrls: ['./team-presence-page.component.scss']
 })
 export class TeamPresencePageComponent implements OnInit, OnDestroy {
-
   private qParamsSnapshotMonth = this.route.snapshot.queryParams.date;
   public date$ = new BehaviorSubject<moment.Moment>(
     this.qParamsSnapshotMonth ? moment(this.qParamsSnapshotMonth, 'MM-YYYY') : moment()
@@ -36,7 +35,6 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
   public subdivisions: DictionaryModel[];
   public locations = locationsDictionary;
 
-
   private subscription = new Subscription();
 
   constructor(
@@ -46,9 +44,8 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     private router: Router,
     private fb: FormBuilder,
     private dictionaryApi: DictionaryApiService,
-    private holidaysApi: HolidaysApiService,
-  ) {
-  }
+    private holidaysApi: HolidaysApiService
+  ) {}
 
   ngOnInit() {
     this.initFilterForm(this.route.snapshot.queryParams);
@@ -57,10 +54,11 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     this.getCommonData();
 
     this.monthData$ = this.date$.pipe(
-      map((date) => date.format('YYYY-MM-DD')),
+      map(date => date.format('YYYY-MM-DD')),
       distinctUntilChanged(),
-      switchMap((date) => this.tasksApi.loadTasksByMonth(date)),
-      share());
+      switchMap(date => this.tasksApi.loadTasksByMonth(date)),
+      share()
+    );
 
     this.updateQueryParamsOnChange();
   }
@@ -83,7 +81,8 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
         this.projects = projects;
         this.jobPositions = jobPositions;
         this.subdivisions = subdivisions;
-      }));
+      })
+    );
   }
 
   public prevMonth(): void {

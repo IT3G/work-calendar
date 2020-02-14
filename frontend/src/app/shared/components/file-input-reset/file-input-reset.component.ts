@@ -22,13 +22,10 @@ export class FileInputResetComponent implements ControlValueAccessor {
   @Input()
   buttonText: string;
 
-  private onChange = (value: File | null) => {
-  };
-  private onTouched = () => {
-  };
+  private onChange = (value: File | null) => {};
+  private onTouched = () => {};
 
-  constructor(private host: ElementRef<HTMLInputElement>) {
-  }
+  constructor(private host: ElementRef<HTMLInputElement>) {}
 
   @HostListener('click')
   click() {

@@ -1,59 +1,45 @@
-<form class="form-container"
-    [formGroup]="form">
+<form class="form-container" [formGroup]="form">
+  <mat-form-field class="control datesFrom">
+    <input matInput formControlName="dateStart" [matDatepicker]="picker" placeholder="с" />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
 
-    <mat-form-field class="control datesFrom">
-        <input matInput
-            formControlName="dateStart"
-            [matDatepicker]="picker"
-            placeholder="с" />
-        <mat-datepicker-toggle matSuffix
-            [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
+  <mat-form-field class="control datesFor">
+    <input
+      matInput
+      formControlName="dateEnd"
+      [min]="form.get('dateStart').value"
+      [matDatepicker]="pickerTo"
+      placeholder="по"
+    />
+    <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+    <mat-datepicker #pickerTo></mat-datepicker>
+  </mat-form-field>
 
-    <mat-form-field class="control datesFor">
-        <input matInput
-            formControlName="dateEnd"
-            [min]="form.get('dateStart').value"
-            [matDatepicker]="pickerTo"
-            placeholder="по" />
-        <mat-datepicker-toggle matSuffix
-            [for]="pickerTo"></mat-datepicker-toggle>
-        <mat-datepicker #pickerTo></mat-datepicker>
-    </mat-form-field>
+  <mat-form-field class="control">
+    <mat-select placeholder="вид" formControlName="type" (selectionChange)="resetComment()">
+      <mat-option *ngFor="let item of options" [value]="item">
+        {{ item?.title }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
-    <mat-form-field class="control">
-        <mat-select placeholder="вид"
-            formControlName="type"
-            (selectionChange)="resetComment()">
-            <mat-option *ngFor="let item of options"
-                [value]="item">
-                {{ item?.title }}
-            </mat-option>
-        </mat-select>
-    </mat-form-field>
-
-
-    <mat-form-field class="control comment">
-        <textarea class="comment-textarea"
-            matInput
-            formControlName="comment"
-            placeholder="Комментарий"></textarea>
-        <button mat-button
-            *ngIf="form.controls['comment'].value"
-            mat-icon-button
-            class="clear-button"
-            aria-label="Clear"
-            (click)="form.controls['comment'].reset()">
-            <i class="fa fa-times icon-btn"></i>
-        </button>
-    </mat-form-field>
-
-    <button mat-raised-button
-        class="control submit-button"
-        color="primary"
-        [disabled]="form.invalid"
-        (click)="addTask()">
-        Сохранить
+  <mat-form-field class="control comment">
+    <textarea class="comment-textarea" matInput formControlName="comment" placeholder="Комментарий"></textarea>
+    <button
+      mat-button
+      *ngIf="form.controls['comment'].value"
+      mat-icon-button
+      class="clear-button"
+      aria-label="Clear"
+      (click)="form.controls['comment'].reset()"
+    >
+      <i class="fa fa-times icon-btn"></i>
     </button>
+  </mat-form-field>
+
+  <button mat-raised-button class="control submit-button" color="primary" [disabled]="form.invalid" (click)="addTask()">
+    Сохранить
+  </button>
 </form>

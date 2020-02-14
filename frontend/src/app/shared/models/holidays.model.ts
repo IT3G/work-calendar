@@ -1,4 +1,3 @@
-
 export interface HolidaysModel {
   data: HolidaysYearModel[];
   _id?: string;
@@ -44,9 +43,8 @@ export enum HolidaysRawData {
   yearMonth = 'Год/Месяц',
   hours24 = 'Количество рабочих часов при 24-часовой рабочей неделе',
   hours36 = 'Количество рабочих часов при 36-часовой рабочей неделе',
-  hours40 = 'Количество рабочих часов при 40-часовой рабочей неделе',
+  hours40 = 'Количество рабочих часов при 40-часовой рабочей неделе'
 }
-
 
 export enum MonthNumber {
   'Jan',
@@ -60,5 +58,5 @@ export enum MonthNumber {
   'Sept',
   'Oct',
   'Nov',
-  'Dec',
+  'Dec'
 }
