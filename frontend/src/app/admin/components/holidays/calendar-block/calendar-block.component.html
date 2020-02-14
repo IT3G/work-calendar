@@ -1,8 +1,8 @@
 <div class="calendar">
   <div class="month-indicator">
-    <div>{{getMonthName(date.month)}}</div>
+    <div>{{ getMonthName(date.month) }}</div>
   </div>
-  <div class="holidays-list">{{days}}</div>
+  <div class="holidays-list">{{ days }}</div>
   <div class="day-of-week">
     <div>Пн</div>
     <div>Вт</div>
@@ -13,14 +13,13 @@
     <div>Вс</div>
   </div>
   <div class="date-grid">
+    <div [ngStyle]="{ 'grid-column': getDayNumber() }" [ngClass]="{ holiday: isHoliday(1) }">1</div>
     <div
-      [ngStyle]="{'grid-column': getDayNumber()}" [ngClass]="{'holiday' : isHoliday(1)}">1
-    </div>
-    <div title="{{getTitle(day)}}"
-         *ngFor="let day of daysInMonth"
-         [ngClass]="{'holiday' : isHoliday(day), 'pre-holiday': isPreHoliday(day)}">
-      {{day}}
+      title="{{ getTitle(day) }}"
+      *ngFor="let day of daysInMonth"
+      [ngClass]="{ holiday: isHoliday(day), 'pre-holiday': isPreHoliday(day) }"
+    >
+      {{ day }}
     </div>
   </div>
 </div>
-

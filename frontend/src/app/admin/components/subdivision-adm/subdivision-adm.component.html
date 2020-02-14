@@ -1,28 +1,15 @@
 <div class="container">
+  <button mat-raised-button color="primary" (click)="openDialog()">Добавить подразделение</button>
 
-  <button mat-raised-button
-          color="primary"
-          (click)="openDialog()">Добавить подразделение
-  </button>
-
-  <table mat-table
-         [dataSource]="subdivisions$ | async"
-         class="mat-elevation-z6">
-
+  <table mat-table [dataSource]="subdivisions$ | async" class="mat-elevation-z6">
     <ng-container matColumnDef="title">
-      <th mat-header-cell
-          *matHeaderCellDef>Название подразделения</th>
-      <td mat-cell
-          *matCellDef="let subdivision">
-        <a routerLink="/employee-list"
-           [queryParams]="{subdivision: subdivision.name}">{{subdivision.name}}</a>
-
+      <th mat-header-cell *matHeaderCellDef>Название подразделения</th>
+      <td mat-cell *matCellDef="let subdivision">
+        <a routerLink="/employee-list" [queryParams]="{ subdivision: subdivision.name }">{{ subdivision.name }}</a>
       </td>
     </ng-container>
 
-    <tr mat-header-row
-        *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row
-        *matRowDef="let row; columns: displayedColumns"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
 </div>

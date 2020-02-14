@@ -4,42 +4,38 @@
 <div class="header element comment">Комментарий</div>
 <div class="header element"></div>
 
-<ng-template ngFor
-    let-task
-    [ngForOf]="tasks | sortTasksByDateStart">
-    <div class="element start">{{task.dateStart | date: 'dd MMMM yyyy'}}</div>
-    <div class="element end">{{task.dateEnd | date: 'dd MMMM yyyy'}}</div>
-    <div class="element type">
-        <div class="type-badge"
-            [ngStyle]="{'background-color' : task.type | taskTypeColor }">
-            {{task.type| taskType}}
-        </div>
+<ng-template ngFor let-task [ngForOf]="tasks | sortTasksByDateStart">
+  <div class="element start">{{ task.dateStart | date: 'dd MMMM yyyy' }}</div>
+  <div class="element end">{{ task.dateEnd | date: 'dd MMMM yyyy' }}</div>
+  <div class="element type">
+    <div class="type-badge" [ngStyle]="{ 'background-color': task.type | taskTypeColor }">
+      {{ task.type | taskType }}
     </div>
-    <div class="element comment">{{task.comment}}</div>
+  </div>
+  <div class="element comment">{{ task.comment }}</div>
 
-    <div class="element buttons">
-        <ng-container *ngIf="task.type === dayTypes.VACATION">
+  <div class="element buttons">
+    <ng-container *ngIf="task.type === dayTypes.VACATION">
+      <i
+        title="Подтвердить согласование отпуска"
+        class="fa fa-check"
+        *ngIf="!task.approved; else approveBtn"
+        aria-hidden="true"
+        (click)="openApproveDialog(task._id)"
+      ></i>
 
-            <i title="Подтвердить согласование отпуска"
-                class="fa fa-check"
-                *ngIf="!task.approved; else approveBtn"
-                aria-hidden="true"
-                (click)="openApproveDialog(task._id)"></i>
+      <ng-template #approveBtn>
+        <i title="Отпуск согласован" class="fa disabled fa-check-circle" aria-hidden="true"></i>
 
-            <ng-template #approveBtn>
-                <i title="Отпуск согласован"
-                    class="fa disabled fa-check-circle"
-                    aria-hidden="true"></i>
+        <i
+          (click)="printStatement(task)"
+          title="Распечатать заявление на отпуск"
+          class="fa fa-print"
+          aria-hidden="true"
+        ></i>
+      </ng-template>
+    </ng-container>
 
-                <i (click)="printStatement(task)"
-                    title="Распечатать заявление на отпуск"
-                    class="fa fa-print"
-                    aria-hidden="true"></i>
-            </ng-template>
-        </ng-container>
-
-        <i (click)="openDeleteDialog(task._id)"
-            class="fa fa-times"
-            aria-hidden="true"></i>
-    </div>
+    <i (click)="openDeleteDialog(task._id)" class="fa fa-times" aria-hidden="true"></i>
+  </div>
 </ng-template>
