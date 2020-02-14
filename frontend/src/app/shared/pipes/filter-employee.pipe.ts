@@ -15,14 +15,14 @@ export class FilterEmployeePipe implements PipeTransform {
 
     const currentDate = moment();
 
-    return value.filter((v) => {
+    return value.filter(v => {
       if (!v.projectsNew || !v.projectsNew.length) {
         return false;
       }
 
       return v.projectsNew
-        .filter((p) => p.metadata.some((m) => currentDate.isSame(NewProjectUtils.mapMetadataToDate(m), 'month')))
-        .some((proj) => proj.project_id === filter);
+        .filter(p => p.metadata.some(m => currentDate.isSame(NewProjectUtils.mapMetadataToDate(m), 'month')))
+        .some(proj => proj.project_id === filter);
     });
   }
 }

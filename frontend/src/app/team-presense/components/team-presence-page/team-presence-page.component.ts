@@ -54,9 +54,9 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     this.getCommonData();
 
     this.monthData$ = this.date$.pipe(
-      map((date) => date.format('YYYY-MM-DD')),
+      map(date => date.format('YYYY-MM-DD')),
       distinctUntilChanged(),
-      switchMap((date) => this.tasksApi.loadTasksByMonth(date)),
+      switchMap(date => this.tasksApi.loadTasksByMonth(date)),
       share()
     );
 
@@ -74,7 +74,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     const subdivisions$ = this.dictionaryApi.getAll('subdivision');
 
     this.subscription.add(
-      forkJoin([holidays$, projects$, jobPositions$, subdivisions$]).subscribe((res) => {
+      forkJoin([holidays$, projects$, jobPositions$, subdivisions$]).subscribe(res => {
         const [holidays, projects, jobPositions, subdivisions] = res;
 
         this.holidays = holidays;
@@ -95,7 +95,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
 
   private updateQueryParamsOnChange() {
     this.subscription.add(
-      this.date$.subscribe((date) =>
+      this.date$.subscribe(date =>
         this.router.navigate([], {
           queryParams: { ...this.route.snapshot.queryParams, date: moment(date).format('MM-YYYY') }
         })
@@ -103,7 +103,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     );
 
     this.subscription.add(
-      this.filtersForm.valueChanges.subscribe((filters) =>
+      this.filtersForm.valueChanges.subscribe(filters =>
         this.router.navigate([], {
           queryParams: { ...this.route.snapshot.queryParams, ...filters }
         })
@@ -113,7 +113,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
 
   private getMonthDays(): Observable<moment.Moment[]> {
     return this.date$.pipe(
-      map((date) => {
+      map(date => {
         const startOfMonth = date.clone().startOf('month');
         const endOfMonth = date.clone().endOf('month');
 

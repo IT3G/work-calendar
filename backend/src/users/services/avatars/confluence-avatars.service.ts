@@ -21,7 +21,7 @@ export class ConfluenceAvatarService extends AvatarsService {
         auth: authData
       })
       .pipe(
-        switchMap((userInfoResponse) => {
+        switchMap(userInfoResponse => {
           const fullPicturePath = `${this.config.CONFLUENCE_BASE_URL}${userInfoResponse.data.profilePicture.path}`;
           return this.http.get(fullPicturePath, {
             auth: authData,

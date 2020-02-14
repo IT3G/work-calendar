@@ -17,12 +17,12 @@ export class GitInfoService {
     this.http
       .get<any>('assets/git-info.json')
       .pipe(
-        tap((version) => {
+        tap(version => {
           this.version$.next(version.git);
           this.addGitInfoToConsole();
         }),
         switchMap(() => interval(2 * 60 * 1000)),
-        switchMap(() => this.http.get('assets/git-info.json').pipe(catchError((err) => of(err))))
+        switchMap(() => this.http.get('assets/git-info.json').pipe(catchError(err => of(err))))
       )
       .subscribe((res: any) => {
         if (res.sha && this.version$.getValue().git.sha !== res.git.sha) {
@@ -44,8 +44,8 @@ export class GitInfoService {
   /** Получение инфы в виде строки */
   public getVersionAsString(): Observable<string> {
     return this.version$.pipe(
-      filter((v) => !!v),
-      map((version) => {
+      filter(v => !!v),
+      map(version => {
         const date = moment(version.committerDate);
         const result = `${date.format('DD.MM.YYYY HH:mm:ss')}`;
 

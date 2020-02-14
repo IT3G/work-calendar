@@ -32,15 +32,15 @@ export class DictionaryAdminComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.dictionaryControl.valueChanges
         .pipe(
-          tap((res) => {
+          tap(res => {
             if (!res) {
               this.selectedDictionary$.next([]);
             }
           }),
-          filter((res) => !!res),
-          switchMap((res) => this.dictionaryApi.getAll(res))
+          filter(res => !!res),
+          switchMap(res => this.dictionaryApi.getAll(res))
         )
-        .subscribe((res) => this.selectedDictionary$.next(res.sort(this.sortByName)))
+        .subscribe(res => this.selectedDictionary$.next(res.sort(this.sortByName)))
     );
   }
 
@@ -54,7 +54,7 @@ export class DictionaryAdminComponent implements OnInit, OnDestroy {
 
   public delete(item: DictionaryModel) {
     this.dictionaryApi.delete(this.dictionaryControl.value, item._id).subscribe(() => {
-      this.selectedDictionary$.next(this.selectedDictionary$.value.filter((i) => i._id !== item._id));
+      this.selectedDictionary$.next(this.selectedDictionary$.value.filter(i => i._id !== item._id));
       this.snackbar.showSuccessSnackBar('Позиция успешно удалена');
     });
   }
@@ -69,7 +69,7 @@ export class DictionaryAdminComponent implements OnInit, OnDestroy {
       .afterClosed()
       .pipe(
         first(),
-        filter((res) => !!res),
+        filter(res => !!res),
         switchMap((res: DictionaryModel) => {
           if (res._id) {
             return this.dictionaryApi.update(this.dictionaryControl.value, res);
@@ -77,9 +77,9 @@ export class DictionaryAdminComponent implements OnInit, OnDestroy {
           return this.dictionaryApi.add(this.dictionaryControl.value, res);
         })
       )
-      .subscribe((res) => {
+      .subscribe(res => {
         this.snackbar.showSuccessSnackBar('Операция выполнена успешно');
-        const currentDictionaryState = this.selectedDictionary$.value.filter((d) => d._id !== res._id);
+        const currentDictionaryState = this.selectedDictionary$.value.filter(d => d._id !== res._id);
         this.selectedDictionary$.next([...currentDictionaryState, res].sort(this.sortByName));
       });
   }

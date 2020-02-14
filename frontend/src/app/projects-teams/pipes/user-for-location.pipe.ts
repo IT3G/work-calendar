@@ -10,6 +10,6 @@ export class UserForLocationPipe implements PipeTransform {
     if (!users) {
       return [];
     }
-    return users.filter((user) => user.location === location);
+    return users.filter(user => user.location === location);
   }
 }

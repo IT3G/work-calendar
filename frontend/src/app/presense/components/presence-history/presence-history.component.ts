@@ -28,13 +28,13 @@ export class PresenceHistoryComponent {
   constructor(private confirm: ConfirmService, private printService: PrintHelperService) {}
 
   openApproveDialog(taskId: string) {
-    this.confirm.openDialog('Вы согласовали отпуск?').subscribe((res) => res && this.approve.emit(taskId));
+    this.confirm.openDialog('Вы согласовали отпуск?').subscribe(res => res && this.approve.emit(taskId));
   }
 
   openDeleteDialog(taskId: string) {
     this.confirm
       .openDialog('Вы уверены, что хотите удалить запись?')
-      .subscribe((res) => res && this.deleteTask.emit(taskId));
+      .subscribe(res => res && this.deleteTask.emit(taskId));
   }
 
   printStatement(task: TaskModel): void {

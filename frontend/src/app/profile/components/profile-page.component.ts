@@ -48,7 +48,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
     this.getUserInfo();
     this.isAdmin$ = this.contextStoreService.isCurrentUserAdmin$();
-    this.settings$ = this.contextStoreService.settings$.pipe(filter((s) => !!s));
+    this.settings$ = this.contextStoreService.settings$.pipe(filter(s => !!s));
   }
 
   ngOnDestroy() {
@@ -64,11 +64,11 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   }
 
   public addFollow(data: FollowModel): void {
-    this.followApi.addFollow(data).subscribe((res) => this.loadFollow(this.selectedUser._id));
+    this.followApi.addFollow(data).subscribe(res => this.loadFollow(this.selectedUser._id));
   }
 
   public deleteFollowing(id: string) {
-    this.followApi.deleteFollow(id).subscribe((res) => this.loadFollow(this.selectedUser._id));
+    this.followApi.deleteFollow(id).subscribe(res => this.loadFollow(this.selectedUser._id));
   }
 
   public getAvatarSrc() {
@@ -87,16 +87,14 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
         .pipe(
           switchMap((params: { id?: string }) => (params.id ? this.getUserFromApi(params.id) : this.getUserFromStore()))
         )
-        .subscribe((user) => {
+        .subscribe(user => {
           this.selectedUser = user;
           this.login = user.mailNickname;
           this.loadFollow(user._id);
         })
     );
     this.userSubscriptions.add(
-      this.route.queryParams
-        .pipe(filter((query) => !!query.tab))
-        .subscribe((query) => (this.selectedTabIndex = query.tab))
+      this.route.queryParams.pipe(filter(query => !!query.tab)).subscribe(query => (this.selectedTabIndex = query.tab))
     );
   }
 
@@ -105,10 +103,10 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   }
 
   private getUserFromStore() {
-    return this.contextStoreService.getCurrentUser$().pipe(filter((user) => !!user));
+    return this.contextStoreService.getCurrentUser$().pipe(filter(user => !!user));
   }
 
   public loadFollow(userId: string) {
-    this.userSubscriptions.add(this.followApi.getUserFollow(userId).subscribe((res) => (this.userFollow = res)));
+    this.userSubscriptions.add(this.followApi.getUserFollow(userId).subscribe(res => (this.userFollow = res)));
   }
 }

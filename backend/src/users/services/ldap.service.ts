@@ -25,13 +25,13 @@ export class LdapService implements OnApplicationShutdown {
       reconnect: true
     });
 
-    this.client.on('error', (err) => {
+    this.client.on('error', err => {
       console.error(err);
     });
     const filter = await this.getFilter(credentials.username);
     const user = await this.search(filter, credentials.password, add);
     const result = user[0];
-    result.attributes = result.attributes.map((el) => ({
+    result.attributes = result.attributes.map(el => ({
       type: el.type,
       data: this.stringFromUTF8Array(el._vals[0])
     }));
@@ -64,7 +64,7 @@ export class LdapService implements OnApplicationShutdown {
   }
 
   private getAttribute(attributes: Array<{ type: string; data: string }>, val: string) {
-    const attr = attributes.find((el) => el.type === val);
+    const attr = attributes.find(el => el.type === val);
 
     return attr ? attr.data : null;
   }
@@ -72,7 +72,7 @@ export class LdapService implements OnApplicationShutdown {
   private getFilter(username: string): Promise<string> {
     const login = `${username}${this.configService.MAIL_POSTFIX}`;
     return new Promise((resolve, reject) => {
-      this.client.bind(this.config.readerDn, this.config.readerPwd, (err) => {
+      this.client.bind(this.config.readerDn, this.config.readerPwd, err => {
         if (err) {
           reject('Reader bind failed ' + err);
           return;
@@ -96,21 +96,21 @@ export class LdapService implements OnApplicationShutdown {
         (err, searchRes) => {
           const searchList = [];
 
-          searchRes.on('searchEntry', (entry) => {
+          searchRes.on('searchEntry', entry => {
             searchList.push(entry);
           });
 
-          searchRes.on('error', (entry) => {
+          searchRes.on('error', entry => {
             console.error('error');
           });
 
-          searchRes.on('end', (retVal) => {
+          searchRes.on('end', retVal => {
             if (!searchList.length) {
               reject({ user: null });
               return;
             }
 
-            this.client.bind(searchList[0].objectName, password, (error) => {
+            this.client.bind(searchList[0].objectName, password, error => {
               if (add && !error) {
                 resolve(searchList);
               }

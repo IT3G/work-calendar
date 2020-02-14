@@ -84,8 +84,8 @@ export class TaskService {
       ]
     });
 
-    const result = users.map((employee) => {
-      const currentUserTasks = tasks.filter((i) => i.employee === employee.mailNickname);
+    const result = users.map(employee => {
+      const currentUserTasks = tasks.filter(i => i.employee === employee.mailNickname);
       const day = moment(date)
         .clone()
         .startOf('month');
@@ -97,7 +97,7 @@ export class TaskService {
 
       while (day.isSameOrBefore(endOfMonth)) {
         const task = currentUserTasks
-          .filter((i) => {
+          .filter(i => {
             if (i.dateEnd) {
               return day.isBetween(moment(i.dateStart), moment(i.dateEnd), 'day', '[]');
             }
@@ -130,7 +130,7 @@ export class TaskService {
       const userSubject = await this.userService.getUserByLogin(task.employee);
       const userCreated = await this.userService.getUserByLogin(task.employeeCreated);
       const userFollowers = await this.followService.getUserFollowers(userSubject.id);
-      let addressesArray = userFollowers.map((user) => user.email);
+      let addressesArray = userFollowers.map(user => user.email);
 
       if (userSubject.id.toString() !== userCreated.id.toString()) {
         addressesArray = [...addressesArray, userSubject.email];

@@ -19,6 +19,6 @@ export class UserCardComponent implements OnInit {
   constructor(private contextStoreService: ContextStoreService) {}
 
   ngOnInit() {
-    this.settings$ = this.contextStoreService.settings$.pipe(filter((s) => !!s));
+    this.settings$ = this.contextStoreService.settings$.pipe(filter(s => !!s));
   }
 }

@@ -22,6 +22,6 @@ export class CurrentDayComponent implements OnInit {
 
   ngOnInit() {
     this.currentDate$ = this.contextStoreService.getCurrentDate$();
-    this.settings$ = this.contextStoreService.settings$.pipe(filter((s) => !!s));
+    this.settings$ = this.contextStoreService.settings$.pipe(filter(s => !!s));
   }
 }

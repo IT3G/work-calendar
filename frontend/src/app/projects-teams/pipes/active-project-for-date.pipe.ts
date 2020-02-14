@@ -15,11 +15,11 @@ export class ActiveProjectForDatePipe implements PipeTransform {
     }
 
     return users.filter(
-      (u) => u.projectsNew && u.projectsNew.some((p) => p.project_id === project._id && this.isProjectAtMonth(p, date))
+      u => u.projectsNew && u.projectsNew.some(p => p.project_id === project._id && this.isProjectAtMonth(p, date))
     );
   }
 
   private isProjectAtMonth(p: ProjectNew, date: moment.Moment): boolean {
-    return p.metadata.some((m) => NewProjectUtils.mapMetadataToDate(m).isSame(date, 'month'));
+    return p.metadata.some(m => NewProjectUtils.mapMetadataToDate(m).isSame(date, 'month'));
   }
 }

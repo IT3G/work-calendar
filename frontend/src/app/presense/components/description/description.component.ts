@@ -72,7 +72,7 @@ export class DescriptionComponent implements OnInit {
       employeeCreated: this.contextStoreService.getCurrentUser().mailNickname
     };
 
-    this.taskApiService.addTask(taskFormVal).subscribe((res) => {
+    this.taskApiService.addTask(taskFormVal).subscribe(res => {
       this.snackbar.showSuccessSnackBar('Событие добавлено');
       this.onAddTask.emit(res);
     });
@@ -86,8 +86,8 @@ export class DescriptionComponent implements OnInit {
     this.getCurrentDateSub.add(
       this.contextStoreService
         .getCurrentDate$()
-        .pipe(filter((i) => !!i))
-        .subscribe((res) => {
+        .pipe(filter(i => !!i))
+        .subscribe(res => {
           this.form.get('dateStart').setValue(res.toDate(), { emitEvent: false });
           this.form.get('dateEnd').setValue(null, { emitEvent: false });
         })
@@ -96,15 +96,15 @@ export class DescriptionComponent implements OnInit {
     this.getDayTypeSub.add(
       this.contextStoreService
         .getDayType$()
-        .pipe(filter((i) => !!i))
-        .subscribe((res) => {
-          const agenda = AgendaColors.find((o) => o.id === res);
+        .pipe(filter(i => !!i))
+        .subscribe(res => {
+          const agenda = AgendaColors.find(o => o.id === res);
           this.form.get('type').setValue(agenda, { emitEvent: false });
         })
     );
 
     this.getCommentSub.add(
-      this.contextStoreService.getComment$().subscribe((res) => {
+      this.contextStoreService.getComment$().subscribe(res => {
         this.form.get('comment').setValue(res, { emitEvent: false });
       })
     );

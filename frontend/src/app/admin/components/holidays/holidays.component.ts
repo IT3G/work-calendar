@@ -29,12 +29,12 @@ export class HolidaysComponent implements OnInit {
 
     this.holidaysService
       .getAllHolidays()
-      .subscribe((res) => {
+      .subscribe(res => {
         this.holidays$.next(res[0]);
       })
       .add(() => (this.isLoading = false));
 
-    this.fileControl.valueChanges.subscribe((res) => {
+    this.fileControl.valueChanges.subscribe(res => {
       if (res) {
         Papa.parse(res, {
           header: true,
@@ -67,7 +67,7 @@ export class HolidaysComponent implements OnInit {
   }
 
   private mapper(src: ParseResult, file: File): HolidaysYearModel[] {
-    return src.data.map((item) => {
+    return src.data.map(item => {
       return {
         year: item[HolidaysRawData.yearMonth],
         Jan: item[HolidaysRawData.Jan],

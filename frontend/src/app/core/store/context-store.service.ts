@@ -54,7 +54,7 @@ export class ContextStoreService {
 
   public isCurrentUserAdmin$(): Observable<boolean> {
     return this.currentUser.pipe(
-      filter((user) => !!user),
+      filter(user => !!user),
       map((user: Employee) => user.isAdmin)
     );
   }

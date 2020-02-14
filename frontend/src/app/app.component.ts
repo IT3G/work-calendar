@@ -38,7 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.getEmployees();
     this.subscription.add(this.employeeStoreService.updater().subscribe(() => this.getEmployees()));
     this.subscription.add(
-      this.configurationApi.loadSettings().subscribe((res) => this.contextStoreService.settings$.next(res))
+      this.configurationApi.loadSettings().subscribe(res => this.contextStoreService.settings$.next(res))
     );
   }
 
@@ -53,7 +53,7 @@ export class AppComponent implements OnInit, OnDestroy {
   /** Добавление версии в заголовок */
   private addGitVersionToPageTitle(): void {
     const currentTitle = this.title.getTitle();
-    this.gitInfo.getVersionAsString().subscribe((version) => {
+    this.gitInfo.getVersionAsString().subscribe(version => {
       this.title.setTitle(`${currentTitle} (${version})`);
     });
   }

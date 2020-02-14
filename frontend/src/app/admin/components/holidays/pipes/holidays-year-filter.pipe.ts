@@ -9,6 +9,6 @@ export class HolidaysYearFilterPipe implements PipeTransform {
     if (year === '') {
       return value;
     }
-    return value.filter((item) => item.year === year);
+    return value.filter(item => item.year === year);
   }
 }

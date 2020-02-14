@@ -49,23 +49,23 @@ export class PresencePageComponent implements OnInit, OnDestroy {
     this.getCurrentUserSub.add(
       this.route.params
         .pipe(
-          switchMap((params) => this.getUserByIdOrCurrent(params.id)),
-          tap((res) => (this.selectedUser = res)),
-          switchMap((res) => this.tasksApi.loadAllTasksByEmployee(res.mailNickname))
+          switchMap(params => this.getUserByIdOrCurrent(params.id)),
+          tap(res => (this.selectedUser = res)),
+          switchMap(res => this.tasksApi.loadAllTasksByEmployee(res.mailNickname))
         )
-        .subscribe((tasks) => this.updateTasks(tasks))
+        .subscribe(tasks => this.updateTasks(tasks))
     );
   }
 
   public approveTask(id: string) {
-    this.tasksApi.update(id, { approved: true }).subscribe((res) => {
-      const task = this.tasks.find((t) => t._id === id);
+    this.tasksApi.update(id, { approved: true }).subscribe(res => {
+      const task = this.tasks.find(t => t._id === id);
       task.approved = true;
     });
   }
 
   public deleteTask(id: string) {
-    this.tasksApi.deleteById(id).subscribe(() => this.updateTasks(this.tasks.filter((t) => t._id !== id)));
+    this.tasksApi.deleteById(id).subscribe(() => this.updateTasks(this.tasks.filter(t => t._id !== id)));
   }
 
   private getUserByIdOrCurrent(id?: string): Observable<Employee> {
@@ -73,7 +73,7 @@ export class PresencePageComponent implements OnInit, OnDestroy {
       return this.employeeApiService.searchUserByLogin(id);
     }
 
-    return this.contextStoreService.getCurrentUser$().pipe(filter((u) => !!u));
+    return this.contextStoreService.getCurrentUser$().pipe(filter(u => !!u));
   }
 
   private updateTasks(tasks: TaskModel[]) {

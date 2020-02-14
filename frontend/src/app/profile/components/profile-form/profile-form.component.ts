@@ -84,7 +84,7 @@ export class ProfileFormComponent implements OnChanges {
     const jobPositions$ = this.dictionaryApi.getAll('jobPosition');
     const subdivisions$ = this.dictionaryApi.getAll('subdivision');
 
-    forkJoin([jobPositions$, subdivisions$]).subscribe((res) => {
+    forkJoin([jobPositions$, subdivisions$]).subscribe(res => {
       const [jobPositions, subdivisions] = res;
       this.jobPositions = jobPositions;
       this.subdivisions = subdivisions;
@@ -94,10 +94,10 @@ export class ProfileFormComponent implements OnChanges {
       }
 
       const jobPosition = this.jobPositions.find(
-        (jp) => this.selectedUser.jobPosition && jp._id === this.selectedUser.jobPosition._id
+        jp => this.selectedUser.jobPosition && jp._id === this.selectedUser.jobPosition._id
       );
       const subdivision = this.subdivisions.find(
-        (sd) => this.selectedUser.subdivision && sd._id === this.selectedUser.subdivision._id
+        sd => this.selectedUser.subdivision && sd._id === this.selectedUser.subdivision._id
       );
 
       this.profileForm.patchValue({ jobPosition, subdivision });

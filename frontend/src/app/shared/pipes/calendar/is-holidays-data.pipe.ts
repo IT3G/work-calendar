@@ -12,7 +12,7 @@ export class IsHolidayDataPipe implements PipeTransform {
       return `day_WORK`;
     }
     const date = moment(dateSrc);
-    const currentYear = holidays[0].data.find((item) => item.year === date.year().toString());
+    const currentYear = holidays[0].data.find(item => item.year === date.year().toString());
     const monthName = MonthNumber[date.month()];
     const arr = currentYear && currentYear[monthName] && currentYear[monthName].split(',');
 

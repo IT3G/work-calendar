@@ -56,8 +56,8 @@ export class ProfileProjectsComponent implements OnChanges {
       steppedLine: 'middle' as 'middle',
       backgroundColor: `${this.colors[i]} 1)`,
       borderWidth: 1,
-      data: datesPeriod.map((d) => {
-        const fromMetadata = p.metadata.find((m) => d.isSame(NewProjectUtils.mapMetadataToDate(m), 'months'));
+      data: datesPeriod.map(d => {
+        const fromMetadata = p.metadata.find(m => d.isSame(NewProjectUtils.mapMetadataToDate(m), 'months'));
 
         return {
           x: d,
@@ -70,7 +70,7 @@ export class ProfileProjectsComponent implements OnChanges {
   private getProjectsMaxPeriod(projects: ProjectNew[] = []): moment.Moment[] {
     const appProjectsMetadata = projects
       .reduce((acc, i) => [...acc, ...i.metadata], [])
-      .map((m) => NewProjectUtils.mapMetadataToDate(m))
+      .map(m => NewProjectUtils.mapMetadataToDate(m))
       .sort((a, b) => (a.isBefore(b) ? -1 : 1));
 
     if (!appProjectsMetadata || !appProjectsMetadata.length) {
@@ -82,7 +82,7 @@ export class ProfileProjectsComponent implements OnChanges {
     const additionalMonths = 1;
     const monthsPeriod = lastMetadata.diff(firstMetadata, 'months') + additionalMonths;
 
-    return Array.from(Array(monthsPeriod).keys()).map((i) => firstMetadata.clone().add(i, 'month'));
+    return Array.from(Array(monthsPeriod).keys()).map(i => firstMetadata.clone().add(i, 'month'));
   }
 
   private generateBarChart(datasets: ChartDataSets[]) {
