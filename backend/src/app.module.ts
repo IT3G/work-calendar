@@ -7,6 +7,7 @@ import { SettingsModule } from './settings/settings.module';
 import { TasksModule } from './tasks/tasks.module';
 import { UsersModule } from './users/users.module';
 import { HolidaysModule } from './holidays/holidays.module';
+import { WebPushModule } from './web-push/web-push.module';
 const config = getConfig();
 
 const url = `${config.DATABASE_URL}`;
@@ -19,6 +20,7 @@ const url = `${config.DATABASE_URL}`;
     HolidaysModule,
     DictionaryModule,
     SettingsModule,
+    WebPushModule,
     MongooseModule.forRoot(url, {
       useNewUrlParser: true,
     }),

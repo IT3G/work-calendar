@@ -25,6 +25,8 @@ export class Config {
   PRINT_COMPANY_NAME: string;
   PRINT_HEAD_MANAGER_POSITION: string;
   PRINT_HEAD_MANAGER_NAME: string;
+  PUSH_PUBLIC_KEY: string;
+  PUSH_PRIVATE_KEY: string;
 }
 
 let config;
