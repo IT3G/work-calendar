@@ -14,7 +14,7 @@ export interface UserEntity extends Document {
       dateStart: string;
       dateEnd: string;
       project: ProjectEntity;
-    },
+    }
   ];
   projectsNew: ProjectNewEntity[];
   whenCreated: string;

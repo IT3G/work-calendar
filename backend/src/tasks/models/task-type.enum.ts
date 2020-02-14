@@ -3,5 +3,5 @@ export enum TaskType {
   CUSTOM = 'CUSTOM',
   LEFT = 'LEFT',
   VACATION = 'VACATION',
-  SICK = 'SICK',
+  SICK = 'SICK'
 }

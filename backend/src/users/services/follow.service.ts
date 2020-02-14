@@ -19,7 +19,7 @@ export interface UserFollow {
 export class FollowService {
   constructor(
     @InjectModel('Follow') private readonly followModel: Model<FollowEntity>,
-    private userService: UsersService,
+    private userService: UsersService
   ) {}
 
   async getUserFollow(userId: string): Promise<UserFollow> {
@@ -30,7 +30,7 @@ export class FollowService {
     return {
       following,
       followers,
-      allForUser,
+      allForUser
     };
   }
 
@@ -83,14 +83,14 @@ export class FollowService {
 
     const followersByProjects = this.matchUsersAndActiveProjects(user, allUsers);
     const followersByEmptyProject = allUsers.filter(
-      (userItem) => !this.haveProjectsInCurrentMonth(userItem.projectsNew),
+      (userItem) => !this.haveProjectsInCurrentMonth(userItem.projectsNew)
     );
 
     const addedFollowersArr = await this.followModel.find({ followingId: user.id, followType: FollowType.add });
 
     const removedFollowersArr = await this.followModel.find({
       followingId: user.id,
-      followType: FollowType.remove,
+      followType: FollowType.remove
     });
 
     const addedUsers = addedFollowersArr.map((item) => item.followerId).map((u) => u.toString());

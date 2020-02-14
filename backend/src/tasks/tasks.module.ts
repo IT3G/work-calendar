@@ -8,6 +8,6 @@ import { UsersModule } from '../users/users.module';
 @Module({
   imports: [EntityModule, MailModule, UsersModule],
   controllers: [TasksController],
-  providers: [TaskService],
+  providers: [TaskService]
 })
 export class TasksModule {}

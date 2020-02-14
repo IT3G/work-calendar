@@ -19,9 +19,9 @@ const HolidaysYearSchema = new Schema({
   hours24: String,
   hours36: String,
   hours40: String,
-  fileName: String,
+  fileName: String
 });
 
 export const HolidaysSchema = new Schema({
-  data: [HolidaysYearSchema],
+  data: [HolidaysYearSchema]
 });

@@ -20,9 +20,9 @@ const url = `${config.DATABASE_URL}`;
     DictionaryModule,
     SettingsModule,
     MongooseModule.forRoot(url, {
-      useNewUrlParser: true,
-    }),
+      useNewUrlParser: true
+    })
   ],
-  providers: [{ provide: Config, useValue: config }],
+  providers: [{ provide: Config, useValue: config }]
 })
 export class AppModule {}

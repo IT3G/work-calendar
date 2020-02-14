@@ -17,7 +17,7 @@ export class TaskService {
     @InjectModel('Tasks') private readonly taskModel: Model<TaskEntity>,
     private sendMailService: SendMailService,
     private userService: UsersService,
-    private followService: FollowService,
+    private followService: FollowService
   ) {}
 
   async getTasks(): Promise<TaskEntity[]> {
@@ -58,30 +58,30 @@ export class TaskService {
         {
           dateStart: {
             $gte: startOfMonth,
-            $lte: endOfMonth,
-          },
+            $lte: endOfMonth
+          }
         },
         {
           dateEnd: {
             $gte: startOfMonth,
-            $lte: endOfMonth,
-          },
+            $lte: endOfMonth
+          }
         },
         {
           $and: [
             {
               dateStart: {
-                $lte: startOfMonth,
-              },
+                $lte: startOfMonth
+              }
             },
             {
               dateEnd: {
-                $gte: endOfMonth,
-              },
-            },
-          ],
-        },
-      ],
+                $gte: endOfMonth
+              }
+            }
+          ]
+        }
+      ]
     });
 
     const result = users.map((employee) => {
@@ -92,7 +92,7 @@ export class TaskService {
 
       const res = {
         employee,
-        tasks: [],
+        tasks: []
       };
 
       while (day.isSameOrBefore(endOfMonth)) {
@@ -143,7 +143,7 @@ export class TaskService {
         user: userSubject.username,
         status: this.getTaskTypeName(task.type as TaskType),
         comment: task.comment,
-        dateEnd: task.dateEnd,
+        dateEnd: task.dateEnd
       };
 
       if (addressesArray.length) {
@@ -160,7 +160,7 @@ export class TaskService {
       [TaskType.CUSTOM]: 'Особое',
       [TaskType.LEFT]: 'Отсутствие',
       [TaskType.VACATION]: 'Отпуск',
-      [TaskType.SICK]: 'Болезнь',
+      [TaskType.SICK]: 'Болезнь'
     });
 
     if (taskTypeMap[type]) {

@@ -19,7 +19,7 @@ export class SendMailService {
       host: this.config.MAIL_HOST,
       port: 25,
       secure: false,
-      tls: { rejectUnauthorized: false },
+      tls: { rejectUnauthorized: false }
     });
 
     const users = data.address.join(',');
@@ -38,7 +38,7 @@ export class SendMailService {
       from: `${this.config.MAIL_SENDER_NAME}<${this.config.MAIL_SENDER_ADDRESS}>`,
       to: users,
       subject: 'Изменение присутствия',
-      html: message,
+      html: message
     });
 
     return info.messageId;

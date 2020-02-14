@@ -11,6 +11,6 @@ import { SubdivisionController } from './subdivision.controller';
   imports: [EntityModule],
   controllers: [JobPositionController, ProjectController, SubdivisionController],
   providers: [JobPositionService, ProjectService, SubdivisionService],
-  exports: [JobPositionService],
+  exports: [JobPositionService]
 })
 export class DictionaryModule {}

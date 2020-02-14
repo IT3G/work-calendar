@@ -8,5 +8,5 @@ export interface FollowEntity extends Document {
 
 export enum FollowType {
   add = 'add',
-  remove = 'remove',
+  remove = 'remove'
 }

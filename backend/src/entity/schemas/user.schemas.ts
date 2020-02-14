@@ -8,8 +8,8 @@ export const UserSchema = new Schema({
     {
       dateStart: String,
       dateEnd: String,
-      project: { type: Schema.Types.ObjectId, ref: 'Project' },
-    },
+      project: { type: Schema.Types.ObjectId, ref: 'Project' }
+    }
   ],
   projectsNew: [
     {
@@ -19,10 +19,10 @@ export const UserSchema = new Schema({
         {
           month: Number,
           year: Number,
-          percent: Number,
-        },
-      ],
-    },
+          percent: Number
+        }
+      ]
+    }
   ],
   whenCreated: String,
   email: String,
@@ -36,5 +36,5 @@ export const UserSchema = new Schema({
   subdivision: { type: Schema.Types.ObjectId, ref: 'Subdivision' },
   jobPosition: { type: Schema.Types.ObjectId, ref: 'JobPosition' },
   authType: String,
-  hashPassword: String,
+  hashPassword: String
 });

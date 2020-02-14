@@ -10,7 +10,7 @@ export class LdapService implements OnApplicationShutdown {
     readerDn: this.configService.READER_DOMAIN_NAME,
     readerPwd: this.configService.READER_PASSWORD,
     serverUrl: this.configService.LDAP_SERVER_URL,
-    suffix: this.configService.LDAP_SUFFIX,
+    suffix: this.configService.LDAP_SUFFIX
   };
 
   client: any;
@@ -22,7 +22,7 @@ export class LdapService implements OnApplicationShutdown {
   public async auth(credentials: LoginModel, add?: boolean): Promise<UserModel> {
     this.client = ldap.createClient({
       url: this.config.serverUrl,
-      reconnect: true,
+      reconnect: true
     });
 
     this.client.on('error', (err) => {
@@ -33,7 +33,7 @@ export class LdapService implements OnApplicationShutdown {
     const result = user[0];
     result.attributes = result.attributes.map((el) => ({
       type: el.type,
-      data: this.stringFromUTF8Array(el._vals[0]),
+      data: this.stringFromUTF8Array(el._vals[0])
     }));
 
     this.client.destroy();
@@ -59,7 +59,7 @@ export class LdapService implements OnApplicationShutdown {
       subdivision: null,
       jobPosition: null,
       authType: 'LDAP',
-      hashPassword: null,
+      hashPassword: null
     };
   }
 
@@ -91,7 +91,7 @@ export class LdapService implements OnApplicationShutdown {
         this.config.suffix,
         {
           filter,
-          scope: 'sub',
+          scope: 'sub'
         },
         (err, searchRes) => {
           const searchList = [];
@@ -121,7 +121,7 @@ export class LdapService implements OnApplicationShutdown {
               }
             });
           });
-        },
+        }
       );
     });
   }

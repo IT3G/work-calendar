@@ -58,7 +58,7 @@ export class UsersService {
       subdivision: null,
       jobPosition: null,
       authType: 'hash',
-      hashPassword: crypto.createHmac('sha256', userInfo.password).digest('hex'),
+      hashPassword: crypto.createHmac('sha256', userInfo.password).digest('hex')
     };
 
     const newUser = await this.userModel.create(data);

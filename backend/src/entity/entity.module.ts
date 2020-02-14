@@ -15,11 +15,11 @@ const mongoModule = MongooseModule.forFeature([
   { name: 'Tasks', schema: TaskSchema },
   { name: 'Subdivision', schema: SubdivisionSchema },
   { name: 'Holidays', schema: HolidaysSchema },
-  { name: 'Follow', schema: FollowSchema },
+  { name: 'Follow', schema: FollowSchema }
 ]);
 
 @Module({
   imports: [mongoModule],
-  exports: [mongoModule],
+  exports: [mongoModule]
 })
 export class EntityModule {}
