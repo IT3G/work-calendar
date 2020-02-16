@@ -5,7 +5,7 @@ dist: trusty
 sudo: required
 branches:
   only:
-  - master
+  - ci
 before_script:
 - cd frontend
 - npm install -g yarn
