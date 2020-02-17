@@ -35,7 +35,7 @@ export class DictionaryBaseController {
 
   @Put()
   async update(@Res() res, @Body() request: DictionaryModel) {
-    const result = await this.apiService.update( request);
+    const result = await this.apiService.update(request);
 
     if (!result) {
       throw new NotFoundException('Не удалось обновить');

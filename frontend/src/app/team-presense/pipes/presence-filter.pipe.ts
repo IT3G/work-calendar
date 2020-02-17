@@ -45,7 +45,9 @@ export class PresenceFilterPipe implements PipeTransform {
         p =>
           p.employee &&
           p.employee.projectsNew &&
-          p.employee.projectsNew.some(p => p.project_id === filter.project && this.isProjectAtMonth(p, date))
+          p.employee.projectsNew.some(
+            project => project.project_id === filter.project && this.isProjectAtMonth(project, date)
+          )
       );
     }
 

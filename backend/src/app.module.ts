@@ -22,9 +22,9 @@ const url = `${config.DATABASE_URL}`;
     SettingsModule,
     WebPushModule,
     MongooseModule.forRoot(url, {
-      useNewUrlParser: true,
-    }),
+      useNewUrlParser: true
+    })
   ],
-  providers: [{ provide: Config, useValue: config }],
+  providers: [{ provide: Config, useValue: config }]
 })
 export class AppModule {}

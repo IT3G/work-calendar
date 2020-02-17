@@ -6,7 +6,6 @@ import { HolidaysService } from './services/holidays.service';
 @Module({
   imports: [EntityModule],
   controllers: [HolidaysController],
-  providers: [HolidaysService],
+  providers: [HolidaysService]
 })
-export class HolidaysModule {
-}
+export class HolidaysModule {}

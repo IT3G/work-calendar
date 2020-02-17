@@ -5,7 +5,6 @@ import { TaskApiService } from '../../../core/services/task-api.service';
 import { DayType } from '../../../shared/const/day-type.const';
 import { TaskModel } from '../../../shared/models/tasks.model';
 
-
 @Component({
   selector: 'app-profile-history',
   templateUrl: './profile-history.component.html',

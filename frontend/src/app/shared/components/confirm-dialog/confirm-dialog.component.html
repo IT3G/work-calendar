@@ -1,14 +1,9 @@
-<div class="question"
-    [innerHTML]="data.question"></div>
+<div class="question" [innerHTML]="data.question"></div>
 
 <div class="buttons">
-    <button mat-raised-button
-        (click)="dialogRef.close(true)"
-        color="primary">Да
-    </button>
+  <button mat-raised-button (click)="dialogRef.close(true)" color="primary">Да</button>
 
-    <button mat-raised-button
-        (click)="dialogRef.close(false)">
-        Нет
-    </button>
+  <button mat-raised-button (click)="dialogRef.close(false)">
+    Нет
+  </button>
 </div>

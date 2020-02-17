@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - "10"
+  - "12"
 dist: trusty
 sudo: required
 
@@ -10,6 +10,7 @@ branches:
 
 before_script:
   - cd frontend
+  - npm install -g yarn
   - npm install -g @angular/cli
 
 script:

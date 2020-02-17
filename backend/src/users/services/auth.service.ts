@@ -14,7 +14,7 @@ export class AuthService {
     private readonly ldapService: LdapService,
     private readonly usersService: UsersService,
     private jwtService: JwtService,
-    private config: Config,
+    private config: Config
   ) {}
 
   async auth(credentials: LoginModel) {
@@ -62,7 +62,7 @@ export class AuthService {
       username: user.username,
       location: user.location,
       position: user.position,
-      email: user.email,
+      email: user.email
     };
 
     return this.jwtService.sign(sign);

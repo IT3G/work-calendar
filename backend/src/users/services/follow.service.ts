@@ -82,7 +82,7 @@ export class FollowService {
     const user = await this.userService.getUserById(userId);
 
     const followersByProjects = this.matchUsersAndActiveProjects(user, allUsers);
-    const followersByEmptyProject = allUsers.filter(user => !this.haveProjectsInCurrentMonth(user.projectsNew));
+    const followersByEmptyProject = allUsers.filter(userItem => !this.haveProjectsInCurrentMonth(userItem.projectsNew));
 
     const addedFollowersArr = await this.followModel.find({ followingId: user.id, followType: FollowType.add });
 

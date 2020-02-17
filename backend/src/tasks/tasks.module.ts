@@ -9,7 +9,6 @@ import { WebPushModule } from '../web-push/web-push.module';
 @Module({
   imports: [EntityModule, MailModule, UsersModule, WebPushModule],
   controllers: [TasksController],
-  providers: [TaskService],
+  providers: [TaskService]
 })
-export class TasksModule {
-}
+export class TasksModule {}

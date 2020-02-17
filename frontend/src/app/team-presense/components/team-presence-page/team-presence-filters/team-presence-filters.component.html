@@ -1,18 +1,13 @@
-<form class="form"
-  [formGroup]="filtersForm">
-
+<form class="form" [formGroup]="filtersForm">
   <mat-form-field>
-    <input matInput
-      formControlName="name"
-      placeholder="Ф.И.О.">
+    <input matInput formControlName="name" placeholder="Ф.И.О." />
   </mat-form-field>
 
   <mat-form-field>
     <mat-label>Проект</mat-label>
     <mat-select formControlName="project">
       <mat-option>Сбросить</mat-option>
-      <mat-option *ngFor="let project of projects"
-        [value]="project._id">
+      <mat-option *ngFor="let project of projects" [value]="project._id">
         {{ project.name }}
       </mat-option>
     </mat-select>
@@ -22,8 +17,7 @@
     <mat-label>Подразделение</mat-label>
     <mat-select formControlName="subdivision">
       <mat-option>Сбросить</mat-option>
-      <mat-option *ngFor="let subdivision of subdivisions"
-        [value]="subdivision.name">
+      <mat-option *ngFor="let subdivision of subdivisions" [value]="subdivision.name">
         {{ subdivision.name }}
       </mat-option>
     </mat-select>
@@ -33,8 +27,7 @@
     <mat-label>Регион</mat-label>
     <mat-select formControlName="location">
       <mat-option>Сбросить</mat-option>
-      <mat-option *ngFor="let location of locations"
-        [value]="location">
+      <mat-option *ngFor="let location of locations" [value]="location">
         {{ location }}
       </mat-option>
     </mat-select>

@@ -13,7 +13,7 @@ export class SendMailService {
       return;
     }
 
-    process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '0';
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
     const transporter = nodemailer.createTransport({
       host: this.config.MAIL_HOST,

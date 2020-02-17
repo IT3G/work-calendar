@@ -7,7 +7,6 @@ import * as moment from 'moment';
   name: 'isHolidayData'
 })
 export class IsHolidayDataPipe implements PipeTransform {
-
   transform(dateSrc: string, holidays: HolidaysModel[]): string {
     if (!dateSrc || !(holidays && holidays.length)) {
       return `day_WORK`;

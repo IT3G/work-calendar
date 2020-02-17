@@ -7,8 +7,7 @@ import { DictionaryModel } from '../../dictionary/models/dictionary.model';
 
 @Injectable()
 export class HolidaysService {
-  constructor(@InjectModel('Holidays') private readonly holidaysModel: Model<HolidaysEntity>) {
-  }
+  constructor(@InjectModel('Holidays') private readonly holidaysModel: Model<HolidaysEntity>) {}
 
   async getHolidays(): Promise<HolidaysEntity[]> {
     return await this.holidaysModel.find().exec();

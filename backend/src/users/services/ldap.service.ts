@@ -2,7 +2,7 @@ import { Injectable, OnApplicationShutdown } from '@nestjs/common';
 import { Config } from '../../config/config';
 import { LoginModel } from '../models/login.model';
 import { UserModel } from '../models/user.model';
-const ldap = require('ldapjs');
+import * as ldap from 'ldapjs';
 @Injectable()
 export class LdapService implements OnApplicationShutdown {
   constructor(private configService: Config) {}
@@ -10,7 +10,7 @@ export class LdapService implements OnApplicationShutdown {
     readerDn: this.configService.READER_DOMAIN_NAME,
     readerPwd: this.configService.READER_PASSWORD,
     serverUrl: this.configService.LDAP_SERVER_URL,
-    suffix: this.configService.LDAP_SUFFIX,
+    suffix: this.configService.LDAP_SUFFIX
   };
 
   client: any;
@@ -22,18 +22,18 @@ export class LdapService implements OnApplicationShutdown {
   public async auth(credentials: LoginModel, add?: boolean): Promise<UserModel> {
     this.client = ldap.createClient({
       url: this.config.serverUrl,
-      reconnect: true,
+      reconnect: true
     });
 
     this.client.on('error', err => {
-      console.log(err);
+      console.error(err);
     });
     const filter = await this.getFilter(credentials.username);
     const user = await this.search(filter, credentials.password, add);
     const result = user[0];
     result.attributes = result.attributes.map(el => ({
       type: el.type,
-      data: this.stringFromUTF8Array(el._vals[0]),
+      data: this.stringFromUTF8Array(el._vals[0])
     }));
 
     this.client.destroy();
@@ -59,7 +59,7 @@ export class LdapService implements OnApplicationShutdown {
       subdivision: null,
       jobPosition: null,
       authType: 'LDAP',
-      hashPassword: null,
+      hashPassword: null
     };
   }
 
@@ -91,7 +91,7 @@ export class LdapService implements OnApplicationShutdown {
         this.config.suffix,
         {
           filter,
-          scope: 'sub',
+          scope: 'sub'
         },
         (err, searchRes) => {
           const searchList = [];
@@ -101,7 +101,7 @@ export class LdapService implements OnApplicationShutdown {
           });
 
           searchRes.on('error', entry => {
-            console.log('error');
+            console.error('error');
           });
 
           searchRes.on('end', retVal => {
@@ -110,18 +110,18 @@ export class LdapService implements OnApplicationShutdown {
               return;
             }
 
-            this.client.bind(searchList[0].objectName, password, err => {
-              if (add && !err) {
+            this.client.bind(searchList[0].objectName, password, error => {
+              if (add && !error) {
                 resolve(searchList);
               }
-              if (err || !password) {
+              if (error || !password) {
                 reject({ user: null });
               } else {
                 resolve(searchList);
               }
             });
           });
-        },
+        }
       );
     });
   }
@@ -143,6 +143,7 @@ export class LdapService implements OnApplicationShutdown {
         ch = ch & (0x3f >> extra);
         for (; extra > 0; extra -= 1) {
           const chx = data[index++];
+          // tslint:disable-next-line: triple-equals
           if ((chx & 0xc0) != 0x80) {
             return null;
           }

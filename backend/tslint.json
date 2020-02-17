@@ -4,6 +4,9 @@
   "jsRules": {
     "no-unused-expression": true
   },
+  "linterOptions": {
+    "exclude": ["**/*.spec.ts"]
+  },
   "rules": {
     "quotemark": [true, "single"],
     "member-access": [false],
@@ -12,7 +15,24 @@
     "member-ordering": [false],
     "interface-name": [false],
     "arrow-parens": false,
-    "object-literal-sort-keys": false
+    "object-literal-sort-keys": false,
+    "variable-name": {
+      "options": ["allow-leading-underscore", "allow-snake-case", "allow-pascal-case"]
+    },
+    "no-console": [true, "log"],
+    "no-bitwise": false,
+    "trailing-comma": [
+      true,
+      {
+        "multiline": {
+          "objects": "never",
+          "arrays": "never",
+          "functions": "never",
+          "typeLiterals": "ignore"
+        },
+        "esSpecCompliant": true
+      }
+    ]
   },
   "rulesDirectory": []
 }

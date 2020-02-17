@@ -6,8 +6,7 @@ import { ApiUseTags } from '@nestjs/swagger';
 @ApiUseTags('Holidays')
 @Controller('holidays')
 export class HolidaysController {
-  constructor(private holidaysService: HolidaysService) {
-  }
+  constructor(private holidaysService: HolidaysService) {}
 
   @Get()
   async getAllHolidays(@Res() res) {

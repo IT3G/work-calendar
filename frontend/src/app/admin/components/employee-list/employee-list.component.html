@@ -1,86 +1,61 @@
-<div class="container"
-    *ngIf="employees">
+<div class="container" *ngIf="employees">
+  <div class="row">
+    <mat-form-field>
+      <mat-label>Проект</mat-label>
+      <mat-select [formControl]="filter">
+        <mat-option>Сбросить</mat-option>
+        <mat-option *ngFor="let project of projects$ | async" [value]="project._id">
+          {{ project.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-    <div class="row">
-        <mat-form-field>
-            <mat-label>Проект</mat-label>
-            <mat-select [formControl]='filter'>
-                <mat-option>Сбросить</mat-option>
-                <mat-option *ngFor="let project of projects$ | async"
-                    [value]="project._id">
-                    {{project.name}}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
+    <button mat-raised-button color="primary" (click)="openDialog()">Добавить пользователя</button>
+  </div>
 
-        <button mat-raised-button
-            color="primary"
-            (click)="openDialog()">Добавить пользователя
-        </button>
-    </div>
+  <table mat-table [dataSource]="employees | filterEmployeePipe: filter.value" class="mat-elevation-z6">
+    <ng-container matColumnDef="username">
+      <th mat-header-cell *matHeaderCellDef>Фамилия, имя</th>
+      <td mat-cell *matCellDef="let employee">
+        <a [routerLink]="['/profile', employee.mailNickname]">{{ employee.username }}</a>
+      </td>
+    </ng-container>
 
-    <table mat-table
-        [dataSource]="employees | filterEmployeePipe:filter.value"
-        class="mat-elevation-z6">
+    <ng-container matColumnDef="login">
+      <th mat-header-cell *matHeaderCellDef>Логин</th>
+      <td mat-cell *matCellDef="let employee">
+        {{ employee.mailNickname }}
+      </td>
+    </ng-container>
 
-        <ng-container matColumnDef="username">
-            <th mat-header-cell
-                *matHeaderCellDef>Фамилия, имя</th>
-            <td mat-cell
-                *matCellDef="let employee"> <a [routerLink]="['/profile', employee.mailNickname]">{{ employee.username }}</a></td>
-        </ng-container>
+    <ng-container matColumnDef="projects">
+      <th mat-header-cell *matHeaderCellDef>Проекты</th>
+      <td mat-cell *matCellDef="let employee">{{ employee | currentProjectsPipe }}</td>
+    </ng-container>
+    <ng-container matColumnDef="jobPosition">
+      <th mat-header-cell *matHeaderCellDef>Позиция</th>
+      <td mat-cell *matCellDef="let employee">{{ employee.jobPosition ? employee.jobPosition?.name : '-' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="subdivision">
+      <th mat-header-cell *matHeaderCellDef>Подразделение</th>
+      <td mat-cell *matCellDef="let employee">{{ employee.subdivision ? employee.subdivision?.name : '-' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="location">
+      <th mat-header-cell *matHeaderCellDef>Город</th>
+      <td mat-cell *matCellDef="let employee">{{ employee.location }}</td>
+    </ng-container>
 
-        <ng-container matColumnDef="login">
-            <th mat-header-cell
-                *matHeaderCellDef>Логин</th>
-            <td mat-cell
-                *matCellDef="let employee">
-                {{ employee.mailNickname }}
-            </td>
-        </ng-container>
+    <ng-container matColumnDef="telNumber">
+      <th mat-header-cell *matHeaderCellDef>Номер</th>
+      <td mat-cell *matCellDef="let employee">{{ employee.telNumber ? employee.telNumber : '-' }}</td>
+    </ng-container>
 
-        <ng-container matColumnDef="projects">
-            <th mat-header-cell
-                *matHeaderCellDef>Проекты</th>
-            <td mat-cell
-                *matCellDef="let employee">{{employee | currentProjectsPipe}}</td>
-        </ng-container>
-        <ng-container matColumnDef="jobPosition">
-            <th mat-header-cell
-                *matHeaderCellDef>Позиция</th>
-            <td mat-cell
-                *matCellDef="let employee">{{employee.jobPosition ? employee.jobPosition?.name : "-"}}</td>
-        </ng-container>
-        <ng-container matColumnDef="subdivision">
-            <th mat-header-cell
-                *matHeaderCellDef>Подразделение</th>
-            <td mat-cell
-                *matCellDef="let employee">{{employee.subdivision ? employee.subdivision?.name : "-"}}</td>
-        </ng-container>
-        <ng-container matColumnDef="location">
-            <th mat-header-cell
-                *matHeaderCellDef>Город</th>
-            <td mat-cell
-                *matCellDef="let employee">{{ employee.location }}</td>
-        </ng-container>
+    <ng-container matColumnDef="isAdmin">
+      <th mat-header-cell *matHeaderCellDef>Админ</th>
+      <td mat-cell *matCellDef="let employee">{{ employee.isAdmin ? 'Да' : 'Нет' }}</td>
+    </ng-container>
 
-        <ng-container matColumnDef="telNumber">
-            <th mat-header-cell
-                *matHeaderCellDef>Номер</th>
-            <td mat-cell
-                *matCellDef="let employee">{{ employee.telNumber ? employee.telNumber : "-" }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="isAdmin">
-            <th mat-header-cell
-                *matHeaderCellDef>Админ</th>
-            <td mat-cell
-                *matCellDef="let employee">{{ employee.isAdmin ? "Да" : "Нет" }}</td>
-        </ng-container>
-
-        <tr mat-header-row
-            *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row
-            *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
 </div>

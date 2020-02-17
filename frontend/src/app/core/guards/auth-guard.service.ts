@@ -15,17 +15,14 @@ export class AuthGuardService implements CanActivate {
     return this.contextStoreService.getCurrentUser$().pipe(
       tap(u => {
         if (!u) {
-          this.authApi
-            .getCurrentUser()
-            .subscribe(
-              user => this.contextStoreService.setCurrentUser(user),
-              err => this.router.navigateByUrl('/login')
-            );
+          this.authApi.getCurrentUser().subscribe(
+            user => this.contextStoreService.setCurrentUser(user),
+            err => this.router.navigateByUrl('/login')
+          );
         }
       }),
       filter(u => !!u),
       map(u => !!u)
     );
   }
-
 }

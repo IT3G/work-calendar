@@ -1,20 +1,20 @@
 <p class="title">Присутствие на {{ currentDate$ | async | datePipe: 'D MMMM YYYY' }}</p>
 
 <div class="user-link">
-    <div class="avatar">
+  <div class="avatar">
+    <ngx-avatar
+      *ngIf="(settings$ | async)?.FEATURE_AVATAR_SOURCE === 'CONFLUENCE'; else noAvatar"
+      [src]="selectedUser | avatarSource"
+      size="28"
+      value="{{ selectedUser.username | usernamePipe }}"
+    ></ngx-avatar>
 
-        <ngx-avatar *ngIf="(settings$ | async)?.FEATURE_AVATAR_SOURCE === 'CONFLUENCE'; else noAvatar"
-            [src]="selectedUser | avatarSource"
-            size="28"
-            value="{{ selectedUser.username | usernamePipe }}"></ngx-avatar>
+    <ng-template #noAvatar>
+      <ngx-avatar size="28" value="{{ selectedUser.username | usernamePipe }}"></ngx-avatar>
+    </ng-template>
+  </div>
 
-        <ng-template #noAvatar>
-            <ngx-avatar size="28"
-                value="{{ selectedUser.username | usernamePipe }}"></ngx-avatar>
-        </ng-template>
-    </div>
-
-    <a [routerLink]="['/profile', selectedUser.mailNickname]">
-        {{ selectedUser.username }}
-    </a>
+  <a [routerLink]="['/profile', selectedUser.mailNickname]">
+    {{ selectedUser.username }}
+  </a>
 </div>
