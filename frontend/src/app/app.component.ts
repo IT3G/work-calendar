@@ -44,7 +44,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private initWebPush() {
     combineLatest([this.contextStoreService.getCurrentUser$(), this.contextStoreService.settings$])
       .pipe(
-        filter(([user, config]) => !!config || !!user),
+        filter(([user, config]) => !!config && !!user),
         filter(() => this.swPush.isEnabled),
         switchMap(([user, config]) =>
           from(this.swPush.requestSubscription({ serverPublicKey: config.PUSH_PUBLIC_KEY }))
