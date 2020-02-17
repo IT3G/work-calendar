@@ -8,7 +8,7 @@ export class NotificationPayloadModel {
       dateOfArrival: string;
       primaryKey: number;
     };
-    actions: {
+    actions?: {
       action: string;
       title: string;
     }[];

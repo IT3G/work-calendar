@@ -10,20 +10,14 @@ export class WebPushController {
   async pushToUser(@Param('id') id: string) {
     const notification = {
       notification: {
-        title: 'test',
-        body: 'test',
-        icon: null,
+        title: 'Тестовое уведомление',
+        body: `Пользователь ${id} отправил тестовое уведомление`,
+        icon: `https://calendar.it2g.ru/backend/avatar?login=${id}`,
         vibrate: [100, 50, 100],
         data: {
           dateOfArrival: Date.now().toLocaleString(),
           primaryKey: 1
-        },
-        actions: [
-          {
-            action: 'explore',
-            title: 'нажать'
-          }
-        ]
+        }
       }
     };
 
