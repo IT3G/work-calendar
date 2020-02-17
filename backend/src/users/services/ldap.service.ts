@@ -2,7 +2,7 @@ import { Injectable, OnApplicationShutdown } from '@nestjs/common';
 import { Config } from '../../config/config';
 import { LoginModel } from '../models/login.model';
 import { UserModel } from '../models/user.model';
-import ldap from 'ldapjs';
+import * as ldap from 'ldapjs';
 @Injectable()
 export class LdapService implements OnApplicationShutdown {
   constructor(private configService: Config) {}
