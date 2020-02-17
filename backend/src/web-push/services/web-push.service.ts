@@ -6,15 +6,16 @@ import { sendNotification, setVapidDetails } from 'web-push';
 
 import { SubscriptionModel } from '../models/subscription.model';
 import { NotificationPayloadModel } from '../models/notification-payload.model';
+import { Config } from '../../config/config';
 
 @Injectable()
 export class WebPushService {
-  constructor(@InjectModel('WebPush') private readonly webPushModel: Model<WebPushEntity>) {
-    setVapidDetails(
-      'mailto:kliment1986@inbox.org',
-      'BMI7mNzEiCPhWNTpwbkxb4BRwKuVvkhlrmqPnxnvF5SGg2cujk-nL4s0x4j8jjZD529nwR1QQw1_ayRPUrvYPdk',
-      'crgOgkQDjKCH_3JgDiFi3TL77nhV_noPE4Ty7sONkWA'
-    );
+  constructor(@InjectModel('WebPush') private readonly webPushModel: Model<WebPushEntity>, private config: Config) {
+    this.initWebPush();
+  }
+
+  private initWebPush() {
+    setVapidDetails(`mailto:${this.config.PUSH_MAIL_TO}`, this.config.PUSH_PUBLIC_KEY, this.config.PUSH_PRIVATE_KEY);
   }
 
   async addSubscription(webPush: SubscriptionModel): Promise<WebPushEntity> {
