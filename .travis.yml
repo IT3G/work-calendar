@@ -14,16 +14,15 @@ script:
 - yarn install
 - npm run build:test
 deploy:
+  - provider: heroku
+    api_key:
+      secure: "dNKLduc8d/FruFHw9kkINaPWN8kFn81IcOXSsoiE1uc6ENdDwtKF+iaNgTc6zRbk8QP52EjgsORScaAfa5Sit/CPnaqB9N6fzMpp44FqlAUIRHkmzTpnPCsIKT3xSwxItdl62NAuUCyl08fYkBJo/mutEYcvdci4lRsWoS9t2B+zgxwMPl5xyAH50QpOIL1xVXSNVPZhQFTNb2EDRSPzno435ftuDsK8fj0mpdTMNypfhDNaX2cQrVNfFWmYsQib4Fl/Gf94WIYshpFZE4LDmcSscIorlQn2P3c8JsiiJSc0izuptwY2aZ9JGq6FHJVvJOzcxL9VfCpOCBD1NUqfEjI8oZIgxWhNlxk6gZZP+3XonPnNJZRO6Ez1CGJpd+JEdqnnbZPjULnjko8aScb6gq6QAGm4tfUIDQJGjrnQQ6S/sTNwEJBUReaRPg5vyH+l1LkDvhZA+2+LiL1yQ3o823hYTVHP+wr3tCsKi+H6kiYdGh8qsN5ShCO8aboeqojwOmAuBjyMG81QD+J1E0uWSyhvzQGOe1TBUiPZgUpmFOgz1AmOLQ2Tyt0+ktDl3gBDUs4qr0NppGeKpTaQdvlgYwffyr9g8oHazaA1RUFEhTwGPFGnkSdbMZ/KH7SAW2larqMD0fxMNxfM8AZTN7Aby5eQRtuQ91tG087NbMQJhz0="
+    app: work-cal
+    on:
+      branch: ci
   - provider: pages
     skip_cleanup: true
     github_token: "$GITHUB_TOKEN"
     local_dir: frontend/dist/work-calendar
     on:
       branch: ci
-  - provider: heroku
-    api_key:
-      secure: "dFH3o31AoN+y7dIgpwO/u9QC8E9gdz6WTY/Wm23saM5WkmWuPCuLMOK3RjaXgwoQohtGSns3q4FXehpq1J215aRLc154e/5rAJRNr3Il07mTbb9gkWF6WRV/ird4DOwDnFcrjQTMJprrtWbpmVtDQGtN8VjMYhLgiH+MQE9fO1OPpGa33x8H1LbPT0nevuliACe1CLYh3LFj2IdTVGDP7Wu9SbhmrmkhVzYDotUw2kBoQBt9/oEIeBGbDD+JfsOYd7uBFRjJjePjzBzq6cv7O5vPpu7edK18rR/yVSWQM+m+HI+1CHvJeb8p4nOsSaUPciX5MEO7xRm2rh5AXW0LOQva72+2OHAQp92g+FxjDwp+loNI+xyyO3kR8rS3c4K7coM/pbPq2RrB7jIw/n/K/KjFW/EdEAJX9LTGj3NswZDxPuAPJ/AVAIluaXuj6Uv6Alhh9pONCyL4+Nhx1QiDjB9fsCYgAwdvHxEMXCOsro/ta1w7R9ayIdVp8mxYUL9CRBuAHyiK1tEwfY+5Uc02VYj5jug8wgAG+wPUyts0aBbBytIfuqA/tphOciQsY2040WsEJY57yE3kTOrl8p+6Vb1Wc7q3rNsYbCNAFdnX0UEFvCmSVbuc+Ma+JKpiqkLcUgcZvhH4q4bZrw01iaAd4oGGPHjHKVHL/e1Cg8ENTpM="
-    app: work-cal
-    on:
-      branch: ci
-
