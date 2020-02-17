@@ -7,10 +7,11 @@ import { AuthService } from '../services/auth.service';
 export class AuthMiddleware implements NestMiddleware {
   constructor(private authService: AuthService, private config: Config) {}
 
-  async use(req: Request, res: Response, next: () => void) {
-    const urls = JSON.parse(this.config.UNAUTH_URLS);
+  async use(req: Request, res: Response, next: Function) {
+    const urls: string[] = JSON.parse(this.config.UNAUTH_URLS);
 
-    if (urls.includes(req.baseUrl)) {
+    const isUnauthUrl = urls.includes(req.baseUrl) || urls.some(u => u.includes('**') && req.baseUrl.includes(u));
+    if (isUnauthUrl) {
       next();
       return;
     }

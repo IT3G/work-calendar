@@ -10,6 +10,8 @@ import { TaskModel } from '../models/task.model';
 import { TaskType } from '../models/task-type.enum';
 import * as moment from 'moment';
 import { PresenceModel } from '../models/task-month.model';
+import { WebPushService } from '../../web-push/services/web-push.service';
+import { UserEntity } from '../../entity/entities/user.entity.model';
 
 @Injectable()
 export class TaskService {
@@ -17,7 +19,8 @@ export class TaskService {
     @InjectModel('Tasks') private readonly taskModel: Model<TaskEntity>,
     private sendMailService: SendMailService,
     private userService: UsersService,
-    private followService: FollowService
+    private followService: FollowService,
+    private webPushService: WebPushService
   ) {}
 
   async getTasks(): Promise<TaskEntity[]> {
@@ -119,21 +122,81 @@ export class TaskService {
 
   async addTask(task: TaskModel): Promise<TaskEntity> {
     this.sendMail(task);
+    this.sendPush(task);
 
     const { _id = null, ...newTask } = task;
 
     return await this.taskModel.create(newTask);
   }
 
+  private async generateAddressArray(userSubject: UserEntity, userCreated: UserEntity): Promise<UserEntity[]> {
+    const userFollowers = await this.followService.getUserFollowers(userSubject.id);
+    let addressesArray = userFollowers;
+
+    if (userSubject.id.toString() !== userCreated.id.toString()) {
+      addressesArray = [...addressesArray, userSubject];
+    }
+
+    return addressesArray;
+  }
+
+  private async sendPush(task: TaskModel): Promise<void> {
+    try {
+      const userSubject = await this.userService.getUserByLogin(task.employee);
+      const userCreated = await this.userService.getUserByLogin(task.employeeCreated);
+      const addressesArray = (await this.generateAddressArray(userSubject, userCreated)).map(user => user.mailNickname);
+
+      if (!addressesArray.length) {
+        return;
+      }
+
+      let body = `Пользователь ${userCreated.username} изменил присутсвие на ${task.dateStart} для ${
+        userSubject.username
+      } на ${this.getTaskTypeName(task.type as TaskType)}`;
+
+      if (task.dateEnd) {
+        body = `Пользователь ${userCreated.username} изменил присутсвие c ${task.dateStart} по ${task.dateEnd} для ${
+          userSubject.username
+        } на ${this.getTaskTypeName(task.type as TaskType)}`;
+      }
+
+      const notification = {
+        notification: {
+          title: 'Изменение присутствия',
+          body,
+          icon: `https://calendar.it2g.ru/backend/avatar?login=${userSubject.mailNickname}`,
+          vibrate: [100, 50, 100],
+          data: {
+            dateOfArrival: Date.now().toLocaleString(),
+            primaryKey: 1
+          },
+          actions: [
+            {
+              action: 'explore',
+              title: 'подробности'
+            }
+          ]
+        }
+      };
+
+      const notifications = addressesArray.map(address =>
+        this.webPushService.sendPushNotification(address, notification)
+      );
+
+      await Promise.all(notifications);
+    } catch (e) {
+      console.error('Ошибка пуша', e);
+    }
+  }
+
   private async sendMail(task: TaskModel): Promise<void> {
     try {
       const userSubject = await this.userService.getUserByLogin(task.employee);
       const userCreated = await this.userService.getUserByLogin(task.employeeCreated);
-      const userFollowers = await this.followService.getUserFollowers(userSubject.id);
-      let addressesArray = userFollowers.map(user => user.email);
+      const addressesArray = (await this.generateAddressArray(userSubject, userCreated)).map(user => user.email);
 
-      if (userSubject.id.toString() !== userCreated.id.toString()) {
-        addressesArray = [...addressesArray, userSubject.email];
+      if (!addressesArray.length) {
+        return;
       }
 
       const mailData: SendMailRequestModel = {
@@ -146,9 +209,7 @@ export class TaskService {
         dateEnd: task.dateEnd
       };
 
-      if (addressesArray.length) {
-        await this.sendMailService.sendMail(mailData);
-      }
+      await this.sendMailService.sendMail(mailData);
     } catch (e) {
       console.error('Ошибка при рассылке', e);
     }

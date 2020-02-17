@@ -4,9 +4,10 @@ import { TaskService } from './services/task.service';
 import { TasksController } from './tasks.controller';
 import { MailModule } from '../mail/mail.module';
 import { UsersModule } from '../users/users.module';
+import { WebPushModule } from '../web-push/web-push.module';
 
 @Module({
-  imports: [EntityModule, MailModule, UsersModule],
+  imports: [EntityModule, MailModule, UsersModule, WebPushModule],
   controllers: [TasksController],
   providers: [TaskService]
 })
