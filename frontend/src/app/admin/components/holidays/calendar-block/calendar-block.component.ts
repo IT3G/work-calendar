@@ -5,22 +5,6 @@ interface DateCalendar {
   month: number;
 }
 
-//
-// export enum NumberOfMonth {
-//   Jan = 1,
-//   Feb,
-//   Mar,
-//   Apr,
-//   May,
-//   June,
-//   July,
-//   Aug,
-//   Sept,
-//   Oct,
-//   Nov,
-//   Dec,
-// }
-
 export enum NamesOfMonth {
   'Январь' = 1,
   'Февраль',

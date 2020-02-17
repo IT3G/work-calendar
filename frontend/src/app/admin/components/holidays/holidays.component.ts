@@ -21,7 +21,8 @@ export class HolidaysComponent implements OnInit {
 
   public isLoading: Boolean = true;
 
-  constructor(private holidaysService: HolidaysApiService) {}
+  constructor(private holidaysService: HolidaysApiService) {
+  }
 
   ngOnInit() {
     this.fileControl = new FormControl();
@@ -41,7 +42,6 @@ export class HolidaysComponent implements OnInit {
           skipEmptyLines: true,
           complete: (result, file) => {
             const currentID = this.holidays$.value && this.holidays$.value._id;
-
             if (currentID) {
               this.holidaysService.updateHolidays({ data: this.mapper(result, file), _id: currentID });
               this.holidays$.next({ data: this.mapper(result, file), _id: currentID });
@@ -67,27 +67,48 @@ export class HolidaysComponent implements OnInit {
   }
 
   private mapper(src: ParseResult, file: File): HolidaysYearModel[] {
+
     return src.data.map(item => {
+      const year = item[HolidaysRawData.yearMonth];
+      const Jan = item[HolidaysRawData.Jan].toString().replace(/\+/g, '');
+      const Feb = item[HolidaysRawData.Feb].toString().replace(/\+/g, '');
+      const Mar = item[HolidaysRawData.Mar].toString().replace(/\+/g, '');
+      const Apr = item[HolidaysRawData.Apr].toString().replace(/\+/g, '');
+      const May = item[HolidaysRawData.May].toString().replace(/\+/g, '');
+      const June = item[HolidaysRawData.June].toString().replace(/\+/g, '');
+      const July = item[HolidaysRawData.July].toString().replace(/\+/g, '');
+      const Aug = item[HolidaysRawData.Aug].toString().replace(/\+/g, '');
+      const Sept = item[HolidaysRawData.Sept].toString().replace(/\+/g, '');
+      const Oct = item[HolidaysRawData.Oct].toString().replace(/\+/g, '');
+      const Nov = item[HolidaysRawData.Nov].toString().replace(/\+/g, '');
+      const Dec = item[HolidaysRawData.Dec].toString().replace(/\+/g, '');
+      const allDays = item[HolidaysRawData.allDays];
+      const allWork = item[HolidaysRawData.allWork];
+      const hours24 = item[HolidaysRawData.hours24];
+      const hours36 = item[HolidaysRawData.hours36];
+      const hours40 = item[HolidaysRawData.hours40];
+      const fileName = file.name;
+
       return {
-        year: item[HolidaysRawData.yearMonth],
-        Jan: item[HolidaysRawData.Jan],
-        Feb: item[HolidaysRawData.Feb],
-        Mar: item[HolidaysRawData.Mar],
-        Apr: item[HolidaysRawData.Apr],
-        May: item[HolidaysRawData.May],
-        June: item[HolidaysRawData.June],
-        July: item[HolidaysRawData.July],
-        Aug: item[HolidaysRawData.Aug],
-        Sept: item[HolidaysRawData.Sept],
-        Oct: item[HolidaysRawData.Oct],
-        Nov: item[HolidaysRawData.Nov],
-        Dec: item[HolidaysRawData.Dec],
-        allDays: item[HolidaysRawData.allDays],
-        allWork: item[HolidaysRawData.allWork],
-        hours24: item[HolidaysRawData.hours24],
-        hours36: item[HolidaysRawData.hours36],
-        hours40: item[HolidaysRawData.hours40],
-        fileName: file.name
+        year,
+        Jan,
+        Feb,
+        Mar,
+        Apr,
+        May,
+        June,
+        July,
+        Aug,
+        Sept,
+        Oct,
+        Nov,
+        Dec,
+        allDays,
+        allWork,
+        hours24,
+        hours36,
+        hours40,
+        fileName
       };
     });
   }
