@@ -15,16 +15,16 @@ script:
   - npm run build:test
   - cd ..
 deploy:
+  - provider: pages
+    skip_cleanup: true
+    github_token: "$GITHUB_TOKEN"
+    local_dir: frontend/dist/work-calendar
+    on:
+      branch: ci
   - provider: heroku
     skip_cleanup: true
     api_key:
       secure: "dNKLduc8d/FruFHw9kkINaPWN8kFn81IcOXSsoiE1uc6ENdDwtKF+iaNgTc6zRbk8QP52EjgsORScaAfa5Sit/CPnaqB9N6fzMpp44FqlAUIRHkmzTpnPCsIKT3xSwxItdl62NAuUCyl08fYkBJo/mutEYcvdci4lRsWoS9t2B+zgxwMPl5xyAH50QpOIL1xVXSNVPZhQFTNb2EDRSPzno435ftuDsK8fj0mpdTMNypfhDNaX2cQrVNfFWmYsQib4Fl/Gf94WIYshpFZE4LDmcSscIorlQn2P3c8JsiiJSc0izuptwY2aZ9JGq6FHJVvJOzcxL9VfCpOCBD1NUqfEjI8oZIgxWhNlxk6gZZP+3XonPnNJZRO6Ez1CGJpd+JEdqnnbZPjULnjko8aScb6gq6QAGm4tfUIDQJGjrnQQ6S/sTNwEJBUReaRPg5vyH+l1LkDvhZA+2+LiL1yQ3o823hYTVHP+wr3tCsKi+H6kiYdGh8qsN5ShCO8aboeqojwOmAuBjyMG81QD+J1E0uWSyhvzQGOe1TBUiPZgUpmFOgz1AmOLQ2Tyt0+ktDl3gBDUs4qr0NppGeKpTaQdvlgYwffyr9g8oHazaA1RUFEhTwGPFGnkSdbMZ/KH7SAW2larqMD0fxMNxfM8AZTN7Aby5eQRtuQ91tG087NbMQJhz0="
     app: work-cal
-    on:
-      branch: ci
-  - provider: pages
-    skip_cleanup: true
-    github_token: "$GITHUB_TOKEN"
-    local_dir: frontend/dist/work-calendar
     on:
       branch: ci
