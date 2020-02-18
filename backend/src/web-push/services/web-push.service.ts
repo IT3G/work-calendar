@@ -15,6 +15,9 @@ export class WebPushService {
   }
 
   private initWebPush() {
+    // trying not to crush backend on heroku
+    if (!this.config.PUSH_PUBLIC_KEY && !this.config.PUSH_PRIVATE_KEY) return;
+
     setVapidDetails(`mailto:${this.config.PUSH_MAIL_TO}`, this.config.PUSH_PUBLIC_KEY, this.config.PUSH_PRIVATE_KEY);
   }
 
