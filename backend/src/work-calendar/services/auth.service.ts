@@ -80,7 +80,7 @@ export class AuthService {
 
   async registration(userInfo: LoginModel): Promise<UserEntity> {
     const emailPostfix =
-      this.config.FEATURE_SEND_MAIL === 'YES' && this.config.MAIL_POSTFIX ? `@${this.config.MAIL_POSTFIX}` : '';
+      this.config.FEATURE_AUTH_TYPE === 'LDAP' && this.config.MAIL_POSTFIX ? `@${this.config.MAIL_POSTFIX}` : '';
 
     const data: UserModel = {
       _id: null,
