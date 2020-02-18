@@ -49,7 +49,7 @@ export class AppComponent implements OnInit, OnDestroy {
           return EMPTY;
         })
       )
-      .subscribe(res => console.log(res));
+      .subscribe();
   }
 
   private getInfoFromStore() {
