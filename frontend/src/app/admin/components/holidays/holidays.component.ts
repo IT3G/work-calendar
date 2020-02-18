@@ -21,8 +21,7 @@ export class HolidaysComponent implements OnInit {
 
   public isLoading: Boolean = true;
 
-  constructor(private holidaysService: HolidaysApiService) {
-  }
+  constructor(private holidaysService: HolidaysApiService) {}
 
   ngOnInit() {
     this.fileControl = new FormControl();
@@ -66,22 +65,25 @@ export class HolidaysComponent implements OnInit {
     this.filterYear = year;
   }
 
-  private mapper(src: ParseResult, file: File): HolidaysYearModel[] {
+  private removeChar(data: any): string {
+    return data.toString().replace(/\+/g, '');
+  }
 
+  private mapper(src: ParseResult, file: File): HolidaysYearModel[] {
     return src.data.map(item => {
       const year = item[HolidaysRawData.yearMonth];
-      const Jan = item[HolidaysRawData.Jan].toString().replace(/\+/g, '');
-      const Feb = item[HolidaysRawData.Feb].toString().replace(/\+/g, '');
-      const Mar = item[HolidaysRawData.Mar].toString().replace(/\+/g, '');
-      const Apr = item[HolidaysRawData.Apr].toString().replace(/\+/g, '');
-      const May = item[HolidaysRawData.May].toString().replace(/\+/g, '');
-      const June = item[HolidaysRawData.June].toString().replace(/\+/g, '');
-      const July = item[HolidaysRawData.July].toString().replace(/\+/g, '');
-      const Aug = item[HolidaysRawData.Aug].toString().replace(/\+/g, '');
-      const Sept = item[HolidaysRawData.Sept].toString().replace(/\+/g, '');
-      const Oct = item[HolidaysRawData.Oct].toString().replace(/\+/g, '');
-      const Nov = item[HolidaysRawData.Nov].toString().replace(/\+/g, '');
-      const Dec = item[HolidaysRawData.Dec].toString().replace(/\+/g, '');
+      const Jan = this.removeChar(item[HolidaysRawData.Jan]);
+      const Feb = this.removeChar(item[HolidaysRawData.Feb]);
+      const Mar = this.removeChar(item[HolidaysRawData.Mar]);
+      const Apr = this.removeChar(item[HolidaysRawData.Apr]);
+      const May = this.removeChar(item[HolidaysRawData.May]);
+      const June = this.removeChar(item[HolidaysRawData.June]);
+      const July = this.removeChar(item[HolidaysRawData.July]);
+      const Aug = this.removeChar(item[HolidaysRawData.Aug]);
+      const Sept = this.removeChar(item[HolidaysRawData.Sept]);
+      const Oct = this.removeChar(item[HolidaysRawData.Oct]);
+      const Nov = this.removeChar(item[HolidaysRawData.Nov]);
+      const Dec = this.removeChar(item[HolidaysRawData.Dec]);
       const allDays = item[HolidaysRawData.allDays];
       const allWork = item[HolidaysRawData.allWork];
       const hours24 = item[HolidaysRawData.hours24];
