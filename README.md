@@ -7,11 +7,11 @@
 
 Worktime planning tool.
 
-## --> [LIVE-DEMO](https://enrey.github.io/work-calendar/) <--
+## --> [LIVE-DEMO](https://IT3G.github.io/work-calendar/) <--
 
 maybe u need to represh page some times to start free dyno heroku servers
 
-login: 1, password: 1, or register
+login: 5, password: 5, or register
 
 ## Developer
 
