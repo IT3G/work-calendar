@@ -4,6 +4,7 @@ import { DayType } from '../../../shared/const/day-type.const';
 import { ConfirmService } from '../../../shared/services/confirm.service';
 import { PrintHelperService } from '../../../shared/services/print-helper.service';
 import { Employee } from '../../../shared/models/employee.model';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-presence-history',
@@ -33,7 +34,8 @@ export class PresenceHistoryComponent {
   /** флаг, разрешающий удалить календарную запись */
   public canDeleteCalendarTask(task: TaskModel): boolean {
     return (
-      (this.currentUser._id === this.user._id && new Date(task.dateStart) > new Date()) || this.currentUser.isAdmin
+      (this.currentUser._id === this.user._id && moment(task.dateStart).isSameOrAfter(moment(), 'day')) ||
+      this.currentUser.isAdmin
     );
   }
 

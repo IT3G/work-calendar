@@ -49,7 +49,7 @@ const avatarServiceProvider = {
     avatarServiceProvider,
     { provide: Config, useValue: config }
   ],
-  exports: [UsersService, FollowService]
+  exports: [UsersService, FollowService, AuthService]
 })
 export class UsersModule {
   configure(consumer: MiddlewareConsumer) {

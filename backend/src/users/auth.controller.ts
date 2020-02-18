@@ -31,10 +31,7 @@ export class AuthController {
   @Get('/current')
   async getCurrentUser(@Req() req: Request, @Res() res: Response) {
     try {
-      const authHeader = req.header('Authorization');
-      const [bearer, jwt] = authHeader.split(' ');
-
-      const user = await this.authService.verifyAndGetUser(jwt);
+      const user = await this.authService.verifyByRequesAndGetUser(req);
       res.status(HttpStatus.OK).send(user);
     } catch (e) {
       res.status(HttpStatus.NOT_ACCEPTABLE).send('user not found');
