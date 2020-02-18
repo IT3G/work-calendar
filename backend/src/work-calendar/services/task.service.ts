@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { TaskEntity } from '../../entity/entities/task.request.model';
@@ -15,6 +15,8 @@ import { UserEntity } from '../../entity/entities/user.entity.model';
 
 @Injectable()
 export class TaskService {
+  private readonly logger = new Logger('TaskService');
+
   constructor(
     @InjectModel('Tasks') private readonly taskModel: Model<TaskEntity>,
     private sendMailService: SendMailService,
@@ -185,7 +187,7 @@ export class TaskService {
 
       await Promise.all(notifications);
     } catch (e) {
-      console.error('Ошибка пуша', e);
+      this.logger.error('Ошибка при отправке пуша', e.stack);
     }
   }
 
@@ -211,7 +213,7 @@ export class TaskService {
 
       await this.sendMailService.sendMail(mailData);
     } catch (e) {
-      console.error('Ошибка при рассылке', e);
+      this.logger.error('Ошибка при отправке почты', e.stack);
     }
   }
 

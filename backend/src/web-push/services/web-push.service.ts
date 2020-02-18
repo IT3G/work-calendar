@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { WebPushEntity } from '../entities/web-push.entity';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
@@ -10,6 +10,8 @@ import { Config } from '../../config/config';
 
 @Injectable()
 export class WebPushService {
+  private readonly logger = new Logger('WebPushService');
+
   constructor(@InjectModel('WebPush') private readonly webPushModel: Model<WebPushEntity>, private config: Config) {
     this.initWebPush();
   }
@@ -38,7 +40,7 @@ export class WebPushService {
 
       await sendNotification(subscriptionData.subscription, JSON.stringify(payload));
     } catch (e) {
-      console.log('Ошибка при отправке пуша', e);
+      this.logger.error('Ошибка при отправке пуша', e.stack);
     }
   }
 }
