@@ -17,7 +17,7 @@ script:
 deploy:
   - provider: pages
     skip_cleanup: true
-    github_token: "$GITHUB_TOKEN"
+    github_token: $GITHUB_TOKEN
     local_dir: frontend/dist/work-calendar
     on:
       branch: ci
