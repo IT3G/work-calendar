@@ -37,6 +37,8 @@
     <mat-tab label="Подписки">
       <app-profile-subscriptions
         [selectedUser]="selectedUser"
+        [currentUser]="currentUser$ | async"
+        [isCurrentUserAdmin]="isAdmin$ | async"
         [users$]="users$"
         [userFollow]="userFollow"
         (addFollow)="addFollow($event)"
