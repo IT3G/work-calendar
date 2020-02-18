@@ -79,13 +79,16 @@ export class AuthService {
   }
 
   async registration(userInfo: LoginModel): Promise<UserEntity> {
+    const emailPostfix =
+      this.config.FEATURE_SEND_MAIL === 'YES' && this.config.MAIL_POSTFIX ? `@${this.config.MAIL_POSTFIX}` : '';
+
     const data: UserModel = {
       _id: null,
       username: userInfo.name,
       location: null,
       position: null,
       whenCreated: null,
-      email: `${userInfo.username}@it2g.ru`,
+      email: `${userInfo.username}${emailPostfix}`,
       telNumber: null,
       physicalDeliveryOfficeName: null,
       mailNickname: userInfo.username,
