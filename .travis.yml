@@ -22,3 +22,9 @@ deploy:
     app: work-cal
     on:
       branch: ci
+  - provider: pages
+    skip_cleanup: true
+    github_token: "$GITHUB_TOKEN"
+    local_dir: frontend/dist/work-calendar
+    on:
+      branch: ci
