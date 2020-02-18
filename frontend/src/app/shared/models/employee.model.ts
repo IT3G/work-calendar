@@ -1,5 +1,6 @@
 import { DictionaryModel } from './dictionary.model';
 import { ProjectNew } from './project-new';
+import { EmployeeProject } from './employee-project.model';
 
 export class Employee {
   _id: string;
@@ -13,14 +14,7 @@ export class Employee {
   skype: string;
   physicalDeliveryOfficeName: string;
   mailNickname: string;
-  projects: [
-    {
-      _id: string;
-      project: string;
-      dateStart: string;
-      dateEnd: string;
-    }
-  ];
+  projects: EmployeeProject[];
   isAdmin: boolean;
   hasMailing: boolean;
   subdivision: DictionaryModel;

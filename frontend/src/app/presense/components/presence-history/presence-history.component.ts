@@ -17,6 +17,9 @@ export class PresenceHistoryComponent {
   @Input()
   user: Employee;
 
+  @Input()
+  currentUser: Employee;
+
   @Output()
   deleteTask = new EventEmitter<string>();
 
@@ -29,7 +32,9 @@ export class PresenceHistoryComponent {
 
   /** флаг, разрешающий удалить календарную запись */
   public canDeleteCalendarTask(task: TaskModel): boolean {
-    return new Date(task.dateStart) > new Date() || this.user.isAdmin;
+    return (
+      (this.currentUser._id === this.user._id && new Date(task.dateStart) > new Date()) || this.currentUser.isAdmin
+    );
   }
 
   openApproveDialog(taskId: string) {

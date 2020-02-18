@@ -18,6 +18,7 @@ import { TaskMapperService } from '../../../shared/services/task-mapper.service'
 })
 export class PresencePageComponent implements OnInit, OnDestroy {
   public selectedUser: Employee;
+  public currentUser: Employee;
   public holidays$: Observable<HolidaysModel[]>;
   private getCurrentUserSub = new Subscription();
   public tasks: TaskModel[] = [];
@@ -50,7 +51,10 @@ export class PresencePageComponent implements OnInit, OnDestroy {
       this.route.params
         .pipe(
           switchMap(params => this.getUserByIdOrCurrent(params.id)),
-          tap(res => (this.selectedUser = res)),
+          tap(res => {
+            this.selectedUser = res;
+            this.currentUser = this.contextStoreService.getCurrentUser();
+          }),
           switchMap(res => this.tasksApi.loadAllTasksByEmployee(res.mailNickname))
         )
         .subscribe(tasks => this.updateTasks(tasks))
