@@ -13,7 +13,9 @@ export class WebPushService {
   private readonly logger = new Logger('WebPushService');
 
   constructor(@InjectModel('WebPush') private readonly webPushModel: Model<WebPushEntity>, private config: Config) {
-    this.initWebPush();
+    if (config.FEATURE_WEB_PUSH === 'YES') {
+      this.initWebPush();
+    }
   }
 
   private initWebPush() {
@@ -24,6 +26,10 @@ export class WebPushService {
   }
 
   async addSubscription(webPush: SubscriptionModel): Promise<WebPushEntity> {
+    if (this.config.FEATURE_WEB_PUSH === 'NO') {
+      return;
+    }
+
     const subscription = await this.webPushModel.findOne({ userName: webPush.userName });
 
     if (subscription) {
@@ -34,6 +40,10 @@ export class WebPushService {
   }
 
   async sendPushNotification(userName: string, payload: NotificationPayloadModel): Promise<void> {
+    if (this.config.FEATURE_WEB_PUSH === 'NO') {
+      return;
+    }
+
     try {
       const subscriptionData = await this.webPushModel.findOne({ userName });
 

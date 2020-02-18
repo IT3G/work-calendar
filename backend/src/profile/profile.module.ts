@@ -7,8 +7,6 @@ import { ConfluenceAvatarService } from './services/avatars/confluence-avatars.s
 import { DefaultAvatarsService } from './services/avatars/default-avatars.service';
 import { UsersService } from './services/users.service';
 import { FollowService } from './services/follow.service';
-import { WebPushModule } from '../web-push/web-push.module';
-import { MailModule } from '../mail/mail.module';
 import { UsersController } from './controllers/users.controller';
 import { AvatarsController } from './controllers/avatars.controller';
 import { FollowController } from './controllers/follow.controller';
@@ -28,16 +26,7 @@ const avatarServiceProvider = {
 };
 
 @Module({
-  imports: [
-    EntityModule,
-    HttpModule,
-    MailModule,
-    WebPushModule,
-    JwtModule.register({
-      secret: config.JWT_SECRET_KEY,
-      signOptions: { expiresIn: config.JWT_EXPIRES }
-    })
-  ],
+  imports: [EntityModule, HttpModule],
   controllers: [UsersController, AvatarsController, FollowController],
   providers: [UsersService, FollowService, avatarServiceProvider, { provide: Config, useValue: config }],
   exports: [UsersService, FollowService]
