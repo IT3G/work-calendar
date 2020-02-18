@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Subscription, combineLatest, from, EMPTY } from 'rxjs';
 import { ConfigurationApiService } from './core/services/configuration-api.service';
-import { EmployeeApiService } from './core/services/employee-api.service';
 import { GitInfoService } from './core/services/git-info.service';
 import { ContextStoreService } from './core/store/context-store.service';
 import { SwPush } from '@angular/service-worker';
