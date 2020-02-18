@@ -1,22 +1,15 @@
 import { Body, Controller, Get, HttpStatus, Post, Req, Res } from '@nestjs/common';
 import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
 import { Request, Response } from 'express';
-import { Config } from '../config/config';
-import { UsersService } from './services/users.service';
-import { LoginModel } from './models/login.model';
-import { AuthService } from './services/auth.service';
-import { LdapService } from './services/ldap.service';
-
+import { LoginModel } from '../models/login.model';
+import { LdapService } from '../services/ldap.service';
+import { AuthService } from '../services/auth.service';
+import { UsersService } from '../../profile/services/users.service';
 @ApiBearerAuth()
 @ApiUseTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private ldapService: LdapService,
-    private usersService: UsersService,
-    private authService: AuthService,
-    private config: Config
-  ) {}
+  constructor(private ldapService: LdapService, private usersService: UsersService, private authService: AuthService) {}
   @Post()
   async auth(@Res() res: Response, @Body() credentials: LoginModel) {
     try {
@@ -69,7 +62,7 @@ export class AuthController {
         return;
       }
 
-      const newUser = await this.usersService.registration(credentials);
+      const newUser = await this.authService.registration(credentials);
       res.status(HttpStatus.OK).send(newUser);
     } catch (e) {
       res.status(HttpStatus.NOT_ACCEPTABLE).send('USER NOT FOUND');

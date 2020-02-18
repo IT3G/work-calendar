@@ -1,20 +1,22 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { TaskEntity } from '../../entity/entities/task.request.model';
 import { SendMailService } from '../../mail/services/send-mail.service';
 import { SendMailRequestModel } from '../../mail/models/send-mail.request.model';
-import { UsersService } from '../../users/services/users.service';
-import { FollowService } from '../../users/services/follow.service';
 import { TaskModel } from '../models/task.model';
 import { TaskType } from '../models/task-type.enum';
 import * as moment from 'moment';
 import { PresenceModel } from '../models/task-month.model';
 import { WebPushService } from '../../web-push/services/web-push.service';
 import { UserEntity } from '../../entity/entities/user.entity.model';
+import { FollowService } from '../../profile/services/follow.service';
+import { UsersService } from '../../profile/services/users.service';
 
 @Injectable()
 export class TaskService {
+  private readonly logger = new Logger('TaskService');
+
   constructor(
     @InjectModel('Tasks') private readonly taskModel: Model<TaskEntity>,
     private sendMailService: SendMailService,
@@ -185,7 +187,7 @@ export class TaskService {
 
       await Promise.all(notifications);
     } catch (e) {
-      console.error('Ошибка пуша', e);
+      this.logger.error('Ошибка при отправке пуша', e.stack);
     }
   }
 
@@ -211,7 +213,7 @@ export class TaskService {
 
       await this.sendMailService.sendMail(mailData);
     } catch (e) {
-      console.error('Ошибка при рассылке', e);
+      this.logger.error('Ошибка при отправке почты', e.stack);
     }
   }
 

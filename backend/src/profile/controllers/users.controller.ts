@@ -1,9 +1,7 @@
 import { Body, Controller, Get, HttpStatus, NotFoundException, Param, Post, Res, HttpCode } from '@nestjs/common';
 import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
-import { UserModel } from './models/user.model';
-import { UsersService } from './services/users.service';
-import { UserEntity } from '../entity/entities/user.entity.model';
-import { FollowService } from './services/follow.service';
+import { UserModel } from '../models/user.model';
+import { UsersService } from '../services/users.service';
 
 @ApiBearerAuth()
 @ApiUseTags('Users')

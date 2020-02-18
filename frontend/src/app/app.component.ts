@@ -2,13 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Subscription, combineLatest, from, EMPTY } from 'rxjs';
 import { ConfigurationApiService } from './core/services/configuration-api.service';
-import { EmployeeApiService } from './core/services/employee-api.service';
 import { GitInfoService } from './core/services/git-info.service';
 import { ContextStoreService } from './core/store/context-store.service';
-import { EmployeeStoreService } from './core/store/employee-store.service';
-import { Employee } from './shared/models/employee.model';
 import { SwPush } from '@angular/service-worker';
-import { HttpClient } from '@angular/common/http';
 import { filter, switchMap, catchError } from 'rxjs/operators';
 import { PushApiService } from './core/services/push-api.service';
 
@@ -24,8 +20,6 @@ export class AppComponent implements OnInit, OnDestroy {
     private title: Title,
     private gitInfo: GitInfoService,
     private contextStoreService: ContextStoreService,
-    private employeeApiService: EmployeeApiService,
-    private employeeStoreService: EmployeeStoreService,
     private configurationApi: ConfigurationApiService,
     private swPush: SwPush,
     private pushApi: PushApiService
@@ -44,8 +38,8 @@ export class AppComponent implements OnInit, OnDestroy {
   private initWebPush() {
     combineLatest([this.contextStoreService.getCurrentUser$(), this.contextStoreService.settings$])
       .pipe(
-        filter(([user, config]) => !!config && !!user),
         filter(() => this.swPush.isEnabled),
+        filter(([user, config]) => !!user && !!config && config.FEATURE_WEB_PUSH === 'YES'),
         switchMap(([user, config]) =>
           from(this.swPush.requestSubscription({ serverPublicKey: config.PUSH_PUBLIC_KEY }))
         ),
@@ -59,17 +53,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private getInfoFromStore() {
-    this.getEmployees();
-    this.subscription.add(this.employeeStoreService.updater().subscribe(() => this.getEmployees()));
     this.configurationApi.loadSettings().subscribe(res => this.contextStoreService.settings$.next(res));
-  }
-
-  private getEmployees(): void {
-    this.subscription.add(
-      this.employeeApiService.loadAllEmployees().subscribe((key: Employee[]) => {
-        this.employeeStoreService.addEmployees(key);
-      })
-    );
   }
 
   /** Добавление версии в заголовок */

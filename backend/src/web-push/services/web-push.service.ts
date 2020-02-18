@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { WebPushEntity } from '../entities/web-push.entity';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
@@ -10,8 +10,12 @@ import { Config } from '../../config/config';
 
 @Injectable()
 export class WebPushService {
+  private readonly logger = new Logger('WebPushService');
+
   constructor(@InjectModel('WebPush') private readonly webPushModel: Model<WebPushEntity>, private config: Config) {
-    this.initWebPush();
+    if (config.FEATURE_WEB_PUSH === 'YES') {
+      this.initWebPush();
+    }
   }
 
   private initWebPush() {
@@ -22,6 +26,10 @@ export class WebPushService {
   }
 
   async addSubscription(webPush: SubscriptionModel): Promise<WebPushEntity> {
+    if (this.config.FEATURE_WEB_PUSH === 'NO') {
+      return;
+    }
+
     const subscription = await this.webPushModel.findOne({ userName: webPush.userName });
 
     if (subscription) {
@@ -32,6 +40,10 @@ export class WebPushService {
   }
 
   async sendPushNotification(userName: string, payload: NotificationPayloadModel): Promise<void> {
+    if (this.config.FEATURE_WEB_PUSH === 'NO') {
+      return;
+    }
+
     try {
       const subscriptionData = await this.webPushModel.findOne({ userName });
 
@@ -41,7 +53,7 @@ export class WebPushService {
 
       await sendNotification(subscriptionData.subscription, JSON.stringify(payload));
     } catch (e) {
-      console.log('Ошибка при отправке пуша', e);
+      this.logger.error('Ошибка при отправке пуша', e.stack);
     }
   }
 }

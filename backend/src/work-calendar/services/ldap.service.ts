@@ -1,10 +1,12 @@
-import { Injectable, OnApplicationShutdown } from '@nestjs/common';
+import { Injectable, OnApplicationShutdown, Logger } from '@nestjs/common';
 import { Config } from '../../config/config';
 import { LoginModel } from '../models/login.model';
-import { UserModel } from '../models/user.model';
 import * as ldap from 'ldapjs';
+import { UserModel } from '../../profile/models/user.model';
 @Injectable()
 export class LdapService implements OnApplicationShutdown {
+  private readonly logger = new Logger('LdapService');
+
   constructor(private configService: Config) {}
   config = {
     readerDn: this.configService.READER_DOMAIN_NAME,
@@ -25,8 +27,8 @@ export class LdapService implements OnApplicationShutdown {
       reconnect: true
     });
 
-    this.client.on('error', err => {
-      console.error(err);
+    this.client.on('error', e => {
+      this.logger.error('Ошибка авторизации', e.stack);
     });
     const filter = await this.getFilter(credentials.username);
     const user = await this.search(filter, credentials.password, add);
@@ -44,7 +46,7 @@ export class LdapService implements OnApplicationShutdown {
 
   private mapToSendOnClient(attributes: Array<{ type: string; data: string }>): UserModel {
     return {
-      id: null,
+      _id: null,
       username: this.getAttribute(attributes, 'cn'),
       location: this.getAttribute(attributes, 'l'),
       position: this.getAttribute(attributes, 'title'),
@@ -53,7 +55,6 @@ export class LdapService implements OnApplicationShutdown {
       telNumber: this.getAttribute(attributes, 'mobile'),
       physicalDeliveryOfficeName: this.getAttribute(attributes, 'physicalDeliveryOfficeName'),
       mailNickname: this.getAttribute(attributes, 'mailNickname'),
-      projects: [],
       isAdmin: false,
       hasMailing: true,
       subdivision: null,
@@ -100,8 +101,8 @@ export class LdapService implements OnApplicationShutdown {
             searchList.push(entry);
           });
 
-          searchRes.on('error', entry => {
-            console.error('error');
+          searchRes.on('error', e => {
+            this.logger.error('Ошибка при поиске пользователя', e.stack);
           });
 
           searchRes.on('end', retVal => {

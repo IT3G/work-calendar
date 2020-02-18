@@ -4,15 +4,13 @@ import { AddedProjectModel } from './added-project.model';
 
 export class UserModel {
   @ApiModelProperty()
-  id: string;
+  _id: string;
   @ApiModelProperty()
   username: string;
   @ApiModelProperty()
   location: string;
   @ApiModelProperty()
   position: string;
-  @ApiModelProperty()
-  projects: AddedProjectModel[];
   @ApiModelProperty()
   whenCreated: string;
   @ApiModelProperty()
