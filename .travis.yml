@@ -6,6 +6,8 @@ sudo: required
 branches:
   only:
   - ci
+script:
+  - npm install -g yarn
 deploy:
   - provider: heroku
     skip_cleanup: true
