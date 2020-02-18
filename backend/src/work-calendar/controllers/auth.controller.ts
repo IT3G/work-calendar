@@ -1,12 +1,11 @@
 import { Body, Controller, Get, HttpStatus, Post, Req, Res } from '@nestjs/common';
 import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
 import { Request, Response } from 'express';
-import { Config } from '../config/config';
-import { UsersService } from './services/users.service';
-import { LoginModel } from './models/login.model';
-import { AuthService } from './services/auth.service';
-import { LdapService } from './services/ldap.service';
-
+import { LoginModel } from '../models/login.model';
+import { LdapService } from '../services/ldap.service';
+import { UsersService } from '../services/users.service';
+import { AuthService } from '../services/auth.service';
+import { Config } from '../../config/config';
 @ApiBearerAuth()
 @ApiUseTags('Auth')
 @Controller('auth')
