@@ -5,8 +5,9 @@ import { Config } from '../../config/config';
 import { JwtSignModel } from '../models/jwt-sign.model';
 import { LoginModel } from '../models/login.model';
 import { LdapService } from './ldap.service';
-import { UsersService } from './users.service';
 import { UserEntity } from '../../entity/entities/user.entity.model';
+import { UsersService } from '../../profile/services/users.service';
+import { UserModel } from '../../profile/models/user.model';
 
 @Injectable()
 export class AuthService {
@@ -75,5 +76,27 @@ export class AuthService {
 
     const res: JwtSignModel = this.jwtService.verify(jwt);
     return await this.usersService.getUserByLogin(res.mailNickname);
+  }
+
+  async registration(userInfo: LoginModel): Promise<UserEntity> {
+    const data: UserModel = {
+      _id: null,
+      username: userInfo.name,
+      location: null,
+      position: null,
+      whenCreated: null,
+      email: `${userInfo.username}@it2g.ru`,
+      telNumber: null,
+      physicalDeliveryOfficeName: null,
+      mailNickname: userInfo.username,
+      isAdmin: false,
+      hasMailing: false,
+      subdivision: null,
+      jobPosition: null,
+      authType: 'hash',
+      hashPassword: crypto.createHmac('sha256', userInfo.password).digest('hex')
+    };
+
+    return this.usersService.addUser(data);
   }
 }

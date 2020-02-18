@@ -4,14 +4,14 @@ import { Model } from 'mongoose';
 import { TaskEntity } from '../../entity/entities/task.request.model';
 import { SendMailService } from '../../mail/services/send-mail.service';
 import { SendMailRequestModel } from '../../mail/models/send-mail.request.model';
-import { UsersService } from './users.service';
-import { FollowService } from './follow.service';
 import { TaskModel } from '../models/task.model';
 import { TaskType } from '../models/task-type.enum';
 import * as moment from 'moment';
 import { PresenceModel } from '../models/task-month.model';
 import { WebPushService } from '../../web-push/services/web-push.service';
 import { UserEntity } from '../../entity/entities/user.entity.model';
+import { FollowService } from '../../profile/services/follow.service';
+import { UsersService } from '../../profile/services/users.service';
 
 @Injectable()
 export class TaskService {
