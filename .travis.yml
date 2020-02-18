@@ -20,9 +20,9 @@ deploy:
   - provider: script
     skip_cleanup: true
     script: 
-      - cd frontend
-      - yarn install &&
-      - npm run build:test
+      cd frontend &&
+      yarn install &&
+      npm run build:test
     on:
       branch: ci
   - provider: pages
