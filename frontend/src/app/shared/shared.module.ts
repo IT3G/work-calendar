@@ -10,7 +10,6 @@ import { AvatarSourcePipe } from './pipes/avatar-source.pipe';
 import { TransformTaskTypePipe } from './pipes/calendar/transform-task-type.pipe';
 import { CurrentProjectsPipe } from './pipes/current-projects.pipe';
 import { DatePipe } from './pipes/date.pipe';
-import { CurrentEmployeePipe } from './pipes/description-history/current-employee.pipe';
 import { TaskTypePipe } from './pipes/description-history/task-type.pipe';
 import { FilterEmployeePipe } from './pipes/filter-employee.pipe';
 import { IsCurrentDayPipe } from './pipes/is-current-day.pipe';
@@ -30,7 +29,6 @@ const pipes = [
   UsernamePipe,
   DatePipe,
   TaskTypePipe,
-  CurrentEmployeePipe,
   TransformTaskTypePipe,
   FilterEmployeePipe,
   AvatarSourcePipe,

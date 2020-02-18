@@ -8,5 +8,6 @@
   },
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "jira-plugin.workingProject": ""
 }
