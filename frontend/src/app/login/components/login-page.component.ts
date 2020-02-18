@@ -6,7 +6,6 @@ import { filter } from 'rxjs/operators';
 import { AuthApiService } from '../../core/services/auth-api.service';
 import { EmployeeApiService } from '../../core/services/employee-api.service';
 import { ContextStoreService } from '../../core/store/context-store.service';
-import { EmployeeStoreService } from '../../core/store/employee-store.service';
 import { AuthSetting } from '../../shared/models/auth-setting.model';
 import { Employee } from '../../shared/models/employee.model';
 
@@ -23,7 +22,6 @@ export class LoginPageComponent implements OnInit {
   constructor(
     private authService: AuthApiService,
     private contextStoreService: ContextStoreService,
-    private employeeStoreService: EmployeeStoreService,
     private employeeApiService: EmployeeApiService,
     private router: Router
   ) {}
@@ -59,7 +57,6 @@ export class LoginPageComponent implements OnInit {
   }
 
   private finishedLogin(): void {
-    this.employeeStoreService.update();
     this.contextStoreService.updater().subscribe(() => {
       this.employeeApiService
         .searchUserById(this.contextStoreService.getCurrentUser()._id)

@@ -7,7 +7,6 @@ import { environment } from '../../../environments/environment';
 import { EmployeeApiService } from '../../core/services/employee-api.service';
 import { FollowApiService } from '../../core/services/follow-api.service';
 import { ContextStoreService } from '../../core/store/context-store.service';
-import { EmployeeStoreService } from '../../core/store/employee-store.service';
 import { AuthSetting } from '../../shared/models/auth-setting.model';
 import { DictionaryModel } from '../../shared/models/dictionary.model';
 import { Employee } from '../../shared/models/employee.model';
@@ -37,7 +36,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   constructor(
     private contextStoreService: ContextStoreService,
     private employeeApiService: EmployeeApiService,
-    private employeeStoreService: EmployeeStoreService,
     private route: ActivatedRoute,
     private router: Router,
     private followApi: FollowApiService
@@ -58,7 +56,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   public onUpdateProfile(employee: Employee): void {
     this.employeeApiService.updateUserInfo(this.login, employee).subscribe(() => {
       this.contextStoreService.update();
-      this.employeeStoreService.update();
       this.loadFollow(this.selectedUser._id);
     });
   }

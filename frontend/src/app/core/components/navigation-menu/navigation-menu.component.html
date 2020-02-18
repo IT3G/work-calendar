@@ -9,7 +9,7 @@
     class="nav-item"
     *ngIf="(isAuth$ | async) && (isAdmin$ | async)"
     [ngClass]="{
-      active: router.url === '/employee-list' || router.url === '/app-configuration' || router.url === '/projects'
+      active: router.url === '/employee-list' || router.url === '/projects'
     }"
     [matMenuTriggerFor]="menu"
   >
@@ -21,7 +21,6 @@
     <a mat-menu-item class="nav-item" routerLink="/admin/holidays" routerLinkActive="active">
       Производственный календарь
     </a>
-    <a mat-menu-item class="nav-item" routerLink="/admin/app-configuration" routerLinkActive="active">Конфигурация</a>
   </mat-menu>
 
   <ng-template #noAuth>

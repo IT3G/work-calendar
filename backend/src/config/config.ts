@@ -15,6 +15,7 @@ export class Config {
   LDAP_SUFFIX: string;
   FEATURE_AVATAR_SOURCE: 'NO' | 'CONFLUENCE';
   FEATURE_AUTH_TYPE: 'PASSWORD' | 'LDAP';
+  FEATURE_WEB_PUSH: 'NO' | 'YES';
   CONFLUENCE_BASE_URL: string;
   CONFLUENCE_LOGIN: string;
   CONFLUENCE_PASSWORD: string;
@@ -25,6 +26,9 @@ export class Config {
   PRINT_COMPANY_NAME: string;
   PRINT_HEAD_MANAGER_POSITION: string;
   PRINT_HEAD_MANAGER_NAME: string;
+  PUSH_MAIL_TO: string;
+  PUSH_PUBLIC_KEY: string;
+  PUSH_PRIVATE_KEY: string;
 }
 
 let config;
