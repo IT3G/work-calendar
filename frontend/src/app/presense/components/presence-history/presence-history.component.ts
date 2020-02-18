@@ -27,6 +27,11 @@ export class PresenceHistoryComponent {
 
   constructor(private confirm: ConfirmService, private printService: PrintHelperService) {}
 
+  /** флаг, разрешающий удалить календарную запись */
+  public canDeleteCalendarTask(task: TaskModel): boolean {
+    return new Date(task.dateStart) > new Date() || this.user.isAdmin;
+  }
+
   openApproveDialog(taskId: string) {
     this.confirm.openDialog('Вы согласовали отпуск?').subscribe(res => res && this.approve.emit(taskId));
   }

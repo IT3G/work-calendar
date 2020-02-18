@@ -36,6 +36,11 @@
       </ng-template>
     </ng-container>
 
-    <i (click)="openDeleteDialog(task._id)" class="fa fa-times" aria-hidden="true"></i>
+    <i
+      *ngIf="canDeleteCalendarTask(task)"
+      (click)="openDeleteDialog(task._id)"
+      class="fa fa-times"
+      aria-hidden="true"
+    ></i>
   </div>
 </ng-template>
