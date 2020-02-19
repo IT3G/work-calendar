@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Employee } from '../../models/employee.model';
 
 /** Диалог для корректировки ФИО Сотрудника */
 @Component({
@@ -11,15 +12,15 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 export class UsernameUpdateComponent {
   constructor(
     public dialogRef: MatDialogRef<UsernameUpdateComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { username: string }
+    @Inject(MAT_DIALOG_DATA) public data: { user: Employee }
   ) {}
 
-  private fio: string[] = this.data.username.split(' ');
+  private username: string[] = this.data.user.username.split(' ');
 
   public profileForm = new FormGroup({
-    f: new FormControl(this.fio[0], Validators.required),
-    i: new FormControl(this.fio[1], Validators.required),
-    o: new FormControl(this.fio[2], Validators.required)
+    f: new FormControl(this.username[0], Validators.required),
+    i: new FormControl(this.username[1], Validators.required),
+    o: new FormControl(this.data.user.patronymic, Validators.required)
   });
 
   public onUpdateProfile(): void {
@@ -28,7 +29,8 @@ export class UsernameUpdateComponent {
       return;
     }
 
-    const username = `${this.profileForm.value['f']} ${this.profileForm.value['i']} ${this.profileForm.value['o']}`;
-    this.dialogRef.close(username);
+    const username = `${this.profileForm.value['f']} ${this.profileForm.value['i']}`;
+    const patronymic = this.profileForm.value['o'];
+    this.dialogRef.close({ ...this.data.user, username, patronymic });
   }
 }

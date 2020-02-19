@@ -76,7 +76,7 @@ export class PresencePageComponent implements OnInit, OnDestroy {
 
   /** печать заявления на отпуск */
   public printWorkHoliday(task: TaskModel): void {
-    if (this.isValidUsername(this.selectedUser.username)) {
+    if (this.selectedUser.patronymic) {
       this.printService.printStatement(this.selectedUser.username, task.dateStart, task.dateEnd);
       return;
     }
@@ -99,16 +99,11 @@ export class PresencePageComponent implements OnInit, OnDestroy {
     this.tasksToCalendar = this.tasksMapper.mapTasksToCalendar(this.tasks);
   }
 
-  /** проверка валидности ФИО */
-  private isValidUsername(username: string): boolean {
-    return /^\S+?\s\S+?\s\S+?$/.test(username);
-  }
-
   /** принудить пользователя к коррекции своего ФИО  */
   private showDialogToUpdateUser(): Observable<unknown> {
-    return this.dialog.userNameUpdate(this.selectedUser.username).pipe(
+    return this.dialog.userNameUpdate(this.selectedUser).pipe(
       filter(Boolean),
-      switchMap((username: string) => this.updateUserInfo({ ...this.selectedUser, username }))
+      switchMap((user: Employee) => this.updateUserInfo(user))
     );
   }
 

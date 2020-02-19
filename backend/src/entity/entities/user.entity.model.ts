@@ -7,6 +7,7 @@ import { ProjectNewEntity } from './project-new.entity';
 export interface UserEntity extends Document {
   id: string;
   username: string;
+  patronymic: string;
   location: string;
   position: string;
   projects: [

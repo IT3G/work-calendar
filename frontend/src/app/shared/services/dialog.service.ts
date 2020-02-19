@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../components/confirm-dialog/confirm-dialog.component';
 import { UsernameUpdateComponent } from '../components/username-update-dialog/username-update-dialog.component';
 import { Observable } from 'rxjs';
+import { Employee } from '../models/employee.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,10 +22,10 @@ export class DialogService {
   }
 
   /** Диалог корректировки ФИО Сотрудника */
-  userNameUpdate(username: string, width = '50vw'): Observable<string | false> {
+  userNameUpdate(user: Employee, width = '50vw'): Observable<string | false> {
     const dialogRef = this.dialog.open(UsernameUpdateComponent, {
       width,
-      data: { username }
+      data: { user }
     });
 
     return dialogRef.afterClosed();
