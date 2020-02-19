@@ -10,6 +10,8 @@ import { HolidaysModel } from '../../../shared/models/holidays.model';
 import { HolidaysApiService } from '../../../core/services/holidays-api.service';
 import { TaskApiService } from '../../../core/services/task-api.service';
 import { TaskMapperService } from '../../../shared/services/task-mapper.service';
+import { PrintHelperService } from '../../../shared/services/print-helper.service';
+import { DialogService } from '../../../shared/services/dialog.service';
 
 @Component({
   selector: 'app-presence',
@@ -30,7 +32,9 @@ export class PresencePageComponent implements OnInit, OnDestroy {
     private tasksApi: TaskApiService,
     private tasksMapper: TaskMapperService,
     private employeeApiService: EmployeeApiService,
-    private holidaysService: HolidaysApiService
+    private holidaysService: HolidaysApiService,
+    private printService: PrintHelperService,
+    private dialog: DialogService
   ) {}
 
   ngOnInit() {
@@ -70,6 +74,18 @@ export class PresencePageComponent implements OnInit, OnDestroy {
     this.tasksApi.deleteById(id).subscribe(() => this.updateTasks(this.tasks.filter(t => t._id !== id)));
   }
 
+  /** печать заявления на отпуск */
+  public printWorkHoliday(task: TaskModel): void {
+    if (this.isValidUsername(this.selectedUser.username)) {
+      this.printService.printStatement(this.selectedUser.username, task.dateStart, task.dateEnd);
+      return;
+    }
+
+    this.showDialogToUpdateUser().subscribe(() => {
+      this.printWorkHoliday(task);
+    });
+  }
+
   private getUserByIdOrCurrent(id?: string): Observable<Employee> {
     if (id) {
       return this.employeeApiService.searchUserByLogin(id);
@@ -81,5 +97,23 @@ export class PresencePageComponent implements OnInit, OnDestroy {
   private updateTasks(tasks: TaskModel[]) {
     this.tasks = tasks;
     this.tasksToCalendar = this.tasksMapper.mapTasksToCalendar(this.tasks);
+  }
+
+  /** проверка валидности ФИО */
+  private isValidUsername(username: string): boolean {
+    return /^\S+?\s\S+?\s\S+?$/.test(username);
+  }
+
+  /** принудить пользователя к коррекции своего ФИО  */
+  private showDialogToUpdateUser(): Observable<unknown> {
+    return this.dialog.userNameUpdate(this.selectedUser.username).pipe(
+      filter(Boolean),
+      switchMap((username: string) => this.updateUserInfo({ ...this.selectedUser, username }))
+    );
+  }
+
+  /** обновить данные выделенного пользователя */
+  private updateUserInfo(user: Employee): Observable<unknown> {
+    return this.employeeApiService.updateUserInfo(user.mailNickname, user).pipe(tap(() => (this.selectedUser = user)));
   }
 }

@@ -1,0 +1,21 @@
+<div class="title">Недостаточно данных</div>
+<div class="subtitle">Для продолжения работы нужно заполнить следующие поля:</div>
+
+<div class="profile-form" [formGroup]="profileForm" (keydown.enter)="onUpdateProfile()">
+  <mat-form-field class="form-group">
+    <input matInput placeholder="фамилия" autocomplete="off" formControlName="f" />
+  </mat-form-field>
+  <mat-form-field class="form-group">
+    <input matInput placeholder="имя" autocomplete="off" formControlName="i" />
+  </mat-form-field>
+  <mat-form-field class="form-group">
+    <input matInput placeholder="отчество" autocomplete="off" formControlName="o" />
+  </mat-form-field>
+</div>
+
+<div class="buttons">
+  <button mat-raised-button (click)="onUpdateProfile()" color="primary">Обновить</button>
+  <button mat-raised-button (click)="dialogRef.close(false)">
+    Отмена
+  </button>
+</div>
