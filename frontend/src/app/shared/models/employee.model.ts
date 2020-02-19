@@ -13,14 +13,6 @@ export class Employee {
   skype: string;
   physicalDeliveryOfficeName: string;
   mailNickname: string;
-  projects: [
-    {
-      _id: string;
-      project: string;
-      dateStart: string;
-      dateEnd: string;
-    }
-  ];
   isAdmin: boolean;
   hasMailing: boolean;
   subdivision: DictionaryModel;

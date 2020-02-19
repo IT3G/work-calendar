@@ -1,7 +1,9 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Res, Delete, Put } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, Post, Res, Delete, Put, UseGuards } from '@nestjs/common';
 import { TaskService } from '../services/task.service';
 import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
 import { TaskModel } from '../models/task.model';
+import { TaskDeleteGuard } from '../guards/task-delete.guard';
+import { AdminActionGuard } from '../guards/admin-action.guard';
 
 @ApiBearerAuth()
 @ApiUseTags('Tasks')
@@ -46,6 +48,7 @@ export class TasksController {
   }
 
   @Delete('/:id')
+  @UseGuards(TaskDeleteGuard)
   async delete(@Res() res, @Param('id') id) {
     const result = await this.taskService.deleteById(id);
 

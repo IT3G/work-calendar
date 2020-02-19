@@ -11,6 +11,7 @@ import { TasksController } from './controllers/tasks.controller';
 import { TaskService } from './services/task.service';
 import { AuthController } from './controllers/auth.controller';
 import { ProfileModule } from '../profile/profile.module';
+import { guards } from './guards';
 
 const config = getConfig();
 
@@ -27,7 +28,7 @@ const config = getConfig();
     })
   ],
   controllers: [AuthController, TasksController],
-  providers: [LdapService, AuthService, TaskService, { provide: Config, useValue: config }]
+  providers: [LdapService, AuthService, TaskService, { provide: Config, useValue: config }, ...guards]
 })
 export class WorkCalendarModule {
   configure(consumer: MiddlewareConsumer) {
