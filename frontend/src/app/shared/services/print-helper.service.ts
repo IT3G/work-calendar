@@ -1,27 +1,67 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ComponentFactoryResolver, ViewContainerRef, Type, ComponentRef } from '@angular/core';
 import { incline } from 'lvovich';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { ContextStoreService } from '../../core/store/context-store.service';
 import { HttpClient } from '@angular/common/http';
+import { PrintComponent } from '../models/print-component.model';
+import { WorkHolidayComponent } from '../components/print/work-holiday/work-holiday.component';
+import { first } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PrintHelperService {
-  constructor(private contextStoreService: ContextStoreService, private http: HttpClient) {}
+  /** ссылка на контейнер, в котором будут создаваться печатные компоненты */
+  private printContainer: ViewContainerRef;
 
-  public printStatement(employee: string, dateStart: string, dateEnd: string) {
-    this.http.get('assets/html/print-vacation.html', { responseType: 'text' }).subscribe((html: string) => {
-      const content = this.formatHtml(html, employee, dateStart, dateEnd);
-      const popupWin = window.open('', 'self');
-      popupWin.document.open();
-      popupWin.document.write(
-        '<html><body onafterprint="window.close()" onload="window.print()">' + content + '</html>'
-      );
-      popupWin.document.close();
-    });
+  constructor(
+    private contextStoreService: ContextStoreService,
+    private http: HttpClient,
+    private factoryResolver: ComponentFactoryResolver
+  ) {}
+
+  public printStatement(employee: string, dateStart: string, dateEnd: string): void {
+    this.printComponent(WorkHolidayComponent, { employee });
   }
+
+  /** задать ссылку на контейнер, в котором будут создаваться печатные компоненты */
+  public setPrintContainer(printContainer: ViewContainerRef): void {
+    this.printContainer = printContainer;
+  }
+
+  /**
+   * Метод создает экземпляр указанной компоненты,
+   * передает ему данные, запускает одну проверку изменений для отрисовки шаблона
+   * и ждет когда экземпляр скажет, что отрисовался и готов к печати
+   */
+  private printComponent(component: Type<PrintComponent>, data: Object): void {
+    const factory = this.factoryResolver.resolveComponentFactory(component);
+    const componentInstance = factory.create(this.printContainer.injector);
+
+    componentInstance.instance.readyToPrint.pipe(first()).subscribe(() => {
+      window.onafterprint = () => {
+        componentInstance.destroy();
+      };
+
+      window.print();
+    });
+
+    this.printContainer.insert(componentInstance.hostView);
+    componentInstance.changeDetectorRef.detectChanges();
+  }
+
+  // public printStatement(employee: string, dateStart: string, dateEnd: string) {
+  //   this.http.get('assets/html/print-vacation.html', { responseType: 'text' }).subscribe((html: string) => {
+  //     const content = this.formatHtml(html, employee, dateStart, dateEnd);
+  //     const popupWin = window.open('', 'self');
+  //     popupWin.document.open();
+  //     popupWin.document.write(
+  //       '<html><body onafterprint="window.close()" onload="window.print()">' + content + '</html>'
+  //     );
+  //     popupWin.document.close();
+  //   });
+  // }
 
   private formatHtml(html: string, employee: string, dateStart: string, dateEnd: string): string {
     const blocks = html.split('***');

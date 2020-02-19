@@ -23,6 +23,7 @@ import { AppRoutingModule } from './routing/app-routing.module';
 import { AppLoadService } from './shared/services/app-load.service';
 import { SharedModule } from './shared/shared.module';
 import { TeamPresenseModule } from './team-presense/team-presense.module';
+import { PrintWrapperComponent } from './shared/components/print/print-wrapper/print-wrapper.component';
 
 registerLocaleData(localeRu);
 moment.locale('ru');
@@ -32,7 +33,7 @@ export function onInit(appLoadService: AppLoadService) {
 }
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, PrintWrapperComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -64,6 +65,6 @@ export function onInit(appLoadService: AppLoadService) {
     { provide: APP_INITIALIZER, useFactory: onInit, deps: [AppLoadService], multi: true },
     { provide: DateAdapter, useClass: CustomDateAdapter }
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent, PrintWrapperComponent]
 })
 export class AppModule {}

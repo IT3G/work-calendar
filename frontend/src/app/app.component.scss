@@ -4,6 +4,12 @@
   flex-direction: column;
 }
 
+@media print {
+  :host {
+    display: none;
+  }
+}
+
 .content-container {
   flex: 1;
 }

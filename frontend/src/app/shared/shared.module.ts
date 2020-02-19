@@ -10,13 +10,14 @@ import { FileInputResetComponent } from './components/file-input-reset/file-inpu
 import { MonthSelectorComponent } from './components/month-selector/month-selector.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { UsernameUpdateComponent } from './components/username-update-dialog/username-update-dialog.component';
+import { WorkHolidayComponent } from './components/print/work-holiday/work-holiday.component';
 import { pipes } from './pipes';
 
 const modules = [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule, AvatarModule, NgbModule, RouterModule];
 
 const components = [AgendaComponent, FileInputResetComponent, MonthSelectorComponent];
 /** Приватные компоненты попапов наружу предоставлять через сервисы */
-const privateComponents = [ConfirmDialogComponent, UsernameUpdateComponent];
+const privateComponents = [ConfirmDialogComponent, UsernameUpdateComponent, WorkHolidayComponent];
 
 @NgModule({
   declarations: [...pipes, ...components, ...privateComponents],
