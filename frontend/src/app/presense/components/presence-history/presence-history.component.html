@@ -37,7 +37,7 @@
     </ng-container>
 
     <i
-      *ngIf="canDeleteCalendarTask(task)"
+      *ngIf="task | canDeleteTask: user:currentUser"
       (click)="openDeleteDialog(task._id)"
       class="fa fa-times"
       aria-hidden="true"
