@@ -19,10 +19,7 @@ export class AuthMiddleware implements NestMiddleware {
     }
 
     try {
-      const authHeader = req.header('Authorization');
-      const [bearer, jwt] = authHeader.split(' ');
-
-      await this.authService.verifyAndGetUser(jwt);
+      await this.authService.verifyByRequesAndGetUser(req);
     } catch (e) {
       throw new UnauthorizedException();
     }

@@ -29,6 +29,10 @@ export class TaskService {
     return await this.taskModel.find().exec();
   }
 
+  async getTaskById(id: string): Promise<TaskEntity> {
+    return await this.taskModel.findById(id);
+  }
+
   async getTasksByAuthor(author: string): Promise<TaskEntity[]> {
     return await this.taskModel.find({ employeeCreated: author }).exec();
   }

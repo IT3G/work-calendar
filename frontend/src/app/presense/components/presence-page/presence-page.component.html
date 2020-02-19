@@ -15,6 +15,7 @@
   <app-presence-history
     class="history"
     [user]="selectedUser"
+    [currentUser]="currentUser"
     [tasks]="tasks"
     (approve)="approveTask($event)"
     (deleteTask)="deleteTask($event)"
