@@ -3,13 +3,15 @@
 [![Build Status](https://travis-ci.com/IT3G/work-calendar.svg?branch=master)](https://travis-ci.com/IT3G/work-calendar)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9652ea8ad13444c8888bae386d5b7ce8)](https://www.codacy.com/app/enrey/work-calendar?utm_source=github.com&utm_medium=referral&utm_content=enrey/work-calendar&utm_campaign=Badge_Grade)
 ![](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)
+![](https://img.shields.io/badge/TypeScript-blue.svg)
+![](https://img.shields.io/badge/NestJS-red.svg)
 ![](https://img.shields.io/badge/Angular-9-red.svg)
 
 Worktime planning tool.
 
 ## --> [LIVE-DEMO](https://IT3G.github.io/work-calendar/) <--
 
-maybe u need to represh page some times to start free dyno heroku servers
+Maybe u need to refresh page some times to start free dyno heroku servers.
 
 login: 5, password: 5, or register
 
