@@ -41,7 +41,6 @@ export class HolidaysComponent implements OnInit {
           skipEmptyLines: true,
           complete: (result, file) => {
             const currentID = this.holidays$.value && this.holidays$.value._id;
-
             if (currentID) {
               this.holidaysService.updateHolidays({ data: this.mapper(result, file), _id: currentID });
               this.holidays$.next({ data: this.mapper(result, file), _id: currentID });
@@ -66,28 +65,52 @@ export class HolidaysComponent implements OnInit {
     this.filterYear = year;
   }
 
+  private removeChar(data: any): string {
+    return data.toString().replace(/\+/g, '');
+  }
+
   private mapper(src: ParseResult, file: File): HolidaysYearModel[] {
     return src.data.map(item => {
+      const year = item[HolidaysRawData.yearMonth];
+      const Jan = this.removeChar(item[HolidaysRawData.Jan]);
+      const Feb = this.removeChar(item[HolidaysRawData.Feb]);
+      const Mar = this.removeChar(item[HolidaysRawData.Mar]);
+      const Apr = this.removeChar(item[HolidaysRawData.Apr]);
+      const May = this.removeChar(item[HolidaysRawData.May]);
+      const June = this.removeChar(item[HolidaysRawData.June]);
+      const July = this.removeChar(item[HolidaysRawData.July]);
+      const Aug = this.removeChar(item[HolidaysRawData.Aug]);
+      const Sept = this.removeChar(item[HolidaysRawData.Sept]);
+      const Oct = this.removeChar(item[HolidaysRawData.Oct]);
+      const Nov = this.removeChar(item[HolidaysRawData.Nov]);
+      const Dec = this.removeChar(item[HolidaysRawData.Dec]);
+      const allDays = item[HolidaysRawData.allDays];
+      const allWork = item[HolidaysRawData.allWork];
+      const hours24 = item[HolidaysRawData.hours24];
+      const hours36 = item[HolidaysRawData.hours36];
+      const hours40 = item[HolidaysRawData.hours40];
+      const fileName = file.name;
+
       return {
-        year: item[HolidaysRawData.yearMonth],
-        Jan: item[HolidaysRawData.Jan],
-        Feb: item[HolidaysRawData.Feb],
-        Mar: item[HolidaysRawData.Mar],
-        Apr: item[HolidaysRawData.Apr],
-        May: item[HolidaysRawData.May],
-        June: item[HolidaysRawData.June],
-        July: item[HolidaysRawData.July],
-        Aug: item[HolidaysRawData.Aug],
-        Sept: item[HolidaysRawData.Sept],
-        Oct: item[HolidaysRawData.Oct],
-        Nov: item[HolidaysRawData.Nov],
-        Dec: item[HolidaysRawData.Dec],
-        allDays: item[HolidaysRawData.allDays],
-        allWork: item[HolidaysRawData.allWork],
-        hours24: item[HolidaysRawData.hours24],
-        hours36: item[HolidaysRawData.hours36],
-        hours40: item[HolidaysRawData.hours40],
-        fileName: file.name
+        year,
+        Jan,
+        Feb,
+        Mar,
+        Apr,
+        May,
+        June,
+        July,
+        Aug,
+        Sept,
+        Oct,
+        Nov,
+        Dec,
+        allDays,
+        allWork,
+        hours24,
+        hours36,
+        hours40,
+        fileName
       };
     });
   }
