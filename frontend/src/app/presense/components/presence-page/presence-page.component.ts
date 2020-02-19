@@ -36,6 +36,7 @@ export class PresencePageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.checkRoute();
     this.holidays$ = this.holidaysService.getAllHolidays();
+    this.currentUser = this.contextStoreService.getCurrentUser();
   }
 
   ngOnDestroy() {
@@ -51,10 +52,7 @@ export class PresencePageComponent implements OnInit, OnDestroy {
       this.route.params
         .pipe(
           switchMap(params => this.getUserByIdOrCurrent(params.id)),
-          tap(res => {
-            this.selectedUser = res;
-            this.currentUser = this.contextStoreService.getCurrentUser();
-          }),
+          tap(res => (this.selectedUser = res)),
           switchMap(res => this.tasksApi.loadAllTasksByEmployee(res.mailNickname))
         )
         .subscribe(tasks => this.updateTasks(tasks))
