@@ -115,16 +115,9 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     return this.date$.pipe(
       map(date => {
         const startOfMonth = date.clone().startOf('month');
-        const endOfMonth = date.clone().endOf('month');
+        const daysInMonth = date.daysInMonth();
 
-        const res: moment.Moment[] = [];
-
-        const day = startOfMonth;
-        while (day.isBefore(endOfMonth)) {
-          res.push(day.clone());
-          day.add(1, 'd');
-        }
-        return res;
+        return Array.from(Array(daysInMonth).keys()).map(i => startOfMonth.clone().add(i, 'day'));
       })
     );
   }
