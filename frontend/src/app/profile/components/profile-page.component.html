@@ -21,7 +21,7 @@
     [selectedIndex]="selectedTabIndex"
     (selectedIndexChange)="tabChange($event)"
   >
-    <mat-tab label="Личные данные">
+    <mat-tab label="Информация">
       <app-profile-form
         [selectedUser]="selectedUser"
         [isAdmin]="isAdmin$ | async"

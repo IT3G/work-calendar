@@ -8,6 +8,7 @@ import { LdapService } from './ldap.service';
 import { UserEntity } from '../../entity/entities/user.entity.model';
 import { UsersService } from '../../profile/services/users.service';
 import { UserModel } from '../../profile/models/user.model';
+import { Request } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -69,6 +70,15 @@ export class AuthService {
     return this.jwtService.sign(sign);
   }
 
+  /** подтвердить валидность сеесси и получить автоизованного Пользователя по запросу */
+  async verifyByRequesAndGetUser(req: Request): Promise<UserEntity> {
+    const authHeader = req.header('Authorization');
+    const [bearer, jwt] = authHeader.split(' ');
+
+    return await this.verifyAndGetUser(jwt);
+  }
+
+  /** подтвердить валидность сеесси и получить автоизованного Пользователя по JWT */
   async verifyAndGetUser(jwt: string): Promise<UserEntity> {
     if (!jwt) {
       return Promise.reject('JWT not found');

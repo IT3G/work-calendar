@@ -17,6 +17,9 @@ export class PresenceHistoryComponent {
   @Input()
   user: Employee;
 
+  @Input()
+  currentUser: Employee;
+
   @Output()
   deleteTask = new EventEmitter<string>();
 
