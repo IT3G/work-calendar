@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TaskModel } from '../../../shared/models/tasks.model';
 import { DayType } from '../../../shared/const/day-type.const';
-import { DialogService } from '../../../shared/services/dialog.service';
+import { ConfirmService } from '../../../shared/services/confirm.service';
 import { Employee } from '../../../shared/models/employee.model';
 
 @Component({
@@ -30,14 +30,16 @@ export class PresenceHistoryComponent {
 
   dayTypes = DayType;
 
-  constructor(private dialog: DialogService) {}
+  constructor(private confirm: ConfirmService) {}
 
   openApproveDialog(taskId: string) {
-    this.dialog.confirm('Вы согласовали отпуск?').subscribe(res => res && this.approve.emit(taskId));
+    this.confirm.openDialog('Вы согласовали отпуск?').subscribe(res => res && this.approve.emit(taskId));
   }
 
   openDeleteDialog(taskId: string) {
-    this.dialog.confirm('Вы уверены, что хотите удалить запись?').subscribe(res => res && this.deleteTask.emit(taskId));
+    this.confirm
+      .openDialog('Вы уверены, что хотите удалить запись?')
+      .subscribe(res => res && this.deleteTask.emit(taskId));
   }
 
   printStatement(task: TaskModel): void {

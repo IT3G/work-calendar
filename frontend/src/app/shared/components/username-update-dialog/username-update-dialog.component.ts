@@ -15,12 +15,8 @@ export class UsernameUpdateComponent {
     @Inject(MAT_DIALOG_DATA) public data: { user: Employee }
   ) {}
 
-  private username: string[] = this.data.user.username.split(' ');
-
   public profileForm = new FormGroup({
-    f: new FormControl(this.username[0], Validators.required),
-    i: new FormControl(this.username[1], Validators.required),
-    o: new FormControl(this.data.user.patronymic, Validators.required)
+    patronymic: new FormControl(this.data.user.patronymic, Validators.required)
   });
 
   public onUpdateProfile(): void {
@@ -29,8 +25,7 @@ export class UsernameUpdateComponent {
       return;
     }
 
-    const username = `${this.profileForm.value['f']} ${this.profileForm.value['i']}`;
-    const patronymic = this.profileForm.value['o'];
-    this.dialogRef.close({ ...this.data.user, username, patronymic });
+    const patronymic = this.profileForm.value['patronymic'];
+    this.dialogRef.close({ ...this.data.user, patronymic });
   }
 }

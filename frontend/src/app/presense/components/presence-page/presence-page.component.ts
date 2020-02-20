@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { filter, map, switchMap, tap } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
+import { filter, switchMap, tap } from 'rxjs/operators';
 import { EmployeeApiService } from '../../../core/services/employee-api.service';
 import { ContextStoreService } from '../../../core/store/context-store.service';
 import { Employee } from '../../../shared/models/employee.model';
@@ -11,7 +11,8 @@ import { HolidaysApiService } from '../../../core/services/holidays-api.service'
 import { TaskApiService } from '../../../core/services/task-api.service';
 import { TaskMapperService } from '../../../shared/services/task-mapper.service';
 import { PrintHelperService } from '../../../shared/services/print-helper.service';
-import { DialogService } from '../../../shared/services/dialog.service';
+import { MatDialog } from '@angular/material/dialog';
+import { UsernameUpdateComponent } from 'src/app/shared/components/username-update-dialog/username-update-dialog.component';
 
 @Component({
   selector: 'app-presence',
@@ -34,7 +35,7 @@ export class PresencePageComponent implements OnInit, OnDestroy {
     private employeeApiService: EmployeeApiService,
     private holidaysService: HolidaysApiService,
     private printService: PrintHelperService,
-    private dialog: DialogService
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -102,7 +103,7 @@ export class PresencePageComponent implements OnInit, OnDestroy {
 
   /** принудить пользователя к коррекции своего ФИО  */
   private showDialogToUpdateUser(): Observable<unknown> {
-    return this.dialog.userNameUpdate(this.selectedUser).pipe(
+    return this.userNameUpdate(this.selectedUser).pipe(
       filter(Boolean),
       switchMap((user: Employee) => this.updateUserInfo(user))
     );
@@ -111,5 +112,15 @@ export class PresencePageComponent implements OnInit, OnDestroy {
   /** обновить данные выделенного пользователя */
   private updateUserInfo(user: Employee): Observable<unknown> {
     return this.employeeApiService.updateUserInfo(user.mailNickname, user).pipe(tap(() => (this.selectedUser = user)));
+  }
+
+  /** Диалог корректировки ФИО Сотрудника */
+  private userNameUpdate(user: Employee, width = '400px'): Observable<string | false> {
+    const dialogRef = this.dialog.open(UsernameUpdateComponent, {
+      width,
+      data: { user }
+    });
+
+    return dialogRef.afterClosed();
   }
 }

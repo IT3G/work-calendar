@@ -6,12 +6,8 @@
   padding-bottom: 1rem;
 }
 
-.profile-form {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 30px;
-  align-items: flex-start;
-  row-gap: 10px;
+.form-group {
+  width: 100%;
 }
 
 .buttons {
