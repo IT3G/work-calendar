@@ -28,8 +28,8 @@ const url = `${config.DATABASE_URL}`;
     }),
     FileStorageModule.forRoot({
       endPoint: config.MINIO_END_POINT,
-      port: config.MINIO_PORT,
-      useSSL: config.MINIO_USE_SSL,
+      port: +config.MINIO_PORT,
+      useSSL: !!config.MINIO_USE_SSL,
       accessKey: config.MINIO_ACCESS_KEY,
       secretKey: config.MINIO_SECRET_KEY
     })
