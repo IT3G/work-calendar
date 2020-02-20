@@ -29,6 +29,11 @@ export class Config {
   PUSH_MAIL_TO: string;
   PUSH_PUBLIC_KEY: string;
   PUSH_PRIVATE_KEY: string;
+  MINIO_END_POINT: string;
+  MINIO_PORT: number;
+  MINIO_USE_SSL: boolean;
+  MINIO_ACCESS_KEY: string;
+  MINIO_SECRET_KEY: string;
 }
 
 let config;

@@ -27,11 +27,11 @@ const url = `${config.DATABASE_URL}`;
       useNewUrlParser: true
     }),
     FileStorageModule.forRoot({
-      endPoint: 'play.min.io',
-      port: 9000,
-      useSSL: true,
-      accessKey: 'Q3AM3UQ867SPQQA43P2F',
-      secretKey: 'zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG'
+      endPoint: config.MINIO_END_POINT,
+      port: config.MINIO_PORT,
+      useSSL: config.MINIO_USE_SSL,
+      accessKey: config.MINIO_ACCESS_KEY,
+      secretKey: config.MINIO_SECRET_KEY
     })
   ],
   providers: [{ provide: Config, useValue: config }]
