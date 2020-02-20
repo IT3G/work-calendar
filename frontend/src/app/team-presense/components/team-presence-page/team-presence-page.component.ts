@@ -163,8 +163,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     const month = moment().month() + 1;
 
     const activeProject = user.projectsNew.filter(item => {
-      const test = item.metadata.filter(pr => pr.year === year && pr.month === month);
-      return !!test.length;
+      return item.metadata.some(pr => pr.year === year && pr.month === month);
     });
 
     if (!activeProject.length) {
@@ -180,10 +179,10 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
       };
     });
 
-    const result = thisMonth.reduce((acc, item) => {
-      return acc.percent >= item.percent ? acc : item;
+    const result = thisMonth.sort((a, b) => {
+      return b.percent - a.percent;
     });
 
-    return result.project_id;
+    return result[0].project_id;
   }
 }
