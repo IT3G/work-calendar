@@ -1,6 +1,5 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Request } from 'express';
-import * as moment from 'moment';
 import { AdminActionGuard } from './admin-action.guard';
 import { AuthService } from '../../work-calendar/services/auth.service';
 import { FollowService } from '../services/follow.service';
@@ -17,7 +16,7 @@ export class FollowEditGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request: Request = context.switchToHttp().getRequest();
-    const follow: FollowerModel = request.body.data;
+    const follow: FollowerModel = request.body;
 
     if (!follow) {
       return false;
@@ -29,8 +28,10 @@ export class FollowEditGuard implements CanActivate {
     }
 
     const authUser = await this.authService.verifyByRequesAndGetUser(request);
-
     /** владелец может изменять свои подписки */
-    return follow.followerId === authUser.id || follow.followingId === authUser.id;
+    return (
+      follow.followerId._id.toString() === authUser.id.toString() ||
+      follow.followingId._id.toString() === authUser.id.toString()
+    );
   }
 }

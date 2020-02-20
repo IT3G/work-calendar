@@ -8,7 +8,6 @@ import { UserEntity } from '../../entity/entities/user.entity.model';
 import { UsersService } from './users.service';
 import { ProjectNewMetadataEntity } from '../../entity/entities/project-new-metadata.entity';
 import { ProjectNewEntity } from '../../entity/entities/project-new.entity';
-import { AuthService } from '../../work-calendar/services/auth.service';
 
 export interface UserFollow {
   following: UserEntity[];
@@ -20,8 +19,7 @@ export interface UserFollow {
 export class FollowService {
   constructor(
     @InjectModel('Follow') private readonly followModel: Model<FollowEntity>,
-    private userService: UsersService,
-    private authService: AuthService
+    private userService: UsersService
   ) {}
 
   async getUserFollow(userId: string): Promise<UserFollow> {

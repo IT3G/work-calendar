@@ -3,6 +3,7 @@ import { Request } from 'express';
 import { AdminActionGuard } from './admin-action.guard';
 import { AuthService } from '../../work-calendar/services/auth.service';
 import { FollowService } from '../services/follow.service';
+import { FollowEntity } from '../../entity/entities/follow.entity.model';
 
 /** Guard для контроля запроса удаления Задачи */
 @Injectable()
@@ -27,9 +28,12 @@ export class FollowDeleteGuard implements CanActivate {
     }
 
     const authUser = await this.authService.verifyByRequesAndGetUser(request);
-    const follow = await this.followService.getOneFollowsByID(followId);
+    const follow: FollowEntity = await this.followService.getOneFollowsByID(followId);
 
     /** владелец может удалить свои подписки */
-    return follow.followerId === authUser.id || follow.followingId === authUser.id;
+    return (
+      follow.followerId.id.toString() === authUser.id.toString() ||
+      follow.followingId.id.toString() === authUser.id.toString()
+    );
   }
 }
