@@ -1,0 +1,115 @@
+<div class="title-grid">
+  <div>
+    <ng-container
+      [ngTemplateOutlet]="writebleField"
+      [ngTemplateOutletContext]="{
+        text: data.settings.PRINT_COMPANY_NAME,
+        subtitle: '(наименование организации)'
+      }"
+    ></ng-container>
+  </div>
+  <div></div>
+  <div>
+    <ng-container
+      [ngTemplateOutlet]="writebleField"
+      [ngTemplateOutletContext]="{
+        text: data.settings.PRINT_HEAD_MANAGER_POSITION,
+        subtitle: '(должность руководителя подразделения)'
+      }"
+    ></ng-container>
+  </div>
+  <div>
+    <ng-container [ngTemplateOutlet]="writebleField"></ng-container>
+  </div>
+  <div></div>
+  <div>
+    <ng-container
+      [ngTemplateOutlet]="writebleField"
+      [ngTemplateOutletContext]="{
+        text: data.settings.PRINT_HEAD_MANAGER_NAME,
+        subtitle: '(Ф.И.О. руководителя подразделения)'
+      }"
+    ></ng-container>
+  </div>
+  <div>ЗАЯВЛЕНИЕ О ПРЕДОСТАВЛЕНИИ ОТПУСКА</div>
+  <div></div>
+  <div class="inline-cell">
+    от
+    <ng-container
+      [ngTemplateOutlet]="writebleField"
+      [ngTemplateOutletContext]="{
+        subtitle: '(должность сотрудника)'
+      }"
+    ></ng-container>
+  </div>
+  <div></div>
+  <div></div>
+  <div>
+    <ng-container
+      [ngTemplateOutlet]="writebleField"
+      [ngTemplateOutletContext]="{
+        text: fioGenitive,
+        subtitle: '(Ф.И.О. сотрудника)'
+      }"
+    ></ng-container>
+  </div>
+</div>
+
+<div class="title">ЗАЯВЛЕНИЕ</div>
+
+<div class="appeal">
+  Прошу предоставить мне очередной отпуск {{ period }} включительно
+  <br />
+  в количестве {{ daysCount || '___' }} календарных дней
+</div>
+
+<div class="user-sign">
+  <div>
+    <ng-container
+      [ngTemplateOutlet]="writebleField"
+      [ngTemplateOutletContext]="{
+        text: nowDate
+      }"
+    ></ng-container>
+  </div>
+  <div>
+    <ng-container
+      [ngTemplateOutlet]="writebleField"
+      [ngTemplateOutletContext]="{
+        subtitle: '(подпись сотрудника)'
+      }"
+    ></ng-container>
+  </div>
+  <div>
+    <ng-container
+      [ngTemplateOutlet]="writebleField"
+      [ngTemplateOutletContext]="{
+        text: fio,
+        subtitle: '(Ф.И.О. сотрудника)'
+      }"
+    ></ng-container>
+  </div>
+</div>
+
+<div class="resolution">
+  <ng-container
+    [ngTemplateOutlet]="writebleField"
+    [ngTemplateOutletContext]="{
+      subtitle: '(резолюция и подпись руководителя подразделения)'
+    }"
+  ></ng-container>
+  <ng-container [ngTemplateOutlet]="writebleField"></ng-container>
+  <ng-container
+    [ngTemplateOutlet]="writebleField"
+    [ngTemplateOutletContext]="{
+      subtitle: '(для резолюции и подписи)'
+    }"
+  ></ng-container>
+</div>
+
+<ng-template let-text="text" let-subtitle="subtitle" #writebleField>
+  <div class="writeble-field">
+    <div class="writeble-field__text">{{ text }}</div>
+    <div class="writeble-field__subtitle">{{ subtitle }}</div>
+  </div>
+</ng-template>

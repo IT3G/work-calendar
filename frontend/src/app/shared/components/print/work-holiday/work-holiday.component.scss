@@ -1,0 +1,59 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  font-size: 14pt;
+  line-height: 1.3;
+}
+
+.title-grid {
+  display: grid;
+  grid-template-columns: 3fr 1fr 3fr;
+  grid-row-gap: 10mm;
+  grid-auto-rows: min-content;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.title {
+  font-size: 18pt;
+  font-weight: bold;
+  text-align: center;
+  padding: 20mm 0;
+}
+
+.inline-cell {
+  display: flex;
+}
+
+.appeal {
+  text-align: center;
+  margin-bottom: 20mm;
+}
+
+.user-sign {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  grid-column-gap: 10mm;
+  margin-bottom: 20mm;
+}
+
+.resolution .writeble-field {
+  margin-bottom: 5mm;
+}
+
+.writeble-field {
+  text-align: center;
+  width: 100%;
+
+  .writeble-field__text {
+    min-height: 1.3em;
+  }
+
+  .writeble-field__subtitle {
+    border-top: 1pt solid black;
+    font-size: 12pt;
+    line-height: 1;
+    min-height: 1em;
+  }
+}

@@ -2,7 +2,7 @@
 @media print {
   @page {
     padding: 0;
-    margin: 0;
+    margin: 15mm; // отсуп полей, регулируемый в Chrome Print Preview
   }
 
   body {

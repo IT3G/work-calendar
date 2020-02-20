@@ -77,7 +77,8 @@ export class PresencePageComponent implements OnInit, OnDestroy {
   /** печать заявления на отпуск */
   public printWorkHoliday(task: TaskModel): void {
     if (this.selectedUser.patronymic) {
-      this.printService.printStatement(this.selectedUser.username, task.dateStart, task.dateEnd);
+      const settings = this.contextStoreService.settings$.value;
+      this.printService.printWorkHoliday({ user: this.selectedUser, task, settings });
       return;
     }
 
