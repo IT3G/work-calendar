@@ -17,3 +17,23 @@
     column-gap: 0;
   }
 }
+
+.clear-field-wrapper {
+  display: flex;
+  align-items: baseline;
+
+  &::ng-deep .mat-form-field {
+    width: 100%;
+  }
+
+  .icon-btn {
+    display: block;
+    padding: 10px;
+    color: #dee2e6;
+
+    &:hover {
+      cursor: pointer;
+      color: #919599;
+    }
+  }
+}
