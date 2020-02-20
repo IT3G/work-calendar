@@ -10,9 +10,10 @@ import { DictionaryModel } from '../../../shared/models/dictionary.model';
 import { PresenceModel } from '../../../shared/models/presence.page.model';
 import { HolidaysApiService } from '../../../core/services/holidays-api.service';
 import { HolidaysModel } from '../../../shared/models/holidays.model';
-import { DateConvertService } from '../../../shared/services/date-convert.service';
 import { TaskApiService } from '../../../core/services/task-api.service';
 import { EmployeeApiService } from '../../../core/services/employee-api.service';
+import { Employee } from '../../../shared/models/employee.model';
+import { ContextStoreService } from '../../../core/store/context-store.service';
 
 @Component({
   selector: 'app-team-presence',
@@ -44,11 +45,13 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     private router: Router,
     private fb: FormBuilder,
     private dictionaryApi: DictionaryApiService,
-    private holidaysApi: HolidaysApiService
+    private holidaysApi: HolidaysApiService,
+    private contextStoreService: ContextStoreService
   ) {}
 
   ngOnInit() {
     this.initFilterForm(this.route.snapshot.queryParams);
+
     this.monthDays$ = this.getMonthDays();
 
     this.getCommonData();
@@ -130,16 +133,57 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
   }
 
   private initFilterForm(filters?: Params): void {
-    this.filtersForm = this.fb.group({
-      name: [''],
-      subdivision: [null],
-      jobPosition: [null],
-      project: [null],
-      location: [null]
+    this.subscription.add(
+      this.contextStoreService.getCurrentUser$().subscribe(res => {
+        const mainProjectId = this.getMainProject(res);
+
+        this.filtersForm = this.fb.group({
+          name: [''],
+          subdivision: [null],
+          jobPosition: [null],
+          project: [mainProjectId],
+          location: [null]
+        });
+
+        if (filters) {
+          this.filtersForm.patchValue(filters);
+        }
+      })
+    );
+  }
+
+  // получаем основной на текущий момент проект
+  // у залогиненого пользователя, с максимальным %
+  private getMainProject(user: Employee): string {
+    if (!user.projectsNew.length) {
+      return null;
+    }
+
+    const year = moment().year();
+    const month = moment().month() + 1;
+
+    const activeProject = user.projectsNew.filter(item => {
+      const test = item.metadata.filter(pr => pr.year === year && pr.month === month);
+      return !!test.length;
     });
 
-    if (filters) {
-      this.filtersForm.patchValue(filters);
+    if (!activeProject.length) {
+      return null;
     }
+
+    const thisMonth = activeProject.map(project => {
+      const item = project.metadata.find(pr => pr.year === year && pr.month === month);
+      return {
+        project_name: project.project_name,
+        project_id: project.project_id,
+        percent: item.percent
+      };
+    });
+
+    const result = thisMonth.reduce((acc, item) => {
+      return acc.percent >= item.percent ? acc : item;
+    });
+
+    return result.project_id;
   }
 }
