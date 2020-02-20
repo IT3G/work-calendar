@@ -1,15 +1,29 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Res, Delete, Put, UseGuards } from '@nestjs/common';
-import { TaskService } from '../services/task.service';
-import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
-import { TaskModel } from '../models/task.model';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+  Res,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
+import { FileStoreService } from '../../file-storage/services/file-store.service';
 import { TaskDeleteGuard } from '../guards/task-delete.guard';
-import { AdminActionGuard } from '../guards/admin-action.guard';
+import { TaskModel } from '../models/task.model';
+import { TaskService } from '../services/task.service';
 
 @ApiBearerAuth()
 @ApiUseTags('Tasks')
 @Controller('tasks')
 export class TasksController {
-  constructor(private taskService: TaskService) {}
+  constructor(private taskService: TaskService, private fss: FileStoreService) {}
 
   @Get()
   async getTasks(@Res() res) {
@@ -53,5 +67,12 @@ export class TasksController {
     const result = await this.taskService.deleteById(id);
 
     return res.status(HttpStatus.OK).json(result);
+  }
+
+  @Post('/upload-resolution')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadResolution(@UploadedFile() file) {
+    console.log(file);
+    this.fss.putObject(`resolutions/${file.originalname}`, file.buffer);
   }
 }

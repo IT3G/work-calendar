@@ -34,6 +34,7 @@ export class Config {
   MINIO_USE_SSL: 'YES';
   MINIO_ACCESS_KEY: string;
   MINIO_SECRET_KEY: string;
+  MINIO_BUCKET_NAME: string;
 }
 
 let config;

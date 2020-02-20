@@ -4,4 +4,5 @@ export class MinioConfig {
   useSSL: boolean;
   accessKey: string;
   secretKey: string;
+  bucketName: string;
 }
