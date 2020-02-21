@@ -18,6 +18,35 @@ export class MinioStoreService implements FileStorage {
       return await this.minioClient.putObject(bucketName, fileName, file, {});
     } catch (e) {
       this.logger.error('minio putObject', e.stack);
+      throw e;
+    }
+  }
+
+  async getObject(objectName: string, bucketName = this.config.MINIO_BUCKET_NAME): Promise<Buffer> {
+    try {
+      const file = await this.minioClient.getObject(bucketName, objectName);
+
+      return new Promise((res, rej) => {
+        const bufs = [];
+        file.on('data', function(d) {
+          bufs.push(d);
+        });
+        file.on('end', function() {
+          res(Buffer.concat(bufs));
+        });
+      });
+    } catch (e) {
+      this.logger.error('minio getObject', e.stack);
+      throw e;
+    }
+  }
+
+  async removeObject(objectName: string, bucketName = this.config.MINIO_BUCKET_NAME) {
+    try {
+      return await this.minioClient.removeObject(bucketName, objectName);
+    } catch (e) {
+      this.logger.error('minio deleteObject', e.stack);
+      throw e;
     }
   }
 
@@ -32,7 +61,9 @@ export class MinioStoreService implements FileStorage {
       });
 
       await this.initBucket(this.config.MINIO_BUCKET_NAME);
-    } catch (error) {}
+    } catch (e) {
+      this.logger.error('minio not init', e.stack);
+    }
   }
 
   private async initBucket(bucketName: string) {

@@ -4,6 +4,8 @@ import {
   Delete,
   Get,
   HttpStatus,
+  NotAcceptableException,
+  NotFoundException,
   Param,
   Post,
   Put,
@@ -14,6 +16,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
+import { Response } from 'express';
 import { FileStorageService } from '../../file-storage/services/file-storage.service';
 import { TaskDeleteGuard } from '../guards/task-delete.guard';
 import { TaskModel } from '../models/task.model';
@@ -23,7 +26,9 @@ import { TaskService } from '../services/task.service';
 @ApiUseTags('Tasks')
 @Controller('tasks')
 export class TasksController {
-  constructor(private taskService: TaskService, private fss: FileStorageService) {}
+  private readonly resolutionsFolderName = 'resolutions/';
+
+  constructor(private taskService: TaskService, private fileStorage: FileStorageService) {}
 
   @Get()
   async getTasks(@Res() res) {
@@ -69,10 +74,33 @@ export class TasksController {
     return res.status(HttpStatus.OK).json(result);
   }
 
-  @Post('/upload-resolution')
+  @Post('/resolution')
   @UseInterceptors(FileInterceptor('file'))
   uploadResolution(@UploadedFile() file) {
-    console.log(file);
-    this.fss.putObject(`resolutions/${file.originalname}`, file.buffer);
+    try {
+      this.fileStorage.putObject(`${this.resolutionsFolderName}${file.originalname}`, file.buffer);
+    } catch (e) {
+      throw new NotAcceptableException('Ошибка при загрузке файла');
+    }
+  }
+
+  @Get('/resolution/:name')
+  async getResolution(@Res() res: Response, @Param('name') name: string) {
+    try {
+      const file = await this.fileStorage.getObject(`${this.resolutionsFolderName}${name}`);
+      res.send(file);
+    } catch (error) {
+      throw new NotFoundException('Файл не найден');
+    }
+  }
+
+  @Delete('/resolution/:name')
+  async removeObject(@Res() res: Response, @Param('name') name: string) {
+    try {
+      const file = await this.fileStorage.removeObject(`${this.resolutionsFolderName}${name}`);
+      res.send(file);
+    } catch (error) {
+      throw new NotAcceptableException('Ошибка при удалении файла');
+    }
   }
 }
