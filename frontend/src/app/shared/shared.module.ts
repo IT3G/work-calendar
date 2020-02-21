@@ -12,27 +12,10 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { pipes } from './pipes';
 import { SingleSelectComponent } from './components/single-select/single-select.component';
 
-const pipes = [
-  UsernamePipe,
-  DatePipe,
-  TaskTypePipe,
-  TransformTaskTypePipe,
-  FilterEmployeePipe,
-  AvatarSourcePipe,
-  CurrentProjectsPipe,
-  IsWeekendDayPipe,
-  IsCurrentDayPipe,
-  IsHolidayDataPipe,
-  UsernameToArrPipe,
-  FollowUsersFilterPipe,
-  IsHolidayDayForNgbModelPipe,
-  TaskTypeColorPipe,
-  SortTasksByDateStartPipe
-];
-
 const modules = [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule, AvatarModule, NgbModule, RouterModule];
 
 const components = [AgendaComponent, FileInputResetComponent, MonthSelectorComponent, SingleSelectComponent];
+
 /** Приватные компоненты попапов наружу предоставлять через сервисы */
 const privateComponents = [ConfirmDialogComponent];
 
