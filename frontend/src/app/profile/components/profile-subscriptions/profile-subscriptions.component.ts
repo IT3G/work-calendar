@@ -69,7 +69,7 @@ export class ProfileSubscriptionsComponent implements OnChanges {
     return a[type].username.toLowerCase().localeCompare(b[type].username.toLowerCase());
   }
 
-  private userCanEdit(): boolean {
+  public userCanEdit(): boolean {
     return this.currentUser.mailNickname === this.selectedUser.mailNickname || this.isCurrentUserAdmin;
   }
 
