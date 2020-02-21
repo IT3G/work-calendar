@@ -89,7 +89,7 @@ export class TasksController {
     try {
       const file = await this.fileStorage.getObject(`${this.resolutionsFolderName}${name}`);
       res.send(file);
-    } catch (error) {
+    } catch (e) {
       throw new NotFoundException('Файл не найден');
     }
   }
@@ -99,7 +99,7 @@ export class TasksController {
     try {
       const file = await this.fileStorage.removeObject(`${this.resolutionsFolderName}${name}`);
       res.send(file);
-    } catch (error) {
+    } catch (e) {
       throw new NotAcceptableException('Ошибка при удалении файла');
     }
   }

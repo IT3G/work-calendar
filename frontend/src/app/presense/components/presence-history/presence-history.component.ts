@@ -1,9 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { TaskModel } from '../../../shared/models/tasks.model';
+import { MatDialog } from '@angular/material/dialog';
 import { DayType } from '../../../shared/const/day-type.const';
+import { Employee } from '../../../shared/models/employee.model';
+import { TaskModel } from '../../../shared/models/tasks.model';
 import { ConfirmService } from '../../../shared/services/confirm.service';
 import { PrintHelperService } from '../../../shared/services/print-helper.service';
-import { Employee } from '../../../shared/models/employee.model';
+import { VacationResolutionComponent } from '../vacation-resolution/vacation-resolution.component';
 
 @Component({
   selector: 'app-presence-history',
@@ -28,10 +30,17 @@ export class PresenceHistoryComponent {
 
   dayTypes = DayType;
 
-  constructor(private confirm: ConfirmService, private printService: PrintHelperService) {}
+  constructor(private confirm: ConfirmService, private printService: PrintHelperService, private dialog: MatDialog) {}
 
   openApproveDialog(taskId: string) {
-    this.confirm.openDialog('Вы согласовали отпуск?').subscribe(res => res && this.approve.emit(taskId));
+    /** TODO: Проверять подключено ли файловое хранилище и выдавать разные попапы */
+    // this.confirm.openDialog('Вы согласовали отпуск?').subscribe(res => res && this.approve.emit(taskId));
+
+    const dialogRef = this.dialog.open(VacationResolutionComponent, {
+      width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe(res => console.log(res));
   }
 
   openDeleteDialog(taskId: string) {
