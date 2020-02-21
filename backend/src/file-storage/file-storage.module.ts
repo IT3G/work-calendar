@@ -1,22 +1,16 @@
-import { DynamicModule, Module } from '@nestjs/common';
-import { initBucket, initMinio } from './minio/minio-client';
-import { MinioConfig } from './minio/minio-config';
-import { FileStoreService } from './services/file-store.service';
+import { Module, Provider } from '@nestjs/common';
+import { getConfig } from '../config/config';
+import { FileStorageService } from './services/file-storage.service';
+import { MinioStoreService } from './services/minio-store.service';
+
+const config = getConfig();
+const fileStorageProvider: Provider = {
+  provide: FileStorageService,
+  useValue: config.FEATURE_FILE_STORAGE === 'YES' ? new MinioStoreService() : new FileStorageService()
+};
 
 @Module({
-  providers: [FileStoreService],
-  exports: [FileStoreService]
+  providers: [fileStorageProvider],
+  exports: [fileStorageProvider]
 })
-export class FileStorageModule {
-  public static forRoot(config: MinioConfig): DynamicModule {
-    initMinio(config);
-
-    initBucket(config.bucketName);
-
-    return {
-      module: FileStorageModule,
-      providers: [FileStoreService],
-      exports: [FileStoreService]
-    };
-  }
-}
+export class FileStorageModule {}

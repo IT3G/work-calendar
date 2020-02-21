@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
-import { FileStoreService } from '../../file-storage/services/file-store.service';
+import { FileStorageService } from '../../file-storage/services/file-storage.service';
 import { TaskDeleteGuard } from '../guards/task-delete.guard';
 import { TaskModel } from '../models/task.model';
 import { TaskService } from '../services/task.service';
@@ -23,7 +23,7 @@ import { TaskService } from '../services/task.service';
 @ApiUseTags('Tasks')
 @Controller('tasks')
 export class TasksController {
-  constructor(private taskService: TaskService, private fss: FileStoreService) {}
+  constructor(private taskService: TaskService, private fss: FileStorageService) {}
 
   @Get()
   async getTasks(@Res() res) {

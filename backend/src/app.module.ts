@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Config, getConfig } from './config/config';
 import { DictionaryModule } from './dictionary/dictionary.module';
-import { FileStorageModule } from './file-storage/file-storage.module';
 import { HolidaysModule } from './holidays/holidays.module';
 import { MailModule } from './mail/mail.module';
 import { ProfileModule } from './profile/profile.module';
@@ -25,14 +24,6 @@ const url = `${config.DATABASE_URL}`;
     WebPushModule,
     MongooseModule.forRoot(url, {
       useNewUrlParser: true
-    }),
-    FileStorageModule.forRoot({
-      endPoint: config.MINIO_END_POINT,
-      port: +config.MINIO_PORT,
-      useSSL: !!config.MINIO_USE_SSL,
-      accessKey: config.MINIO_ACCESS_KEY,
-      secretKey: config.MINIO_SECRET_KEY,
-      bucketName: config.MINIO_BUCKET_NAME
     })
   ],
   providers: [{ provide: Config, useValue: config }]
