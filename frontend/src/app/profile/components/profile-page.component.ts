@@ -54,7 +54,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   }
 
   public onUpdateProfile(employee: Employee): void {
-    this.employeeApiService.updateUserInfo(this.login, employee).subscribe(i => {
+    this.employeeApiService.updateUserInfo(this.login, employee).subscribe(() => {
       this.contextStoreService.update();
       this.loadFollow(this.selectedUser._id);
     });
