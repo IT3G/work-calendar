@@ -10,9 +10,7 @@ import { DictionaryModel } from '../../../shared/models/dictionary.model';
 import { PresenceModel } from '../../../shared/models/presence.page.model';
 import { HolidaysApiService } from '../../../core/services/holidays-api.service';
 import { HolidaysModel } from '../../../shared/models/holidays.model';
-import { DateConvertService } from '../../../shared/services/date-convert.service';
 import { TaskApiService } from '../../../core/services/task-api.service';
-import { EmployeeApiService } from '../../../core/services/employee-api.service';
 
 @Component({
   selector: 'app-team-presence',
@@ -38,7 +36,6 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
   private subscription = new Subscription();
 
   constructor(
-    private employeeApi: EmployeeApiService,
     private tasksApi: TaskApiService,
     private route: ActivatedRoute,
     private router: Router,
@@ -57,6 +54,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
       map(date => date.format('YYYY-MM-DD')),
       distinctUntilChanged(),
       switchMap(date => this.tasksApi.loadTasksByMonth(date)),
+      map(this.filterTerminatedEmployees),
       share()
     );
 
@@ -65,6 +63,20 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
+  }
+
+  private filterTerminatedEmployees(presenceModels: PresenceModel[]): PresenceModel[] {
+    const now = moment();
+
+    return presenceModels.filter(({ employee }) => {
+      if (!employee.terminationDate) {
+        return true;
+      }
+
+      const endOfEmployeeTerminationMonth = moment(employee.terminationDate).endOf('month');
+
+      return now.isBefore(endOfEmployeeTerminationMonth);
+    });
   }
 
   private getCommonData() {
