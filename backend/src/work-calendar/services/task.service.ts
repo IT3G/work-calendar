@@ -29,6 +29,10 @@ export class TaskService {
     return await this.taskModel.find().exec();
   }
 
+  async getTaskById(id: string): Promise<TaskEntity> {
+    return await this.taskModel.findById(id);
+  }
+
   async getTasksByAuthor(author: string): Promise<TaskEntity[]> {
     return await this.taskModel.find({ employeeCreated: author }).exec();
   }
@@ -57,69 +61,74 @@ export class TaskService {
       .format('YYYY-MM-DD');
 
     const users = await this.userService.getUsers();
+    const tasks = await this.getTasksInPeriod(startOfMonth, endOfMonth);
+
+    const day = moment(date)
+      .clone()
+      .startOf('month');
+
+    const monthDays = Array.from(Array(day.daysInMonth()).keys()).map(i => day.clone().add(i, 'day'));
+
+    const result = users.map(employee => {
+      const currentUserTasks = tasks.filter(i => i.employee === employee.mailNickname);
+
+      return {
+        employee,
+        tasks: monthDays.map(d => this.getLastTaskInCurrentDay(currentUserTasks, d))
+      };
+    });
+
+    return result;
+  }
+
+  private getLastTaskInCurrentDay(currentUserTasks: TaskEntity[], currentDay: moment.Moment): TaskEntity {
+    const currentDayTasks = currentUserTasks
+      .filter(i => {
+        if (i.dateEnd) {
+          return currentDay.isBetween(moment(i.dateStart, 'YYYY-MM-DD'), moment(i.dateEnd, 'YYYY-MM-DD'), 'day', '[]');
+        }
+
+        return currentDay.isSame(moment(i.dateStart, 'YYYY-MM-DD'), 'day');
+      })
+      .sort((a, b) => (moment(a.dtCreated).isAfter(moment(b.dtCreated)) ? -1 : 1));
+
+    const lastTask = currentDayTasks[0] || ({ dateStart: currentDay.format('YYYY-MM-DD') } as TaskEntity);
+
+    return lastTask;
+  }
+
+  private async getTasksInPeriod(dateStart: string, dateEnd: string) {
     // a >= start <= b  || a >= end <= b || start < a && end > b
-    const tasks = await this.taskModel.find({
+    return await this.taskModel.find({
       $or: [
         {
           dateStart: {
-            $gte: startOfMonth,
-            $lte: endOfMonth
+            $gte: dateStart,
+            $lte: dateEnd
           }
         },
         {
           dateEnd: {
-            $gte: startOfMonth,
-            $lte: endOfMonth
+            $gte: dateStart,
+            $lte: dateEnd
           }
         },
         {
           $and: [
             {
               dateStart: {
-                $lte: startOfMonth
+                $lte: dateStart
               }
             },
             {
               dateEnd: {
-                $gte: endOfMonth
+                $gte: dateEnd
               }
             }
           ]
         }
       ]
     });
-
-    const result = users.map(employee => {
-      const currentUserTasks = tasks.filter(i => i.employee === employee.mailNickname);
-      const day = moment(date)
-        .clone()
-        .startOf('month');
-
-      const res = {
-        employee,
-        tasks: []
-      };
-
-      while (day.isSameOrBefore(endOfMonth)) {
-        const task = currentUserTasks
-          .filter(i => {
-            if (i.dateEnd) {
-              return day.isBetween(moment(i.dateStart), moment(i.dateEnd), 'day', '[]');
-            }
-
-            return day.isSame(moment(i.dateStart), 'day');
-          })
-          .sort((a, b) => (moment(a.dtCreated).isAfter(moment(b.dtCreated)) ? -1 : 1));
-
-        const lastTask = task[0] || { dateStart: day.format('YYYY-MM-DD') };
-
-        res.tasks = [...res.tasks, lastTask];
-
-        day.add(1, 'd');
-      }
-      return res;
-    });
-    return result;
   }
 
   async addTask(task: TaskModel): Promise<TaskEntity> {

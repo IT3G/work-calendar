@@ -18,6 +18,7 @@ import { TaskMapperService } from '../../../shared/services/task-mapper.service'
 })
 export class PresencePageComponent implements OnInit, OnDestroy {
   public selectedUser: Employee;
+  public currentUser: Employee;
   public holidays$: Observable<HolidaysModel[]>;
   private getCurrentUserSub = new Subscription();
   public tasks: TaskModel[] = [];
@@ -35,6 +36,7 @@ export class PresencePageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.checkRoute();
     this.holidays$ = this.holidaysService.getAllHolidays();
+    this.currentUser = this.contextStoreService.getCurrentUser();
   }
 
   ngOnDestroy() {
