@@ -49,6 +49,18 @@
     <mat-datepicker #pickerCreate></mat-datepicker>
   </mat-form-field>
 
+  <mat-form-field *ngIf="isAdmin || profileForm.get('terminationDate').value" class="form-group control control-date">
+    <input
+      placeholder="дата увольнения"
+      matInput
+      autocomplete="off"
+      formControlName="terminationDate"
+      [matDatepicker]="pickerTerminate"
+    />
+    <mat-datepicker-toggle matSuffix [for]="pickerTerminate"></mat-datepicker-toggle>
+    <mat-datepicker #pickerTerminate></mat-datepicker>
+  </mat-form-field>
+
   <mat-checkbox *ngIf="isAdmin" class="form-group checkbox" color="primary" formControlName="isAdmin">
     админ
   </mat-checkbox>

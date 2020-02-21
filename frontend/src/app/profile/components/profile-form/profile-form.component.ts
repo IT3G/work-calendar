@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
 import { DictionaryModel } from '../../../shared/models/dictionary.model';
@@ -48,6 +48,7 @@ export class ProfileFormComponent implements OnChanges {
       this.profileForm.get('subdivision').enable();
       this.profileForm.get('jobPosition').enable();
       this.profileForm.get('isAdmin').enable();
+      this.profileForm.get('terminationDate').enable();
     }
     this.isEdit = true;
   }
@@ -75,7 +76,8 @@ export class ProfileFormComponent implements OnChanges {
       hasMailing: [user.hasMailing],
       jobPosition: [null],
       subdivision: [null],
-      whenCreated: [user.whenCreated]
+      whenCreated: [user.whenCreated],
+      terminationDate: [user.terminationDate]
     });
     this.profileForm.disable();
   }
