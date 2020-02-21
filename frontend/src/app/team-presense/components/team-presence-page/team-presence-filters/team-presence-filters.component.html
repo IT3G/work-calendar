@@ -1,75 +1,25 @@
 <form class="form" [formGroup]="filtersForm">
-  <div class="clear-field-wrapper">
-    <mat-form-field>
-      <input matInput formControlName="name" placeholder="Ф.И.О." />
-    </mat-form-field>
-    <i
+  <mat-form-field>
+    <input matInput formControlName="name" placeholder="Ф.И.О." />
+    <button
+      mat-button
       *ngIf="filtersForm.controls['name'].value"
-      matRipple
-      [matRippleUnbounded]="true"
-      [matRippleCentered]="true"
-      class="fa fa-times icon-btn"
-      aria-hidden="true"
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
       (click)="filtersForm.controls['name'].reset()"
-    ></i>
-  </div>
+    >
+      <i class="fa fa-times icon-btn"></i>
+    </button>
+  </mat-form-field>
 
-  <div class="clear-field-wrapper">
-    <mat-form-field>
-      <mat-label>Проект</mat-label>
-      <mat-select formControlName="project">
-        <mat-option *ngFor="let project of projects" [value]="project._id">
-          {{ project.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <i
-      *ngIf="filtersForm.controls['project'].value"
-      matRipple
-      [matRippleUnbounded]="true"
-      [matRippleCentered]="true"
-      class="fa fa-times icon-btn"
-      aria-hidden="true"
-      (click)="filtersForm.controls['project'].reset()"
-    ></i>
-  </div>
+  <app-single-select formControlName="project" [elements]="projects" [placeholder]="'Проект'"></app-single-select>
 
-  <div class="clear-field-wrapper">
-    <mat-form-field>
-      <mat-label>Подразделение</mat-label>
-      <mat-select formControlName="subdivision">
-        <mat-option *ngFor="let subdivision of subdivisions" [value]="subdivision.name">
-          {{ subdivision.name }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <i
-      *ngIf="filtersForm.controls['subdivision'].value"
-      matRipple
-      [matRippleUnbounded]="true"
-      [matRippleCentered]="true"
-      class="fa fa-times icon-btn"
-      aria-hidden="true"
-      (click)="filtersForm.controls['subdivision'].reset()"
-    ></i>
-  </div>
-  <div class="clear-field-wrapper">
-    <mat-form-field>
-      <mat-label>Регион</mat-label>
-      <mat-select formControlName="location">
-        <mat-option *ngFor="let location of locations" [value]="location">
-          {{ location }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    <i
-      *ngIf="filtersForm.controls['location'].value"
-      matRipple
-      [matRippleUnbounded]="true"
-      [matRippleCentered]="true"
-      class="fa fa-times icon-btn"
-      aria-hidden="true"
-      (click)="filtersForm.controls['location'].reset()"
-    ></i>
-  </div>
+  <app-single-select
+    formControlName="subdivision"
+    [elements]="subdivisions"
+    [placeholder]="'Подразделение'"
+  ></app-single-select>
+
+  <app-single-select formControlName="location" [elements]="locations" [placeholder]="'Регион'"></app-single-select>
 </form>

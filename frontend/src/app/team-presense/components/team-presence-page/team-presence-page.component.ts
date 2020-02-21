@@ -14,6 +14,7 @@ import { TaskApiService } from '../../../core/services/task-api.service';
 import { EmployeeApiService } from '../../../core/services/employee-api.service';
 import { Employee } from '../../../shared/models/employee.model';
 import { ContextStoreService } from '../../../core/store/context-store.service';
+import { SelectInputDataModel } from '../../../shared/components/single-select/single-select.component';
 
 @Component({
   selector: 'app-team-presence',
@@ -31,10 +32,10 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
 
   public filtersForm: FormGroup;
   public holidays: HolidaysModel[];
-  public projects: DictionaryModel[];
-  public jobPositions: DictionaryModel[];
-  public subdivisions: DictionaryModel[];
-  public locations = locationsDictionary;
+  public projects: SelectInputDataModel[];
+  public jobPositions: SelectInputDataModel[];
+  public subdivisions: SelectInputDataModel[];
+  public locations: SelectInputDataModel[];
 
   private subscription = new Subscription();
 
@@ -81,11 +82,29 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
         const [holidays, projects, jobPositions, subdivisions] = res;
 
         this.holidays = holidays;
-        this.projects = projects;
-        this.jobPositions = jobPositions;
-        this.subdivisions = subdivisions;
+        this.projects = projects.map(item => this.mapperToSelectInputDataModel(item));
+        this.jobPositions = jobPositions.map(item => this.mapperToSelectInputDataModel(item));
+        this.subdivisions = subdivisions.map(item => {
+          return {
+            value: item.name,
+            name: item.name
+          };
+        });
+        this.locations = locationsDictionary.map(item => {
+          return {
+            value: item,
+            name: item
+          };
+        });
       })
     );
+  }
+
+  private mapperToSelectInputDataModel(item: DictionaryModel): SelectInputDataModel {
+    return {
+      value: item._id,
+      name: item.name
+    };
   }
 
   public prevMonth(): void {

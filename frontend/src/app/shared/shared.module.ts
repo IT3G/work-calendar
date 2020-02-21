@@ -24,6 +24,7 @@ import { IsHolidayDayForNgbModelPipe } from './pipes/calendar/is-holiday-day-for
 import { TaskTypeColorPipe } from './pipes/description-history/task-type-color.pipe';
 import { SortTasksByDateStartPipe } from './pipes/sort-tasks-by-date-start.pipe';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { SingleSelectComponent } from './components/single-select/single-select.component';
 
 const pipes = [
   UsernamePipe,
@@ -45,7 +46,7 @@ const pipes = [
 
 const modules = [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule, AvatarModule, NgbModule, RouterModule];
 
-const components = [AgendaComponent, FileInputResetComponent, MonthSelectorComponent];
+const components = [AgendaComponent, FileInputResetComponent, MonthSelectorComponent, SingleSelectComponent];
 /** Приватные компоненты попапов наружу предоставлять через сервисы */
 const privateComponents = [ConfirmDialogComponent];
 
