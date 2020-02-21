@@ -50,8 +50,7 @@ export class PresenceFilterPipe implements PipeTransform {
           )
       );
     }
-
-    return res;
+    return res.filter(p => date.isSameOrAfter(moment(p.employee.whenCreated), 'month'));
   }
 
   private isProjectAtMonth(p: ProjectNew, date: Moment): boolean {
