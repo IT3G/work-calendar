@@ -1,0 +1,42 @@
+<div class="title">Проверьте данные</div>
+<div style="width: 100%; display: inline-block;">
+  <div class="subtitle" style="width:50%">ФИО:</div>
+  <div class="subtitle" style="width:50%">От:</div>
+</div>
+
+<div class="profile-form" [formGroup]="profileForm" (keydown.enter)="onUpdateProfile()">
+  <mat-form-field class="form-group">
+    <input matInput placeholder="фамилия" autocomplete="off" formControlName="surname" />
+  </mat-form-field>
+  →
+  <mat-form-field class="form-group">
+    <input matInput placeholder="фамилия" autocomplete="off" formControlName="surnameFrom" />
+  </mat-form-field>
+  <mat-form-field class="form-group">
+    <input matInput placeholder="имя" autocomplete="off" formControlName="name" />
+  </mat-form-field>
+  →
+  <mat-form-field class="form-group">
+    <input matInput placeholder="имя" autocomplete="off" formControlName="nameFrom" />
+  </mat-form-field>
+  <mat-form-field class="form-group">
+    <input
+      matInput
+      placeholder="отчество"
+      autocomplete="off"
+      formControlName="patronymic"
+      (keyup)="patronymicChange()"
+    />
+  </mat-form-field>
+  →
+  <mat-form-field class="form-group">
+    <input matInput placeholder="отчество" autocomplete="off" formControlName="patronymicFrom" />
+  </mat-form-field>
+</div>
+
+<div class="buttons">
+  <button mat-raised-button (click)="onUpdateProfile()" color="primary">Сформировать заявление</button>
+  <button mat-raised-button (click)="dialogRef.close(false)">
+    Отмена
+  </button>
+</div>
