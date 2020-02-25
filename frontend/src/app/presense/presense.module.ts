@@ -6,13 +6,15 @@ import { CurrentDayComponent } from './components/current-day/current-day.compon
 import { DescriptionComponent } from './components/description/description.component';
 import { PresencePageComponent } from './components/presence-page/presence-page.component';
 import { PresenceHistoryComponent } from './components/presence-history/presence-history.component';
+import { UsernameUpdateComponent } from './components/username-update-dialog/username-update-dialog.component';
 
 const components = [
   CalendarComponent,
   CurrentDayComponent,
   DescriptionComponent,
   PresencePageComponent,
-  PresenceHistoryComponent
+  PresenceHistoryComponent,
+  UsernameUpdateComponent
 ];
 @NgModule({
   declarations: [...components],

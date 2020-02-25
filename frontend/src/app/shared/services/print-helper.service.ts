@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { incline } from 'lvovich';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { ContextStoreService } from '../../core/store/context-store.service';
 import { HttpClient } from '@angular/common/http';
+import { PrintInfo } from './print-info';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +11,9 @@ import { HttpClient } from '@angular/common/http';
 export class PrintHelperService {
   constructor(private contextStoreService: ContextStoreService, private http: HttpClient) {}
 
-  public printStatement(employee: string, dateStart: string, dateEnd: string) {
+  public printStatement(printInfo: PrintInfo, dateStart: string, dateEnd: string) {
     this.http.get('assets/html/print-vacation.html', { responseType: 'text' }).subscribe((html: string) => {
-      const content = this.formatHtml(html, employee, dateStart, dateEnd);
+      const content = this.formatHtml(html, printInfo, dateStart, dateEnd);
       const popupWin = window.open('', 'self');
       popupWin.document.open();
       popupWin.document.write(
@@ -23,7 +23,7 @@ export class PrintHelperService {
     });
   }
 
-  private formatHtml(html: string, employee: string, dateStart: string, dateEnd: string): string {
+  private formatHtml(html: string, printInfo: PrintInfo, dateStart: string, dateEnd: string): string {
     const blocks = html.split('***');
 
     const settings = this.contextStoreService.settings$.value;
@@ -43,9 +43,8 @@ export class PrintHelperService {
       .format('D MMMM YYYY')
       .split(' ');
 
-    const formatEmployee = incline({ last: employee.split(' ')[0], first: employee.split(' ')[1] }, 'genitive');
-
-    const headersHtml = this.createHeaderHtml(blocks, companyName, position, mainManager, formatEmployee);
+    const fullNameFrom = `${printInfo.surnameFrom} ${printInfo.nameFrom} ${printInfo.patronymicFrom}`;
+    const headersHtml = this.createHeaderHtml(blocks, companyName, position, mainManager, fullNameFrom);
 
     const { dateStartHtml, dateEndHtml, daysCountHtml } = this.createDatesHtml(
       blocks,
@@ -57,7 +56,8 @@ export class PrintHelperService {
       daysCount
     );
 
-    const footerHtml = `${dayNow[0]}${blocks[12]}${dayNow[1]}${blocks[13]}${dayNow[2]}${blocks[14]}${employee}${blocks[15]}`;
+    const fullName = `${printInfo.surname} ${printInfo.name} ${printInfo.patronymic}`;
+    const footerHtml = `${dayNow[0]}${blocks[12]}${dayNow[1]}${blocks[13]}${dayNow[2]}${blocks[14]}${fullName}${blocks[15]}`;
 
     return `${headersHtml}${dateStartHtml}${dateEndHtml}${daysCountHtml}${footerHtml}`;
   }
@@ -88,6 +88,6 @@ export class PrintHelperService {
     mainManager: string,
     formatEmployee
   ): string {
-    return `${blocks[0]}${companyName}${blocks[1]}${position}${blocks[2]}${mainManager}${blocks[3]}${formatEmployee.last} ${formatEmployee.first}`;
+    return `${blocks[0]}${companyName}${blocks[1]}${position}${blocks[2]}${mainManager}${blocks[3]}${formatEmployee}`;
   }
 }
