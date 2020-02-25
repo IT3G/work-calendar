@@ -23,7 +23,10 @@ const url = `${config.DATABASE_URL}`;
     SettingsModule,
     WebPushModule,
     MongooseModule.forRoot(url, {
-      useNewUrlParser: true
+      keepAlive: true,
+      useNewUrlParser: true,
+      useCreateIndex: true,
+      useFindAndModify: false
     })
   ],
   providers: [{ provide: Config, useValue: config }]
