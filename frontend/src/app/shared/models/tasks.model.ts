@@ -9,5 +9,9 @@ export class TaskModel {
   comment: string;
   dtCreated: string;
   approved: boolean;
+  attachment: {
+    fileName: string;
+    originalName: string;
+  };
   employeeCreated: string;
 }

@@ -14,6 +14,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
+import { Response } from 'express';
 import { TaskDeleteGuard } from '../guards/task-delete.guard';
 import { TaskModel } from '../models/task.model';
 import { TaskService } from '../services/task.service';
@@ -72,29 +73,15 @@ export class TasksController {
   @Post('/resolution/:taskId')
   @UseInterceptors(FileInterceptor('file'))
   async uploadResolution(@Res() res, @UploadedFile() file, @Param('taskId') taskId: string) {
-    await this.vacationResolution.updateTaskResolutionById(taskId, file);
+    const task = await this.vacationResolution.updateTaskResolutionById(taskId, file);
 
-    return res.status(HttpStatus.OK);
+    return res.status(HttpStatus.OK).json(task);
   }
 
-  // @Get('/resolution/:taskId')
-  // async getResolution(@Res() res: Response, @Param('taskId') taskId: string) {
-  //   try {
-  //     const file = await this.fileStorage.getObject(`${this.resolutionsFolderName}${name}`);
-  //     console.log(file);
-  //     res.set('content-disposition', 'attachment; filename="test.test"').send(file);
-  //   } catch (e) {
-  //     throw new NotFoundException('Файл не найден');
-  //   }
-  // }
+  @Get('/resolution/:taskId')
+  async getResolution(@Res() res: Response, @Param('taskId') taskId: string) {
+    const result = await this.vacationResolution.getFileByTaskId(taskId);
 
-  // @Delete('/resolution/:taskId')
-  // async removeObject(@Res() res: Response, @Param('taskId') taskId: string) {
-  //   try {
-  //     const file = await this.fileStorage.removeObject(`${this.resolutionsFolderName}${name}`);
-  //     res.send(file);
-  //   } catch (e) {
-  //     throw new NotAcceptableException('Ошибка при удалении файла');
-  //   }
-  // }
+    res.set('content-disposition', `attachment; filename="${result.name}"`).send(result.file);
+  }
 }

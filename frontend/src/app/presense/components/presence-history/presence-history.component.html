@@ -24,6 +24,14 @@
         (click)="openApproveDialog(task._id)"
       ></i>
 
+      <i
+        *ngIf="task?.attachment?.fileName"
+        (click)="downloadAttachment(task._id)"
+        title="Скачать прикрепленные материалы"
+        class="fa fa-download"
+        aria-hidden="true"
+      ></i>
+
       <ng-template #approveBtn>
         <i title="Отпуск согласован" class="fa disabled fa-check-circle" aria-hidden="true"></i>
 

@@ -5,6 +5,7 @@ import { filter } from 'rxjs/operators';
 import { EmployeeApiService } from 'src/app/core/services/employee-api.service';
 import { ContextStoreService } from 'src/app/core/store/context-store.service';
 import { PrintInfo } from 'src/app/shared/services/print-info';
+import { environment } from '../../../../environments/environment';
 import { DayType } from '../../../shared/const/day-type.const';
 import { Employee } from '../../../shared/models/employee.model';
 import { TaskModel } from '../../../shared/models/tasks.model';
@@ -35,7 +36,7 @@ export class PresenceHistoryComponent {
   deleteTask = new EventEmitter<string>();
 
   @Output()
-  approve = new EventEmitter<string>();
+  approve = new EventEmitter<{ taskId: string; file?: any }>();
 
   dayTypes = DayType;
 
@@ -55,7 +56,11 @@ export class PresenceHistoryComponent {
       width: '400px'
     });
 
-    dialogRef.afterClosed().subscribe(res => console.log(res));
+    dialogRef.afterClosed().subscribe(res => this.approve.emit({ taskId, file: res }));
+  }
+
+  downloadAttachment(taskId: string) {
+    window.open(`${environment.baseUrl}/tasks/resolution/${taskId}`, '_blank');
   }
 
   openDeleteDialog(taskId: string) {
