@@ -2,9 +2,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { PresenceModel } from '../../shared/models/presence.page.model';
-import { PresenceFiltersFormModel } from '../models/presence-filters-form.model';
 import { ProjectNew } from '../../shared/models/project-new';
 import { NewProjectUtils } from '../../shared/utils/new-project.utils';
+import { PresenceFiltersFormModel } from '../models/presence-filters-form.model';
 @Pipe({
   name: 'presenceFilter'
 })
@@ -50,8 +50,7 @@ export class PresenceFilterPipe implements PipeTransform {
           )
       );
     }
-
-    return res;
+    return res.filter(p => date.isSameOrAfter(moment(p.employee.whenCreated), 'month'));
   }
 
   private isProjectAtMonth(p: ProjectNew, date: Moment): boolean {

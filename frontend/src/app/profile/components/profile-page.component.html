@@ -13,7 +13,13 @@
 
   <div class="user-name">{{ selectedUser.username }}</div>
 
-  <button class="presence" [routerLink]="['/presence', selectedUser.mailNickname]" mat-button>
+  <button
+    class="presence"
+    mat-raised-button
+    color="primary"
+    [routerLink]="['/presence', selectedUser.mailNickname]"
+    mat-button
+  >
     Присутствие
   </button>
 
@@ -39,6 +45,8 @@
     <mat-tab label="Подписки">
       <app-profile-subscriptions
         [selectedUser]="selectedUser"
+        [currentUser]="currentUser$ | async"
+        [isCurrentUserAdmin]="isAdmin$ | async"
         [users$]="users$"
         [userFollow]="userFollow"
         (addFollow)="addFollow($event)"

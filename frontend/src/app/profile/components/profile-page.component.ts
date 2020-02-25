@@ -19,8 +19,8 @@ import { FollowModel, UserFollow } from '../../shared/models/follow.model';
 })
 export class ProfilePageComponent implements OnInit, OnDestroy {
   public selectedUser: Employee;
+  public currentUser$: Observable<Employee>;
   public isAdmin$: Observable<boolean>;
-  public isEdit = false;
   public canEdit = false;
   private login: string;
   public projects: DictionaryModel[];
@@ -45,6 +45,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.users$ = this.employeeApiService.loadAllEmployees();
 
     this.getUserInfo();
+    this.currentUser$ = this.contextStoreService.getCurrentUser$();
     this.isAdmin$ = this.contextStoreService.isCurrentUserAdmin$();
     this.settings$ = this.contextStoreService.settings$.pipe(filter(s => !!s));
   }
@@ -90,6 +91,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
           this.loadFollow(user._id);
         })
     );
+
     this.userSubscriptions.add(
       this.route.queryParams.pipe(filter(query => !!query.tab)).subscribe(query => (this.selectedTabIndex = query.tab))
     );
