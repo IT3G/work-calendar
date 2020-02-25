@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { InputFile } from 'ngx-input-file';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Employee } from '../../shared/models/employee.model';
 import { PresenceModel } from '../../shared/models/presence.page.model';
 import { TaskModel } from '../../shared/models/tasks.model';
 
@@ -14,8 +14,8 @@ export class TaskApiService {
 
   constructor(private http: HttpClient) {}
 
-  public addTask(task: TaskModel): Observable<any> {
-    return this.http.post<Employee>(this.baseUrl, task);
+  public addTask(task: TaskModel): Observable<TaskModel> {
+    return this.http.post<TaskModel>(this.baseUrl, task);
   }
 
   public loadAllTasks(): Observable<TaskModel[]> {
@@ -42,12 +42,12 @@ export class TaskApiService {
     return this.http.delete<PresenceModel[]>(`${this.baseUrl}/${taskId}`);
   }
 
-  public addResolution(taskId: string, file: any): Observable<TaskModel> {
+  public addResolution(taskId: string, inputFile: InputFile): Observable<TaskModel> {
     const formData = new FormData();
 
     /** Добавляем файл для случаев с файловым хранилищем */
-    if (file && file.file) {
-      formData.append('file', file.file, file.name);
+    if (inputFile && inputFile.file) {
+      formData.append('file', inputFile.file);
     }
 
     return this.http.post<TaskModel>(`${this.baseUrl}/resolution/${taskId}`, formData);

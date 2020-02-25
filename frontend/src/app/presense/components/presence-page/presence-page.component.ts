@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { InputFile } from 'ngx-input-file';
 import { Observable, Subscription } from 'rxjs';
 import { filter, switchMap, tap } from 'rxjs/operators';
 import { EmployeeApiService } from '../../../core/services/employee-api.service';
@@ -59,7 +60,7 @@ export class PresencePageComponent implements OnInit, OnDestroy {
     );
   }
 
-  public approveTask(approve: { taskId: string; file?: any }) {
+  public approveTask(approve: { taskId: string; file?: InputFile }) {
     this.tasksApi.addResolution(approve.taskId, approve.file).subscribe(res => {
       const taskIndex = this.tasks.findIndex(t => t._id === res._id);
       this.tasks.splice(taskIndex, 1, res);

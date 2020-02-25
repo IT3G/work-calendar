@@ -1,7 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { InputFile } from 'ngx-input-file';
 import { Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { EmployeeApiService } from 'src/app/core/services/employee-api.service';
 import { ContextStoreService } from 'src/app/core/store/context-store.service';
 import { PrintInfo } from 'src/app/shared/services/print-info';
@@ -36,7 +37,7 @@ export class PresenceHistoryComponent {
   deleteTask = new EventEmitter<string>();
 
   @Output()
-  approve = new EventEmitter<{ taskId: string; file?: any }>();
+  approve = new EventEmitter<{ taskId: string; file?: InputFile }>();
 
   dayTypes = DayType;
 
@@ -49,23 +50,27 @@ export class PresenceHistoryComponent {
   ) {}
 
   openApproveDialog(taskId: string) {
-    this.getVacationApproveDialog()
-      .pipe(filter(res => !!res))
-      .subscribe(res => this.approve.emit({ taskId, file: res }));
+    this.getVacationApproveDialog().subscribe(file => this.approve.emit({ taskId, file }));
   }
 
-  /** Попап с драг-н-дропом файла в случае если файловое хранилище включено */
-  private getVacationApproveDialog(): Observable<any> {
+  /**
+   * Попап с драг-н-дропом файла в случае если файловое хранилище включено
+   * Мапим его к формату InputFile
+   * */
+  private getVacationApproveDialog(): Observable<InputFile> {
     const settings = this.contextStoreService.settings$.value;
     if (settings.FEATURE_FILE_STORAGE === 'YES') {
       const dialog = this.dialog.open(VacationResolutionComponent, {
         width: '400px'
       });
 
-      return dialog.afterClosed();
+      return dialog.afterClosed().pipe(filter(res => !!res));
     }
 
-    return this.confirm.openDialog(this.IS_CONFRMED);
+    return this.confirm.openDialog(this.IS_CONFRMED).pipe(
+      filter(res => !!res),
+      map(() => null)
+    );
   }
 
   downloadAttachment(taskId: string) {
