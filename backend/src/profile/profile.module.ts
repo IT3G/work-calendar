@@ -10,6 +10,10 @@ import { FollowService } from './services/follow.service';
 import { UsersController } from './controllers/users.controller';
 import { AvatarsController } from './controllers/avatars.controller';
 import { FollowController } from './controllers/follow.controller';
+import { guards } from './guards';
+import { AuthService } from '../work-calendar/services/auth.service';
+import { LdapService } from '../work-calendar/services/ldap.service';
+import { AdminActionGuard } from './guards/admin-action.guard';
 
 const config = getConfig();
 
@@ -26,9 +30,28 @@ const avatarServiceProvider = {
 };
 
 @Module({
-  imports: [EntityModule, HttpModule],
+  imports: [
+    EntityModule,
+    HttpModule,
+    JwtModule.register({
+      secret: config.JWT_SECRET_KEY,
+      signOptions: { expiresIn: config.JWT_EXPIRES }
+    })
+  ],
   controllers: [UsersController, AvatarsController, FollowController],
-  providers: [UsersService, FollowService, avatarServiceProvider, { provide: Config, useValue: config }],
-  exports: [UsersService, FollowService]
+  providers: [
+    UsersService,
+    LdapService,
+    AuthService,
+    FollowService,
+    AdminActionGuard,
+    avatarServiceProvider,
+    {
+      provide: Config,
+      useValue: config
+    },
+    ...guards
+  ],
+  exports: [UsersService, FollowService, AdminActionGuard]
 })
 export class ProfileModule {}
