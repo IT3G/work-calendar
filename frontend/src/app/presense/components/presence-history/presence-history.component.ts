@@ -49,14 +49,23 @@ export class PresenceHistoryComponent {
   ) {}
 
   openApproveDialog(taskId: string) {
-    /** TODO: Проверять подключено ли файловое хранилище и выдавать разные попапы */
-    // this.confirm.openDialog(this.IS_CONFRMED).subscribe(res => res && this.approve.emit(taskId));
+    this.getVacationApproveDialog()
+      .pipe(filter(res => !!res))
+      .subscribe(res => this.approve.emit({ taskId, file: res }));
+  }
 
-    const dialogRef = this.dialog.open(VacationResolutionComponent, {
-      width: '400px'
-    });
+  /** Попап с драг-н-дропом файла в случае если файловое хранилище включено */
+  private getVacationApproveDialog(): Observable<any> {
+    const settings = this.contextStoreService.settings$.value;
+    if (settings.FEATURE_FILE_STORAGE === 'YES') {
+      const dialog = this.dialog.open(VacationResolutionComponent, {
+        width: '400px'
+      });
 
-    dialogRef.afterClosed().subscribe(res => this.approve.emit({ taskId, file: res }));
+      return dialog.afterClosed();
+    }
+
+    return this.confirm.openDialog(this.IS_CONFRMED);
   }
 
   downloadAttachment(taskId: string) {

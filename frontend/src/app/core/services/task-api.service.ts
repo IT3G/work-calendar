@@ -45,7 +45,8 @@ export class TaskApiService {
   public addResolution(taskId: string, file: any): Observable<TaskModel> {
     const formData = new FormData();
 
-    if (file) {
+    /** Добавляем файл для случаев с файловым хранилищем */
+    if (file && file.file) {
       formData.append('file', file.file, file.name);
     }
 
