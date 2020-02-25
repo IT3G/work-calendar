@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import { ContextStoreService } from 'src/app/core/store/context-store.service';
 import { EmployeeApiService } from 'src/app/core/services/employee-api.service';
 import { PrintInfo } from 'src/app/shared/services/print-info';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-presence-history',
@@ -54,14 +55,14 @@ export class PresenceHistoryComponent {
   }
 
   printStatement(task: TaskModel): void {
-    this.userNameUpdate(this.user).subscribe(o => {
-      if (o) {
+    this.userNameUpdate(this.user)
+      .pipe(filter(i => !!i))
+      .subscribe(o => {
         this.employeeApiService.updateUserPatronymic(this.user.mailNickname, o.patronymic).subscribe(i => {
           this.contextStoreService.setCurrentUser(i);
           this.printService.printStatement(o, task.dateStart, task.dateEnd);
         });
-      }
-    });
+      });
   }
 
   private userNameUpdate(user: Employee, width = '400px'): Observable<PrintInfo> {
