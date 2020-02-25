@@ -34,6 +34,15 @@ export class FollowService {
     };
   }
 
+  /** Получение одной подписки по ID */
+  async getOneFollowsByID(followId: string): Promise<FollowEntity> {
+    return await this.followModel
+      .findById(followId)
+      .populate('followingId')
+      .populate('followerId')
+      .exec();
+  }
+
   /** Получение всех ручных подписок пользователя */
   async getAllStaticFollowsForUser(userId: string): Promise<FollowEntity[]> {
     return await this.followModel
