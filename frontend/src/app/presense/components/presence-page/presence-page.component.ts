@@ -60,13 +60,10 @@ export class PresencePageComponent implements OnInit, OnDestroy {
   }
 
   public approveTask(approve: { taskId: string; file?: any }) {
-    this.tasksApi
-      .addResolution(approve.taskId, approve.file)
-
-      .subscribe(res => {
-        const taskIndex = this.tasks.findIndex(t => t._id === res._id);
-        this.tasks.splice(taskIndex, 1, res);
-      });
+    this.tasksApi.addResolution(approve.taskId, approve.file).subscribe(res => {
+      const taskIndex = this.tasks.findIndex(t => t._id === res._id);
+      this.tasks.splice(taskIndex, 1, res);
+    });
   }
 
   public deleteTask(id: string) {
