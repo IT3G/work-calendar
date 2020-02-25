@@ -4,8 +4,6 @@ import {
   Delete,
   Get,
   HttpStatus,
-  NotAcceptableException,
-  NotFoundException,
   Param,
   Post,
   Put,
@@ -16,19 +14,16 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
-import { Response } from 'express';
-import { FileStorageService } from '../../file-storage/services/file-storage.service';
 import { TaskDeleteGuard } from '../guards/task-delete.guard';
 import { TaskModel } from '../models/task.model';
 import { TaskService } from '../services/task.service';
+import { VacationResolutionService } from '../services/vacation-resolution.service';
 
 @ApiBearerAuth()
 @ApiUseTags('Tasks')
 @Controller('tasks')
 export class TasksController {
-  private readonly resolutionsFolderName = 'resolutions/';
-
-  constructor(private taskService: TaskService, private fileStorage: FileStorageService) {}
+  constructor(private taskService: TaskService, private vacationResolution: VacationResolutionService) {}
 
   @Get()
   async getTasks(@Res() res) {
@@ -74,33 +69,32 @@ export class TasksController {
     return res.status(HttpStatus.OK).json(result);
   }
 
-  @Post('/resolution')
+  @Post('/resolution/:taskId')
   @UseInterceptors(FileInterceptor('file'))
-  uploadResolution(@UploadedFile() file) {
-    try {
-      this.fileStorage.putObject(`${this.resolutionsFolderName}${file.originalname}`, file.buffer);
-    } catch (e) {
-      throw new NotAcceptableException('Ошибка при загрузке файла');
-    }
+  async uploadResolution(@Res() res, @UploadedFile() file, @Param('taskId') taskId: string) {
+    await this.vacationResolution.updateTaskResolutionById(taskId, file);
+
+    return res.status(HttpStatus.OK);
   }
 
-  @Get('/resolution/:name')
-  async getResolution(@Res() res: Response, @Param('name') name: string) {
-    try {
-      const file = await this.fileStorage.getObject(`${this.resolutionsFolderName}${name}`);
-      res.send(file);
-    } catch (e) {
-      throw new NotFoundException('Файл не найден');
-    }
-  }
+  // @Get('/resolution/:taskId')
+  // async getResolution(@Res() res: Response, @Param('taskId') taskId: string) {
+  //   try {
+  //     const file = await this.fileStorage.getObject(`${this.resolutionsFolderName}${name}`);
+  //     console.log(file);
+  //     res.set('content-disposition', 'attachment; filename="test.test"').send(file);
+  //   } catch (e) {
+  //     throw new NotFoundException('Файл не найден');
+  //   }
+  // }
 
-  @Delete('/resolution/:name')
-  async removeObject(@Res() res: Response, @Param('name') name: string) {
-    try {
-      const file = await this.fileStorage.removeObject(`${this.resolutionsFolderName}${name}`);
-      res.send(file);
-    } catch (e) {
-      throw new NotAcceptableException('Ошибка при удалении файла');
-    }
-  }
+  // @Delete('/resolution/:taskId')
+  // async removeObject(@Res() res: Response, @Param('taskId') taskId: string) {
+  //   try {
+  //     const file = await this.fileStorage.removeObject(`${this.resolutionsFolderName}${name}`);
+  //     res.send(file);
+  //   } catch (e) {
+  //     throw new NotAcceptableException('Ошибка при удалении файла');
+  //   }
+  // }
 }

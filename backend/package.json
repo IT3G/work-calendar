@@ -43,7 +43,7 @@
     "i": "^0.3.6",
     "ldapjs": "^1.0.2",
     "lodash-es": "^4.17.15",
-    "minio": "^7.0.13",
+    "minio": "^7.0.14",
     "mongoose": "^5.7.7",
     "nest": "^0.1.6",
     "nodemailer": "^6.3.1",
@@ -52,6 +52,7 @@
     "rimraf": "^3.0.0",
     "rxjs": "^6.5.3",
     "swagger-ui-express": "^4.1.2",
+    "uuid": "^7.0.0",
     "web-push": "^3.4.3"
   },
   "devDependencies": {

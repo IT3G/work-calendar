@@ -50,7 +50,7 @@ export class MinioStoreService implements FileStorage {
     }
   }
 
-  private async init() {
+  private async init(): Promise<void> {
     try {
       this.minioClient = new Minio.Client({
         endPoint: this.config.MINIO_END_POINT,
@@ -66,7 +66,7 @@ export class MinioStoreService implements FileStorage {
     }
   }
 
-  private async initBucket(bucketName: string) {
+  private async initBucket(bucketName: string): Promise<void> {
     const isBucketExists = await this.minioClient.bucketExists(bucketName);
     if (!isBucketExists) {
       await this.minioClient.makeBucket(bucketName, 'rus');

@@ -13,6 +13,7 @@ import { AuthMiddleware } from './middleware/auth.middleware';
 import { AuthService } from './services/auth.service';
 import { LdapService } from './services/ldap.service';
 import { TaskService } from './services/task.service';
+import { VacationResolutionService } from './services/vacation-resolution.service';
 
 const config = getConfig();
 
@@ -30,7 +31,14 @@ const config = getConfig();
     })
   ],
   controllers: [AuthController, TasksController],
-  providers: [LdapService, AuthService, TaskService, { provide: Config, useValue: config }, ...guards]
+  providers: [
+    LdapService,
+    AuthService,
+    TaskService,
+    VacationResolutionService,
+    { provide: Config, useValue: config },
+    ...guards
+  ]
 })
 export class WorkCalendarModule {
   configure(consumer: MiddlewareConsumer) {

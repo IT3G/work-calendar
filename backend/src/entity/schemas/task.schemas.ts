@@ -8,5 +8,9 @@ export const TaskSchema = new Schema({
   employee: String,
   type: String,
   approved: Boolean,
-  employeeCreated: String
+  employeeCreated: String,
+  attachment: {
+    fileName: String,
+    originalName: String
+  }
 });

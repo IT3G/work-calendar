@@ -18,5 +18,10 @@ export class TaskModel {
   @ApiModelProperty()
   approved: boolean;
   @ApiModelProperty()
+  attachment: {
+    fileName: string;
+    originalName: string;
+  };
+  @ApiModelProperty()
   employeeCreated: string;
 }
