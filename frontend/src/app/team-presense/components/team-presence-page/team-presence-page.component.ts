@@ -3,16 +3,18 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import * as moment from 'moment';
 import { BehaviorSubject, forkJoin, Observable, Subscription } from 'rxjs';
-import { distinctUntilChanged, map, share, switchMap, tap } from 'rxjs/operators';
+import { distinctUntilChanged, map, share, switchMap } from 'rxjs/operators';
 import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
 import { locationsDictionary } from '../../../shared/const/locations-dictionary.const';
 import { DictionaryModel } from '../../../shared/models/dictionary.model';
 import { PresenceModel } from '../../../shared/models/presence.page.model';
 import { HolidaysApiService } from '../../../core/services/holidays-api.service';
 import { HolidaysModel } from '../../../shared/models/holidays.model';
-import { DateConvertService } from '../../../shared/services/date-convert.service';
 import { TaskApiService } from '../../../core/services/task-api.service';
 import { EmployeeApiService } from '../../../core/services/employee-api.service';
+import { Employee } from '../../../shared/models/employee.model';
+import { ContextStoreService } from '../../../core/store/context-store.service';
+import { SelectInputDataModel } from '../../../shared/components/single-select/single-select.component';
 
 @Component({
   selector: 'app-team-presence',
@@ -30,10 +32,10 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
 
   public filtersForm: FormGroup;
   public holidays: HolidaysModel[];
-  public projects: DictionaryModel[];
-  public jobPositions: DictionaryModel[];
-  public subdivisions: DictionaryModel[];
-  public locations = locationsDictionary;
+  public projects: SelectInputDataModel[];
+  public jobPositions: SelectInputDataModel[];
+  public subdivisions: SelectInputDataModel[];
+  public locations: SelectInputDataModel[];
 
   private subscription = new Subscription();
 
@@ -44,11 +46,13 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     private router: Router,
     private fb: FormBuilder,
     private dictionaryApi: DictionaryApiService,
-    private holidaysApi: HolidaysApiService
+    private holidaysApi: HolidaysApiService,
+    private contextStoreService: ContextStoreService
   ) {}
 
   ngOnInit() {
     this.initFilterForm(this.route.snapshot.queryParams);
+
     this.monthDays$ = this.getMonthDays();
 
     this.getCommonData();
@@ -78,11 +82,29 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
         const [holidays, projects, jobPositions, subdivisions] = res;
 
         this.holidays = holidays;
-        this.projects = projects;
-        this.jobPositions = jobPositions;
-        this.subdivisions = subdivisions;
+        this.projects = projects.map(item => this.mapperToSelectInputDataModel(item));
+        this.jobPositions = jobPositions.map(item => this.mapperToSelectInputDataModel(item));
+        this.subdivisions = subdivisions.map(item => {
+          return {
+            value: item.name,
+            name: item.name
+          };
+        });
+        this.locations = locationsDictionary.map(item => {
+          return {
+            value: item,
+            name: item
+          };
+        });
       })
     );
+  }
+
+  private mapperToSelectInputDataModel(item: DictionaryModel): SelectInputDataModel {
+    return {
+      value: item._id,
+      name: item.name
+    };
   }
 
   public prevMonth(): void {
@@ -134,5 +156,43 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     if (filters) {
       this.filtersForm.patchValue(filters);
     }
+
+    this.subscription.add(
+      this.contextStoreService
+        .getCurrentUser$()
+        .subscribe(res => this.filtersForm.patchValue({ project: this.getMainProject(res) }))
+    );
+  }
+
+  // получаем основной на текущий момент проект
+  // у залогиненого пользователя, с максимальным %
+  private getMainProject(user: Employee): string {
+    if (!user.projectsNew && !user.projectsNew.length) {
+      return null;
+    }
+
+    const year = moment().year();
+    const month = moment().month() + 1;
+
+    // тк у проекта метадата - массив с инфой по месяцам,
+    // мапим проекты, чтобы получить массив
+    // с активными на текущий момент проектами, без массива метадат
+    const activeProject = user.projectsNew
+      .map(project => {
+        const metadata = project.metadata.find(pr => pr.year === year && pr.month === month);
+        return {
+          project_name: project.project_name,
+          project_id: project.project_id,
+          percent: metadata ? metadata.percent : null
+        };
+      })
+      .filter(p => p && p.percent)
+      .sort((a, b) => b.percent - a.percent);
+
+    if (!activeProject && !activeProject.length) {
+      return null;
+    }
+
+    return activeProject[0].project_id;
   }
 }

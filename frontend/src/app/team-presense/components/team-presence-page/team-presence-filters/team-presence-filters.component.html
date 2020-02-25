@@ -1,35 +1,25 @@
 <form class="form" [formGroup]="filtersForm">
   <mat-form-field>
     <input matInput formControlName="name" placeholder="Ф.И.О." />
+    <button
+      mat-button
+      *ngIf="filtersForm.controls['name'].value"
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="filtersForm.controls['name'].reset()"
+    >
+      <i class="fa fa-times icon-btn"></i>
+    </button>
   </mat-form-field>
 
-  <mat-form-field>
-    <mat-label>Проект</mat-label>
-    <mat-select formControlName="project">
-      <mat-option>Сбросить</mat-option>
-      <mat-option *ngFor="let project of projects" [value]="project._id">
-        {{ project.name }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+  <app-single-select formControlName="project" [elements]="projects" [placeholder]="'Проект'"></app-single-select>
 
-  <mat-form-field>
-    <mat-label>Подразделение</mat-label>
-    <mat-select formControlName="subdivision">
-      <mat-option>Сбросить</mat-option>
-      <mat-option *ngFor="let subdivision of subdivisions" [value]="subdivision.name">
-        {{ subdivision.name }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+  <app-single-select
+    formControlName="subdivision"
+    [elements]="subdivisions"
+    [placeholder]="'Подразделение'"
+  ></app-single-select>
 
-  <mat-form-field>
-    <mat-label>Регион</mat-label>
-    <mat-select formControlName="location">
-      <mat-option>Сбросить</mat-option>
-      <mat-option *ngFor="let location of locations" [value]="location">
-        {{ location }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+  <app-single-select formControlName="location" [elements]="locations" [placeholder]="'Регион'"></app-single-select>
 </form>
