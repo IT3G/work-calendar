@@ -7,6 +7,7 @@ import { CurrentDayComponent } from './components/current-day/current-day.compon
 import { DescriptionComponent } from './components/description/description.component';
 import { PresenceHistoryComponent } from './components/presence-history/presence-history.component';
 import { PresencePageComponent } from './components/presence-page/presence-page.component';
+import { UsernameUpdateComponent } from './components/username-update-dialog/username-update-dialog.component';
 import { VacationResolutionComponent } from './components/vacation-resolution/vacation-resolution.component';
 
 const components = [
@@ -15,7 +16,8 @@ const components = [
   DescriptionComponent,
   PresencePageComponent,
   PresenceHistoryComponent,
-  VacationResolutionComponent
+  VacationResolutionComponent,
+  UsernameUpdateComponent
 ];
 @NgModule({
   declarations: [...components],

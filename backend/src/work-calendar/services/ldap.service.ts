@@ -1,8 +1,9 @@
-import { Injectable, OnApplicationShutdown, Logger } from '@nestjs/common';
-import { Config } from '../../config/config';
-import { LoginModel } from '../models/login.model';
+import { Injectable, Logger, OnApplicationShutdown } from '@nestjs/common';
 import * as ldap from 'ldapjs';
+import * as moment from 'moment';
+import { Config } from '../../config/config';
 import { UserModel } from '../../profile/models/user.model';
+import { LoginModel } from '../models/login.model';
 @Injectable()
 export class LdapService implements OnApplicationShutdown {
   private readonly logger = new Logger('LdapService');
@@ -45,12 +46,13 @@ export class LdapService implements OnApplicationShutdown {
   }
 
   private mapToSendOnClient(attributes: Array<{ type: string; data: string }>): UserModel {
+    const whenCreated = this.getAttribute(attributes, 'whenCreated');
     return {
       _id: null,
       username: this.getAttribute(attributes, 'cn'),
       location: this.getAttribute(attributes, 'l'),
       position: this.getAttribute(attributes, 'title'),
-      whenCreated: this.getAttribute(attributes, 'whenCreated'),
+      whenCreated: moment(whenCreated.substr(0, 8)).format(),
       email: this.getAttribute(attributes, 'userPrincipalName'),
       telNumber: this.getAttribute(attributes, 'mobile'),
       physicalDeliveryOfficeName: this.getAttribute(attributes, 'physicalDeliveryOfficeName'),

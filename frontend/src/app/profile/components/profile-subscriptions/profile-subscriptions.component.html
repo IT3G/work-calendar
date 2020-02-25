@@ -9,7 +9,7 @@
       <div *ngIf="following?.length; else emptyFollow">
         <div *ngFor="let user of following" class="follow-item">
           <a [routerLink]="['/profile', user.mailNickname]" [queryParams]="{ tab: 0 }">{{ user?.username }}</a>
-          <div>
+          <div *ngIf="userCanEdit()">
             <i
               class="fa fa-eye icon-btn"
               [ngClass]="{ 'active-eye': isAddedUser(user) }"
@@ -29,7 +29,7 @@
         </div>
       </div>
 
-      <div class="add-subscriptions">
+      <div class="add-subscriptions" *ngIf="userCanEdit()">
         <mat-form-field class="form-inline">
           <mat-select [formControl]="followingForm" [placeholder]="'Добавить подписку'">
             <mat-option>Сбросить</mat-option>
@@ -54,7 +54,7 @@
       <div *ngIf="removedFromMe?.length; else emptyBlackList">
         <div *ngFor="let user of removedFromMe" class="follow-item">
           {{ user?.followingId?.username }}
-          <div>
+          <div *ngIf="userCanEdit()">
             <i
               class="fa fa-eye icon-btn"
               title="Получать уведомления постоянно"

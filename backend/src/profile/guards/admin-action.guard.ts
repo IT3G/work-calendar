@@ -1,5 +1,5 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../work-calendar/services/auth.service';
 import { Request } from 'express';
 
 /** Guard для подтверждения полномочий роли Администратор */

@@ -14,6 +14,12 @@ export class ProfileSubscriptionsComponent implements OnChanges {
   selectedUser: Employee;
 
   @Input()
+  currentUser: Employee;
+
+  @Input()
+  isCurrentUserAdmin: boolean;
+
+  @Input()
   users$: Observable<Employee[]>;
 
   @Input()
@@ -61,6 +67,10 @@ export class ProfileSubscriptionsComponent implements OnChanges {
 
   private sortFollowModel(a: FollowModel, b: FollowModel, type: string): number {
     return a[type].username.toLowerCase().localeCompare(b[type].username.toLowerCase());
+  }
+
+  public userCanEdit(): boolean {
+    return this.currentUser.mailNickname === this.selectedUser.mailNickname || this.isCurrentUserAdmin;
   }
 
   public isAddedUser(user: Employee): boolean {

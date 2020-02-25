@@ -2,6 +2,7 @@ import { Schema } from 'mongoose';
 
 export const UserSchema = new Schema({
   username: String,
+  patronymic: String,
   location: String,
   position: String,
   projects: [

@@ -1,24 +1,24 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { AuthService } from '../services/auth.service';
 import { Request } from 'express';
-import { TaskService } from '../services/task.service';
-import * as moment from 'moment';
-import { AdminActionGuard } from '../../profile/guards/admin-action.guard';
+import { AdminActionGuard } from './admin-action.guard';
+import { AuthService } from '../../work-calendar/services/auth.service';
+import { FollowService } from '../services/follow.service';
+import { FollowerModel } from '../models/follow.model';
 
 /** Guard для контроля запроса удаления Задачи */
 @Injectable()
-export class TaskDeleteGuard implements CanActivate {
+export class FollowEditGuard implements CanActivate {
   constructor(
     private authService: AuthService,
-    private taskService: TaskService,
+    private followService: FollowService,
     private adminActionGuard: AdminActionGuard
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request: Request = context.switchToHttp().getRequest();
-    const taskId: string = request.params.id;
+    const follow: FollowerModel = request.body;
 
-    if (!taskId) {
+    if (!follow) {
       return false;
     }
 
@@ -28,9 +28,10 @@ export class TaskDeleteGuard implements CanActivate {
     }
 
     const authUser = await this.authService.verifyByRequesAndGetUser(request);
-    const task = await this.taskService.getTaskById(taskId);
-
-    /** владелец может удалить свое событие, которое еще не началось */
-    return task.employee === authUser.mailNickname && moment(task.dateStart).isSameOrAfter(moment(), 'day');
+    /** владелец может изменять свои подписки */
+    return (
+      follow.followerId._id.toString() === authUser.id.toString() ||
+      follow.followingId._id.toString() === authUser.id.toString()
+    );
   }
 }
