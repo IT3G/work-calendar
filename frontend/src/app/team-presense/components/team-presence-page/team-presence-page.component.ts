@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import * as moment from 'moment';
 import { BehaviorSubject, forkJoin, Observable, Subscription } from 'rxjs';
-import { distinctUntilChanged, map, share, switchMap, tap } from 'rxjs/operators';
+import { distinctUntilChanged, map, share, switchMap } from 'rxjs/operators';
 import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
 import { locationsDictionary } from '../../../shared/const/locations-dictionary.const';
 import { DictionaryModel } from '../../../shared/models/dictionary.model';
@@ -145,56 +145,54 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
   }
 
   private initFilterForm(filters?: Params): void {
+    this.filtersForm = this.fb.group({
+      name: [''],
+      subdivision: [null],
+      jobPosition: [null],
+      project: [null],
+      location: [null]
+    });
+
+    if (filters) {
+      this.filtersForm.patchValue(filters);
+    }
+
     this.subscription.add(
-      this.contextStoreService.getCurrentUser$().subscribe(res => {
-        const mainProjectId = this.getMainProject(res);
-
-        this.filtersForm = this.fb.group({
-          name: [''],
-          subdivision: [null],
-          jobPosition: [null],
-          project: [mainProjectId],
-          location: [null]
-        });
-
-        if (filters) {
-          this.filtersForm.patchValue(filters);
-        }
-      })
+      this.contextStoreService
+        .getCurrentUser$()
+        .subscribe(res => this.filtersForm.patchValue({ project: this.getMainProject(res) }))
     );
   }
 
   // получаем основной на текущий момент проект
   // у залогиненого пользователя, с максимальным %
   private getMainProject(user: Employee): string {
-    if (!user.projectsNew.length) {
+    if (!user.projectsNew && !user.projectsNew.length) {
       return null;
     }
 
     const year = moment().year();
     const month = moment().month() + 1;
 
-    const activeProject = user.projectsNew.filter(item => {
-      return item.metadata.some(pr => pr.year === year && pr.month === month);
-    });
+    // тк у проекта метадата - массив с инфой по месяцам,
+    // мапим проекты, чтобы получить массив
+    // с активными на текущий момент проектами, без массива метадат
+    const activeProject = user.projectsNew
+      .map(project => {
+        const metadata = project.metadata.find(pr => pr.year === year && pr.month === month);
+        return {
+          project_name: project.project_name,
+          project_id: project.project_id,
+          percent: metadata ? metadata.percent : null
+        };
+      })
+      .filter(p => p && p.percent)
+      .sort((a, b) => b.percent - a.percent);
 
-    if (!activeProject.length) {
+    if (!activeProject && !activeProject.length) {
       return null;
     }
 
-    const thisMonth = activeProject.map(project => {
-      const item = project.metadata.find(pr => pr.year === year && pr.month === month);
-      return {
-        project_name: project.project_name,
-        project_id: project.project_id,
-        percent: item.percent
-      };
-    });
-
-    const result = thisMonth.sort((a, b) => {
-      return b.percent - a.percent;
-    });
-
-    return result[0].project_id;
+    return activeProject[0].project_id;
   }
 }

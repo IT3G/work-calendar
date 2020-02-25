@@ -1,28 +1,9 @@
 :host {
   position: relative;
-
-  &:hover {
-    ::ng-deep {
-      .icon-clear {
-        display: block;
-      }
-    }
-  }
 }
 
 .mat-form-field {
   width: calc(100% - 25px);
-}
-
-.reset {
-  font-size: inherit;
-  line-height: 3em;
-  height: 3em;
-  padding: 0 16px;
-
-  &:hover {
-    cursor: pointer;
-  }
 }
 
 .icon-btn {

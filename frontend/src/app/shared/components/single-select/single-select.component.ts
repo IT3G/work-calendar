@@ -1,5 +1,6 @@
-import { Component, forwardRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, forwardRef, HostListener, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 export interface SelectInputDataModel {
   value: MultiSelectType;
@@ -21,7 +22,7 @@ export type MultiSelectType = string | number | boolean;
     }
   ]
 })
-export class SingleSelectComponent implements OnInit, ControlValueAccessor {
+export class SingleSelectComponent implements OnInit, ControlValueAccessor, OnDestroy {
   @Input()
   public placeholder: string;
 
@@ -29,6 +30,7 @@ export class SingleSelectComponent implements OnInit, ControlValueAccessor {
   elements: SelectInputDataModel[];
 
   public control = new FormControl(null);
+  private controlSubscription: Subscription;
 
   @ViewChild('mySelect', { static: true }) mySelect;
 
@@ -41,9 +43,13 @@ export class SingleSelectComponent implements OnInit, ControlValueAccessor {
   private onTouched = () => {};
 
   ngOnInit(): void {
-    this.control.valueChanges.subscribe((element: SelectInputDataModel) => {
-      this.onSelectChange(!!element ? element : null);
-    });
+    this.controlSubscription = this.control.valueChanges.subscribe((element: SelectInputDataModel) =>
+      this.onSelectChange(!!element ? element : null)
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.controlSubscription.unsubscribe();
   }
 
   registerOnChange(fn) {
