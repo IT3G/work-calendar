@@ -1,7 +1,7 @@
 import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { Config } from '../../config/config';
-import { TaskEntity } from '../../entity/entities/task.entity';
+import { AttachmentEntity, TaskEntity } from '../../entity/entities/task.entity';
 import { FileStorageService } from '../../file-storage/services/file-storage.service';
 import { TaskService } from './task.service';
 
@@ -36,12 +36,12 @@ export class VacationResolutionService {
       throw new NotFoundException('Данные не найдены');
     }
 
-    const attachment = await this.saveFileAndCreateAttachmentsEntity(file);
+    const attachment = await this.saveFileAndCreateAttachmentEntity(file);
 
     return await this.taskService.udpdateOne(taskId, { attachment, approved: true });
   }
 
-  private async saveFileAndCreateAttachmentsEntity(file?: any): Promise<{ fileName: string; originalName: string }> {
+  private async saveFileAndCreateAttachmentEntity(file?): Promise<AttachmentEntity> {
     if (!file) {
       return null;
     }
