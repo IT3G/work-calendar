@@ -4,7 +4,7 @@ import { getConfig } from '../../config/config';
 import { FileStorage } from './file-storage.interface';
 
 @Injectable()
-export class MinioStoreService implements FileStorage {
+export class MinioStorageService implements FileStorage {
   private minioClient: Minio.Client;
   private readonly logger = new Logger('FileStoreService');
   private config = getConfig();
