@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { FileStorage } from './file-storage.interface';
 
+/**
+ * Сервис инжектится во внешние модули.
+ * Реализация подменяется внутри file-storage.module.ts
+ */
 @Injectable()
 export class FileStorageService implements FileStorage {
   putObject(fileName: string, file: Buffer, bucketName?: string): Promise<string> {

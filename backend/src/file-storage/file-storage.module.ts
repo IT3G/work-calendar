@@ -3,6 +3,9 @@ import { getConfig } from '../config/config';
 import { FileStorageService } from './services/file-storage.service';
 import { MinioStorageService } from './services/minio-storage.service';
 
+/**
+ * Подмена реализации файлового хранилища на выбранную в настройках.
+ */
 const config = getConfig();
 const fileStorageProvider: Provider = {
   provide: FileStorageService,
