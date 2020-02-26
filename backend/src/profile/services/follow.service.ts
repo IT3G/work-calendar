@@ -48,9 +48,7 @@ export class FollowService {
   /** Получение всех ручных подписок пользователя */
   async getAllStaticFollowsForUser(userId: string): Promise<FollowEntity[]> {
     return await this.followModel
-      .find({
-        $or: [{ followerId: userId }, { followingId: userId }]
-      })
+      .find({ $or: [{ followerId: userId }, { followingId: userId }] })
       .populate('followingId')
       .populate('followerId')
       .exec();
