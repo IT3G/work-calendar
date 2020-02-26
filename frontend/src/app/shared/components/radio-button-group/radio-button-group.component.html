@@ -1,0 +1,22 @@
+<app-radio-button
+  [idForLabel]="'first' + '_' + groupName"
+  [data]="first"
+  (valueChosen)="onButtonEmit($event)"
+  [groupName]="groupName"
+  [defaultChoice]="defaultChoice"
+></app-radio-button>
+<app-radio-button
+  *ngFor="let item of data; let i = index"
+  [idForLabel]="i + '_' + groupName"
+  [data]="item"
+  (valueChosen)="onButtonEmit($event)"
+  [groupName]="groupName"
+  [defaultChoice]="defaultChoice"
+></app-radio-button>
+<app-radio-button
+  [idForLabel]="'last' + '_' + groupName"
+  [data]="last"
+  (valueChosen)="onButtonEmit($event)"
+  [groupName]="groupName"
+  [defaultChoice]="defaultChoice"
+></app-radio-button>

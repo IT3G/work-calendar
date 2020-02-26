@@ -1,5 +1,6 @@
 <div class="container-fit">
-  <app-month-selector [date]="date$ | async" (nextMonth)="nextMonth()" (prevMonth)="prevMonth()"></app-month-selector>
+  <app-project-teams-filter [filtersForm]="filtersForm" [subdivision]="subdivisionData"></app-project-teams-filter>
+
   <div class="table-title">
     <table class="project-table">
       <tr>
@@ -12,30 +13,28 @@
   </div>
   <div class="tab-scroll-content">
     <table class="project-table">
-      <tr *ngFor="let project of projects">
+      <tr *ngFor="let project of projectsData">
         <td>
           <div class="project-name">
-            <a [href]="getLink(project._id)">
-              {{ project.name }}
+            <a [href]="getLink(project.projectID)">
+              {{ project.projectName }}
             </a>
           </div>
         </td>
         <td class="project-cell" *ngFor="let loc of location">
           <div class="users-wrapper">
-            <div *ngFor="let user of users | userForLocation: loc | activeProjectForDatePipe: (date$ | async):project">
+            <div
+              *ngFor="
+                let user of project.users
+                  | userForLocation: loc
+                  | projectTeamsFilter: filtersForm.value:project.projectID
+              "
+            >
               <app-user-card [user]="user"></app-user-card>
             </div>
           </div>
         </td>
       </tr>
     </table>
-  </div>
-
-  <div class="color-info">
-    <div [style]="{ 'background-color': '#fffacd' }">Аналитика</div>
-    <div [style]="{ 'background-color': '#ffdab9' }">Проектный офис</div>
-    <div [style]="{ 'background-color': '#CCFFCC' }">Разработка</div>
-    <div [style]="{ 'background-color': '#CCCCFF' }">DevOps</div>
-    <div [style]="{ 'background-color': '#EFECEC' }">Не укзано</div>
   </div>
 </div>

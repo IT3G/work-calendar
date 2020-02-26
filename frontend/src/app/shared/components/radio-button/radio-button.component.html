@@ -1,0 +1,10 @@
+<input
+  class="radio"
+  type="radio"
+  [value]="data.value"
+  [defaultChecked]="defaultChoice === data.value"
+  [id]="idForLabel"
+  [name]="groupName"
+  (change)="choose($event)"
+/>
+<label [style.--color]="data.color" [for]="idForLabel">{{ data.title }}</label>

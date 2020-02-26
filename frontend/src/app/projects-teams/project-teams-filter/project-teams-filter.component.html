@@ -1,0 +1,7 @@
+<app-month-selector [date]="date$ | async" (nextMonth)="nextMonth()" (prevMonth)="prevMonth()"></app-month-selector>
+<app-radio-button-group
+  (valueChosen)="changeSubdivision($event)"
+  [data]="subdivision"
+  [groupName]="'jobPositions-filter'"
+  [defaultChoice]="filterInfo[0].value"
+></app-radio-button-group>

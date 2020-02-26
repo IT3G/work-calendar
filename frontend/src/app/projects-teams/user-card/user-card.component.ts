@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { AuthSetting } from '../../shared/models/auth-setting.model';
 import { filter } from 'rxjs/operators';
 import { ContextStoreService } from '../../core/store/context-store.service';
+import { RadioButtonGroupCommonColor } from '../../shared/const/subdivision-colors.const';
 
 @Component({
   selector: 'app-user-card',
@@ -20,22 +21,5 @@ export class UserCardComponent implements OnInit {
 
   ngOnInit() {
     this.settings$ = this.contextStoreService.settings$.pipe(filter(s => !!s));
-  }
-
-  public getColor(name: string) {
-    if (name === 'Аналитика') {
-      return '#fffacd';
-    }
-    if (name === 'Проектный офис') {
-      return '#ffdab9';
-    }
-    if (name === 'Разработка') {
-      return '#CCFFCC';
-    }
-    if (name === 'DevOps') {
-      return '#CCCCFF';
-    }
-
-    return '#EFECEC';
   }
 }
