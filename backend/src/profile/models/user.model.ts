@@ -1,6 +1,5 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { DictionaryModel } from '../../dictionary/models/dictionary.model';
-import { AddedProjectModel } from './added-project.model';
 
 export class UserModel {
   @ApiModelProperty()
@@ -33,4 +32,6 @@ export class UserModel {
   authType?: string;
   @ApiModelProperty()
   hashPassword?: string;
+  @ApiModelProperty()
+  terminationDate?: string;
 }

@@ -204,7 +204,9 @@ export class TaskService {
     try {
       const userSubject = await this.userService.getUserByLogin(task.employee);
       const userCreated = await this.userService.getUserByLogin(task.employeeCreated);
-      const addressesArray = (await this.generateAddressArray(userSubject, userCreated)).map(user => user.email);
+      const addressesArray = (await this.generateAddressArray(userSubject, userCreated))
+        .filter(user => !user.terminationDate)
+        .map(user => user.email);
 
       if (!addressesArray.length) {
         return;

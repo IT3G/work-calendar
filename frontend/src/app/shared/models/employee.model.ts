@@ -20,4 +20,5 @@ export class Employee {
   jobPosition: DictionaryModel;
   hashPassword: string;
   projectsNew: ProjectNew[];
+  terminationDate: string;
 }

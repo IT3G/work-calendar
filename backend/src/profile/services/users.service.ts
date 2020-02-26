@@ -1,4 +1,3 @@
-import * as crypto from 'crypto';
 import { Model } from 'mongoose';
 import { UserModel } from '../models/user.model';
 import { UserEntity } from '../../entity/entities/user.entity.model';

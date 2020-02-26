@@ -31,4 +31,5 @@ export interface UserEntity extends Document {
   jobPosition: JobPositionEntity;
   authType?: string;
   hashPassword?: string;
+  terminationDate?: string;
 }
