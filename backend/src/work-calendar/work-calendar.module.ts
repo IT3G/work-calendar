@@ -2,16 +2,18 @@ import { HttpModule, MiddlewareConsumer, Module, RequestMethod } from '@nestjs/c
 import { JwtModule } from '@nestjs/jwt';
 import { Config, getConfig } from '../config/config';
 import { EntityModule } from '../entity/entity.module';
+import { FileStorageModule } from '../file-storage/file-storage.module';
+import { MailModule } from '../mail/mail.module';
+import { ProfileModule } from '../profile/profile.module';
+import { WebPushModule } from '../web-push/web-push.module';
+import { AuthController } from './controllers/auth.controller';
+import { TasksController } from './controllers/tasks.controller';
+import { guards } from './guards';
 import { AuthMiddleware } from './middleware/auth.middleware';
 import { AuthService } from './services/auth.service';
 import { LdapService } from './services/ldap.service';
-import { WebPushModule } from '../web-push/web-push.module';
-import { MailModule } from '../mail/mail.module';
-import { TasksController } from './controllers/tasks.controller';
 import { TaskService } from './services/task.service';
-import { AuthController } from './controllers/auth.controller';
-import { ProfileModule } from '../profile/profile.module';
-import { guards } from './guards';
+import { VacationResolutionService } from './services/vacation-resolution.service';
 
 const config = getConfig();
 
@@ -22,13 +24,21 @@ const config = getConfig();
     ProfileModule,
     MailModule,
     WebPushModule,
+    FileStorageModule,
     JwtModule.register({
       secret: config.JWT_SECRET_KEY,
       signOptions: { expiresIn: config.JWT_EXPIRES }
     })
   ],
   controllers: [AuthController, TasksController],
-  providers: [LdapService, AuthService, TaskService, { provide: Config, useValue: config }, ...guards]
+  providers: [
+    LdapService,
+    AuthService,
+    TaskService,
+    VacationResolutionService,
+    { provide: Config, useValue: config },
+    ...guards
+  ]
 })
 export class WorkCalendarModule {
   configure(consumer: MiddlewareConsumer) {

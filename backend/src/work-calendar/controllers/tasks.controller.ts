@@ -1,15 +1,30 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Res, Delete, Put, UseGuards } from '@nestjs/common';
-import { TaskService } from '../services/task.service';
-import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
-import { TaskModel } from '../models/task.model';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+  Res,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
+import { Response } from 'express';
 import { TaskDeleteGuard } from '../guards/task-delete.guard';
-import { AdminActionGuard } from '../../profile/guards/admin-action.guard';
+import { TaskModel } from '../models/task.model';
+import { TaskService } from '../services/task.service';
+import { VacationResolutionService } from '../services/vacation-resolution.service';
 
 @ApiBearerAuth()
 @ApiUseTags('Tasks')
 @Controller('tasks')
 export class TasksController {
-  constructor(private taskService: TaskService) {}
+  constructor(private taskService: TaskService, private vacationResolution: VacationResolutionService) {}
 
   @Get()
   async getTasks(@Res() res) {
@@ -53,5 +68,20 @@ export class TasksController {
     const result = await this.taskService.deleteById(id);
 
     return res.status(HttpStatus.OK).json(result);
+  }
+
+  @Post('/resolution/:taskId')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadResolution(@Res() res, @UploadedFile() file, @Param('taskId') taskId: string) {
+    const task = await this.vacationResolution.updateTaskResolutionById(taskId, file);
+
+    return res.status(HttpStatus.OK).json(task);
+  }
+
+  @Get('/resolution/:taskId')
+  async getResolution(@Res() res: Response, @Param('taskId') taskId: string) {
+    const result = await this.vacationResolution.getFileByTaskId(taskId);
+
+    res.set('content-disposition', `attachment; filename="${result.name}"`).send(result.file);
   }
 }

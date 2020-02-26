@@ -11,4 +11,11 @@ export interface TaskEntity extends Document {
   approved: boolean;
   /** логин сотрудника, создавшего задачу */
   employeeCreated: string;
+  /** прикрепленный материал */
+  attachment: AttachmentEntity;
+}
+
+export interface AttachmentEntity {
+  fileName: string;
+  originalName: string;
 }

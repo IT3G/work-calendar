@@ -1,16 +1,19 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { TaskModel } from '../../../shared/models/tasks.model';
+import { MatDialog } from '@angular/material/dialog';
+import { InputFile } from 'ngx-input-file';
+import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+import { EmployeeApiService } from 'src/app/core/services/employee-api.service';
+import { ContextStoreService } from 'src/app/core/store/context-store.service';
+import { PrintInfo } from 'src/app/shared/services/print-info';
+import { environment } from '../../../../environments/environment';
 import { DayType } from '../../../shared/const/day-type.const';
+import { Employee } from '../../../shared/models/employee.model';
+import { TaskModel } from '../../../shared/models/tasks.model';
 import { ConfirmService } from '../../../shared/services/confirm.service';
 import { PrintHelperService } from '../../../shared/services/print-helper.service';
-import { Employee } from '../../../shared/models/employee.model';
-import { MatDialog } from '@angular/material/dialog';
 import { UsernameUpdateComponent } from '../username-update-dialog/username-update-dialog.component';
-import { Observable } from 'rxjs';
-import { ContextStoreService } from 'src/app/core/store/context-store.service';
-import { EmployeeApiService } from 'src/app/core/services/employee-api.service';
-import { PrintInfo } from 'src/app/shared/services/print-info';
-import { filter } from 'rxjs/operators';
+import { VacationResolutionComponent } from '../vacation-resolution/vacation-resolution.component';
 
 @Component({
   selector: 'app-presence-history',
@@ -34,7 +37,7 @@ export class PresenceHistoryComponent {
   deleteTask = new EventEmitter<string>();
 
   @Output()
-  approve = new EventEmitter<string>();
+  approve = new EventEmitter<{ taskId: string; file?: InputFile }>();
 
   dayTypes = DayType;
 
@@ -47,7 +50,31 @@ export class PresenceHistoryComponent {
   ) {}
 
   openApproveDialog(taskId: string) {
-    this.confirm.openDialog(this.IS_CONFRMED).subscribe(res => res && this.approve.emit(taskId));
+    this.getVacationApproveDialog().subscribe(file => this.approve.emit({ taskId, file }));
+  }
+
+  /**
+   * Попап с драг-н-дропом файла в случае если файловое хранилище включено
+   * Мапим его к формату InputFile
+   * */
+  private getVacationApproveDialog(): Observable<InputFile> {
+    const settings = this.contextStoreService.settings$.value;
+    if (settings.FEATURE_FILE_STORAGE === 'YES') {
+      const dialog = this.dialog.open(VacationResolutionComponent, {
+        width: '400px'
+      });
+
+      return dialog.afterClosed().pipe(filter(res => !!res));
+    }
+
+    return this.confirm.openDialog(this.IS_CONFRMED).pipe(
+      filter(res => !!res),
+      map(() => null)
+    );
+  }
+
+  downloadAttachment(taskId: string) {
+    window.open(`${environment.baseUrl}/tasks/resolution/${taskId}`, '_blank');
   }
 
   openDeleteDialog(taskId: string) {

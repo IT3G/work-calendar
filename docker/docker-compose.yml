@@ -20,3 +20,18 @@ services:
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: root
+
+  minio-calendar:
+    image: minio/minio
+    volumes:
+      - data:/data
+    restart: always
+    ports:
+      - 9005:9000
+    environment:
+      MINIO_ACCESS_KEY: MINIO_ACCESS_KEY
+      MINIO_SECRET_KEY: MINIO_SECRET_KEY
+    command: server /data
+
+volumes:
+  data:

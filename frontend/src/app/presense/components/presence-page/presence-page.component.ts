@@ -1,14 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { filter, map, switchMap, tap } from 'rxjs/operators';
+import { InputFile } from 'ngx-input-file';
+import { Observable, Subscription } from 'rxjs';
+import { filter, switchMap, tap } from 'rxjs/operators';
 import { EmployeeApiService } from '../../../core/services/employee-api.service';
-import { ContextStoreService } from '../../../core/store/context-store.service';
-import { Employee } from '../../../shared/models/employee.model';
-import { TaskModel } from '../../../shared/models/tasks.model';
-import { HolidaysModel } from '../../../shared/models/holidays.model';
 import { HolidaysApiService } from '../../../core/services/holidays-api.service';
 import { TaskApiService } from '../../../core/services/task-api.service';
+import { ContextStoreService } from '../../../core/store/context-store.service';
+import { Employee } from '../../../shared/models/employee.model';
+import { HolidaysModel } from '../../../shared/models/holidays.model';
+import { TaskModel } from '../../../shared/models/tasks.model';
 import { TaskMapperService } from '../../../shared/services/task-mapper.service';
 
 @Component({
@@ -59,10 +60,10 @@ export class PresencePageComponent implements OnInit, OnDestroy {
     );
   }
 
-  public approveTask(id: string) {
-    this.tasksApi.update(id, { approved: true }).subscribe(res => {
-      const task = this.tasks.find(t => t._id === id);
-      task.approved = true;
+  public approveTask(approve: { taskId: string; file?: InputFile }) {
+    this.tasksApi.addResolution(approve.taskId, approve.file).subscribe(res => {
+      const taskIndex = this.tasks.findIndex(t => t._id === res._id);
+      this.tasks.splice(taskIndex, 1, res);
     });
   }
 

@@ -16,6 +16,7 @@ export class Config {
   FEATURE_AVATAR_SOURCE: 'NO' | 'CONFLUENCE';
   FEATURE_AUTH_TYPE: 'PASSWORD' | 'LDAP';
   FEATURE_WEB_PUSH: 'NO' | 'YES';
+  FEATURE_FILE_STORAGE: 'NO' | 'YES';
   CONFLUENCE_BASE_URL: string;
   CONFLUENCE_LOGIN: string;
   CONFLUENCE_PASSWORD: string;
@@ -29,6 +30,12 @@ export class Config {
   PUSH_MAIL_TO: string;
   PUSH_PUBLIC_KEY: string;
   PUSH_PRIVATE_KEY: string;
+  MINIO_END_POINT: string;
+  MINIO_PORT: string;
+  MINIO_USE_SSL: 'YES' | 'NO';
+  MINIO_ACCESS_KEY: string;
+  MINIO_SECRET_KEY: string;
+  MINIO_BUCKET_NAME: string;
 }
 
 let config;

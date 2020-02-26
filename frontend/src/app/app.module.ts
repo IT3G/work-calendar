@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import * as moment from 'moment';
+import { InputFileModule } from 'ngx-input-file';
 import { environment } from '../environments/environment';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
@@ -48,6 +49,7 @@ export function onInit(appLoadService: AppLoadService) {
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
+    InputFileModule.forRoot({}),
     RouterModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
