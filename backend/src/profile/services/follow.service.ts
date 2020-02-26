@@ -26,11 +26,13 @@ export class FollowService {
     const following = await this.getUserFollowing(userId);
     const followers = await this.getUserFollowers(userId);
     const allForUser = await this.getAllStaticFollowsForUser(userId);
+    /** Исключить сотрудников с датой увольнения. */
+    const allEmployedFollowersForUser = allForUser.filter(rec => !rec.followingId.terminationDate);
 
     return {
       following,
       followers,
-      allForUser
+      allForUser: allEmployedFollowersForUser
     };
   }
 
@@ -46,7 +48,9 @@ export class FollowService {
   /** Получение всех ручных подписок пользователя */
   async getAllStaticFollowsForUser(userId: string): Promise<FollowEntity[]> {
     return await this.followModel
-      .find({ $or: [{ followerId: userId }, { followingId: userId }] })
+      .find({
+        $or: [{ followerId: userId }, { followingId: userId }]
+      })
       .populate('followingId')
       .populate('followerId')
       .exec();
