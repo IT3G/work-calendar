@@ -3,7 +3,7 @@ import { TaskService } from '../services/task.service';
 import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
 import { TaskModel } from '../models/task.model';
 import { TaskDeleteGuard } from '../guards/task-delete.guard';
-import { AdminActionGuard } from '../guards/admin-action.guard';
+import { AdminActionGuard } from '../../profile/guards/admin-action.guard';
 
 @ApiBearerAuth()
 @ApiUseTags('Tasks')

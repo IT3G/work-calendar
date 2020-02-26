@@ -1,7 +1,9 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Res, UseGuards } from '@nestjs/common';
 import { FollowService } from '../services/follow.service';
 import { FollowerModel } from '../models/follow.model';
 import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
+import { FollowEditGuard } from '../guards/follow-edit.guard';
+import { FollowDeleteGuard } from '../guards/follow-delete.guard';
 
 @ApiBearerAuth()
 @ApiUseTags('Follow')
@@ -16,12 +18,14 @@ export class FollowController {
   }
 
   @Post()
+  @UseGuards(FollowEditGuard)
   async addFollow(@Res() res, @Body() data: FollowerModel) {
     const newFollow = await this.followService.addFollow(data);
     return res.status(HttpStatus.OK).json(newFollow);
   }
 
   @Delete('/:id')
+  @UseGuards(FollowDeleteGuard)
   async deleteFollow(@Res() res, @Param('id') id) {
     const result = await this.followService.deleteFollow(id);
 
