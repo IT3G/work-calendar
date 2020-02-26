@@ -73,7 +73,8 @@ export class FollowService {
 
     return this.addUserToArr(addedUsers, followingByProjects, allUsers)
       .filter(u => this.removeMyselfFromArr(u.id, user.id))
-      .filter(u => this.removeUsersFromArr(removedUsers, u.id));
+      .filter(u => this.removeUsersFromArr(removedUsers, u.id))
+      .filter(u => !u.terminationDate);
   }
 
   async addFollow(data: FollowerModel): Promise<FollowEntity> {
@@ -105,7 +106,8 @@ export class FollowService {
 
     return this.addUserToArr(addedUsers, [...followersByProjects, ...followersByEmptyProject], allUsers)
       .filter(u => this.removeMyselfFromArr(u.id, user.id))
-      .filter(u => this.removeUsersFromArr(removedUsers, u.id));
+      .filter(u => this.removeUsersFromArr(removedUsers, u.id))
+      .filter(u => !u.terminationDate);
   }
 
   // Добавление пользователя в массив

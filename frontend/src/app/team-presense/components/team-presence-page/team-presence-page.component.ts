@@ -59,6 +59,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
       map(date => date.format('YYYY-MM-DD')),
       distinctUntilChanged(),
       switchMap(date => this.tasksApi.loadTasksByMonth(date)),
+      /** Отсеять сотрудников, которые должны уволиться после окончания текущего месяца. */
       map(this.filterTerminatedEmployees),
       share()
     );
