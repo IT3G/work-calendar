@@ -55,7 +55,7 @@ export class MinioStoreService implements FileStorage {
       this.minioClient = new Minio.Client({
         endPoint: this.config.MINIO_END_POINT,
         port: +this.config.MINIO_PORT,
-        useSSL: !!this.config.MINIO_USE_SSL,
+        useSSL: this.config.MINIO_USE_SSL === 'YES',
         accessKey: this.config.MINIO_ACCESS_KEY,
         secretKey: this.config.MINIO_SECRET_KEY
       });

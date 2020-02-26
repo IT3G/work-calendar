@@ -32,7 +32,7 @@ export class Config {
   PUSH_PRIVATE_KEY: string;
   MINIO_END_POINT: string;
   MINIO_PORT: string;
-  MINIO_USE_SSL: 'YES';
+  MINIO_USE_SSL: 'YES' | 'NO';
   MINIO_ACCESS_KEY: string;
   MINIO_SECRET_KEY: string;
   MINIO_BUCKET_NAME: string;
