@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import * as moment from 'moment';
-import { BehaviorSubject, forkJoin, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, forkJoin, combineLatest, Observable, Subscription } from 'rxjs';
 import { distinctUntilChanged, map, share, switchMap } from 'rxjs/operators';
 import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
 import { locationsDictionary } from '../../../shared/const/locations-dictionary.const';
@@ -71,6 +71,24 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
+  private navigateToFoo() {
+    console.log('navigateToFoo');
+
+    // changes the route without moving from the current view or
+    // triggering a navigation event,
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        name: '123',
+        project: '123'
+      },
+      queryParamsHandling: 'merge',
+      // preserve the existing query params in the route
+      skipLocationChange: false
+      // do not trigger navigation
+    });
+  }
+
   private filterTerminatedEmployees(presenceModels: PresenceModel[]): PresenceModel[] {
     const now = moment();
 
@@ -130,20 +148,45 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
   }
 
   private updateQueryParamsOnChange() {
-    this.subscription.add(
-      this.date$.subscribe(date =>
-        this.router.navigate([], {
-          queryParams: { ...this.route.snapshot.queryParams, date: moment(date).format('MM-YYYY') }
-        })
-      )
-    );
+    combineLatest([this.date$, this.contextStoreService.getCurrentUser$()]).subscribe(res => {
+      const [date, currentUser] = res;
+
+      const mainProject = this.getMainProject(currentUser);
+
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: {
+          ...this.route.snapshot.queryParams,
+          date: moment(date).format('MM-YYYY'),
+          project: mainProject
+        }
+        // queryParamsHandling: 'merge',
+        // preserve the existing query params in the route
+        // skipLocationChange: true
+        // do not trigger navigation
+      });
+      this.filtersForm.patchValue({ project: mainProject });
+    });
+
+    //
+    // this.subscription.add(
+    //   this.contextStoreService
+    //     .getCurrentUser$()
+    //     .subscribe(currentUser => {
+    //       const mainProject = this.getMainProject(currentUser);
+    //
+    //       this.router.navigate([], {
+    //         queryParams: { ...this.route.snapshot.queryParams, project: mainProject }
+    //       });
+    //     })
+    // );
 
     this.subscription.add(
-      this.filtersForm.valueChanges.subscribe(filters =>
+      this.filtersForm.valueChanges.subscribe(filters => {
         this.router.navigate([], {
           queryParams: { ...this.route.snapshot.queryParams, ...filters }
-        })
-      )
+        });
+      })
     );
   }
 
@@ -158,24 +201,18 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     );
   }
 
-  private initFilterForm(filters?: Params): void {
+  private initFilterForm(queryFilters?: Params): void {
     this.filtersForm = this.fb.group({
-      name: [''],
+      name: [null],
       subdivision: [null],
       jobPosition: [null],
       project: [null],
       location: [null]
     });
 
-    if (filters) {
-      this.filtersForm.patchValue(filters);
+    if (queryFilters) {
+      this.filtersForm.patchValue({ ...queryFilters });
     }
-
-    this.subscription.add(
-      this.contextStoreService
-        .getCurrentUser$()
-        .subscribe(res => this.filtersForm.patchValue({ project: this.getMainProject(res) }))
-    );
   }
 
   // получаем основной на текущий момент проект
