@@ -1,16 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
-import { BehaviorSubject, forkJoin, Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { DictionaryApiService } from '../../core/services/dictionary-api.service';
 import { EmployeeApiService } from '../../core/services/employee-api.service';
 import { locationsDictionary } from '../../shared/const/locations-dictionary.const';
-import { DictionaryModel } from '../../shared/models/dictionary.model';
 import { Employee } from '../../shared/models/employee.model';
-import { SubdivisionColors } from '../../shared/const/subdivision-colors.const';
+import {
+  NotFindColor,
+  RadioButtonGroupCommonColor,
+  SubdivisionColors
+} from '../../shared/const/subdivision-colors.const';
 import { ToggleButtonData } from '../../shared/components/radio-button-group/radio-button-group.component';
-import { ProjectNew } from '../../shared/models/project-new';
-import { NewProjectUtils } from '../../shared/utils/new-project.utils';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 export interface ProjectData {
@@ -25,9 +26,6 @@ export interface ProjectData {
   styleUrls: ['./projects-teams.component.scss']
 })
 export class ProjectsTeamsComponent implements OnInit, OnDestroy {
-  public users: Employee[];
-  public projects: DictionaryModel[];
-
   public location = locationsDictionary;
 
   public filtersForm: FormGroup;
@@ -48,18 +46,10 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.filtersForm = this.fb.group({
       month: [moment()],
-      subdivision: ['all-items']
+      subdivision: [RadioButtonGroupCommonColor[0].value]
     });
 
     this.getData();
-
-    this.subdivisionData = SubdivisionColors.map(item => {
-      return {
-        title: item.title,
-        color: item.color,
-        value: item.title
-      };
-    });
   }
 
   ngOnDestroy(): void {
@@ -69,12 +59,12 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
   private getData() {
     const users$ = this.employeeApiService.loadAllEmployees();
     const projects$ = this.dictionaryApi.getAll('project');
+    const subdivision$ = this.dictionaryApi.getAll('subdivision');
 
-    forkJoin([users$, projects$]).subscribe(res => {
+    forkJoin([users$, projects$, subdivision$]).subscribe(res => {
       const usersAll = res[0];
       const projects = res[1];
-
-      this.projects = res[1];
+      const subdivision = res[2];
 
       this.projectsData = projects
         .map(project => {
@@ -87,6 +77,16 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
           };
         })
         .filter(item => item.users && item.users.length);
+
+      this.subdivisionData = subdivision.map(item => {
+        const subdivisionConstInfo = SubdivisionColors.find(el => el.subdivision_id === item._id);
+
+        return {
+          title: item.name,
+          color: subdivisionConstInfo ? subdivisionConstInfo.color : NotFindColor,
+          value: item.name
+        };
+      });
     });
   }
 

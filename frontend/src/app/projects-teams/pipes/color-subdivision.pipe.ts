@@ -1,21 +1,25 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { RadioButtonGroupCommonColor, SubdivisionColors } from '../../shared/const/subdivision-colors.const';
+import {
+  NotFindColor,
+  RadioButtonGroupCommonColor,
+  SubdivisionColors
+} from '../../shared/const/subdivision-colors.const';
 
 @Pipe({
   name: 'colorSubdivision'
 })
 export class ColorSubdivisionPipe implements PipeTransform {
-  transform(name: string): string {
-    if (!name || name === '') {
+  transform(subdivision_id: string): string {
+    if (!subdivision_id || subdivision_id === '') {
       return RadioButtonGroupCommonColor[1].color;
     }
 
-    if (name && name === RadioButtonGroupCommonColor[0].value) {
-      return RadioButtonGroupCommonColor[0].color;
+    const color = SubdivisionColors.find(item => item.subdivision_id === subdivision_id);
+
+    if (!color) {
+      return NotFindColor;
     }
 
-    const color = SubdivisionColors.find(item => item.title === name);
-
-    return color ? color.color : RadioButtonGroupCommonColor[1].color;
+    return color.color;
   }
 }

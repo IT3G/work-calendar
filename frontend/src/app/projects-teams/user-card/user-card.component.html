@@ -14,7 +14,7 @@
       </ng-template>
     </div>
 
-    <div class="label-subdivision" [style]="{ 'background-color': user?.subdivision?.name | colorSubdivision }"></div>
+    <div class="label-subdivision" [style]="{ 'background-color': user?.subdivision?._id | colorSubdivision }"></div>
   </div>
 
   <div class="user-name">

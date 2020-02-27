@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { AuthSetting } from '../../shared/models/auth-setting.model';
 import { filter } from 'rxjs/operators';
 import { ContextStoreService } from '../../core/store/context-store.service';
-import { RadioButtonGroupCommonColor } from '../../shared/const/subdivision-colors.const';
 
 @Component({
   selector: 'app-user-card',
