@@ -1,0 +1,14 @@
+<div class="question">Подтвердите согласование отпуска</div>
+
+<div class="file-container">
+  <input-file placeholder="" [fileLimit]="1" [(ngModel)]="files"></input-file>
+  <div class="file-placeholder">Добавьте или перетащите файл</div>
+</div>
+
+<div class="buttons">
+  <button mat-raised-button (click)="dialogRef.close(files[0])" color="primary" [disabled]="!files?.length">Да</button>
+
+  <button mat-raised-button (click)="dialogRef.close(false)">
+    Нет
+  </button>
+</div>

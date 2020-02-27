@@ -10,17 +10,26 @@ import { FileInputResetComponent } from './components/file-input-reset/file-inpu
 import { MonthSelectorComponent } from './components/month-selector/month-selector.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { pipes } from './pipes';
+import { SingleSelectComponent } from './components/single-select/single-select.component';
 import { RadioButtonGroupComponent } from './components/radio-button-group/radio-button-group.component';
 import { RadioButtonComponent } from './components/radio-button/radio-button.component';
 
 const modules = [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule, AvatarModule, NgbModule, RouterModule];
 
-const components = [AgendaComponent, FileInputResetComponent, MonthSelectorComponent, RadioButtonGroupComponent];
+const components = [
+  AgendaComponent,
+  FileInputResetComponent,
+  MonthSelectorComponent,
+  RadioButtonComponent,
+  RadioButtonGroupComponent,
+  SingleSelectComponent
+];
+
 /** Приватные компоненты попапов наружу предоставлять через сервисы */
 const privateComponents = [ConfirmDialogComponent];
 
 @NgModule({
-  declarations: [...pipes, ...components, ...privateComponents, RadioButtonComponent],
+  declarations: [...pipes, ...components, ...privateComponents],
   imports: [...modules],
   entryComponents: [...privateComponents],
   exports: [...pipes, ...modules, ...components]

@@ -1,17 +1,17 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { TaskEntity } from '../../entity/entities/task.request.model';
-import { SendMailService } from '../../mail/services/send-mail.service';
-import { SendMailRequestModel } from '../../mail/models/send-mail.request.model';
-import { TaskModel } from '../models/task.model';
-import { TaskType } from '../models/task-type.enum';
 import * as moment from 'moment';
-import { PresenceModel } from '../models/task-month.model';
-import { WebPushService } from '../../web-push/services/web-push.service';
+import { Model } from 'mongoose';
+import { TaskEntity } from '../../entity/entities/task.entity';
 import { UserEntity } from '../../entity/entities/user.entity.model';
+import { SendMailRequestModel } from '../../mail/models/send-mail.request.model';
+import { SendMailService } from '../../mail/services/send-mail.service';
 import { FollowService } from '../../profile/services/follow.service';
 import { UsersService } from '../../profile/services/users.service';
+import { WebPushService } from '../../web-push/services/web-push.service';
+import { PresenceModel } from '../models/task-month.model';
+import { TaskType } from '../models/task-type.enum';
+import { TaskModel } from '../models/task.model';
 
 @Injectable()
 export class TaskService {
@@ -204,7 +204,9 @@ export class TaskService {
     try {
       const userSubject = await this.userService.getUserByLogin(task.employee);
       const userCreated = await this.userService.getUserByLogin(task.employeeCreated);
-      const addressesArray = (await this.generateAddressArray(userSubject, userCreated)).map(user => user.email);
+      const addressesArray = (await this.generateAddressArray(userSubject, userCreated))
+        .filter(user => !user.terminationDate)
+        .map(user => user.email);
 
       if (!addressesArray.length) {
         return;

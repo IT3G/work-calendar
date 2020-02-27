@@ -1,0 +1,16 @@
+<mat-form-field>
+  <mat-select #mySelect [placeholder]="placeholder" [formControl]="control">
+    <mat-option *ngFor="let element of elements" [value]="element.value">
+      {{ element.name }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+<i
+  *ngIf="!!control.value"
+  (click)="resetSelect()"
+  matRipple
+  [matRippleUnbounded]="true"
+  [matRippleCentered]="true"
+  class="fa fa-times icon-btn"
+  aria-hidden="true"
+></i>

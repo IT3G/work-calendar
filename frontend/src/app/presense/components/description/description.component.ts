@@ -1,18 +1,14 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { TaskApiService } from '../../../core/services/task-api.service';
 import { ContextStoreService } from '../../../core/store/context-store.service';
-import { TasksStoreService } from '../../../core/store/tasks-store.service';
 import { AgendaColors } from '../../../shared/const/agenda-colors.const';
 import { AgendaColorsModel } from '../../../shared/models/agenda-colors.model';
 import { Employee } from '../../../shared/models/employee.model';
 import { TaskModel } from '../../../shared/models/tasks.model';
-import { PrintHelperService } from '../../../shared/services/print-helper.service';
 import { SnackbarService } from '../../../shared/services/snackbar.service';
 
 @Component({
@@ -69,6 +65,7 @@ export class DescriptionComponent implements OnInit {
       comment: val.comment,
       dtCreated: moment().toISOString(),
       approved: false,
+      attachment: null,
       employeeCreated: this.contextStoreService.getCurrentUser().mailNickname
     };
 

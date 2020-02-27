@@ -4,6 +4,7 @@ import { ProjectNew } from './project-new';
 export class Employee {
   _id: string;
   username: string;
+  patronymic: string;
   location: string;
   position: string;
   whenCreated: string;
@@ -19,4 +20,5 @@ export class Employee {
   jobPosition: DictionaryModel;
   hashPassword: string;
   projectsNew: ProjectNew[];
+  terminationDate: string;
 }

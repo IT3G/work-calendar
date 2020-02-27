@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, NotFoundException, Param, Post, Res, HttpCode } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, NotFoundException, Param, Post, Res } from '@nestjs/common';
 import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
 import { UserModel } from '../models/user.model';
 import { UsersService } from '../services/users.service';
@@ -40,6 +40,20 @@ export class UsersController {
     if (!editedUser) {
       throw new NotFoundException('User does not exist!');
     }
+
+    return res.status(HttpStatus.OK).json(editedUser);
+  }
+
+  @Post('/patronymic/:login')
+  async editUserPatronymic(@Res() res, @Param('login') login, @Body() data) {
+    const editedUser = await this.userService.getUserByLogin(login);
+
+    if (!editedUser) {
+      throw new NotFoundException('User does not exist!');
+    }
+
+    editedUser.patronymic = data.patronymic;
+    await editedUser.save();
 
     return res.status(HttpStatus.OK).json(editedUser);
   }

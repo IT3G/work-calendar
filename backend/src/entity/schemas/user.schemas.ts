@@ -2,6 +2,7 @@ import { Schema } from 'mongoose';
 
 export const UserSchema = new Schema({
   username: String,
+  patronymic: String,
   location: String,
   position: String,
   projects: [
@@ -36,5 +37,6 @@ export const UserSchema = new Schema({
   subdivision: { type: Schema.Types.ObjectId, ref: 'Subdivision' },
   jobPosition: { type: Schema.Types.ObjectId, ref: 'JobPosition' },
   authType: String,
-  hashPassword: String
+  hashPassword: String,
+  terminationDate: String
 });
