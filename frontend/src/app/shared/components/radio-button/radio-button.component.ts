@@ -30,7 +30,7 @@ export class RadioButtonComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  private choose($event) {
+  public choose($event) {
     this.valueChosen.emit($event.target.value);
   }
 }

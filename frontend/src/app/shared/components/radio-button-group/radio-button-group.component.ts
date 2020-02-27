@@ -34,7 +34,7 @@ export class RadioButtonGroupComponent implements OnInit {
     this.control = this.defaultChoice ? this.defaultChoice : 'first';
   }
 
-  private onButtonEmit(value: string) {
+  public onButtonEmit(value: string) {
     this.control = value;
     this.valueChosen.emit(value);
   }
