@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Router, RouterModule, Routes } from '@angular/router';
+import { environment } from '../../environments/environment';
 import { AuthGuardService as AuthGuard } from '../core/guards/auth-guard.service';
 import { IsAdminGuardService } from '../core/guards/is-admin-guard.service';
 import { LoginPageComponent } from '../login/components/login-page.component';
 import { RegistrationComponent } from '../login/registration/registration.component';
 import { PresencePageComponent } from '../presense/components/presence-page/presence-page.component';
 import { ProfilePageComponent } from '../profile/components/profile-page.component';
-import { TeamPresencePageComponent } from '../team-presense/components/team-presence-page/team-presence-page.component';
 import { ProjectsTeamsComponent } from '../projects-teams/projects-teams/projects-teams.component';
+import { TeamPresencePageComponent } from '../team-presense/components/team-presence-page/team-presence-page.component';
 
 const swipebleRoutes: string[] = ['/presence', '/team-presence', '/profile'];
 
@@ -25,7 +26,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true })],
+  /** Для тестового стенда используем хэши в роуте. Для остальных нет */
+  imports: [RouterModule.forRoot(routes, { useHash: environment.envName === 'test' })],
   exports: [RouterModule]
 })
 export class AppRoutingModule {
