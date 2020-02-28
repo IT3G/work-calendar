@@ -7,6 +7,7 @@ import { ContextStoreService } from './core/store/context-store.service';
 import { SwPush } from '@angular/service-worker';
 import { filter, switchMap, catchError } from 'rxjs/operators';
 import { PushApiService } from './core/services/push-api.service';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -58,9 +59,17 @@ export class AppComponent implements OnInit, OnDestroy {
 
   /** Добавление версии в заголовок */
   private addGitVersionToPageTitle(): void {
-    const currentTitle = this.title.getTitle();
+    const currentTitle = this.getPageTitle();
+
     this.gitInfo.getVersionAsString().subscribe(version => {
-      this.title.setTitle(`${currentTitle} (${version})`);
+      this.title.setTitle(`${currentTitle} (версия от ${version})`);
     });
+  }
+
+  private getPageTitle(): string {
+    if (environment.pageTitle) {
+      return environment.pageTitle;
+    }
+    return this.title.getTitle();
   }
 }
