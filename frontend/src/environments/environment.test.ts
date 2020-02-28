@@ -5,7 +5,8 @@
 export const environment = {
   envName: 'test',
   production: false,
-  baseUrl: 'https://work-cal.herokuapp.com'
+  baseUrl: 'https://work-cal.herokuapp.com',
+  pageTitle: ''
 };
 
 /*

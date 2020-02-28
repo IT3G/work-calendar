@@ -6,7 +6,7 @@ export const environment = {
   envName: 'dev',
   production: false,
   baseUrl: '/backend',
-  pageTitle: null
+  pageTitle: ''
 };
 
 /*
