@@ -8,8 +8,8 @@
     </h5>
   </div>
 
-  <div class="header-search flex-1">
-    <form #f="ngForm" (ngSubmit)="onSubmitSearch($event)" *ngIf="showHeaderSearch">
+  <div class="flex-1">
+    <form class="header-search-form" #f="ngForm" (ngSubmit)="onSubmitSearch($event)" *ngIf="showHeaderSearch">
       <mat-form-field>
         <input matInput type="text" name="name" [(ngModel)]="value" placeholder="Ф.И.О." />
         <button

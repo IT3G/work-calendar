@@ -10,10 +10,6 @@
 
 .header-search {
   padding: 0 30px;
-  text-align: center;
-}
-
-.search-button {
 }
 
 .user-info-container {
@@ -24,6 +20,11 @@
 .mobile-menu {
   display: none;
   cursor: pointer;
+}
+
+.header-search-form {
+  display: flex;
+  justify-content: center;
 }
 
 @media (max-width: 750px) {

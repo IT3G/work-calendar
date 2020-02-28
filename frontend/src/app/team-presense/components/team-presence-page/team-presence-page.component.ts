@@ -71,24 +71,6 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  private navigateToFoo() {
-    console.log('navigateToFoo');
-
-    // changes the route without moving from the current view or
-    // triggering a navigation event,
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {
-        name: '123',
-        project: '123'
-      },
-      queryParamsHandling: 'merge',
-      // preserve the existing query params in the route
-      skipLocationChange: false
-      // do not trigger navigation
-    });
-  }
-
   private filterTerminatedEmployees(presenceModels: PresenceModel[]): PresenceModel[] {
     const now = moment();
 
@@ -160,26 +142,9 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
           date: moment(date).format('MM-YYYY'),
           project: mainProject
         }
-        // queryParamsHandling: 'merge',
-        // preserve the existing query params in the route
-        // skipLocationChange: true
-        // do not trigger navigation
       });
       this.filtersForm.patchValue({ project: mainProject });
     });
-
-    //
-    // this.subscription.add(
-    //   this.contextStoreService
-    //     .getCurrentUser$()
-    //     .subscribe(currentUser => {
-    //       const mainProject = this.getMainProject(currentUser);
-    //
-    //       this.router.navigate([], {
-    //         queryParams: { ...this.route.snapshot.queryParams, project: mainProject }
-    //       });
-    //     })
-    // );
 
     this.subscription.add(
       this.filtersForm.valueChanges.subscribe(filters => {
