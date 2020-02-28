@@ -4,11 +4,20 @@ import { ProjectsTeamsComponent } from './projects-teams/projects-teams.componen
 
 import { UserForLocationPipe } from './pipes/user-for-location.pipe';
 import { SharedModule } from '../shared/shared.module';
-import { ActiveProjectForDatePipe } from './pipes/active-project-for-date.pipe';
 import { UserCardComponent } from './user-card/user-card.component';
+import { ColorSubdivisionPipe } from './pipes/color-subdivision.pipe';
+import { ProjectTeamsFilterComponent } from './project-teams-filter/project-teams-filter.component';
+import { ProjectTeamsFilterPipe } from './pipes/project-teams-filter.pipe';
 
 @NgModule({
-  declarations: [ProjectsTeamsComponent, UserForLocationPipe, ActiveProjectForDatePipe, UserCardComponent],
+  declarations: [
+    ProjectsTeamsComponent,
+    UserForLocationPipe,
+    UserCardComponent,
+    ColorSubdivisionPipe,
+    ProjectTeamsFilterComponent,
+    ProjectTeamsFilterPipe
+  ],
   imports: [CommonModule, SharedModule]
 })
 export class ProjectsTeamsModule {}

@@ -1,21 +1,29 @@
 <div class="user-card card-s">
   <div>
-    <div *ngIf="(settings$ | async)?.FEATURE_AVATAR_SOURCE === 'CONFLUENCE'; else noAvatar">
-      <ngx-avatar
-        [src]="user | avatarSource"
-        class="avatar-center"
-        size="50"
-        value="{{ user.username | usernamePipe }}"
-      ></ngx-avatar>
+    <div class="avatar-area">
+      <div *ngIf="(settings$ | async)?.FEATURE_AVATAR_SOURCE === 'CONFLUENCE'; else noAvatar">
+        <ngx-avatar
+          [src]="user | avatarSource"
+          class="avatar-center"
+          size="50"
+          value="{{ user.username | usernamePipe }}"
+        ></ngx-avatar>
+      </div>
+      <ng-template #noAvatar>
+        <ngx-avatar size="50" class="avatar-center" value="{{ user.username | usernamePipe }}"></ngx-avatar>
+      </ng-template>
     </div>
-    <ng-template #noAvatar>
-      <ngx-avatar size="50" class="avatar-center" value="{{ user.username | usernamePipe }}"></ngx-avatar>
-    </ng-template>
+
+    <div class="label-subdivision" [style]="{ 'background-color': user?.subdivision?._id | colorSubdivision }"></div>
   </div>
 
-  <a class="user-name" [routerLink]="['/presence', user.mailNickname]">
-    <div *ngFor="let nameItem of user.username | usernameToArr">
-      {{ nameItem }}
-    </div>
-  </a>
+  <div class="user-name">
+    <a [routerLink]="['/presence', user.mailNickname]">
+      <div *ngFor="let nameItem of user.username | usernameToArr">
+        {{ nameItem }}
+      </div>
+    </a>
+
+    <div class="jobPosition">{{ user?.jobPosition?.name }}</div>
+  </div>
 </div>

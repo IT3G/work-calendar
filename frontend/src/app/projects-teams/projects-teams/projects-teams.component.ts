@@ -1,12 +1,25 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
-import { BehaviorSubject, forkJoin, Subscription } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { DictionaryApiService } from '../../core/services/dictionary-api.service';
 import { EmployeeApiService } from '../../core/services/employee-api.service';
 import { locationsDictionary } from '../../shared/const/locations-dictionary.const';
-import { DictionaryModel } from '../../shared/models/dictionary.model';
 import { Employee } from '../../shared/models/employee.model';
+import {
+  notFindColor,
+  radioButtonGroupCommonColor,
+  subdivisionColors
+} from '../../shared/const/subdivision-colors.const';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { DictionaryModel } from '../../shared/models/dictionary.model';
+import { ToggleButtonDataModel } from '../../shared/components/radio-button-group/radio-button-group.model';
+
+export interface ProjectData {
+  projectName: string;
+  projectID: string;
+  users: Employee[];
+}
 
 @Component({
   selector: 'app-projects-teams',
@@ -14,23 +27,29 @@ import { Employee } from '../../shared/models/employee.model';
   styleUrls: ['./projects-teams.component.scss']
 })
 export class ProjectsTeamsComponent implements OnInit, OnDestroy {
-  public users: Employee[];
-  public projects: DictionaryModel[];
   public location = locationsDictionary;
+
+  public filtersForm: FormGroup;
+
+  public projectsData: ProjectData[];
+  public subdivisionData: ToggleButtonDataModel[];
 
   private subscription = new Subscription();
 
-  private qParamsSnpshotMonth = this.route.snapshot.queryParams.date;
-  public date$ = new BehaviorSubject<moment.Moment>(
-    this.qParamsSnpshotMonth ? moment(this.qParamsSnpshotMonth, 'MM-YYYY') : moment()
-  );
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
+    private fb: FormBuilder,
     private dictionaryApi: DictionaryApiService,
     private employeeApiService: EmployeeApiService
   ) {}
 
   ngOnInit() {
+    this.filtersForm = this.fb.group({
+      month: [moment()],
+      subdivision: [radioButtonGroupCommonColor[0].value]
+    });
+
     this.getData();
   }
 
@@ -38,21 +57,46 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  public prevMonth(): void {
-    this.date$.next(this.date$.value.clone().subtract(1, 'months'));
-  }
-
-  public nextMonth(): void {
-    this.date$.next(this.date$.value.clone().add(1, 'months'));
-  }
-
   private getData() {
     const users$ = this.employeeApiService.loadAllEmployees();
     const projects$ = this.dictionaryApi.getAll('project');
+    const subdivision$ = this.dictionaryApi.getAll('subdivision');
 
-    forkJoin([users$, projects$]).subscribe(res => {
-      this.users = res[0];
-      this.projects = res[1];
+    forkJoin([users$, projects$, subdivision$]).subscribe(res => {
+      const [usersAll, projects, subdivision] = res;
+
+      // делаем выборку пользователей для каждого проекта,
+      // и фильтруем проекты вообще без пользователей
+      this.projectsData = this.getUsersForProjects(projects, usersAll);
+
+      // привязываем цветовую схему через id подразделения
+      this.subdivisionData = this.getColorForSubdivisions(subdivision);
+    });
+  }
+
+  private getUsersForProjects(projects: DictionaryModel[], usersAll: Employee[]): ProjectData[] {
+    return projects
+      .map(project => {
+        const users = usersAll.filter(u => u.projectsNew && u.projectsNew.some(p => p.project_id === project._id));
+
+        return {
+          projectName: project.name,
+          projectID: project._id,
+          users
+        };
+      })
+      .filter(item => item.users && item.users.length);
+  }
+
+  private getColorForSubdivisions(subdivision: DictionaryModel[]): ToggleButtonDataModel[] {
+    return subdivision.map(item => {
+      const subdivisionConstInfo = subdivisionColors.find(el => el.subdivision_id === item._id);
+
+      return {
+        title: item.name,
+        color: subdivisionConstInfo ? subdivisionConstInfo.color : notFindColor,
+        value: item.name
+      };
     });
   }
 

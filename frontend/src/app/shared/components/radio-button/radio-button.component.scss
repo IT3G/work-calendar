@@ -1,0 +1,23 @@
+:host {
+  --color: #ffffff;
+}
+
+.radio {
+  display: none;
+}
+.radio + label {
+  position: relative;
+  padding: 5px 10px;
+  margin: 0 5px;
+  cursor: pointer;
+  border-radius: 4px;
+  border: solid 2px var(--color);
+
+  &:hover {
+    background-color: var(--color);
+  }
+}
+
+.radio:checked + label {
+  background-color: var(--color);
+}
