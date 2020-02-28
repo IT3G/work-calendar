@@ -23,9 +23,5 @@
     </a>
   </mat-menu>
 
-  <ng-template #noAuth>
-    <a class="btn btn-outline-primary" routerLink="/login" routerLinkActive="active">Войти</a>
-  </ng-template>
-
-  <a class="btn btn-outline-primary" *ngIf="isAuth$ | async; else noAuth" (click)="logout()">Выйти</a>
+  <a class="btn btn-outline-primary" *ngIf="isAuth$ | async" (click)="logout()">Выйти</a>
 </nav>
