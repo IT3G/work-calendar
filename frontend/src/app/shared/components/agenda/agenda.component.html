@@ -1,6 +1,6 @@
 <div class="day-type" [ngClass]="{ vertical: !isLineView, horizontal: isLineView }">
   <div class="item" *ngFor="let item of optionsAgenda" [matTooltip]="item.tooltip">
-    <div class="label" [style.backgroundColor]="item.color"></div>
+    <div class="label" [ngClass]="item.id"></div>
     <div class="title">{{ item.title }}</div>
   </div>
 </div>

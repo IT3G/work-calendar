@@ -90,24 +90,23 @@ $borderColor: #e3e3e3;
 }
 
 .CUSTOM {
-  background-color: rgb(144, 202, 249);
+  background-color: var(--dayTypeCustom);
 }
 
 .LEFT {
-  background-color: #ef9a9a;
+  background-color: var(--dayTypeLeft);
 }
 
 .VACATION {
-  $vacation-bg: #c5e1a5;
-  background-color: $vacation-bg;
+  background-color: var(--dayTypeVacation);
 
   &.is-approved {
-    background-color: darken($vacation-bg, $amount: 40);
+    background-color: var(--dayTypeVacationApproved);
   }
 }
 
 .SICK {
-  background-color: #ffe082;
+  background-color: var(--dayTypeSick);
 }
 
 .agenda__wrapper {
