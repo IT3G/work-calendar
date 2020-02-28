@@ -8,6 +8,7 @@ $borderColor: #e3e3e3;
   border-right: 1px solid $borderColor;
   border-bottom: 2px solid $borderColor;
   min-height: 45px;
+
   &.header {
     border-bottom: 1px solid $borderColor;
   }
@@ -43,6 +44,7 @@ $borderColor: #e3e3e3;
   @extend .scrollbar;
 
   display: grid;
+
   &.row_28 {
     grid-template-columns: 30px 240px repeat(28, 1fr);
   }
@@ -96,7 +98,12 @@ $borderColor: #e3e3e3;
 }
 
 .VACATION {
-  background-color: #c5e1a5;
+  $vacation-bg: #c5e1a5;
+  background-color: $vacation-bg;
+
+  &.is-approved {
+    background-color: darken($vacation-bg, $amount: 40);
+  }
 }
 
 .SICK {
@@ -118,6 +125,7 @@ mat-form-field {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .currentDay {
   div:first-of-type {
     background: #ff3b30;

@@ -22,6 +22,7 @@
       *ngFor="let task of data.tasks; index as i"
       [title]="task?.comment || ''"
       [ngClass]="i + 1 | getDateFromIndex: yearAndMonth | isHolidayData: holidays"
+      [class.is-approved]="!task.approved"
       class="day {{ task?.type }}"
     ></div>
   </ng-container>
