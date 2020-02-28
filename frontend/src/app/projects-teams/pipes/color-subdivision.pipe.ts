@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import {
-  NotFindColor,
+  notFindColor,
   radioButtonGroupCommonColor,
   subdivisionColors
 } from '../../shared/const/subdivision-colors.const';
@@ -17,7 +17,7 @@ export class ColorSubdivisionPipe implements PipeTransform {
     const color = subdivisionColors.find(item => item.subdivision_id === subdivision_id);
 
     if (!color) {
-      return NotFindColor;
+      return notFindColor;
     }
 
     return color.color;

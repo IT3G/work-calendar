@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
-import { ToggleButtonData } from '../radio-button-group/radio-button-group.component';
+import { ToggleButtonDataModel } from '../radio-button-group/radio-button-group.model';
 
 @Component({
   selector: 'app-radio-button',
@@ -9,7 +9,7 @@ import { ToggleButtonData } from '../radio-button-group/radio-button-group.compo
 })
 export class RadioButtonComponent {
   @Input()
-  public data: ToggleButtonData;
+  public data: ToggleButtonDataModel;
 
   @HostBinding('style.--color')
   public get isExample(): string {

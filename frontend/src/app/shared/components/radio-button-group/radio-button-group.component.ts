@@ -1,11 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { radioButtonGroupCommonColor } from '../../const/subdivision-colors.const';
-
-export interface ToggleButtonData {
-  title: string;
-  color: string;
-  value: string;
-}
+import { ToggleButtonDataModel } from './radio-button-group.model';
 
 @Component({
   selector: 'app-radio-button-group',
@@ -14,7 +9,7 @@ export interface ToggleButtonData {
 })
 export class RadioButtonGroupComponent implements OnInit {
   @Input()
-  data: ToggleButtonData[];
+  data: ToggleButtonDataModel[];
 
   @Input()
   defaultChoice: string;

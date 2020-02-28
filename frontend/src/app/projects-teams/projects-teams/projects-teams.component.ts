@@ -7,13 +7,13 @@ import { EmployeeApiService } from '../../core/services/employee-api.service';
 import { locationsDictionary } from '../../shared/const/locations-dictionary.const';
 import { Employee } from '../../shared/models/employee.model';
 import {
-  NotFindColor,
+  notFindColor,
   radioButtonGroupCommonColor,
   subdivisionColors
 } from '../../shared/const/subdivision-colors.const';
-import { ToggleButtonData } from '../../shared/components/radio-button-group/radio-button-group.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DictionaryModel } from '../../shared/models/dictionary.model';
+import { ToggleButtonDataModel } from '../../shared/components/radio-button-group/radio-button-group.model';
 
 export interface ProjectData {
   projectName: string;
@@ -32,7 +32,7 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
   public filtersForm: FormGroup;
 
   public projectsData: ProjectData[];
-  public subdivisionData: ToggleButtonData[];
+  public subdivisionData: ToggleButtonDataModel[];
 
   private subscription = new Subscription();
 
@@ -88,13 +88,13 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
       .filter(item => item.users && item.users.length);
   }
 
-  private getColorForSubdivisions(subdivision: DictionaryModel[]): ToggleButtonData[] {
+  private getColorForSubdivisions(subdivision: DictionaryModel[]): ToggleButtonDataModel[] {
     return subdivision.map(item => {
       const subdivisionConstInfo = subdivisionColors.find(el => el.subdivision_id === item._id);
 
       return {
         title: item.name,
-        color: subdivisionConstInfo ? subdivisionConstInfo.color : NotFindColor,
+        color: subdivisionConstInfo ? subdivisionConstInfo.color : notFindColor,
         value: item.name
       };
     });

@@ -1,4 +1,4 @@
-import { ToggleButtonData } from '../components/radio-button-group/radio-button-group.component';
+import { ToggleButtonDataModel } from '../components/radio-button-group/radio-button-group.model';
 
 export const subdivisionColors = [
   {
@@ -23,7 +23,7 @@ export const subdivisionColors = [
   }
 ];
 
-export const radioButtonGroupCommonColor: ToggleButtonData[] = [
+export const radioButtonGroupCommonColor: ToggleButtonDataModel[] = [
   {
     title: 'Все',
     color: '#EFECEC',
@@ -39,4 +39,4 @@ export const radioButtonGroupCommonColor: ToggleButtonData[] = [
 // если в фильтре и карточках появился этот цвет,
 // значит подразделений прибавилось,
 // и в SubdivisionColors надо добавить информацию
-export const NotFindColor = '#ff4ac7';
+export const notFindColor = '#ff4ac7';
