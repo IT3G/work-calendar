@@ -8,11 +8,12 @@ import { locationsDictionary } from '../../shared/const/locations-dictionary.con
 import { Employee } from '../../shared/models/employee.model';
 import {
   NotFindColor,
-  RadioButtonGroupCommonColor,
-  SubdivisionColors
+  radioButtonGroupCommonColor,
+  subdivisionColors
 } from '../../shared/const/subdivision-colors.const';
 import { ToggleButtonData } from '../../shared/components/radio-button-group/radio-button-group.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { DictionaryModel } from '../../shared/models/dictionary.model';
 
 export interface ProjectData {
   projectName: string;
@@ -46,7 +47,7 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.filtersForm = this.fb.group({
       month: [moment()],
-      subdivision: [RadioButtonGroupCommonColor[0].value]
+      subdivision: [radioButtonGroupCommonColor[0].value]
     });
 
     this.getData();
@@ -62,31 +63,40 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
     const subdivision$ = this.dictionaryApi.getAll('subdivision');
 
     forkJoin([users$, projects$, subdivision$]).subscribe(res => {
-      const usersAll = res[0];
-      const projects = res[1];
-      const subdivision = res[2];
+      const [usersAll, projects, subdivision] = res;
 
-      this.projectsData = projects
-        .map(project => {
-          const users = usersAll.filter(u => u.projectsNew && u.projectsNew.some(p => p.project_id === project._id));
+      // делаем выборку пользователей для каждого проекта,
+      // и фильтруем проекты вообще без пользователей
+      this.projectsData = this.getUsersForProjects(projects, usersAll);
 
-          return {
-            projectName: project.name,
-            projectID: project._id,
-            users
-          };
-        })
-        .filter(item => item.users && item.users.length);
+      // привязываем цветовую схему через id подразделения
+      this.subdivisionData = this.getColorForSubdivisions(subdivision);
+    });
+  }
 
-      this.subdivisionData = subdivision.map(item => {
-        const subdivisionConstInfo = SubdivisionColors.find(el => el.subdivision_id === item._id);
+  private getUsersForProjects(projects: DictionaryModel[], usersAll: Employee[]): ProjectData[] {
+    return projects
+      .map(project => {
+        const users = usersAll.filter(u => u.projectsNew && u.projectsNew.some(p => p.project_id === project._id));
 
         return {
-          title: item.name,
-          color: subdivisionConstInfo ? subdivisionConstInfo.color : NotFindColor,
-          value: item.name
+          projectName: project.name,
+          projectID: project._id,
+          users
         };
-      });
+      })
+      .filter(item => item.users && item.users.length);
+  }
+
+  private getColorForSubdivisions(subdivision: DictionaryModel[]): ToggleButtonData[] {
+    return subdivision.map(item => {
+      const subdivisionConstInfo = subdivisionColors.find(el => el.subdivision_id === item._id);
+
+      return {
+        title: item.name,
+        color: subdivisionConstInfo ? subdivisionConstInfo.color : NotFindColor,
+        value: item.name
+      };
     });
   }
 

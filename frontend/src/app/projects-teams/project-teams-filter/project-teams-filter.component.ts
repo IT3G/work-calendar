@@ -3,7 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { ToggleButtonData } from '../../shared/components/radio-button-group/radio-button-group.component';
 import { BehaviorSubject } from 'rxjs';
 import * as moment from 'moment';
-import { RadioButtonGroupCommonColor } from '../../shared/const/subdivision-colors.const';
+import { radioButtonGroupCommonColor } from '../../shared/const/subdivision-colors.const';
 
 export interface ProjectTeamsFilterModel {
   month: moment.Moment;
@@ -22,12 +22,14 @@ export class ProjectTeamsFilterComponent implements OnInit {
   @Input()
   subdivision: ToggleButtonData[];
 
-  public filterInfo = RadioButtonGroupCommonColor;
+  public filterInfo = radioButtonGroupCommonColor;
   public date$ = new BehaviorSubject<moment.Moment>(moment());
+  public defaultState: string;
 
-  constructor() {}
-
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.defaultState = this.filterInfo[0].value;
+    this.filtersForm.patchValue({ subdivision: this.defaultState });
+  }
 
   public prevMonth(): void {
     const newData = this.date$.value.clone().subtract(1, 'months');

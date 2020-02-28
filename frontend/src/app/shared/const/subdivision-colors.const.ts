@@ -1,6 +1,6 @@
 import { ToggleButtonData } from '../components/radio-button-group/radio-button-group.component';
 
-export const SubdivisionColors = [
+export const subdivisionColors = [
   {
     title: 'Аналитика',
     subdivision_id: '5e454e0ecd5ae500129ed283',
@@ -23,7 +23,7 @@ export const SubdivisionColors = [
   }
 ];
 
-export const RadioButtonGroupCommonColor: ToggleButtonData[] = [
+export const radioButtonGroupCommonColor: ToggleButtonData[] = [
   {
     title: 'Все',
     color: '#EFECEC',

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { RadioButtonGroupCommonColor } from '../../const/subdivision-colors.const';
+import { radioButtonGroupCommonColor } from '../../const/subdivision-colors.const';
 
 export interface ToggleButtonData {
   title: string;
@@ -22,16 +22,14 @@ export class RadioButtonGroupComponent implements OnInit {
   @Input()
   groupName: string;
 
-  public first = RadioButtonGroupCommonColor[0];
-  public last = RadioButtonGroupCommonColor[1];
+  public first = radioButtonGroupCommonColor[0];
+  public last = radioButtonGroupCommonColor[1];
   public control: string;
 
   @Output() valueChosen: EventEmitter<string> = new EventEmitter();
 
-  constructor() {}
-
   ngOnInit(): void {
-    this.control = this.defaultChoice ? this.defaultChoice : 'first';
+    this.control = this.defaultChoice ? this.defaultChoice : radioButtonGroupCommonColor[0].value;
   }
 
   public onButtonEmit(value: string) {

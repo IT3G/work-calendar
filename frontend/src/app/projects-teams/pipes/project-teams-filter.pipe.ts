@@ -4,6 +4,7 @@ import { ProjectNew } from '../../shared/models/project-new';
 import { NewProjectUtils } from '../../shared/utils/new-project.utils';
 import { ProjectTeamsFilterModel } from '../project-teams-filter/project-teams-filter.component';
 import { ProjectData } from '../projects-teams/projects-teams.component';
+import { radioButtonGroupCommonColor } from '../../shared/const/subdivision-colors.const';
 
 @Pipe({
   name: 'projectTeamsFilter'
@@ -18,8 +19,8 @@ export class ProjectTeamsFilterPipe implements PipeTransform {
       return projectsData;
     }
 
-    const undefinedValue = 'undefined-value';
-    const allItems = 'all-items';
+    const allItems = radioButtonGroupCommonColor[0].value;
+    const undefinedValue = radioButtonGroupCommonColor[1].value;
 
     const activeProjectsData = projectsData
       .map(prjData => {
