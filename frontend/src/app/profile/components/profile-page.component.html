@@ -33,7 +33,7 @@
       <app-profile-form
         [selectedUser]="selectedUser"
         [isAdmin]="isAdmin$ | async"
-        [canEdit]="canEdit"
+        [canEdit]="canEdit$ | async"
         (updateProfile)="onUpdateProfile($event)"
       ></app-profile-form>
     </mat-tab>

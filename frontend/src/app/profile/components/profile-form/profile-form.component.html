@@ -66,13 +66,7 @@
   </mat-checkbox>
 
   <div class="form-footer">
-    <button
-      type="submit"
-      mat-raised-button
-      color="primary"
-      *ngIf="!isEdit && (canEdit || isAdmin)"
-      (click)="editStart()"
-    >
+    <button type="submit" mat-raised-button color="primary" *ngIf="!isEdit && canEdit" (click)="editStart()">
       Редактировать
     </button>
 
