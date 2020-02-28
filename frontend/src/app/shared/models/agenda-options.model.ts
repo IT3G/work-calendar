@@ -1,8 +1,7 @@
 import { DayType } from '../const/day-type.const';
 
-export class AgendaColorsModel {
+export class AgendaOptionsModel {
   id: DayType;
   title: string;
-  color: string;
   tooltip: string;
 }
