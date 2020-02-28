@@ -11,10 +11,19 @@ import { MonthSelectorComponent } from './components/month-selector/month-select
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { pipes } from './pipes';
 import { SingleSelectComponent } from './components/single-select/single-select.component';
+import { RadioButtonGroupComponent } from './components/radio-button-group/radio-button-group.component';
+import { RadioButtonComponent } from './components/radio-button/radio-button.component';
 
 const modules = [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule, AvatarModule, NgbModule, RouterModule];
 
-const components = [AgendaComponent, FileInputResetComponent, MonthSelectorComponent, SingleSelectComponent];
+const components = [
+  AgendaComponent,
+  FileInputResetComponent,
+  MonthSelectorComponent,
+  RadioButtonComponent,
+  RadioButtonGroupComponent,
+  SingleSelectComponent
+];
 
 /** Приватные компоненты попапов наружу предоставлять через сервисы */
 const privateComponents = [ConfirmDialogComponent];
