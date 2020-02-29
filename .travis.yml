@@ -7,11 +7,10 @@ branches:
   only:
     - master
 before_script:
-  - npm install -g yarn
   - npm install -g @angular/cli
 script:
   - cd frontend
-  - yarn install
+  - npm install
   - npm run build:test
   - cd ..
 deploy:
