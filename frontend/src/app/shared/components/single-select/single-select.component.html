@@ -1,4 +1,4 @@
-<mat-form-field>
+<mat-form-field [ngClass]="{ 'active-field': !!control.value }">
   <mat-select #mySelect [placeholder]="placeholder" [formControl]="control">
     <mat-option *ngFor="let element of elements" [value]="element.value">
       {{ element.name }}
@@ -11,6 +11,6 @@
   matRipple
   [matRippleUnbounded]="true"
   [matRippleCentered]="true"
-  class="fa fa-times icon-btn"
+  class="fa fa-times icon-btn active-clear-button"
   aria-hidden="true"
 ></i>

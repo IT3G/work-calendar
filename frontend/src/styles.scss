@@ -1,6 +1,10 @@
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 @import 'app/shared/styles/snackbar';
 
+:root {
+  --colorActiveField: rgb(48, 155, 230);
+}
+
 *:focus {
   outline: none;
 }
@@ -33,5 +37,32 @@ button.calendar:active {
 @media (min-width: 576px) {
   .container.container-adapt {
     padding: 30px 0;
+  }
+}
+
+//чтобы выделять заполненные поля формы, добавьте этот класс к mat-form-field,
+// с проверкой пример: [ngClass]="{'active-field': filtersForm.controls['name'].value}"
+.active-field {
+  color: var(--colorActiveField);
+
+  .mat-select-value-text {
+    color: var(--colorActiveField);
+  }
+
+  .mat-form-field-underline {
+    background-color: var(--colorActiveField);
+  }
+
+  &.mat-focused .mat-form-field-ripple {
+    background-color: var(--colorActiveField);
+  }
+}
+//если нужно подкрасить и кнопку очистки поля, добавьте иконке класс ниже:
+// пример: <i class="fa fa-times icon-btn active-clear-button"></i>
+.active-clear-button {
+  color: var(--colorActiveField);
+
+  &:hover {
+    cursor: pointer;
   }
 }

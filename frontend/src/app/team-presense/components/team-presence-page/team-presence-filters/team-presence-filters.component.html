@@ -1,5 +1,5 @@
 <form class="form" [formGroup]="filtersForm">
-  <mat-form-field>
+  <mat-form-field [ngClass]="{ 'active-field': filtersForm.controls['name'].value }">
     <input matInput formControlName="name" placeholder="Ф.И.О." />
     <button
       mat-button
@@ -9,7 +9,7 @@
       aria-label="Clear"
       (click)="filtersForm.controls['name'].reset()"
     >
-      <i class="fa fa-times icon-btn"></i>
+      <i class="fa fa-times icon-btn active-clear-button"></i>
     </button>
   </mat-form-field>
 
