@@ -21,7 +21,7 @@
     outline: none;
     border: 1px solid white;
     &.type_COMMON {
-      background-color: #ffffff;
+      background-color: var(--dayTypeCommon);
     }
     &.day_HOLIDAY {
       background-color: $holiday;
@@ -30,18 +30,21 @@
       background-color: $pre-holiday;
     }
     &.type_CUSTOM {
-      background-color: #90caf9;
+      background-color: var(--dayTypeCustom);
     }
     &.type_LEFT {
-      background-color: #ef9a9a;
+      background-color: var(--dayTypeLeft);
       color: white;
     }
     &.type_VACATION {
-      background-color: #c5e1a5;
+      background-color: var(--dayTypeVacation);
       color: white;
+      &.is-approved {
+        background-color: var(--dayTypeVacationApproved);
+      }
     }
     &.type_SICK {
-      background-color: #ffe082;
+      background-color: var(--dayTypeSick);
     }
   }
 }

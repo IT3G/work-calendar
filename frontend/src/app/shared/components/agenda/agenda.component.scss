@@ -1,3 +1,5 @@
+@import 'src/app/shared/styles/color';
+
 :host {
   margin-bottom: 30px;
   width: 100%;
@@ -37,6 +39,22 @@
   min-height: 25px;
   border: 1px solid;
   margin: 5px;
+
+  &.CUSTOM {
+    background-color: var(--dayTypeCustom);
+  }
+
+  &.LEFT {
+    background-color: var(--dayTypeLeft);
+  }
+
+  &.VACATION {
+    background-color: var(--dayTypeVacation);
+  }
+
+  &.SICK {
+    background-color: var(--dayTypeSick);
+  }
 }
 
 .item {

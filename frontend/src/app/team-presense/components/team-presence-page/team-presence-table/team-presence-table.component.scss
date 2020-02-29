@@ -8,6 +8,7 @@ $borderColor: #e3e3e3;
   border-right: 1px solid $borderColor;
   border-bottom: 2px solid $borderColor;
   min-height: 45px;
+
   &.header {
     border-bottom: 1px solid $borderColor;
   }
@@ -43,6 +44,7 @@ $borderColor: #e3e3e3;
   @extend .scrollbar;
 
   display: grid;
+
   &.row_28 {
     grid-template-columns: 30px 240px repeat(28, 1fr);
   }
@@ -88,19 +90,23 @@ $borderColor: #e3e3e3;
 }
 
 .CUSTOM {
-  background-color: rgb(144, 202, 249);
+  background-color: var(--dayTypeCustom);
 }
 
 .LEFT {
-  background-color: #ef9a9a;
+  background-color: var(--dayTypeLeft);
 }
 
 .VACATION {
-  background-color: #c5e1a5;
+  background-color: var(--dayTypeVacation);
+
+  &.is-approved {
+    background-color: var(--dayTypeVacationApproved);
+  }
 }
 
 .SICK {
-  background-color: #ffe082;
+  background-color: var(--dayTypeSick);
 }
 
 .agenda__wrapper {
@@ -118,6 +124,7 @@ mat-form-field {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .currentDay {
   div:first-of-type {
     background: #ff3b30;
