@@ -1,0 +1,29 @@
+.page-title {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 0 20px;
+}
+
+.image-upload {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  grid-gap: 20px;
+  grid-template-areas: 'button preview';
+}
+
+.image-upload-input {
+  grid-area: button;
+}
+
+.image-preview {
+  grid-area: preview;
+  background-color: #efecec;
+  padding: 10px;
+  max-width: 220px;
+  min-height: 100px;
+
+  img {
+    width: 100%;
+    display: block;
+  }
+}

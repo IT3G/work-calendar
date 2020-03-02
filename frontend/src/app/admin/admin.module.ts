@@ -12,8 +12,10 @@ import { HolidaysComponent } from './components/holidays/holidays.component';
 import { HolidaysYearFilterPipe } from './components/holidays/pipes/holidays-year-filter.pipe';
 import { AddPopupComponent } from './components/popups/add-popup/add-popup.component';
 import { SubdivisionAdmComponent } from './components/subdivision-adm/subdivision-adm.component';
+import { SettingsComponent } from './components/settings/settings.component';
 
 const routes: Routes = [
+  { path: 'settings', component: SettingsComponent },
   { path: 'employee-list', component: EmployeeListComponent },
   { path: 'holidays', component: HolidaysComponent },
   { path: 'dictionary', component: DictionaryAdminComponent },
@@ -35,7 +37,7 @@ const pieps = [HolidaysYearFilterPipe];
 const entryComponents = [AddPopupComponent, EmployeeAddComponent];
 
 @NgModule({
-  declarations: [...components, ...pieps],
+  declarations: [...components, ...pieps, SettingsComponent],
   entryComponents: [...entryComponents],
   imports: [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule, SharedModule, RouterModule.forChild(routes)]
 })
