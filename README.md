@@ -17,7 +17,7 @@ login: 5, password: 5, or register
 
 ## Developer
 
-1. Run '/frontend/yarn' and '/backend/yarn' to get dependencies
+1. Run '/frontend/npm i' and '/backend/npm i' to get dependencies
 
 2. Run '/database/docker-compose up --build' to start MongoDB
 
@@ -25,4 +25,4 @@ login: 5, password: 5, or register
 
 4. Run '/backend/npm run start:dev' to run Node backend.
 
-5. Run '/frontend/yarn start' to run frontend. Navigate to `http://localhost:4200/`.
+5. Run '/frontend/npm start' to run frontend. Navigate to `http://localhost:4200/`.

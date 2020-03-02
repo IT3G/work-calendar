@@ -5,8 +5,8 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { TaskApiService } from '../../../core/services/task-api.service';
 import { ContextStoreService } from '../../../core/store/context-store.service';
-import { AgendaColors } from '../../../shared/const/agenda-colors.const';
-import { AgendaColorsModel } from '../../../shared/models/agenda-colors.model';
+import { AgendaOptions } from '../../../shared/const/agenda-options.const';
+import { AgendaOptionsModel } from '../../../shared/models/agenda-options.model';
 import { Employee } from '../../../shared/models/employee.model';
 import { TaskModel } from '../../../shared/models/tasks.model';
 import { SnackbarService } from '../../../shared/services/snackbar.service';
@@ -23,7 +23,7 @@ export class DescriptionComponent implements OnInit {
   @Output() onAddTask = new EventEmitter<TaskModel>();
 
   public form: FormGroup;
-  public options: AgendaColorsModel[];
+  public options: AgendaOptionsModel[];
   private getCurrentDateSub = new Subscription();
   private getDayTypeSub = new Subscription();
   private getCommentSub = new Subscription();
@@ -38,7 +38,7 @@ export class DescriptionComponent implements OnInit {
   ngOnInit() {
     this.initForm();
     this.getInfoFromStore();
-    this.options = AgendaColors;
+    this.options = AgendaOptions;
   }
 
   private initForm(): void {
@@ -95,7 +95,7 @@ export class DescriptionComponent implements OnInit {
         .getDayType$()
         .pipe(filter(i => !!i))
         .subscribe(res => {
-          const agenda = AgendaColors.find(o => o.id === res);
+          const agenda = AgendaOptions.find(o => o.id === res);
           this.form.get('type').setValue(agenda, { emitEvent: false });
         })
     );

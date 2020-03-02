@@ -8,7 +8,7 @@
   <div class="element start">{{ task.dateStart | date: 'dd MMMM yyyy' }}</div>
   <div class="element end">{{ task.dateEnd | date: 'dd MMMM yyyy' }}</div>
   <div class="element type">
-    <div class="type-badge" [ngStyle]="{ 'background-color': task.type | taskTypeColor }">
+    <div class="type-badge" [ngClass]="task.type" [class.is-approved]="task.approved">
       {{ task.type | taskType }}
     </div>
   </div>

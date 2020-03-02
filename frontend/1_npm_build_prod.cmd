@@ -1,2 +1,2 @@
-call yarn install
+call npm install
 call npm run build:prod
