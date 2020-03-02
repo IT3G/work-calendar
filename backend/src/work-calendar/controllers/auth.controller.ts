@@ -1,6 +1,8 @@
 import { Body, Controller, Get, NotAcceptableException, Post, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
 import { Request } from 'express';
+import { UserEntityToDtoMapper } from '../../profile/mappers/user-entity-to-dto.mapper';
+import { UserModel } from '../../profile/models/user.model';
 import { UsersService } from '../../profile/services/users.service';
 import { LoginModel } from '../models/login.model';
 import { AuthService } from '../services/auth.service';
@@ -9,31 +11,36 @@ import { LdapService } from '../services/ldap.service';
 @ApiUseTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private ldapService: LdapService, private usersService: UsersService, private authService: AuthService) {}
+  constructor(
+    private ldapService: LdapService,
+    private usersService: UsersService,
+    private authService: AuthService,
+    private entityToDtoMapper: UserEntityToDtoMapper
+  ) {}
 
   @Post()
-  async auth(@Body() credentials: LoginModel) {
+  async auth(@Body() credentials: LoginModel): Promise<UserModel> {
     try {
       const user = await this.authService.auth(credentials);
       user.hashPassword = `Bearer ${this.authService.getJWTbyUser(user)}`;
-      return user;
+      return this.entityToDtoMapper.map(user);
     } catch (e) {
       throw new NotAcceptableException(e.message ? e.message : e);
     }
   }
 
   @Get('/current')
-  async getCurrentUser(@Req() req: Request) {
+  async getCurrentUser(@Req() req: Request): Promise<UserModel> {
     try {
       const user = await this.authService.verifyByRequesAndGetUser(req);
-      return user;
+      return this.entityToDtoMapper.map(user);
     } catch (e) {
       throw new NotAcceptableException('user not found');
     }
   }
 
   @Post('/add')
-  async authAndAdd(@Body() credentials: LoginModel) {
+  async authAndAdd(@Body() credentials: LoginModel): Promise<UserModel> {
     try {
       const ldapResult = await this.ldapService.auth(credentials, true);
       const user = await this.usersService.getUserByLogin(ldapResult.mailNickname);
@@ -44,14 +51,14 @@ export class AuthController {
 
       const newUser = await this.usersService.addUser(ldapResult);
 
-      return newUser;
+      return this.entityToDtoMapper.map(newUser);
     } catch (e) {
       throw new NotAcceptableException('user not found');
     }
   }
 
   @Post('/registration')
-  async registration(@Body() credentials: LoginModel) {
+  async registration(@Body() credentials: LoginModel): Promise<UserModel> {
     try {
       const user = await this.usersService.getUserByLogin(credentials.username);
 
@@ -60,7 +67,7 @@ export class AuthController {
       }
 
       const newUser = await this.authService.registration(credentials);
-      return newUser;
+      return this.entityToDtoMapper.map(newUser);
     } catch (e) {
       throw new NotAcceptableException('user not found');
     }

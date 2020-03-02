@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import * as moment from 'moment';
 import { Model } from 'mongoose';
 import { TaskEntity } from '../../entity/entities/task.entity';
-import { UserEntity } from '../../entity/entities/user.entity.model';
+import { UserEntity } from '../../entity/entities/user.entity';
 import { SendMailRequestModel } from '../../mail/models/send-mail.request.model';
 import { SendMailService } from '../../mail/services/send-mail.service';
 import { FollowService } from '../../profile/services/follow.service';

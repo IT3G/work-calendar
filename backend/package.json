@@ -37,6 +37,7 @@
     "@types/ldapjs": "^1.0.5",
     "body-parser": "^1.19.0",
     "cfenv": "^1.2.2",
+    "class-transformer": "^0.2.3",
     "commander": "^3.0.2",
     "cookie-parser": "^1.4.4",
     "dotenv": "^8.2.0",

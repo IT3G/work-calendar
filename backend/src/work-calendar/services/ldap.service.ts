@@ -50,6 +50,7 @@ export class LdapService implements OnApplicationShutdown {
     return {
       _id: null,
       username: this.getAttribute(attributes, 'cn'),
+      patronymic: null,
       location: this.getAttribute(attributes, 'l'),
       position: this.getAttribute(attributes, 'title'),
       whenCreated: moment(whenCreated.substr(0, 8)).format(),
@@ -61,8 +62,12 @@ export class LdapService implements OnApplicationShutdown {
       hasMailing: true,
       subdivision: null,
       jobPosition: null,
+      projectsNew: null,
+      skype: null,
+      telegram: null,
       authType: 'LDAP',
-      hashPassword: null
+      hashPassword: null,
+      terminationDate: null
     };
   }
 

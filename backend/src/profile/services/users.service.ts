@@ -1,8 +1,8 @@
-import { Model } from 'mongoose';
-import { UserModel } from '../models/user.model';
-import { UserEntity } from '../../entity/entities/user.entity.model';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { UserEntity } from '../../entity/entities/user.entity';
+import { UserModel } from '../models/user.model';
 
 @Injectable()
 export class UsersService {

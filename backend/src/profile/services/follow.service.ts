@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import * as moment from 'moment';
 import { Model } from 'mongoose';
 import { FollowEntity, FollowType } from '../../entity/entities/follow.entity.model';
-import { FollowerModel } from '../models/follow.model';
-import * as moment from 'moment';
-import { UserEntity } from '../../entity/entities/user.entity.model';
-import { UsersService } from './users.service';
 import { ProjectNewMetadataEntity } from '../../entity/entities/project-new-metadata.entity';
 import { ProjectNewEntity } from '../../entity/entities/project-new.entity';
+import { UserEntity } from '../../entity/entities/user.entity';
+import { FollowerModel } from '../models/follow.model';
+import { UsersService } from './users.service';
 
 export interface UserFollow {
   following: UserEntity[];
