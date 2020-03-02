@@ -1,23 +1,13 @@
 import { Document } from 'mongoose';
 import { JobPositionEntity } from './job-position.entity.model';
-import { SubdivisionEntity } from './subdivision.entity.model';
-import { ProjectEntity } from './project.entity.model';
 import { ProjectNewEntity } from './project-new.entity';
+import { SubdivisionEntity } from './subdivision.entity.model';
 
 export interface UserEntity extends Document {
-  id: string;
   username: string;
   patronymic: string;
   location: string;
   position: string;
-  projects: [
-    {
-      dateStart: string;
-      dateEnd: string;
-      project: ProjectEntity;
-    }
-  ];
-  projectsNew: ProjectNewEntity[];
   whenCreated: string;
   email: string;
   telNumber: string;
@@ -29,6 +19,7 @@ export interface UserEntity extends Document {
   hasMailing: boolean;
   subdivision: SubdivisionEntity;
   jobPosition: JobPositionEntity;
+  projectsNew: ProjectNewEntity[];
   authType?: string;
   hashPassword?: string;
   terminationDate?: string;
