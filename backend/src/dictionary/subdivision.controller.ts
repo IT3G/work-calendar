@@ -1,13 +1,14 @@
 import { Controller } from '@nestjs/common';
-import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
+import { EntityToDtoMapperService } from '../shared/services/entity-to-dto-mapper.service';
 import { DictionaryBaseController } from './dictionary-base.controller';
-import { SubdivisionService } from './services/subdivision.service';
+import { JobPositionService } from './services/job-position.service';
 
 @ApiBearerAuth()
 @ApiUseTags('Subdivision')
 @Controller('subdivision')
 export class SubdivisionController extends DictionaryBaseController {
-  constructor(private subdivisionService: SubdivisionService) {
-    super(subdivisionService);
+  constructor(jobPositionService: JobPositionService, mapper: EntityToDtoMapperService) {
+    super(jobPositionService, mapper);
   }
 }

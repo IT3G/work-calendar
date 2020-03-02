@@ -1,13 +1,14 @@
 import { Controller } from '@nestjs/common';
-import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
+import { EntityToDtoMapperService } from '../shared/services/entity-to-dto-mapper.service';
 import { DictionaryBaseController } from './dictionary-base.controller';
-import { ProjectService } from './services/project.service';
+import { JobPositionService } from './services/job-position.service';
 
 @ApiBearerAuth()
 @ApiUseTags('Project')
 @Controller('project')
 export class ProjectController extends DictionaryBaseController {
-  constructor(private projectsService: ProjectService) {
-    super(projectsService);
+  constructor(jobPositionService: JobPositionService, mapper: EntityToDtoMapperService) {
+    super(jobPositionService, mapper);
   }
 }
