@@ -1,5 +1,5 @@
 import { ApiModelProperty } from '@nestjs/swagger';
-import { DictionaryModel } from '../../dictionary/models/dictionary.model';
+import { DictionaryDto } from '../../dictionary/dto/dictionary.dto';
 
 export class AddedProjectModel {
   @ApiModelProperty({ type: String })
@@ -9,5 +9,5 @@ export class AddedProjectModel {
   @ApiModelProperty()
   dateEnd?: string;
   @ApiModelProperty()
-  project: DictionaryModel;
+  project: DictionaryDto;
 }

@@ -1,6 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
-import { DictionaryModel } from '../../dictionary/models/dictionary.model';
+import { DictionaryDto } from '../../dictionary/dto/dictionary.dto';
 import { ProjectNewDto } from './project-new.dto';
 
 export class UserDto {
@@ -61,14 +61,14 @@ export class UserDto {
   hasMailing: boolean;
 
   @Expose()
-  @Type(() => DictionaryModel)
+  @Type(() => DictionaryDto)
   @ApiModelProperty()
-  subdivision: DictionaryModel;
+  subdivision: DictionaryDto;
 
   @Expose()
-  @Type(() => DictionaryModel)
+  @Type(() => DictionaryDto)
   @ApiModelProperty()
-  jobPosition: DictionaryModel;
+  jobPosition: DictionaryDto;
 
   @Expose()
   @Type(() => ProjectNewDto)

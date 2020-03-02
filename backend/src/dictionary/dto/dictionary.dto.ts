@@ -1,7 +1,7 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 
-export class DictionaryModel {
+export class DictionaryDto {
   @Expose()
   @ApiModelProperty({ type: String })
   _id?: string;
