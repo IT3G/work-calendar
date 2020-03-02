@@ -4,7 +4,7 @@ import * as crypto from 'crypto';
 import { Request } from 'express';
 import { Config } from '../../config/config';
 import { UserEntity } from '../../entity/entities/user.entity';
-import { UserModel } from '../../profile/models/user.model';
+import { UserDto } from '../../profile/dto/user.dto';
 import { UsersService } from '../../profile/services/users.service';
 import { JwtSignModel } from '../models/jwt-sign.model';
 import { LoginModel } from '../models/login.model';
@@ -92,7 +92,7 @@ export class AuthService {
     const emailPostfix =
       this.config.FEATURE_AUTH_TYPE === 'LDAP' && this.config.MAIL_POSTFIX ? `@${this.config.MAIL_POSTFIX}` : '';
 
-    const data: UserModel = {
+    const data: UserDto = {
       _id: null,
       username: userInfo.name,
       patronymic: null,

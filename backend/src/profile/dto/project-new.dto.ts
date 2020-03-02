@@ -1,8 +1,8 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
-import { ProjectNewMetadataModel } from './project-new-metadata.model';
+import { ProjectNewMetadataDto } from './project-new-metadata.dto';
 
-export class ProjectNewModel {
+export class ProjectNewDto {
   @Expose()
   @ApiModelProperty()
   project_id: string;
@@ -13,6 +13,6 @@ export class ProjectNewModel {
 
   @Expose()
   @ApiModelProperty()
-  @Type(() => ProjectNewMetadataModel)
-  metadata: ProjectNewMetadataModel[];
+  @Type(() => ProjectNewMetadataDto)
+  metadata: ProjectNewMetadataDto[];
 }

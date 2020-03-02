@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserEntity } from '../../entity/entities/user.entity';
-import { UserModel } from '../models/user.model';
+import { UserDto } from '../dto/user.dto';
 
 @Injectable()
 export class UsersService {
@@ -34,12 +34,12 @@ export class UsersService {
       .exec();
   }
 
-  async addUser(userInfo: UserModel): Promise<UserEntity> {
+  async addUser(userInfo: UserDto): Promise<UserEntity> {
     const newUser = await this.userModel.create(userInfo);
     return newUser.save();
   }
 
-  async updateUserByLogin(login: string, data: UserModel): Promise<UserEntity> {
+  async updateUserByLogin(login: string, data: UserDto): Promise<UserEntity> {
     return await this.userModel.updateOne({ mailNickname: login }, { ...data });
   }
 }

@@ -1,8 +1,8 @@
 import { Body, Controller, Get, NotAcceptableException, Post, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
 import { Request } from 'express';
+import { UserDto } from '../../profile/dto/user.dto';
 import { UserEntityToDtoMapper } from '../../profile/mappers/user-entity-to-dto.mapper';
-import { UserModel } from '../../profile/models/user.model';
 import { UsersService } from '../../profile/services/users.service';
 import { LoginModel } from '../models/login.model';
 import { AuthService } from '../services/auth.service';
@@ -19,7 +19,7 @@ export class AuthController {
   ) {}
 
   @Post()
-  async auth(@Body() credentials: LoginModel): Promise<UserModel> {
+  async auth(@Body() credentials: LoginModel): Promise<UserDto> {
     try {
       const user = await this.authService.auth(credentials);
       user.hashPassword = `Bearer ${this.authService.getJWTbyUser(user)}`;
@@ -30,7 +30,7 @@ export class AuthController {
   }
 
   @Get('/current')
-  async getCurrentUser(@Req() req: Request): Promise<UserModel> {
+  async getCurrentUser(@Req() req: Request): Promise<UserDto> {
     try {
       const user = await this.authService.verifyByRequesAndGetUser(req);
       return this.entityToDtoMapper.map(user);
@@ -40,7 +40,7 @@ export class AuthController {
   }
 
   @Post('/add')
-  async authAndAdd(@Body() credentials: LoginModel): Promise<UserModel> {
+  async authAndAdd(@Body() credentials: LoginModel): Promise<UserDto> {
     try {
       const ldapResult = await this.ldapService.auth(credentials, true);
       const user = await this.usersService.getUserByLogin(ldapResult.mailNickname);
@@ -58,7 +58,7 @@ export class AuthController {
   }
 
   @Post('/registration')
-  async registration(@Body() credentials: LoginModel): Promise<UserModel> {
+  async registration(@Body() credentials: LoginModel): Promise<UserDto> {
     try {
       const user = await this.usersService.getUserByLogin(credentials.username);
 

@@ -1,7 +1,7 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 
-export class ProjectNewMetadataModel {
+export class ProjectNewMetadataDto {
   @Expose()
   @ApiModelProperty()
   month: number;

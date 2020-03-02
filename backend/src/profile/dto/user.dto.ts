@@ -1,9 +1,9 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
 import { DictionaryModel } from '../../dictionary/models/dictionary.model';
-import { ProjectNewModel } from './project-new.model';
+import { ProjectNewDto } from './project-new.dto';
 
-export class UserModel {
+export class UserDto {
   @Expose()
   @ApiModelProperty()
   _id: string;
@@ -71,9 +71,9 @@ export class UserModel {
   jobPosition: DictionaryModel;
 
   @Expose()
-  @Type(() => ProjectNewModel)
+  @Type(() => ProjectNewDto)
   @ApiModelProperty()
-  projectsNew: ProjectNewModel[];
+  projectsNew: ProjectNewDto[];
 
   @Expose()
   @ApiModelProperty()

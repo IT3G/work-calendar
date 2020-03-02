@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { UserEntity } from '../../entity/entities/user.entity';
-import { UserModel } from '../models/user.model';
+import { UserDto } from '../dto/user.dto';
 
 @Injectable()
 export class UserEntityToDtoMapper {
-  map(entity: UserEntity): UserModel {
-    return plainToClass(UserModel, entity.toObject(), { strategy: 'excludeAll' });
+  map(entity: UserEntity): UserDto {
+    return plainToClass(UserDto, entity.toObject(), { strategy: 'excludeAll' });
   }
 
-  mapArray(entities: UserEntity[]): UserModel[] {
+  mapArray(entities: UserEntity[]): UserDto[] {
     return entities.map(e => this.map(e));
   }
 }
