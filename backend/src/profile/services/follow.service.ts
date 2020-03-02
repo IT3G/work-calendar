@@ -152,6 +152,10 @@ export class FollowService {
   }
 
   private getActiveUserProjects(user: UserEntity): string[] {
+    if (!user) {
+      return [];
+    }
+
     const currentDate = moment();
     return user.projectsNew
       .filter(p => p.metadata.some(m => currentDate.isSame(this.mapMetadataToDate(m), 'month')))
