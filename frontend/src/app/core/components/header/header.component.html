@@ -1,14 +1,17 @@
-<div (swipe)="onSwipe($event)" class="contaienr shadow-sm">
+<div (swipe)="onSwipe($event)" class="container-header shadow-sm">
   <div class="user-info-container">
     <div class="mobile-menu" (click)="mobileMenuClick.emit()">
       <i class="fa fa-bars"></i>
     </div>
-    <h5 class="my-0 mr-md-auto font-weight-normal">
-      Привет, {{ (currentUser$ | async) ? ((currentUser$ | async).username?.split(' '))[1] : 'гость' }}!
-    </h5>
+    <div class="main-logo">
+      <img src="../../../../assets/images/logo_it2g.png" />
+    </div>
   </div>
 
-  <div class="flex-1"></div>
-
   <app-navigation-menu class="menu"></app-navigation-menu>
+  <span class="header-spacer"></span>
+  <app-personal-menu
+    class="menu"
+    [color]="(currentUser$ | async)?.subdivision?._id | colorSubdivision"
+  ></app-personal-menu>
 </div>

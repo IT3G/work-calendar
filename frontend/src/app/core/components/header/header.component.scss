@@ -1,7 +1,21 @@
-.contaienr {
+.header-spacer {
+  flex: 1 1 auto;
+}
+
+.container-header {
   display: flex;
   align-items: center;
   padding: 10px 20px;
+}
+
+.main-logo {
+  height: 55px;
+  margin-right: 10px;
+
+  img {
+    height: inherit;
+    display: block;
+  }
 }
 
 .avatar {
