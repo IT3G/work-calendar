@@ -1,6 +1,9 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { Expose, Transform, Type } from 'class-transformer';
 import { DictionaryDto } from '../../dictionary/dto/dictionary.dto';
+import { ProjectNewMetadataEntity } from '../../entity/entities/project-new-metadata.entity';
+import { UserEntity } from '../../entity/entities/user.entity';
+import { LastProjectDto } from './last-project.dto';
 import { ProjectNewDto } from './project-new.dto';
 
 export class UserDto {
@@ -87,4 +90,50 @@ export class UserDto {
   @Expose()
   @ApiModelProperty()
   terminationDate: string;
+
+  @Expose()
+  @Type(() => LastProjectDto)
+  @Transform(lastProjectsMapper)
+  @ApiModelProperty()
+  lastProjects: LastProjectDto[];
+}
+
+/** Получение последних активных проектов */
+function lastProjectsMapper(val: null, src: UserEntity): LastProjectDto[] {
+  if (!src.projectsNew) {
+    return [];
+  }
+
+  const projectsMetadata: ProjectNewMetadataEntity[] = src.projectsNew
+    .reduce((acc, p) => [...acc, ...p.metadata], [])
+    .sort((a, b) => {
+      if (b.year - a.year !== 0) {
+        return b.year - a.year;
+      }
+
+      return b.month - a.month;
+    });
+
+  const lastMetadata: ProjectNewMetadataEntity = projectsMetadata[0];
+
+  if (!lastMetadata) {
+    return [];
+  }
+
+  return src.projectsNew
+    .map(p => {
+      const projectLastMetadata = p.metadata.find(m => m.year === lastMetadata.year && m.month === lastMetadata.month);
+
+      if (!projectLastMetadata) {
+        return null;
+      }
+
+      return {
+        project_id: p.project_id,
+        project_name: p.project_name,
+        percent: projectLastMetadata.percent,
+        date: `${projectLastMetadata.year}-${projectLastMetadata.month}`
+      };
+    })
+    .filter(p => !!p);
 }
