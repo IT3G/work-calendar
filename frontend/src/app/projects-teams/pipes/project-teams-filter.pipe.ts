@@ -1,7 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import * as moment from 'moment';
 import { radioButtonGroupCommonColor } from '../../shared/const/subdivision-colors.const';
-import { ProjectNewModel } from '../../shared/models/project-new.model';
 import { NewProjectUtils } from '../../shared/utils/new-project.utils';
 import { ProjectDataModel } from '../models/project-data.model';
 import { ProjectTeamsFilterModel } from '../project-teams-filter/project-teams-filter.component';
@@ -51,9 +49,5 @@ export class ProjectTeamsFilterPipe implements PipeTransform {
 
       return { ...project, users: filteredUsers };
     });
-  }
-
-  private isProjectAtMonth(p: ProjectNewModel, date: moment.Moment): boolean {
-    return p.metadata.some(m => NewProjectUtils.mapMetadataToDate(m).isSame(date, 'month'));
   }
 }
