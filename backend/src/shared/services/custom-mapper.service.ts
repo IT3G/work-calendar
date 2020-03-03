@@ -4,11 +4,11 @@ import { ClassType } from 'class-transformer/ClassTransformer';
 
 @Injectable()
 export class CustomMapper {
-  map<T>(clazz: ClassType<T>, entity: any): T {
+  map<TOut, TIn>(clazz: ClassType<TOut>, entity: TIn): TOut {
     return plainToClass(clazz, entity, { excludeExtraneousValues: true });
   }
 
-  mapArray<T>(clazz: ClassType<T>, entities: any[]): T[] {
+  mapArray<TOut, TIn>(clazz: ClassType<TOut>, entities: TIn[]): TOut[] {
     return entities.map(e => this.map(clazz, e));
   }
 }
