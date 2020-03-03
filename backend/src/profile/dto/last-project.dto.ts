@@ -14,4 +14,8 @@ export class LastProjectDto {
   @Expose()
   @ApiModelProperty()
   percent: number;
+
+  @Expose()
+  @ApiModelProperty()
+  date: string;
 }
