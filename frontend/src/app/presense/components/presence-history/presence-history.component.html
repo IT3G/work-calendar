@@ -1,18 +1,18 @@
-<div class="header element start">С</div>
-<div class="header element end">По</div>
-<div class="header element type">Тип</div>
-<div class="header element comment">Комментарий</div>
-<div class="header element"></div>
+<div class="header element start start-title">С</div>
+<div class="header element end end-title">По</div>
+<div class="header element type type-title">Тип</div>
+<div class="header element comment comment-title">Комментарий</div>
+<div class="header element element-hidden"></div>
 
 <ng-template ngFor let-task [ngForOf]="tasks | sortTasksByDateStart">
-  <div class="element start">{{ task.dateStart | date: 'dd MMMM yyyy' }}</div>
-  <div class="element end">{{ task.dateEnd | date: 'dd MMMM yyyy' }}</div>
-  <div class="element type">
+  <div class="element start start-area">{{ task.dateStart | date: 'dd MMMM yyyy' }}</div>
+  <div class="element end end-area">{{ task.dateEnd | date: 'dd MMMM yyyy' }}</div>
+  <div class="element type type-area">
     <div class="type-badge" [ngClass]="task.type" [class.is-approved]="task.approved">
       {{ task.type | taskType }}
     </div>
   </div>
-  <div class="element comment">{{ task.comment }}</div>
+  <div class="element comment comment-area">{{ task.comment }}</div>
 
   <div class="element buttons">
     <ng-container *ngIf="task.type === dayTypes.VACATION">
