@@ -1,6 +1,6 @@
 import { Body, Controller, Get, NotFoundException, Param, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
-import { EntityToDtoMapperService } from '../../shared/services/entity-to-dto-mapper.service';
+import { CustomMapper } from '../../shared/services/custom-mapper.service';
 import { UserDto } from '../dto/user.dto';
 import { UsersService } from '../services/users.service';
 
@@ -8,7 +8,7 @@ import { UsersService } from '../services/users.service';
 @ApiUseTags('Users')
 @Controller('users')
 export class UsersController {
-  constructor(private userService: UsersService, private mapper: EntityToDtoMapperService) {}
+  constructor(private userService: UsersService, private mapper: CustomMapper) {}
 
   @Get()
   async getUsers(): Promise<UserDto[]> {

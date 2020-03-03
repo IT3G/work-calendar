@@ -3,7 +3,7 @@ import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { UserDto } from '../../profile/dto/user.dto';
 import { UsersService } from '../../profile/services/users.service';
-import { EntityToDtoMapperService } from '../../shared/services/entity-to-dto-mapper.service';
+import { CustomMapper } from '../../shared/services/custom-mapper.service';
 import { LoginModel } from '../models/login.model';
 import { AuthService } from '../services/auth.service';
 import { LdapService } from '../services/ldap.service';
@@ -15,7 +15,7 @@ export class AuthController {
     private ldapService: LdapService,
     private usersService: UsersService,
     private authService: AuthService,
-    private mapper: EntityToDtoMapperService
+    private mapper: CustomMapper
   ) {}
 
   @Post()

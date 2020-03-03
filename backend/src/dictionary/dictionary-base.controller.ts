@@ -1,10 +1,10 @@
 import { Body, Delete, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
-import { EntityToDtoMapperService } from '../shared/services/entity-to-dto-mapper.service';
+import { CustomMapper } from '../shared/services/custom-mapper.service';
 import { DictionaryDto } from './dto/dictionary.dto';
 import { DictionaryBaseService } from './services/dictionary-base.service';
 
 export class DictionaryBaseController {
-  constructor(private apiService: DictionaryBaseService, private mapper: EntityToDtoMapperService) {}
+  constructor(private apiService: DictionaryBaseService, private mapper: CustomMapper) {}
 
   @Get()
   async getAll(): Promise<DictionaryDto[]> {

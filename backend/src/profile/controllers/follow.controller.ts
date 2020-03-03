@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
-import { EntityToDtoMapperService } from '../../shared/services/entity-to-dto-mapper.service';
+import { CustomMapper } from '../../shared/services/custom-mapper.service';
 import { FollowDto } from '../dto/follow.dto';
 import { UserFollowDto } from '../dto/user-follow.dto';
 import { FollowDeleteGuard } from '../guards/follow-delete.guard';
@@ -11,7 +11,7 @@ import { FollowService } from '../services/follow.service';
 @ApiUseTags('Follow')
 @Controller('follow')
 export class FollowController {
-  constructor(private followService: FollowService, private mapper: EntityToDtoMapperService) {}
+  constructor(private followService: FollowService, private mapper: CustomMapper) {}
 
   @Get('/user-follow/:id')
   async getUserFollow(@Param('id') userId): Promise<UserFollowDto> {

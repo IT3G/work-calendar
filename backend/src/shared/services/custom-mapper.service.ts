@@ -3,7 +3,7 @@ import { plainToClass } from 'class-transformer';
 import { ClassType } from 'class-transformer/ClassTransformer';
 
 @Injectable()
-export class EntityToDtoMapperService {
+export class CustomMapper {
   map<T>(clazz: ClassType<T>, entity: any): T {
     return plainToClass(clazz, entity, { excludeExtraneousValues: true });
   }

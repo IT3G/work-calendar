@@ -14,7 +14,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
 import { Response } from 'express';
-import { EntityToDtoMapperService } from '../../shared/services/entity-to-dto-mapper.service';
+import { CustomMapper } from '../../shared/services/custom-mapper.service';
 import { PresenceDto } from '../dto/presence.dto';
 import { TaskDto } from '../dto/task.dto';
 import { TaskDeleteGuard } from '../guards/task-delete.guard';
@@ -28,7 +28,7 @@ export class TasksController {
   constructor(
     private taskService: TaskService,
     private vacationResolution: VacationResolutionService,
-    private mapper: EntityToDtoMapperService
+    private mapper: CustomMapper
   ) {}
 
   @Get()
