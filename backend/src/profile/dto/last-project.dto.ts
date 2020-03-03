@@ -17,5 +17,9 @@ export class LastProjectDto {
 
   @Expose()
   @ApiModelProperty()
-  date: string;
+  month: number;
+
+  @Expose()
+  @ApiModelProperty()
+  year: number;
 }

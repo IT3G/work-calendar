@@ -79,7 +79,6 @@ export class UserDto {
   @ApiModelProperty()
   projectsNew: ProjectNewDto[];
 
-  @Expose()
   @ApiModelProperty()
   authType: string;
 
@@ -131,8 +130,9 @@ function lastProjectsMapper(val: null, src: UserEntity): LastProjectDto[] {
       return {
         project_id: p.project_id,
         project_name: p.project_name,
-        percent: projectLastMetadata.percent,
-        date: `${projectLastMetadata.year}-${projectLastMetadata.month}`
+        year: projectLastMetadata.year,
+        month: projectLastMetadata.month,
+        percent: projectLastMetadata.percent
       };
     })
     .filter(p => !!p);
