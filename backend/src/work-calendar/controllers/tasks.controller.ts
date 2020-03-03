@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  HttpStatus,
   Param,
   Post,
   Put,
@@ -16,6 +15,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { EntityToDtoMapperService } from '../../shared/services/entity-to-dto-mapper.service';
+import { PresenceDto } from '../dto/presence.dto';
 import { TaskDto } from '../dto/task.dto';
 import { TaskDeleteGuard } from '../guards/task-delete.guard';
 import { TaskService } from '../services/task.service';
@@ -53,9 +53,10 @@ export class TasksController {
   }
 
   @Get('/tasks-month/:date')
-  async getTasksByMonth(@Res() res, @Param('date') date) {
-    const tasks = await this.taskService.getTasksByMonth(date);
-    return res.status(HttpStatus.OK).json(tasks);
+  async getTasksByMonth(@Param('date') date): Promise<PresenceDto[]> {
+    const presence = await this.taskService.getTasksByMonth(date);
+
+    return this.mapper.mapArray(PresenceDto, presence);
   }
 
   @Post()
@@ -82,10 +83,10 @@ export class TasksController {
 
   @Post('/resolution/:taskId')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadResolution(@Res() res, @UploadedFile() file, @Param('taskId') taskId: string) {
+  async uploadResolution(@UploadedFile() file, @Param('taskId') taskId: string): Promise<TaskDto> {
     const task = await this.vacationResolution.updateTaskResolutionById(taskId, file);
 
-    return res.status(HttpStatus.OK).json(task);
+    return this.mapper.map(TaskDto, task);
   }
 
   @Get('/resolution/:taskId')

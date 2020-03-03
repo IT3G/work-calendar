@@ -10,7 +10,7 @@ import { FollowService } from '../../profile/services/follow.service';
 import { UsersService } from '../../profile/services/users.service';
 import { WebPushService } from '../../web-push/services/web-push.service';
 import { TaskDto } from '../dto/task.dto';
-import { PresenceModel } from '../models/task-month.model';
+import { PresenceModel } from '../models/presence.model';
 import { TaskType } from '../models/task-type.enum';
 
 @Injectable()
