@@ -1,22 +1,17 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Request } from 'express';
-import { AdminActionGuard } from './admin-action.guard';
 import { AuthService } from '../../work-calendar/services/auth.service';
-import { FollowService } from '../services/follow.service';
-import { FollowerModel } from '../models/follow.model';
+import { FollowDto } from '../dto/follow.dto';
+import { AdminActionGuard } from './admin-action.guard';
 
 /** Guard для контроля запроса удаления Задачи */
 @Injectable()
 export class FollowEditGuard implements CanActivate {
-  constructor(
-    private authService: AuthService,
-    private followService: FollowService,
-    private adminActionGuard: AdminActionGuard
-  ) {}
+  constructor(private authService: AuthService, private adminActionGuard: AdminActionGuard) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request: Request = context.switchToHttp().getRequest();
-    const follow: FollowerModel = request.body;
+    const follow: FollowDto = request.body;
 
     if (!follow) {
       return false;

@@ -1,10 +1,11 @@
 import { ApiModelProperty } from '@nestjs/swagger';
-import { Expose, Type } from 'class-transformer';
+import { Expose, Transform, Type } from 'class-transformer';
 import { DictionaryDto } from '../../dictionary/dto/dictionary.dto';
 import { ProjectNewDto } from './project-new.dto';
 
 export class UserDto {
   @Expose()
+  @Transform((val, src) => src.id)
   @ApiModelProperty()
   _id: string;
 
