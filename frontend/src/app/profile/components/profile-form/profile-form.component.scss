@@ -8,6 +8,7 @@
 
 button {
   margin-right: 10px;
+
   &:last-child {
     margin-right: 0;
   }
@@ -36,6 +37,7 @@ button {
 .span-project {
   padding-left: 10px;
 }
+
 .delete {
   width: 20px;
   height: 20px;
@@ -55,4 +57,21 @@ button {
 
 ::ng-deep .mat-tab-body {
   padding: 20px 10px;
+}
+
+@media (min-width: 768px) and (max-width: 1200px) {
+  .profile-form {
+    width: 90vw;
+    grid-template-columns: 50% 50%;
+  }
+
+  .mat-form-field {
+    width: 45vw;
+  }
+}
+
+@media (min-width: 320px) and (max-width: 767px) {
+  .profile-form {
+    grid-template-columns: 1fr;
+  }
 }
