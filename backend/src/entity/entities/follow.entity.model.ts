@@ -1,5 +1,5 @@
 import { Document } from 'mongoose';
-import { UserEntity } from './user.entity.model';
+import { UserEntity } from './user.entity';
 
 export interface FollowEntity extends Document {
   followerId: UserEntity; // кто подписан

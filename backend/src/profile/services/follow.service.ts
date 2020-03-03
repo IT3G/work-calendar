@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import * as moment from 'moment';
 import { Model } from 'mongoose';
 import { FollowEntity, FollowType } from '../../entity/entities/follow.entity.model';
-import { FollowerModel } from '../models/follow.model';
-import * as moment from 'moment';
-import { UserEntity } from '../../entity/entities/user.entity.model';
-import { UsersService } from './users.service';
 import { ProjectNewMetadataEntity } from '../../entity/entities/project-new-metadata.entity';
 import { ProjectNewEntity } from '../../entity/entities/project-new.entity';
+import { UserEntity } from '../../entity/entities/user.entity';
+import { FollowDto } from '../dto/follow.dto';
+import { UsersService } from './users.service';
 
 export interface UserFollow {
   following: UserEntity[];
@@ -27,7 +27,7 @@ export class FollowService {
     const followers = await this.getUserFollowers(userId);
     const allForUser = await this.getAllStaticFollowsForUser(userId);
     /** Исключить сотрудников с датой увольнения. */
-    const allEmployedFollowersForUser = allForUser.filter(rec => !rec.followingId.terminationDate);
+    const allEmployedFollowersForUser = allForUser.filter(rec => rec.followingId && !rec.followingId.terminationDate);
 
     return {
       following,
@@ -76,10 +76,10 @@ export class FollowService {
     return this.addUserToArr(addedUsers, followingByProjects, allUsers)
       .filter(u => this.removeMyselfFromArr(u.id, user.id))
       .filter(u => this.removeUsersFromArr(removedUsers, u.id))
-      .filter(u => !u.terminationDate);
+      .filter(u => u && !u.terminationDate);
   }
 
-  async addFollow(data: FollowerModel): Promise<FollowEntity> {
+  async addFollow(data: FollowDto): Promise<FollowEntity> {
     const newFollow = await this.followModel.create(data);
     return newFollow.save();
   }
@@ -109,7 +109,7 @@ export class FollowService {
     return this.addUserToArr(addedUsers, [...followersByProjects, ...followersByEmptyProject], allUsers)
       .filter(u => this.removeMyselfFromArr(u.id, user.id))
       .filter(u => this.removeUsersFromArr(removedUsers, u.id))
-      .filter(u => !u.terminationDate);
+      .filter(u => u && !u.terminationDate);
   }
 
   // Добавление пользователя в массив
@@ -152,6 +152,10 @@ export class FollowService {
   }
 
   private getActiveUserProjects(user: UserEntity): string[] {
+    if (!user || !user.projectsNew) {
+      return [];
+    }
+
     const currentDate = moment();
     return user.projectsNew
       .filter(p => p.metadata.some(m => currentDate.isSame(this.mapMetadataToDate(m), 'month')))
@@ -160,6 +164,10 @@ export class FollowService {
   }
 
   private haveProjectsInCurrentMonth(projects: ProjectNewEntity[]): boolean {
+    if (!projects) {
+      return false;
+    }
+
     const currentDate = moment();
     return projects.some(p => p.metadata.some(m => currentDate.isSame(this.mapMetadataToDate(m), 'month')));
   }

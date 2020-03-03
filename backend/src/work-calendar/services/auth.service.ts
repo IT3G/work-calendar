@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as crypto from 'crypto';
+import { Request } from 'express';
 import { Config } from '../../config/config';
+import { UserEntity } from '../../entity/entities/user.entity';
+import { UserDto } from '../../profile/dto/user.dto';
+import { UsersService } from '../../profile/services/users.service';
 import { JwtSignModel } from '../models/jwt-sign.model';
 import { LoginModel } from '../models/login.model';
 import { LdapService } from './ldap.service';
-import { UserEntity } from '../../entity/entities/user.entity.model';
-import { UsersService } from '../../profile/services/users.service';
-import { UserModel } from '../../profile/models/user.model';
-import { Request } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -92,9 +92,10 @@ export class AuthService {
     const emailPostfix =
       this.config.FEATURE_AUTH_TYPE === 'LDAP' && this.config.MAIL_POSTFIX ? `@${this.config.MAIL_POSTFIX}` : '';
 
-    const data: UserModel = {
+    const data: UserDto = {
       _id: null,
       username: userInfo.name,
+      patronymic: null,
       location: null,
       position: null,
       whenCreated: null,
@@ -106,7 +107,11 @@ export class AuthService {
       hasMailing: false,
       subdivision: null,
       jobPosition: null,
+      projectsNew: null,
+      skype: null,
+      telegram: null,
       authType: 'hash',
+      terminationDate: null,
       hashPassword: crypto.createHmac('sha256', userInfo.password).digest('hex')
     };
 

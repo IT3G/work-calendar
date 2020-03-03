@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  HttpStatus,
   Param,
   Post,
   Put,
@@ -15,8 +14,10 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
 import { Response } from 'express';
+import { CustomMapper } from '../../shared/services/custom-mapper.service';
+import { PresenceDto } from '../dto/presence.dto';
+import { TaskDto } from '../dto/task.dto';
 import { TaskDeleteGuard } from '../guards/task-delete.guard';
-import { TaskModel } from '../models/task.model';
 import { TaskService } from '../services/task.service';
 import { VacationResolutionService } from '../services/vacation-resolution.service';
 
@@ -24,58 +25,68 @@ import { VacationResolutionService } from '../services/vacation-resolution.servi
 @ApiUseTags('Tasks')
 @Controller('tasks')
 export class TasksController {
-  constructor(private taskService: TaskService, private vacationResolution: VacationResolutionService) {}
+  constructor(
+    private taskService: TaskService,
+    private vacationResolution: VacationResolutionService,
+    private mapper: CustomMapper
+  ) {}
 
   @Get()
-  async getTasks(@Res() res) {
+  async getTasks(): Promise<TaskDto[]> {
     const tasks = await this.taskService.getTasks();
-    return res.status(HttpStatus.OK).json(tasks);
+
+    return this.mapper.mapArray(TaskDto, tasks);
   }
 
   @Get('/tasks-author/:author')
-  async getTasksByAuthor(@Res() res, @Param('author') author) {
+  async getTasksByAuthor(@Param('author') author): Promise<TaskDto[]> {
     const tasks = await this.taskService.getTasksByAuthor(author);
-    return res.status(HttpStatus.OK).json(tasks);
+
+    return this.mapper.mapArray(TaskDto, tasks);
   }
 
   @Get('/tasks-employee/:employee')
-  async getTasksByEmployee(@Res() res, @Param('employee') employee) {
+  async getTasksByEmployee(@Param('employee') employee): Promise<TaskDto[]> {
     const tasks = await this.taskService.getTasksByEmployee(employee);
-    return res.status(HttpStatus.OK).json(tasks);
+
+    return this.mapper.mapArray(TaskDto, tasks);
   }
 
   @Get('/tasks-month/:date')
-  async getTasksByMonth(@Res() res, @Param('date') date) {
-    const tasks = await this.taskService.getTasksByMonth(date);
-    return res.status(HttpStatus.OK).json(tasks);
+  async getTasksByMonth(@Param('date') date): Promise<PresenceDto[]> {
+    const presence = await this.taskService.getTasksByMonth(date);
+
+    return this.mapper.mapArray(PresenceDto, presence);
   }
 
   @Post()
-  async addTask(@Res() res, @Body() task: TaskModel) {
+  async addTask(@Body() task: TaskDto): Promise<TaskDto> {
     const newTask = await this.taskService.addTask(task);
-    return res.status(HttpStatus.OK).json(newTask);
+
+    return this.mapper.map(TaskDto, newTask);
   }
 
   @Put('/:id')
-  async update(@Res() res, @Param('id') id, @Body() task: Partial<TaskModel>) {
+  async update(@Param('id') id, @Body() task: Partial<TaskDto>): Promise<TaskDto> {
     const newTask = await this.taskService.udpdateOne(id, task);
-    return res.status(HttpStatus.OK).json(newTask);
+
+    return this.mapper.map(TaskDto, newTask);
   }
 
   @Delete('/:id')
   @UseGuards(TaskDeleteGuard)
-  async delete(@Res() res, @Param('id') id) {
+  async delete(@Param('id') id): Promise<TaskDto> {
     const result = await this.taskService.deleteById(id);
 
-    return res.status(HttpStatus.OK).json(result);
+    return this.mapper.map(TaskDto, result);
   }
 
   @Post('/resolution/:taskId')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadResolution(@Res() res, @UploadedFile() file, @Param('taskId') taskId: string) {
+  async uploadResolution(@UploadedFile() file, @Param('taskId') taskId: string): Promise<TaskDto> {
     const task = await this.vacationResolution.updateTaskResolutionById(taskId, file);
 
-    return res.status(HttpStatus.OK).json(task);
+    return this.mapper.map(TaskDto, task);
   }
 
   @Get('/resolution/:taskId')

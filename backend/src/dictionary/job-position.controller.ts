@@ -1,5 +1,6 @@
 import { Controller } from '@nestjs/common';
-import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
+import { CustomMapper } from '../shared/services/custom-mapper.service';
 import { DictionaryBaseController } from './dictionary-base.controller';
 import { JobPositionService } from './services/job-position.service';
 
@@ -7,7 +8,7 @@ import { JobPositionService } from './services/job-position.service';
 @ApiUseTags('Job position')
 @Controller('jobPosition')
 export class JobPositionController extends DictionaryBaseController {
-  constructor(private jobPositionService: JobPositionService) {
-    super(jobPositionService);
+  constructor(jobPositionService: JobPositionService, mapper: CustomMapper) {
+    super(jobPositionService, mapper);
   }
 }

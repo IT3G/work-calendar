@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Document, Model } from 'mongoose';
+import { Model } from 'mongoose';
 import { HolidaysEntity } from '../../entity/entities/holidays.entity.model';
-import { HolidaysResponseModel } from '../models/holidays.request.model';
-import { DictionaryModel } from '../../dictionary/models/dictionary.model';
+import { HolidaysDto } from '../dto/holidays.dto';
 
 @Injectable()
 export class HolidaysService {
@@ -13,12 +12,12 @@ export class HolidaysService {
     return await this.holidaysModel.find().exec();
   }
 
-  async addHolidays(holidays: HolidaysResponseModel): Promise<Document> {
+  async addHolidays(holidays: HolidaysDto): Promise<HolidaysEntity> {
     const result = await this.holidaysModel.create(holidays);
     return result.save();
   }
 
-  async updateHolidays(holidays: HolidaysResponseModel): Promise<Document> {
+  async updateHolidays(holidays: HolidaysDto): Promise<HolidaysEntity> {
     await this.holidaysModel.findByIdAndUpdate(holidays._id, holidays);
     return await this.holidaysModel.findById(holidays._id);
   }

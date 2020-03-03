@@ -5,6 +5,7 @@ import { EntityModule } from '../entity/entity.module';
 import { FileStorageModule } from '../file-storage/file-storage.module';
 import { MailModule } from '../mail/mail.module';
 import { ProfileModule } from '../profile/profile.module';
+import { SharedModule } from '../shared/shared.module';
 import { WebPushModule } from '../web-push/web-push.module';
 import { AuthController } from './controllers/auth.controller';
 import { TasksController } from './controllers/tasks.controller';
@@ -20,6 +21,7 @@ const config = getConfig();
 @Module({
   imports: [
     EntityModule,
+    SharedModule,
     HttpModule,
     ProfileModule,
     MailModule,

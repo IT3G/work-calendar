@@ -1,5 +1,6 @@
 import { Controller } from '@nestjs/common';
-import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
+import { CustomMapper } from '../shared/services/custom-mapper.service';
 import { DictionaryBaseController } from './dictionary-base.controller';
 import { SubdivisionService } from './services/subdivision.service';
 
@@ -7,7 +8,7 @@ import { SubdivisionService } from './services/subdivision.service';
 @ApiUseTags('Subdivision')
 @Controller('subdivision')
 export class SubdivisionController extends DictionaryBaseController {
-  constructor(private subdivisionService: SubdivisionService) {
-    super(subdivisionService);
+  constructor(subdivisionService: SubdivisionService, mapper: CustomMapper) {
+    super(subdivisionService, mapper);
   }
 }
