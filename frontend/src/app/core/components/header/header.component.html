@@ -1,17 +1,15 @@
-<div (swipe)="onSwipe($event)" class="container-header shadow-sm">
-  <div class="user-info-container">
-    <div class="mobile-menu" (click)="mobileMenuClick.emit()">
-      <i class="fa fa-bars"></i>
-    </div>
-    <div class="main-logo">
-      <img src="../../../../assets/images/logo_it2g.png" />
-    </div>
+<div class="container-header">
+  <div class="main-logo" [style.height]="isMobile ? '35px' : '55px'" [style.grid-area]="isMobile ? 'center' : 'left'">
+    <img src="../../../../assets/images/logo_it2g.png" />
   </div>
 
-  <app-navigation-menu class="menu"></app-navigation-menu>
-  <span class="header-spacer"></span>
+  <app-navigation-menu
+    [style.grid-area]="isMobile ? 'left' : 'center'"
+    [style.justify-self]="isMobile ? 'center' : 'left'"
+    [isMobile]="isMobile"
+  ></app-navigation-menu>
   <app-personal-menu
-    class="menu"
+    class="personal-menu"
     [color]="(currentUser$ | async)?.subdivision?._id | colorSubdivision"
   ></app-personal-menu>
 </div>

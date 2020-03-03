@@ -13,6 +13,8 @@ import { pipes } from './pipes';
 import { SingleSelectComponent } from './components/single-select/single-select.component';
 import { RadioButtonGroupComponent } from './components/radio-button-group/radio-button-group.component';
 import { RadioButtonComponent } from './components/radio-button/radio-button.component';
+import { DropdownComponent } from './components/dropdown/dropdown.component';
+import { ClickOutsideDirective } from './directives/click-outside.directive';
 
 const modules = [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule, AvatarModule, NgbModule, RouterModule];
 
@@ -22,16 +24,19 @@ const components = [
   MonthSelectorComponent,
   RadioButtonComponent,
   RadioButtonGroupComponent,
-  SingleSelectComponent
+  SingleSelectComponent,
+  DropdownComponent
 ];
+
+const directives = [ClickOutsideDirective];
 
 /** Приватные компоненты попапов наружу предоставлять через сервисы */
 const privateComponents = [ConfirmDialogComponent];
 
 @NgModule({
-  declarations: [...pipes, ...components, ...privateComponents],
+  declarations: [...pipes, ...components, ...privateComponents, ...directives],
   imports: [...modules],
   entryComponents: [...privateComponents],
-  exports: [...pipes, ...modules, ...components]
+  exports: [...pipes, ...modules, ...components, DropdownComponent]
 })
 export class SharedModule {}

@@ -1,0 +1,40 @@
+.dd-panel {
+  display: none;
+  z-index: 999;
+  box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+
+  position: absolute;
+  border-radius: 6px;
+  top: 30px;
+  min-width: 100px;
+  background-color: white;
+}
+
+.right-position {
+  right: 10px;
+}
+
+.left-position {
+  left: 10px;
+}
+
+.isOpen {
+  display: block;
+}
+
+.dd-trigger {
+  cursor: pointer;
+}
+
+::ng-deep .nav-item {
+  color: #333;
+  padding: 10px 25px;
+  display: flex;
+  align-items: center;
+}
+
+::ng-deep .nav-item:hover {
+  text-decoration: none;
+  background: rgba(0, 0, 0, 0.04);
+}

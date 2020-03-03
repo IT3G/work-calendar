@@ -1,8 +1,4 @@
-<app-header (mobileMenuClick)="drawer.toggle()"></app-header>
-<mat-drawer-container class="content-container">
+<app-header></app-header>
+<div class="content-container">
   <router-outlet></router-outlet>
-
-  <mat-drawer #drawer mode="over">
-    <app-navigation-menu></app-navigation-menu>
-  </mat-drawer>
-</mat-drawer-container>
+</div>

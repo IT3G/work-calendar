@@ -1,4 +1,15 @@
-<nav class="nav">
+<app-dropdown ddPanelPosition="left" *ngIf="isMobile">
+  <div dd-trigger>
+    <mat-icon>menu</mat-icon>
+  </div>
+  <div dd-panel>
+    <a class="nav-item" *ngIf="isAuth$ | async" routerLink="/presence" routerLinkActive="active">Мое присутствие</a>
+    <a class="nav-item" *ngIf="isAuth$ | async" routerLink="/team-presence" routerLinkActive="active">Команда</a>
+    <a class="nav-item" *ngIf="isAuth$ | async" routerLink="/projects-teams" routerLinkActive="active">Проекты</a>
+  </div>
+</app-dropdown>
+
+<nav class="nav" *ngIf="!isMobile">
   <a class="nav-item" *ngIf="isAuth$ | async" routerLink="/presence" routerLinkActive="active">Мое присутствие</a>
   <a class="nav-item" *ngIf="isAuth$ | async" routerLink="/team-presence" routerLinkActive="active">Команда</a>
   <a class="nav-item" *ngIf="isAuth$ | async" routerLink="/projects-teams" routerLinkActive="active">Проекты</a>

@@ -24,6 +24,7 @@ import { AppRoutingModule } from './routing/app-routing.module';
 import { AppLoadService } from './shared/services/app-load.service';
 import { SharedModule } from './shared/shared.module';
 import { TeamPresenseModule } from './team-presense/team-presense.module';
+import { LayoutModule } from '@angular/cdk/layout';
 
 registerLocaleData(localeRu);
 moment.locale('ru');
@@ -47,6 +48,7 @@ export function onInit(appLoadService: AppLoadService) {
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,
+    LayoutModule,
     ReactiveFormsModule,
     SharedModule,
     InputFileModule.forRoot({}),

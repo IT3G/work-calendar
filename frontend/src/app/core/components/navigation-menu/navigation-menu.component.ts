@@ -1,8 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { AuthApiService } from '../../services/auth-api.service';
 import { ContextStoreService } from '../../store/context-store.service';
 import { AuthSetting } from '../../../shared/models/auth-setting.model';
 import { Employee } from '../../../shared/models/employee.model';
@@ -19,11 +17,10 @@ export class NavigationMenuComponent implements OnInit {
   public settings$: Observable<AuthSetting>;
   public selectedUser$: Observable<Employee>;
 
-  constructor(
-    private contextStoreService: ContextStoreService,
-    private router: Router,
-    private authApi: AuthApiService
-  ) {}
+  @Input()
+  isMobile: boolean;
+
+  constructor(private contextStoreService: ContextStoreService) {}
 
   ngOnInit() {
     this.isAuth$ = this.contextStoreService.getCurrentUser$().pipe(map(user => !!user));
