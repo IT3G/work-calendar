@@ -1,10 +1,10 @@
-import { Controller, Get, HttpStatus, Res } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { getConfig } from '../config/config';
 
 @Controller('settings')
 export class SettingsController {
   @Get()
-  async getSettings(@Res() res) {
+  async getSettings() {
     const config = getConfig();
     const settings = {
       FEATURE_AUTH_TYPE: config.FEATURE_AUTH_TYPE,
@@ -18,6 +18,6 @@ export class SettingsController {
       PUSH_PUBLIC_KEY: config.PUSH_PUBLIC_KEY
     };
 
-    return res.status(HttpStatus.OK).json(settings);
+    return settings;
   }
 }

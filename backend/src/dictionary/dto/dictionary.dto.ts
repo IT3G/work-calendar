@@ -5,7 +5,7 @@ export class DictionaryDto {
   @Expose()
   @Transform((val, src) => src.id)
   @ApiModelProperty({ type: String })
-  _id?: string;
+  _id: string;
 
   @Expose()
   @ApiModelProperty({ type: String })

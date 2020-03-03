@@ -1,4 +1,4 @@
-import { Body, Delete, Get, NotFoundException, Param, Post, Put, Res } from '@nestjs/common';
+import { Body, Delete, Get, NotFoundException, Param, Post, Put } from '@nestjs/common';
 import { EntityToDtoMapperService } from '../shared/services/entity-to-dto-mapper.service';
 import { DictionaryDto } from './dto/dictionary.dto';
 import { DictionaryBaseService } from './services/dictionary-base.service';
@@ -47,7 +47,7 @@ export class DictionaryBaseController {
   }
 
   @Delete('/:id')
-  async delete(@Res() res, @Param('id') id): Promise<DictionaryDto> {
+  async delete(@Param('id') id): Promise<DictionaryDto> {
     const result = await this.apiService.delete(id);
 
     return this.mapper.map(DictionaryDto, result);

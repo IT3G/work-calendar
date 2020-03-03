@@ -4,7 +4,7 @@ import { ProjectNewMetadataDto } from './project-new-metadata.dto';
 
 export class ProjectNewDto {
   @Expose()
-  @Transform((val, src) => src.id)
+  @Transform((val, src) => src.project_id.toString())
   @ApiModelProperty()
   project_id: string;
 
