@@ -16,7 +16,7 @@
       <tr *ngFor="let project of projectsData | projectTeamsFilter: filtersForm.value">
         <td>
           <div class="project-name">
-            <a [href]="getLink(project.projectID)">
+            <a [href]="getLink(project.projectId)">
               {{ project.projectName }}
             </a>
           </div>

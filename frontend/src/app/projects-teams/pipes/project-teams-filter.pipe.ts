@@ -3,14 +3,14 @@ import * as moment from 'moment';
 import { radioButtonGroupCommonColor } from '../../shared/const/subdivision-colors.const';
 import { ProjectNewModel } from '../../shared/models/project-new.model';
 import { NewProjectUtils } from '../../shared/utils/new-project.utils';
+import { ProjectDataModel } from '../models/project-data.model';
 import { ProjectTeamsFilterModel } from '../project-teams-filter/project-teams-filter.component';
-import { ProjectData } from '../projects-teams/projects-teams.component';
 
 @Pipe({
   name: 'projectTeamsFilter'
 })
 export class ProjectTeamsFilterPipe implements PipeTransform {
-  transform(projectsData: ProjectData[], filter: ProjectTeamsFilterModel): ProjectData[] {
+  transform(projectsData: ProjectDataModel[], filter: ProjectTeamsFilterModel): ProjectDataModel[] {
     if (!projectsData) {
       return [];
     }
@@ -24,11 +24,9 @@ export class ProjectTeamsFilterPipe implements PipeTransform {
 
     const activeProjectsData = projectsData
       .map(prjData => {
-        const usersForProject = prjData.users.filter(
-          u =>
-            u.projectsNew &&
-            u.projectsNew.some(p => p.project_id === prjData.projectID && this.isProjectAtMonth(p, filter.month))
-        );
+        const usersForProject = prjData.users
+          .filter(u => !!u)
+          .filter(u => NewProjectUtils.isUserHaveSameOrLastProjectInCurrentMonth(u, filter.month, prjData.projectId));
 
         return { ...prjData, users: usersForProject };
       })

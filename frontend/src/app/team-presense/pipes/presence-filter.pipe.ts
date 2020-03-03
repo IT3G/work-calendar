@@ -1,9 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import * as moment from 'moment';
 import { Moment } from 'moment';
-import { LastProjectModel } from '../../shared/models/last-project.model';
 import { PresenceModel } from '../../shared/models/presence.page.model';
-import { ProjectNewModel } from '../../shared/models/project-new.model';
 import { NewProjectUtils } from '../../shared/utils/new-project.utils';
 import { PresenceFiltersFormModel } from '../models/presence-filters-form.model';
 @Pipe({
@@ -42,48 +40,10 @@ export class PresenceFilterPipe implements PipeTransform {
     }
 
     if (filter.project) {
-      res = res.filter(p => {
-        if (!p.employee) {
-          return false;
-        }
-
-        const isSameProjectInMonth = this.isSomeProjectAtMonth(p.employee.projectsNew, date, filter.project);
-        const isSameLastProjectInMonth = this.isSameLastProjectAtMonth(p.employee.lastProjects, date, filter.project);
-
-        return isSameProjectInMonth || isSameLastProjectInMonth;
-      });
+      res = res.filter(
+        p => p.employee && NewProjectUtils.isUserHaveSameOrLastProjectInCurrentMonth(p.employee, date, filter.project)
+      );
     }
     return res.filter(p => date.isSameOrAfter(moment(p.employee.whenCreated), 'month'));
-  }
-
-  private isSomeProjectAtMonth(projects: ProjectNewModel[], date: Moment, selectedProject: string): boolean {
-    if (!projects) {
-      return false;
-    }
-
-    return projects.some(p => {
-      if (p.project_id !== selectedProject) {
-        return false;
-      }
-
-      return p.metadata.some(m => NewProjectUtils.mapMetadataToDate(m).isSame(date, 'month'));
-    });
-  }
-
-  /** Проверяем входит ли последний проект в число выбранных, чтоб можно было отображать людей в будущем по последним проектам */
-  private isSameLastProjectAtMonth(projects: LastProjectModel[], date: Moment, selectedProject: string): boolean {
-    if (!projects) {
-      return false;
-    }
-
-    return projects.some(p => {
-      if (p.project_id !== selectedProject) {
-        return false;
-      }
-
-      const { project_id, project_name, ...metadata } = p;
-
-      return NewProjectUtils.mapMetadataToDate(metadata).isBefore(date, 'month');
-    });
   }
 }
