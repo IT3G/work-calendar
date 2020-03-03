@@ -1,19 +1,19 @@
 import { Body, Controller, Get, NotFoundException, Param, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
+import { CustomMapper } from '../../shared/services/custom-mapper.service';
 import { UserDto } from '../dto/user.dto';
-import { UserEntityToDtoMapper } from '../mappers/user-entity-to-dto.mapper';
 import { UsersService } from '../services/users.service';
 
 @ApiBearerAuth()
 @ApiUseTags('Users')
 @Controller('users')
 export class UsersController {
-  constructor(private userService: UsersService, private entityToDtoMapper: UserEntityToDtoMapper) {}
+  constructor(private userService: UsersService, private mapper: CustomMapper) {}
 
   @Get()
   async getUsers(): Promise<UserDto[]> {
     const users = await this.userService.getUsers();
-    return this.entityToDtoMapper.mapArray(users);
+    return this.mapper.mapArray(UserDto, users);
   }
 
   @Get(':id')
@@ -23,7 +23,7 @@ export class UsersController {
       throw new NotFoundException('User does not exist!');
     }
 
-    return this.entityToDtoMapper.map(user);
+    return this.mapper.map(UserDto, user);
   }
 
   @Get('/login/:login')
@@ -33,7 +33,7 @@ export class UsersController {
       throw new NotFoundException('User does not exist!');
     }
 
-    return this.entityToDtoMapper.map(user);
+    return this.mapper.map(UserDto, user);
   }
 
   @Post('/login/:login')
@@ -44,7 +44,7 @@ export class UsersController {
       throw new NotFoundException('User does not exist!');
     }
 
-    return this.entityToDtoMapper.map(editedUser);
+    return this.mapper.map(UserDto, editedUser);
   }
 
   @Post('/patronymic/:login')
@@ -58,6 +58,6 @@ export class UsersController {
     editedUser.patronymic = data.patronymic;
     await editedUser.save();
 
-    return this.entityToDtoMapper.map(editedUser);
+    return this.mapper.map(UserDto, editedUser);
   }
 }

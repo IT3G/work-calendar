@@ -1,34 +1,37 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Res, UseGuards } from '@nestjs/common';
-import { FollowService } from '../services/follow.service';
-import { FollowerModel } from '../models/follow.model';
+import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
-import { FollowEditGuard } from '../guards/follow-edit.guard';
+import { CustomMapper } from '../../shared/services/custom-mapper.service';
+import { FollowDto } from '../dto/follow.dto';
+import { UserFollowDto } from '../dto/user-follow.dto';
 import { FollowDeleteGuard } from '../guards/follow-delete.guard';
+import { FollowEditGuard } from '../guards/follow-edit.guard';
+import { FollowService } from '../services/follow.service';
 
 @ApiBearerAuth()
 @ApiUseTags('Follow')
 @Controller('follow')
 export class FollowController {
-  constructor(private followService: FollowService) {}
+  constructor(private followService: FollowService, private mapper: CustomMapper) {}
 
   @Get('/user-follow/:id')
-  async getUserFollow(@Res() res, @Param('id') userId) {
+  async getUserFollow(@Param('id') userId): Promise<UserFollowDto> {
     const userFollow = await this.followService.getUserFollow(userId);
-    return res.status(HttpStatus.OK).json(userFollow);
+
+    return this.mapper.map(UserFollowDto, userFollow);
   }
 
   @Post()
   @UseGuards(FollowEditGuard)
-  async addFollow(@Res() res, @Body() data: FollowerModel) {
+  async addFollow(@Body() data: FollowDto): Promise<UserFollowDto> {
     const newFollow = await this.followService.addFollow(data);
-    return res.status(HttpStatus.OK).json(newFollow);
+    return this.mapper.map(UserFollowDto, newFollow);
   }
 
   @Delete('/:id')
   @UseGuards(FollowDeleteGuard)
-  async deleteFollow(@Res() res, @Param('id') id) {
+  async deleteFollow(@Param('id') id): Promise<UserFollowDto> {
     const result = await this.followService.deleteFollow(id);
 
-    return res.status(HttpStatus.OK).json(result);
+    return this.mapper.map(UserFollowDto, result);
   }
 }

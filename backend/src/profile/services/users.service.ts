@@ -40,6 +40,7 @@ export class UsersService {
   }
 
   async updateUserByLogin(login: string, data: UserDto): Promise<UserEntity> {
-    return await this.userModel.updateOne({ mailNickname: login }, { ...data });
+    await this.userModel.updateOne({ mailNickname: login }, { ...data });
+    return await this.getUserByLogin(login);
   }
 }
