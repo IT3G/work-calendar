@@ -19,6 +19,8 @@ $borderColor: #e3e3e3;
   display: grid;
   font-weight: 500;
   margin-top: 30px;
+  overflow-x: scroll;
+  @extend .scrollbar;
 
   &.row_28 {
     grid-template-columns: 30px 240px repeat(28, 1fr);
@@ -142,4 +144,44 @@ mat-form-field {
   font-size: 14px;
   margin-top: 1px;
   padding-right: 5px;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .table-scrolled {
+    &.row_28 {
+      grid-template-columns: 30px 240px repeat(28, 20px);
+    }
+
+    &.row_29 {
+      grid-template-columns: 30px 240px repeat(29, 20px);
+    }
+
+    &.row_30 {
+      grid-template-columns: 30px 240px repeat(30, 20px);
+    }
+
+    &.row_31 {
+      grid-template-columns: 30px 240px repeat(31, 20px);
+    }
+  }
+}
+
+@media (min-width: 320px) and (max-width: 767px) {
+  .table-scrolled {
+    &.row_28 {
+      grid-template-columns: 30px 240px repeat(28, 15px);
+    }
+
+    &.row_29 {
+      grid-template-columns: 30px 240px repeat(29, 15px);
+    }
+
+    &.row_30 {
+      grid-template-columns: 30px 240px repeat(30, 15px);
+    }
+
+    &.row_31 {
+      grid-template-columns: 30px 240px repeat(31, 15px);
+    }
+  }
 }
