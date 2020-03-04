@@ -1,10 +1,10 @@
 @import 'src/app/shared/styles/scroll';
 
-:host {
-  display: block;
-  max-height: calc(100vh - 260px);
-  @extend .scrollbar;
-}
+// :host {
+//   display: block;
+//   max-height: calc(100vh - 260px);
+//   @extend .scrollbar;
+// }
 
 button {
   margin-right: 10px;
@@ -61,17 +61,16 @@ button {
 
 @media (min-width: 768px) and (max-width: 1200px) {
   .profile-form {
-    width: 90vw;
-    grid-template-columns: 50% 50%;
-  }
-
-  .mat-form-field {
-    width: 45vw;
+    grid-template-columns: 1fr 1fr;
   }
 }
 
 @media (min-width: 320px) and (max-width: 767px) {
   .profile-form {
     grid-template-columns: 1fr;
+  }
+
+  .form-footer {
+    grid-column: 1 / 2;
   }
 }

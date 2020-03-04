@@ -4,7 +4,7 @@
     <td class="date">Дата</td>
     <td class="employee">Кому</td>
     <td class="type">Вид</td>
-    <td class="comment">Комментарий</td>
+    <td class="comment element-hidden">Комментарий</td>
   </tr>
 </table>
 
@@ -18,7 +18,7 @@
       </td>
       <td class="employee">{{ element.employee }}</td>
       <td class="type">{{ dayType[element.type] | taskType }}</td>
-      <td class="comment">{{ element.comment }}</td>
+      <td class="comment element-hidden">{{ element.comment }}</td>
     </tr>
   </table>
 </div>

@@ -25,12 +25,15 @@
   .date {
     width: 110px;
   }
+
   .employee {
     width: 150px;
   }
+
   .type {
     width: 110px;
   }
+
   .comment {
     width: 200px;
   }
@@ -40,4 +43,10 @@
   text-align: center;
   color: #b9b7b7;
   padding: 20px 0;
+}
+
+@media (min-width: 320px) and (max-width: 767px) {
+  .element-hidden {
+    display: none;
+  }
 }

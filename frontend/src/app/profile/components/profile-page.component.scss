@@ -49,18 +49,12 @@
   }
 
   .avatar {
-  }
-
-  .user-name {
-    text-align: center;
+    margin: 0 auto;
   }
 
   .presence {
+    margin: 0 auto;
     width: 30vw;
-  }
-
-  .tabs {
-    width: 90vw;
   }
 }
 
@@ -76,7 +70,16 @@
       'tabs';
   }
 
+  .avatar {
+    margin: 0 auto;
+  }
+
   .presence {
-    width: 30vw;
+    width: 40vw;
+    margin: 0 auto;
+  }
+
+  .tabs {
+    width: 90vw;
   }
 }
