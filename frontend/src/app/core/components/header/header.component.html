@@ -1,17 +1,9 @@
-<div
-  *ngIf="logoName$ | async"
-  class="main-logo"
-  [style.height]="isMobile ? '35px' : '55px'"
-  [style.grid-area]="isMobile ? 'center' : 'left'"
->
+<div *ngIf="logoName$ | async" class="main-logo">
   <img [src]="baseUrl + '/settings/logo/' + (logoName$ | async)" />
 </div>
 
-<app-navigation-menu
-  [style.grid-area]="isMobile ? 'left' : 'center'"
-  [style.justify-self]="isMobile ? 'center' : 'left'"
-  [isMobile]="isMobile"
-></app-navigation-menu>
+<app-navigation-menu class="nav-menu" [isMobile]="isMobile"></app-navigation-menu>
+
 <app-personal-menu
   class="personal-menu"
   [color]="(currentUser$ | async)?.subdivision?._id | colorSubdivision"
