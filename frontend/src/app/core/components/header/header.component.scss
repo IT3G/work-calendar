@@ -1,16 +1,18 @@
 :host {
   --headerHeight: 80px;
   height: var(--headerHeight);
-  position: relative;
-}
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: white;
 
-.container-header {
   display: grid;
-  grid-template-columns: 100px 1fr 100px;
+  grid-template-columns: 100px 1fr 200px;
   grid-template-rows: var(--headerHeight);
   grid-template-areas: 'left center right';
   align-items: center;
   justify-items: center;
+  box-shadow: -1px -1px 3px 0px;
 }
 
 .main-logo {
