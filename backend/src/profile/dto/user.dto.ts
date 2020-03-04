@@ -1,5 +1,6 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { Expose, Transform, Type } from 'class-transformer';
+import * as moment from 'moment';
 import { DictionaryDto } from '../../dictionary/dto/dictionary.dto';
 import { ProjectNewMetadataEntity } from '../../entity/entities/project-new-metadata.entity';
 import { UserEntity } from '../../entity/entities/user.entity';
@@ -114,6 +115,7 @@ function lastProjectsMapper(val: null, src: UserEntity): LastProjectDto[] {
     });
 
   const lastMetadata: ProjectNewMetadataEntity = projectsMetadata[0];
+  const currentDate = moment();
 
   if (!lastMetadata) {
     return [];
@@ -123,7 +125,15 @@ function lastProjectsMapper(val: null, src: UserEntity): LastProjectDto[] {
     .map(p => {
       const projectLastMetadata = p.metadata.find(m => m.year === lastMetadata.year && m.month === lastMetadata.month);
 
+      /** Если нет проекта в последнем месяце, то проект не включаем */
       if (!projectLastMetadata) {
+        return null;
+      }
+
+      const projectLastMetadataDate = moment(`${projectLastMetadata}-${projectLastMetadata.year}`, 'M-YYYY');
+
+      /** Если последний месяц был больше 3х месяцев назад, то проект не включаем */
+      if (currentDate.diff(projectLastMetadataDate, 'months') > 3) {
         return null;
       }
 
