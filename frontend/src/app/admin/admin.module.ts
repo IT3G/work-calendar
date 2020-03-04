@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
+import { InputFileModule } from 'ngx-input-file';
 import { MaterialModule } from '../material.module';
 import { SharedModule } from '../shared/shared.module';
 import { DictionaryAdminComponent } from './components/dictionary-admin/dictionary-admin.component';
@@ -40,6 +41,14 @@ const entryComponents = [AddPopupComponent, EmployeeAddComponent];
 @NgModule({
   declarations: [...components, ...pieps],
   entryComponents: [...entryComponents],
-  imports: [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule, SharedModule, RouterModule.forChild(routes)]
+  imports: [
+    CommonModule,
+    MaterialModule,
+    FormsModule,
+    ReactiveFormsModule,
+    SharedModule,
+    InputFileModule,
+    RouterModule.forChild(routes)
+  ]
 })
 export class AdminModule {}

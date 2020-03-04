@@ -1,17 +1,12 @@
 <div class="container">
   <div class="page-title">Настройки</div>
 
-  <div class="image-upload">
-    <app-file-input-reset
-      class="image-upload-input"
-      [formControl]="fileControl"
-      [fileType]="fileType"
-      [buttonText]="buttonText"
-    ></app-file-input-reset>
-
-    <figure class="image-preview">
-      <img *ngIf="imageUrl" [width]="imageUrl" [src]="imageUrl" [alt]="fileName" />
-      <figcaption *ngIf="!imageUrl">Логотип не загружен</figcaption>
-    </figure>
+  <div class="file-container">
+    <input-file fileAccept="image/*" placeholder="" [fileLimit]="1" [(ngModel)]="files"></input-file>
+    <div class="file-placeholder">Добавьте или перетащите логотип</div>
   </div>
+
+  <button mat-raised-button color="primary">
+    Сохранить
+  </button>
 </div>
