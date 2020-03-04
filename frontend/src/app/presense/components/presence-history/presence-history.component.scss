@@ -71,85 +71,27 @@
 
 @media (min-width: 768px) and (max-width: 1200px) {
   :host {
-    grid-template-columns: 150px 150px 100px 1fr 100px;
+    grid-template-columns: 150px 150px 115px 1fr 100px;
   }
 }
 
 @media (min-width: 320px) and (max-width: 767px) {
   :host {
-    border: 1px solid lightgray;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(4, 50px);
-    grid-template-areas:
-      'start-title start-area'
-      'end-title end-area'
-      'type-title type-area'
-      'comment-title comment-area';
+    grid-template-columns: auto auto auto 75px;
   }
 
-  .start-title {
-    grid-area: start-title;
-  }
+  .type {
+    padding: 10px 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-  .end-title {
-    grid-area: end-title;
-  }
-
-  .type-title {
-    grid-area: type-title;
-  }
-
-  .comment-title {
-    grid-area: comment-title;
-  }
-
-  .start-area {
-    grid-area: start-area;
-  }
-
-  .end-area {
-    grid-area: end-area;
-  }
-
-  .type-area {
-    grid-area: type-area;
-  }
-
-  .comment-area {
-    grid-area: comment-area;
+    & .type-badge {
+      padding: 3px 5px;
+    }
   }
 
   .element-hidden {
     display: none;
-  }
-
-  .element {
-    border: none;
-  }
-
-  .buttons {
-    grid-column: 1 / 3;
-  }
-
-  i {
-    margin: 0 5px;
-  }
-
-  .fa-check {
-    width: 44vw;
-    background-color: rgba(183, 216, 144, 0.6);
-    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14),
-      0px 1px 5px 0px rgba(0, 0, 0, 0.12);
-    line-height: 36px;
-    border-radius: 4px;
-  }
-
-  .fa-times {
-    width: 44vw;
-    background-color: rgba(221, 118, 118, 0.6);
-    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14),
-      0px 1px 5px 0px rgba(0, 0, 0, 0.12);
-    line-height: 36px;
-    border-radius: 4px;
   }
 }
