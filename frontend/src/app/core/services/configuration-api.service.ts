@@ -17,6 +17,10 @@ export class ConfigurationApiService {
     return this.http.get<AuthSetting>(this.baseUrl);
   }
 
+  public deleteLogo(): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/logo`);
+  }
+
   public setLogo(inputFile: InputFile): Observable<void> {
     const formData = new FormData();
 

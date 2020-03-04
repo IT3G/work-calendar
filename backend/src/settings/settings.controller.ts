@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Param, Post, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller, Delete, Get, HttpStatus, Param, Post, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { getConfig } from '../config/config';
@@ -32,18 +32,23 @@ export class SettingsController {
 
   @Post('/logo')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadResolution(@UploadedFile() file): Promise<void> {
+  async uploadLogo(@UploadedFile() file): Promise<void> {
     await this.settingsService.saveLogo(file);
     return;
   }
 
   @Get('/logo/:name')
-  async getResolution(@Res() res: Response, @Param('name') name: string) {
+  async getLogo(@Res() res: Response, @Param('name') name: string) {
     const logo = await this.settingsService.getLogo(name);
 
     res
-      .set('content-disposition', `attachment; filename="${name}"`)
+      .set('content-disposition', `attachment; filename="logo"`)
       .status(HttpStatus.OK)
       .send(logo);
+  }
+
+  @Delete('/logo')
+  async deleteLogo(): Promise<void> {
+    return await this.settingsService.deleteLogo();
   }
 }

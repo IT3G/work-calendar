@@ -23,6 +23,17 @@ export class SettingsService {
     return await this.fileStorage.getObject(`${this.logoFolder}${logoName}`);
   }
 
+  async deleteLogo(): Promise<void> {
+    const settings = await this.getSettings();
+
+    if (!settings || !settings.logoName) {
+      return;
+    }
+
+    await this.fileStorage.removeObject(`${this.logoFolder}${settings.logoName}`);
+    await this.createOrUpdateSettings({ logoName: null });
+  }
+
   async getSettings(): Promise<SettingsEntity> {
     return await this.settingsModel.findOne();
   }

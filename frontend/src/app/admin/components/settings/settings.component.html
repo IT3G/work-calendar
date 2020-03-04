@@ -4,7 +4,7 @@
   <div class="logo-preview" *ngIf="logoName$ | async; else uploadLogo">
     <img class="logo" [src]="baseUrl + '/settings/logo/' + (logoName$ | async)" />
 
-    <button mat-raised-button color="primary">
+    <button mat-raised-button color="primary" (click)="deleteLogo()">
       Удалить
     </button>
   </div>

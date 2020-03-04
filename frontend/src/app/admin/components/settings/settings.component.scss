@@ -22,8 +22,10 @@
   align-items: center;
   justify-content: center;
   width: 175px;
+  padding: 20px;
 
   & .logo {
     width: 100%;
+    margin-bottom: 20px;
   }
 }

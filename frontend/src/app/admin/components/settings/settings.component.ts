@@ -25,6 +25,13 @@ export class SettingsComponent implements OnInit {
     );
   }
 
+  deleteLogo() {
+    this.configApi.deleteLogo().subscribe(() => {
+      this.files = [];
+      this.context.settings$.next({ ...this.context.settings$.value, LOGO_NAME: null });
+    });
+  }
+
   addLogo(file: InputFile) {
     if (!file) {
       return;
