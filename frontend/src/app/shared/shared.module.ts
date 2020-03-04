@@ -6,15 +6,15 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AvatarModule } from 'ngx-avatar';
 import { MaterialModule } from '../material.module';
 import { AgendaComponent } from './components/agenda/agenda.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { FileInputResetComponent } from './components/file-input-reset/file-input-reset.component';
 import { MonthSelectorComponent } from './components/month-selector/month-selector.component';
-import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
-import { pipes } from './pipes';
-import { SingleSelectComponent } from './components/single-select/single-select.component';
 import { RadioButtonGroupComponent } from './components/radio-button-group/radio-button-group.component';
 import { RadioButtonComponent } from './components/radio-button/radio-button.component';
-import { DropdownComponent } from './components/dropdown/dropdown.component';
+import { SingleSelectComponent } from './components/single-select/single-select.component';
 import { ClickOutsideDirective } from './directives/click-outside.directive';
+import { pipes } from './pipes';
 
 const modules = [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule, AvatarModule, NgbModule, RouterModule];
 
@@ -37,6 +37,6 @@ const privateComponents = [ConfirmDialogComponent];
   declarations: [...pipes, ...components, ...privateComponents, ...directives],
   imports: [...modules],
   entryComponents: [...privateComponents],
-  exports: [...pipes, ...modules, ...components, DropdownComponent]
+  exports: [...pipes, ...modules, ...components]
 })
 export class SharedModule {}
