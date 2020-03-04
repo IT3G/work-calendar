@@ -112,6 +112,7 @@ export class AuthService {
       telegram: null,
       authType: 'hash',
       terminationDate: null,
+      lastProjects: null,
       hashPassword: crypto.createHmac('sha256', userInfo.password).digest('hex')
     };
 
