@@ -12,7 +12,7 @@
   <ng-template #uploadLogo>
     <div class="file-container">
       <input-file
-        [disabled]="isAddLogoDisabled()"
+        [disabled]="isLogoDisabled$ | async"
         fileAccept="image/*"
         placeholder=""
         [fileLimit]="1"

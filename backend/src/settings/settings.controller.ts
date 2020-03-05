@@ -26,7 +26,7 @@ export class SettingsController {
       PRINT_HEAD_MANAGER_POSITION: config.PRINT_HEAD_MANAGER_POSITION,
       FEATURE_WEB_PUSH: config.FEATURE_WEB_PUSH,
       PUSH_PUBLIC_KEY: config.PUSH_PUBLIC_KEY,
-      LOGO_NAME: asycncSettings ? asycncSettings.logoName : null
+      LOGO_NAME: asycncSettings?.logoName
     };
 
     return settings;

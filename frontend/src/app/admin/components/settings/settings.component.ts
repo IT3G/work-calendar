@@ -15,6 +15,7 @@ export class SettingsComponent implements OnInit {
   files: InputFile[];
   logoName$: Observable<string>;
   baseUrl = environment.baseUrl;
+  isLogoDisabled$: Observable<boolean>;
 
   constructor(private configApi: ConfigurationApiService, private context: ContextStoreService) {}
 
@@ -23,10 +24,8 @@ export class SettingsComponent implements OnInit {
       filter(s => !!s),
       map(s => s.LOGO_NAME)
     );
-  }
 
-  isAddLogoDisabled() {
-    return environment.envName === 'test';
+    this.isLogoDisabled$ = this.context.settings$.pipe(map(s => s?.FEATURE_FILE_STORAGE === 'NO'));
   }
 
   deleteLogo() {
