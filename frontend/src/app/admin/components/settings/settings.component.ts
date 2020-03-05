@@ -25,6 +25,10 @@ export class SettingsComponent implements OnInit {
     );
   }
 
+  isAddLogoDisabled() {
+    return environment.envName === 'test';
+  }
+
   deleteLogo() {
     this.configApi.deleteLogo().subscribe(() => {
       this.files = [];
