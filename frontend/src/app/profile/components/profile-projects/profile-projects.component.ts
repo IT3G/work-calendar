@@ -1,16 +1,7 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  Input,
-  ViewChild,
-  OnChanges,
-  SimpleChange,
-  SimpleChanges
-} from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { Chart, ChartDataSets } from 'chart.js';
 import * as moment from 'moment';
-import { ProjectNew, ProjectStatsMetadataNew } from '../../../shared/models/project-new';
+import { ProjectNewModel } from '../../../shared/models/project-new.model';
 import { NewProjectUtils } from '../../../shared/utils/new-project.utils';
 
 @Component({
@@ -23,7 +14,7 @@ export class ProfileProjectsComponent implements OnChanges {
   chart: ElementRef;
 
   @Input()
-  projects: ProjectNew[] = [];
+  projects: ProjectNewModel[] = [];
 
   private readonly colors = [
     'rgba(119, 227, 200,',
@@ -50,7 +41,7 @@ export class ProfileProjectsComponent implements OnChanges {
     }
   }
 
-  private generateDatasetsFromProjects(projects: ProjectNew[], datesPeriod: moment.Moment[]) {
+  private generateDatasetsFromProjects(projects: ProjectNewModel[], datesPeriod: moment.Moment[]) {
     return projects.map((p, i) => ({
       label: p.project_name,
       steppedLine: 'middle' as 'middle',
@@ -67,7 +58,7 @@ export class ProfileProjectsComponent implements OnChanges {
     }));
   }
 
-  private getProjectsMaxPeriod(projects: ProjectNew[] = []): moment.Moment[] {
+  private getProjectsMaxPeriod(projects: ProjectNewModel[] = []): moment.Moment[] {
     const appProjectsMetadata = projects
       .reduce((acc, i) => [...acc, ...i.metadata], [])
       .map(m => NewProjectUtils.mapMetadataToDate(m))

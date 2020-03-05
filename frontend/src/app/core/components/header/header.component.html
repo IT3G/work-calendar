@@ -1,14 +1,10 @@
-<div (swipe)="onSwipe($event)" class="contaienr shadow-sm">
-  <div class="user-info-container">
-    <div class="mobile-menu" (click)="mobileMenuClick.emit()">
-      <i class="fa fa-bars"></i>
-    </div>
-    <h5 class="my-0 mr-md-auto font-weight-normal">
-      Привет, {{ (currentUser$ | async) ? ((currentUser$ | async).username?.split(' '))[1] : 'гость' }}!
-    </h5>
-  </div>
-
-  <div class="flex-1"></div>
-
-  <app-navigation-menu class="menu"></app-navigation-menu>
+<div *ngIf="logoName$ | async" class="main-logo">
+  <img [src]="baseUrl + '/settings/logo/' + (logoName$ | async)" />
 </div>
+
+<app-navigation-menu class="nav-menu" [isMobile]="isMobile"></app-navigation-menu>
+
+<app-personal-menu
+  class="personal-menu"
+  [color]="(currentUser$ | async)?.subdivision?._id | colorSubdivision"
+></app-personal-menu>

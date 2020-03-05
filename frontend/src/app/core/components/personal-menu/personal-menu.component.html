@@ -1,0 +1,45 @@
+<app-dropdown *ngIf="isAuth$ | async; else noAuth" [ddPanelPosition]="'right'">
+  <div dd-trigger class="avatar-button">
+    <div class="avatar">
+      <ngx-avatar
+        *ngIf="(settings$ | async)?.FEATURE_AVATAR_SOURCE === 'CONFLUENCE'; else noAvatar"
+        [src]="selectedUser$ | async | avatarSource"
+        size="28"
+        value="{{ (selectedUser$ | async).username | usernamePipe }}"
+      ></ngx-avatar>
+
+      <ng-template #noAvatar>
+        <ngx-avatar size="28" value="{{ (selectedUser$ | async).username | usernamePipe }}"></ngx-avatar>
+      </ng-template>
+    </div>
+    <i class="fa fa-chevron-down"></i>
+  </div>
+  <div dd-panel>
+    <div class="user-info">Привет, {{ ((selectedUser$ | async).username?.split(' '))[1] }}!</div>
+    <a mat-menu-item class="nav-item" routerLink="/profile" [queryParams]="{ tab: '0' }" routerLinkActive="active">
+      Профиль
+    </a>
+    <a mat-menu-item class="nav-item" routerLink="/profile" [queryParams]="{ tab: '1' }" routerLinkActive="active">
+      Проекты
+    </a>
+    <a mat-menu-item class="nav-item" routerLink="/profile" [queryParams]="{ tab: '2' }" routerLinkActive="active">
+      Подписки
+    </a>
+
+    <div *ngIf="(isAuth$ | async) && (isAdmin$ | async)">
+      <hr />
+      <a mat-menu-item class="nav-item" routerLink="/admin/settings" routerLinkActive="active">Настройки</a>
+      <a mat-menu-item class="nav-item" routerLink="/admin/employee-list" routerLinkActive="active">Сотрудники</a>
+      <a mat-menu-item class="nav-item" routerLink="/admin/dictionary" routerLinkActive="active">Справочники</a>
+      <a mat-menu-item class="nav-item" routerLink="/admin/holidays" routerLinkActive="active">
+        Производственный календарь
+      </a>
+    </div>
+
+    <div class="item-logout" (click)="logout()" [style.--colorize]="color">
+      Выйти
+    </div>
+  </div>
+</app-dropdown>
+
+<ng-template #noAuth><div class="user-info">Привет, гость!</div></ng-template>

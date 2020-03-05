@@ -5,6 +5,7 @@
     "preBuild": "node scripts/build-pre.js",
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json",
+    "startMobileDebug": "ng serve --host 0.0.0.0 --proxy-config proxy.conf.json",
     "build": "npm run preBuild && ng build",
     "build:prod": "npm run preBuild && ng build --configuration=production",
     "build:preprod": "npm run preBuild && ng build --configuration=preprod",

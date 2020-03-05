@@ -1,0 +1,15 @@
+<div appClickOutside (clickOutside)="hideDropDownPanel()" (click)="toggleDropDownPanel()">
+  <div class="dd-trigger">
+    <ng-content select="[dd-trigger]"></ng-content>
+  </div>
+  <div
+    class="dd-panel"
+    [ngClass]="{
+      isOpen: isOpen,
+      'right-position': ddPanelPosition === 'right',
+      'left-position': ddPanelPosition === 'left'
+    }"
+  >
+    <ng-content select="[dd-panel]"></ng-content>
+  </div>
+</div>

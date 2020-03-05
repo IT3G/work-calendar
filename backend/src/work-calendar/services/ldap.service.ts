@@ -58,16 +58,17 @@ export class LdapService implements OnApplicationShutdown {
       telNumber: this.getAttribute(attributes, 'mobile'),
       physicalDeliveryOfficeName: this.getAttribute(attributes, 'physicalDeliveryOfficeName'),
       mailNickname: this.getAttribute(attributes, 'mailNickname'),
-      isAdmin: false,
+      authType: 'LDAP',
       hasMailing: true,
+      isAdmin: false,
       subdivision: null,
       jobPosition: null,
       projectsNew: null,
       skype: null,
       telegram: null,
-      authType: 'LDAP',
       hashPassword: null,
-      terminationDate: null
+      terminationDate: null,
+      lastProjects: null
     };
   }
 
