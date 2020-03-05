@@ -1,5 +1,5 @@
 import { Document, Model } from 'mongoose';
-import { DictionaryModel } from '../models/dictionary.model';
+import { DictionaryDto } from '../dto/dictionary.dto';
 
 export class DictionaryBaseService {
   constructor(private readonly entity: Model<Document>) {}
@@ -18,12 +18,12 @@ export class DictionaryBaseService {
     return result;
   }
 
-  async add(request: DictionaryModel): Promise<Document> {
+  async add(request: DictionaryDto): Promise<Document> {
     const result = await this.entity.create(request);
     return result.save();
   }
 
-  async update(request: DictionaryModel): Promise<Document> {
+  async update(request: DictionaryDto): Promise<Document> {
     await this.entity.findByIdAndUpdate(request._id, request);
     return await this.entity.findById(request._id);
   }

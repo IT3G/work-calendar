@@ -2,7 +2,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { PresenceModel } from '../../shared/models/presence.page.model';
-import { ProjectNew } from '../../shared/models/project-new';
 import { NewProjectUtils } from '../../shared/utils/new-project.utils';
 import { PresenceFiltersFormModel } from '../models/presence-filters-form.model';
 @Pipe({
@@ -42,18 +41,9 @@ export class PresenceFilterPipe implements PipeTransform {
 
     if (filter.project) {
       res = res.filter(
-        p =>
-          p.employee &&
-          p.employee.projectsNew &&
-          p.employee.projectsNew.some(
-            project => project.project_id === filter.project && this.isProjectAtMonth(project, date)
-          )
+        p => p.employee && NewProjectUtils.isUserHaveSameOrLastProjectInCurrentMonth(p.employee, date, filter.project)
       );
     }
     return res.filter(p => date.isSameOrAfter(moment(p.employee.whenCreated), 'month'));
-  }
-
-  private isProjectAtMonth(p: ProjectNew, date: Moment): boolean {
-    return p.metadata.some(m => NewProjectUtils.mapMetadataToDate(m).isSame(date, 'month'));
   }
 }

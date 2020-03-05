@@ -1,5 +1,6 @@
 import { Controller } from '@nestjs/common';
-import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
+import { CustomMapper } from '../shared/services/custom-mapper.service';
 import { DictionaryBaseController } from './dictionary-base.controller';
 import { ProjectService } from './services/project.service';
 
@@ -7,7 +8,7 @@ import { ProjectService } from './services/project.service';
 @ApiUseTags('Project')
 @Controller('project')
 export class ProjectController extends DictionaryBaseController {
-  constructor(private projectsService: ProjectService) {
-    super(projectsService);
+  constructor(projectService: ProjectService, mapper: CustomMapper) {
+    super(projectService, mapper);
   }
 }

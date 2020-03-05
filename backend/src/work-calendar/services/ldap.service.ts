@@ -2,7 +2,7 @@ import { Injectable, Logger, OnApplicationShutdown } from '@nestjs/common';
 import * as ldap from 'ldapjs';
 import * as moment from 'moment';
 import { Config } from '../../config/config';
-import { UserModel } from '../../profile/models/user.model';
+import { UserDto } from '../../profile/dto/user.dto';
 import { LoginModel } from '../models/login.model';
 @Injectable()
 export class LdapService implements OnApplicationShutdown {
@@ -22,7 +22,7 @@ export class LdapService implements OnApplicationShutdown {
     this.client.destroy();
   }
 
-  public async auth(credentials: LoginModel, add?: boolean): Promise<UserModel> {
+  public async auth(credentials: LoginModel, add?: boolean): Promise<UserDto> {
     this.client = ldap.createClient({
       url: this.config.serverUrl,
       reconnect: true
@@ -41,15 +41,16 @@ export class LdapService implements OnApplicationShutdown {
 
     this.client.destroy();
 
-    const data: UserModel = this.mapToSendOnClient(result.attributes);
+    const data: UserDto = this.mapToSendOnClient(result.attributes);
     return data;
   }
 
-  private mapToSendOnClient(attributes: Array<{ type: string; data: string }>): UserModel {
+  private mapToSendOnClient(attributes: Array<{ type: string; data: string }>): UserDto {
     const whenCreated = this.getAttribute(attributes, 'whenCreated');
     return {
       _id: null,
       username: this.getAttribute(attributes, 'cn'),
+      patronymic: null,
       location: this.getAttribute(attributes, 'l'),
       position: this.getAttribute(attributes, 'title'),
       whenCreated: moment(whenCreated.substr(0, 8)).format(),
@@ -57,12 +58,17 @@ export class LdapService implements OnApplicationShutdown {
       telNumber: this.getAttribute(attributes, 'mobile'),
       physicalDeliveryOfficeName: this.getAttribute(attributes, 'physicalDeliveryOfficeName'),
       mailNickname: this.getAttribute(attributes, 'mailNickname'),
-      isAdmin: false,
+      authType: 'LDAP',
       hasMailing: true,
+      isAdmin: false,
       subdivision: null,
       jobPosition: null,
-      authType: 'LDAP',
-      hashPassword: null
+      projectsNew: null,
+      skype: null,
+      telegram: null,
+      hashPassword: null,
+      terminationDate: null,
+      lastProjects: null
     };
   }
 

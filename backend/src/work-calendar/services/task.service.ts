@@ -3,15 +3,15 @@ import { InjectModel } from '@nestjs/mongoose';
 import * as moment from 'moment';
 import { Model } from 'mongoose';
 import { TaskEntity } from '../../entity/entities/task.entity';
-import { UserEntity } from '../../entity/entities/user.entity.model';
+import { UserEntity } from '../../entity/entities/user.entity';
 import { SendMailRequestModel } from '../../mail/models/send-mail.request.model';
 import { SendMailService } from '../../mail/services/send-mail.service';
 import { FollowService } from '../../profile/services/follow.service';
 import { UsersService } from '../../profile/services/users.service';
 import { WebPushService } from '../../web-push/services/web-push.service';
-import { PresenceModel } from '../models/task-month.model';
+import { TaskDto } from '../dto/task.dto';
+import { PresenceModel } from '../models/presence.model';
 import { TaskType } from '../models/task-type.enum';
-import { TaskModel } from '../models/task.model';
 
 @Injectable()
 export class TaskService {
@@ -41,7 +41,7 @@ export class TaskService {
     return await this.taskModel.find({ employee }).exec();
   }
 
-  async udpdateOne(id: string, task: Partial<TaskModel>): Promise<TaskEntity> {
+  async udpdateOne(id: string, task: Partial<TaskDto>): Promise<TaskEntity> {
     await this.taskModel.findByIdAndUpdate(id, task);
     return await this.taskModel.findById(id);
   }
@@ -131,7 +131,7 @@ export class TaskService {
     });
   }
 
-  async addTask(task: TaskModel): Promise<TaskEntity> {
+  async addTask(task: TaskDto): Promise<TaskEntity> {
     this.sendMail(task);
     this.sendPush(task);
 
@@ -151,7 +151,7 @@ export class TaskService {
     return addressesArray;
   }
 
-  private async sendPush(task: TaskModel): Promise<void> {
+  private async sendPush(task: TaskDto): Promise<void> {
     try {
       const userSubject = await this.userService.getUserByLogin(task.employee);
       const userCreated = await this.userService.getUserByLogin(task.employeeCreated);
@@ -200,7 +200,7 @@ export class TaskService {
     }
   }
 
-  private async sendMail(task: TaskModel): Promise<void> {
+  private async sendMail(task: TaskDto): Promise<void> {
     try {
       const userSubject = await this.userService.getUserByLogin(task.employee);
       const userCreated = await this.userService.getUserByLogin(task.employeeCreated);
