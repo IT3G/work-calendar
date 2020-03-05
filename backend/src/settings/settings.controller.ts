@@ -4,6 +4,8 @@ import { Response } from 'express';
 import { getConfig } from '../config/config';
 import { SettingsService } from './settings.service';
 
+const encodeUrl = require('encodeurl');
+
 @Controller('settings')
 export class SettingsController {
   constructor(private settingsService: SettingsService) {}
@@ -42,7 +44,7 @@ export class SettingsController {
     const logo = await this.settingsService.getLogo(name);
 
     res
-      .set('content-disposition', `attachment; filename="logo"`)
+      .set('content-disposition', `attachment; filename="${encodeUrl(name)}"`)
       .status(HttpStatus.OK)
       .send(logo);
   }
