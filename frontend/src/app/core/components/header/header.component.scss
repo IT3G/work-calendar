@@ -15,17 +15,6 @@
   box-shadow: -1px -1px 3px 0px;
 }
 
-@media screen and (max-width: 860px) {
-  :host {
-    grid-template-columns: 100px 1fr 200px;
-    grid-template-areas: 'nav logo personal';
-  }
-
-  .main-logo {
-    height: 35px;
-  }
-}
-
 .main-logo {
   height: 55px;
   grid-area: logo;
@@ -42,4 +31,19 @@
 
 .personal-menu {
   grid-area: personal;
+}
+
+@media screen and (max-width: 860px) {
+  :host {
+    grid-template-columns: 100px 1fr 200px;
+    grid-template-areas: 'nav logo personal';
+  }
+
+  .main-logo {
+    height: 35px;
+  }
+
+  .nav-menu {
+    justify-self: center;
+  }
 }

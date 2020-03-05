@@ -1,4 +1,4 @@
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
@@ -28,8 +28,6 @@ export class HeaderComponent implements OnInit {
       map(s => s.LOGO_NAME)
     );
 
-    this.breakpointObserver.observe(['(max-width: 860px)']).subscribe((result: BreakpointState) => {
-      this.isMobile = result.matches;
-    });
+    this.breakpointObserver.observe(['(max-width: 860px)']).subscribe(result => (this.isMobile = result.matches));
   }
 }
