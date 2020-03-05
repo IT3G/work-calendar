@@ -5,6 +5,7 @@
 .radio {
   display: none;
 }
+
 .radio + label {
   position: relative;
   padding: 5px 10px;
@@ -20,4 +21,10 @@
 
 .radio:checked + label {
   background-color: var(--color);
+}
+
+@media (min-width: 320px) and (max-width: 767px) {
+  .radio + label {
+    margin: 5px;
+  }
 }

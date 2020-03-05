@@ -18,10 +18,12 @@
     border: 1px solid #dee2e6;
     vertical-align: super;
   }
+
+  th {
+  }
 }
 
 .table-title {
-  padding-right: 5px;
   margin: 30px auto 0;
   color: #212529;
   font-weight: bolder;
@@ -45,4 +47,16 @@
   text-align: center;
   font-weight: bolder;
   color: #212529;
+}
+
+@media (min-width: 768px) and (max-width: 1200px) {
+  .project-table {
+    td {
+      width: 15vw;
+    }
+  }
+
+  .tab-scroll-content {
+    overflow-x: hidden;
+  }
 }

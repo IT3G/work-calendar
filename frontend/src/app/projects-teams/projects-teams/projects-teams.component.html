@@ -4,7 +4,6 @@
   <div class="table-title">
     <table class="project-table">
       <tr>
-        <td></td>
         <td *ngFor="let loc of location">
           {{ loc }}
         </td>
@@ -12,15 +11,15 @@
     </table>
   </div>
   <div class="tab-scroll-content">
-    <table class="project-table">
-      <tr *ngFor="let project of projectsData | projectTeamsFilter: filtersForm.value">
-        <td>
-          <div class="project-name">
-            <a [href]="getLink(project.projectID)">
-              {{ project.projectName }}
-            </a>
-          </div>
-        </td>
+    <table *ngFor="let project of projectsData | projectTeamsFilter: filtersForm.value" class="project-table">
+      <tr>
+        <th class="project-name" colspan="6">
+          <a [href]="getLink(project.projectID)">
+            {{ project.projectName }}
+          </a>
+        </th>
+      </tr>
+      <tr>
         <td class="project-cell" *ngFor="let loc of location">
           <div class="users-wrapper">
             <div *ngFor="let user of project.users | userForLocation: loc">
