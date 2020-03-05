@@ -21,6 +21,8 @@ import { TaskDeleteGuard } from '../guards/task-delete.guard';
 import { TaskService } from '../services/task.service';
 import { VacationResolutionService } from '../services/vacation-resolution.service';
 
+const encodeUrl = require('encodeurl');
+
 @ApiBearerAuth()
 @ApiUseTags('Tasks')
 @Controller('tasks')
@@ -93,6 +95,6 @@ export class TasksController {
   async getResolution(@Res() res: Response, @Param('taskId') taskId: string) {
     const result = await this.vacationResolution.getFileByTaskId(taskId);
 
-    res.set('content-disposition', `attachment; filename="${result.name}"`).send(result.file);
+    res.set('content-disposition', `attachment; filename="${encodeUrl(result.name)}"`).send(result.file);
   }
 }

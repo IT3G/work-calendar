@@ -1,0 +1,25 @@
+<div class="container">
+  <div class="page-title">Настройки</div>
+
+  <div class="logo-preview" *ngIf="logoName$ | async; else uploadLogo">
+    <img class="logo" [src]="baseUrl + '/settings/logo/' + (logoName$ | async)" />
+
+    <button mat-raised-button color="primary" (click)="deleteLogo()">
+      Удалить
+    </button>
+  </div>
+
+  <ng-template #uploadLogo>
+    <div class="file-container">
+      <input-file
+        [disabled]="isLogoDisabled$ | async"
+        fileAccept="image/*"
+        placeholder=""
+        [fileLimit]="1"
+        [(ngModel)]="files"
+        (acceptedFile)="addLogo($event)"
+      ></input-file>
+      <div class="file-placeholder">Добавьте или перетащите логотип</div>
+    </div>
+  </ng-template>
+</div>

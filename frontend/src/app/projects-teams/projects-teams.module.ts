@@ -18,6 +18,7 @@ import { ProjectTeamsFilterPipe } from './pipes/project-teams-filter.pipe';
     ProjectTeamsFilterComponent,
     ProjectTeamsFilterPipe
   ],
+  exports: [ColorSubdivisionPipe],
   imports: [CommonModule, SharedModule]
 })
 export class ProjectsTeamsModule {}
