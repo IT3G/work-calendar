@@ -5,15 +5,15 @@ import * as moment from 'moment';
 import { BehaviorSubject, forkJoin, Observable, Subscription } from 'rxjs';
 import { distinctUntilChanged, map, share, switchMap } from 'rxjs/operators';
 import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
-import { locationsDictionary } from '../../../shared/const/locations-dictionary.const';
-import { DictionaryModel } from '../../../shared/models/dictionary.model';
-import { PresenceModel } from '../../../shared/models/presence.page.model';
 import { HolidaysApiService } from '../../../core/services/holidays-api.service';
-import { HolidaysModel } from '../../../shared/models/holidays.model';
 import { TaskApiService } from '../../../core/services/task-api.service';
-import { Employee } from '../../../shared/models/employee.model';
 import { ContextStoreService } from '../../../core/store/context-store.service';
 import { SelectInputDataModel } from '../../../shared/components/single-select/single-select.component';
+import { locationsDictionary } from '../../../shared/const/locations-dictionary.const';
+import { DictionaryModel } from '../../../shared/models/dictionary.model';
+import { Employee } from '../../../shared/models/employee.model';
+import { HolidaysModel } from '../../../shared/models/holidays.model';
+import { PresenceModel } from '../../../shared/models/presence.page.model';
 
 @Component({
   selector: 'app-team-presence',
@@ -181,7 +181,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
   // получаем основной на текущий момент проект
   // у залогиненого пользователя, с максимальным %
   private getMainProject(user: Employee): string {
-    if (!user.projectsNew && !user.projectsNew.length) {
+    if (!user?.projectsNew?.length) {
       return null;
     }
 

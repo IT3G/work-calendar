@@ -52,7 +52,7 @@ export class LoginPageComponent implements OnInit {
   }
 
   private successedLogin(res: Employee): void {
-    localStorage.setItem('Authorization', res.hashPassword);
+    localStorage.setItem('Authorization', res.accessKey);
     this.contextStoreService.setCurrentUser(res);
   }
 
