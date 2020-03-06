@@ -23,9 +23,10 @@
 }
 
 .logo-container {
-  .page-title {
-    text-align: center;
-  }
+  width: 190px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .logo-preview {
@@ -44,4 +45,11 @@
 
 .form-group {
   width: 100%;
+}
+
+@media (max-width: 800px) {
+  .container {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
 }
