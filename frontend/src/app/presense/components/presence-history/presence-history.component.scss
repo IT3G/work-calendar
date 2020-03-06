@@ -68,3 +68,30 @@
   color: green;
   cursor: default;
 }
+
+@media (min-width: 768px) and (max-width: 1200px) {
+  :host {
+    grid-template-columns: 150px 150px 115px 1fr 100px;
+  }
+}
+
+@media (min-width: 320px) and (max-width: 767px) {
+  :host {
+    grid-template-columns: auto auto auto 75px;
+  }
+
+  .type {
+    padding: 10px 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    & .type-badge {
+      padding: 3px 5px;
+    }
+  }
+
+  .element-hidden {
+    display: none;
+  }
+}
