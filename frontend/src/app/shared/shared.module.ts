@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { SpringSpinnerModule } from 'angular-epic-spinners';
 import { AvatarModule } from 'ngx-avatar';
 import { MaterialModule } from '../material.module';
 import { AgendaComponent } from './components/agenda/agenda.component';
@@ -16,7 +17,16 @@ import { SingleSelectComponent } from './components/single-select/single-select.
 import { ClickOutsideDirective } from './directives/click-outside.directive';
 import { pipes } from './pipes';
 
-const modules = [CommonModule, MaterialModule, FormsModule, ReactiveFormsModule, AvatarModule, NgbModule, RouterModule];
+const modules = [
+  CommonModule,
+  MaterialModule,
+  FormsModule,
+  ReactiveFormsModule,
+  AvatarModule,
+  NgbModule,
+  RouterModule,
+  SpringSpinnerModule
+];
 
 const components = [
   AgendaComponent,

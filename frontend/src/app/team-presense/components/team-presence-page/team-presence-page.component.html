@@ -18,6 +18,11 @@
   [date]="date$ | async"
   [monthData]="monthData$ | async | presenceFilter: filtersForm?.value:(date$ | async)"
   [monthDays]="monthDays$ | async"
+  [loadInProgress]="loadInProgress"
 ></app-team-presence-table>
+
+<div class="loader-container" *ngIf="loadInProgress">
+  <app-spring-spinner [animationDuration]="1000" [size]="80" color="#79b03b"></app-spring-spinner>
+</div>
 
 <app-agenda [isLineView]="true"></app-agenda>

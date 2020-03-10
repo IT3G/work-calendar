@@ -10,6 +10,11 @@
   min-height: 200px;
   overflow-y: scroll;
   @extend .scrollbar;
+  position: relative;
+
+  &.blur {
+    filter: blur(2px);
+  }
 }
 
 .day {
