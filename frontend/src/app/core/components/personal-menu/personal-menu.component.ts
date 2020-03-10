@@ -1,10 +1,10 @@
 import { Component, HostBinding, Input, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { AuthSetting } from '../../../shared/models/auth-setting.model';
-import { Employee } from '../../../shared/models/employee.model';
-import { ContextStoreService } from '../../store/context-store.service';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { Employee } from '../../../shared/models/employee.model';
+import { SettingsModel } from '../../../shared/models/settings.model';
+import { ContextStoreService } from '../../store/context-store.service';
 
 @Component({
   selector: 'app-personal-menu',
@@ -23,7 +23,7 @@ export class PersonalMenuComponent implements OnInit {
   public isAuth$: Observable<boolean>;
   public isAdmin$: Observable<boolean>;
 
-  public settings$: Observable<AuthSetting>;
+  public settings$: Observable<SettingsModel>;
   public selectedUser$: Observable<Employee>;
 
   constructor(private contextStoreService: ContextStoreService, private router: Router) {}

@@ -6,8 +6,8 @@ import { filter } from 'rxjs/operators';
 import { AuthApiService } from '../../core/services/auth-api.service';
 import { EmployeeApiService } from '../../core/services/employee-api.service';
 import { ContextStoreService } from '../../core/store/context-store.service';
-import { AuthSetting } from '../../shared/models/auth-setting.model';
 import { Employee } from '../../shared/models/employee.model';
+import { SettingsModel } from '../../shared/models/settings.model';
 
 @Component({
   selector: 'app-login-page',
@@ -17,7 +17,7 @@ import { Employee } from '../../shared/models/employee.model';
 export class LoginPageComponent implements OnInit {
   public errorMessage: string;
   public loginForm: FormGroup;
-  public settings$: Observable<AuthSetting>;
+  public settings$: Observable<SettingsModel>;
 
   constructor(
     private authService: AuthApiService,
@@ -51,7 +51,7 @@ export class LoginPageComponent implements OnInit {
   }
 
   private successedLogin(res: Employee): void {
-    localStorage.setItem('Authorization', res.hashPassword);
+    localStorage.setItem('Authorization', res.accessKey);
     this.contextStoreService.setCurrentUser(res);
     this.router.navigate(['/presence']);
   }

@@ -1,12 +1,23 @@
 <div class="container">
-  <div class="page-title">Настройки</div>
+  <div class="settings" [formGroup]="settingsForm">
+    <div class="page-title">Настройки</div>
 
-  <div class="logo-preview" *ngIf="logoName$ | async; else uploadLogo">
-    <img class="logo" [src]="baseUrl + '/settings/logo/' + (logoName$ | async)" />
+    <mat-form-field class="form-group">
+      <input placeholder="Заголовок страницы" matInput autocomplete="off" formControlName="title" />
+    </mat-form-field>
 
-    <button mat-raised-button color="primary" (click)="deleteLogo()">
-      Удалить
-    </button>
+    <button mat-raised-button color="primary" (click)="updateSettings()">сохранить</button>
+  </div>
+
+  <div class="logo-container">
+    <div class="page-title">Логотип</div>
+    <div class="logo-preview" *ngIf="logoName$ | async; else uploadLogo">
+      <img class="logo" [src]="baseUrl + '/settings/logo/' + (logoName$ | async)" />
+
+      <button mat-raised-button color="primary" (click)="deleteLogo()">
+        Удалить
+      </button>
+    </div>
   </div>
 
   <ng-template #uploadLogo>
@@ -19,7 +30,7 @@
         [(ngModel)]="files"
         (acceptedFile)="addLogo($event)"
       ></input-file>
-      <div class="file-placeholder">Добавьте или перетащите логотип</div>
+      <div class="file-placeholder">Добавьте или перетащите</div>
     </div>
   </ng-template>
 </div>

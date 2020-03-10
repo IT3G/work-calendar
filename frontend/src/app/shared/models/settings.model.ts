@@ -1,4 +1,4 @@
-export interface AuthSetting {
+export interface SettingsModel {
   MAIL_POSTFIX: string;
   FEATURE_AVATAR_SOURCE: 'NO' | 'CONFLUENCE';
   FEATURE_AUTH_TYPE: 'PASSWORD' | 'LDAP';
@@ -9,4 +9,5 @@ export interface AuthSetting {
   PRINT_HEAD_MANAGER_NAME: string;
   PUSH_PUBLIC_KEY: string;
   LOGO_NAME: string;
+  TITLE: string;
 }

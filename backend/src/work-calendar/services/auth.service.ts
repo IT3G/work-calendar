@@ -108,6 +108,7 @@ export class AuthService {
       subdivision: null,
       jobPosition: null,
       projectsNew: null,
+      accessKey: null,
       skype: null,
       telegram: null,
       authType: 'hash',

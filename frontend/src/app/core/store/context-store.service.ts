@@ -3,12 +3,12 @@ import { Moment } from 'moment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { DayType } from '../../shared/const/day-type.const';
-import { AuthSetting } from '../../shared/models/auth-setting.model';
 import { Employee } from '../../shared/models/employee.model';
+import { SettingsModel } from '../../shared/models/settings.model';
 
 @Injectable({ providedIn: 'root' })
 export class ContextStoreService {
-  public settings$ = new BehaviorSubject<AuthSetting>(null);
+  public settings$ = new BehaviorSubject<SettingsModel>(null);
 
   private currentUser = new BehaviorSubject<Employee>(null);
   private currentDate = new BehaviorSubject<Moment>(null);

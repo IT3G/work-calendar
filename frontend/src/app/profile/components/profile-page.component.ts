@@ -6,10 +6,10 @@ import { environment } from '../../../environments/environment';
 import { EmployeeApiService } from '../../core/services/employee-api.service';
 import { FollowApiService } from '../../core/services/follow-api.service';
 import { ContextStoreService } from '../../core/store/context-store.service';
-import { AuthSetting } from '../../shared/models/auth-setting.model';
 import { DictionaryModel } from '../../shared/models/dictionary.model';
 import { Employee } from '../../shared/models/employee.model';
 import { FollowModel, UserFollow } from '../../shared/models/follow.model';
+import { SettingsModel } from '../../shared/models/settings.model';
 
 @Component({
   selector: 'app-team',
@@ -26,7 +26,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   public selectedTabIndex = this.route.snapshot.queryParams.tab || 0;
 
   public users$: Observable<Employee[]>;
-  public settings$: Observable<AuthSetting>;
+  public settings$: Observable<SettingsModel>;
 
   public userFollow: UserFollow;
 

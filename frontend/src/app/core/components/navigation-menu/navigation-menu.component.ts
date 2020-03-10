@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { ContextStoreService } from '../../store/context-store.service';
-import { AuthSetting } from '../../../shared/models/auth-setting.model';
 import { Employee } from '../../../shared/models/employee.model';
+import { SettingsModel } from '../../../shared/models/settings.model';
+import { ContextStoreService } from '../../store/context-store.service';
 
 @Component({
   selector: 'app-navigation-menu',
@@ -14,7 +14,7 @@ export class NavigationMenuComponent implements OnInit {
   public isAuth$: Observable<boolean>;
   public isAdmin$: Observable<boolean>;
 
-  public settings$: Observable<AuthSetting>;
+  public settings$: Observable<SettingsModel>;
   public selectedUser$: Observable<Employee>;
 
   @Input()

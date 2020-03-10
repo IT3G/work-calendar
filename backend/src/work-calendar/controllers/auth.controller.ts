@@ -21,9 +21,12 @@ export class AuthController {
   @Post()
   async auth(@Body() credentials: LoginModel): Promise<UserDto> {
     try {
-      const user = await this.authService.auth(credentials);
-      user.hashPassword = `Bearer ${this.authService.getJWTbyUser(user)}`;
-      return this.mapper.map(UserDto, user);
+      const userEntity = await this.authService.auth(credentials);
+
+      const dto = this.mapper.map(UserDto, userEntity);
+
+      dto.accessKey = `Bearer ${this.authService.getJWTbyUser(userEntity)}`;
+      return dto;
     } catch (e) {
       throw new NotAcceptableException(e.message ? e.message : e);
     }

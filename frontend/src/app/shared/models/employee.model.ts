@@ -19,7 +19,7 @@ export class Employee {
   hasMailing: boolean;
   subdivision: DictionaryModel;
   jobPosition: DictionaryModel;
-  hashPassword: string;
+  accessKey: string;
   projectsNew: ProjectNewModel[];
   terminationDate: string;
   lastProjects: LastProjectModel[];
