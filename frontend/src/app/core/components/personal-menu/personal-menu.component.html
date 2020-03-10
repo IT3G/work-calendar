@@ -1,4 +1,4 @@
-<app-dropdown *ngIf="isAuth$ | async; else noAuth" [ddPanelPosition]="'right'">
+<app-dropdown *ngIf="isAuth$ | async" ddPanelPosition="right">
   <div dd-trigger class="avatar-button">
     <div class="avatar">
       <ngx-avatar
@@ -41,5 +41,3 @@
     </div>
   </div>
 </app-dropdown>
-
-<ng-template #noAuth><div class="user-info">Привет, гость!</div></ng-template>

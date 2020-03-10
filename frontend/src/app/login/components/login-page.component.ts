@@ -39,8 +39,7 @@ export class LoginPageComponent implements OnInit {
       err => {
         this.errorMessage = err;
         console.log(err);
-      },
-      () => this.finishedLogin()
+      }
     );
   }
 
@@ -54,17 +53,6 @@ export class LoginPageComponent implements OnInit {
   private successedLogin(res: Employee): void {
     localStorage.setItem('Authorization', res.accessKey);
     this.contextStoreService.setCurrentUser(res);
-  }
-
-  private finishedLogin(): void {
-    this.contextStoreService.updater().subscribe(() => {
-      this.employeeApiService
-        .searchUserById(this.contextStoreService.getCurrentUser()._id)
-        .subscribe((key: Employee) => {
-          this.contextStoreService.setCurrentUser(key);
-        });
-    });
-
     this.router.navigate(['/presence']);
   }
 }

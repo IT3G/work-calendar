@@ -1,0 +1,44 @@
+@import 'src/app/shared/styles/scroll';
+
+:host {
+  display: block;
+  width: 100%;
+  padding: 0 20px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.control {
+  width: 100%;
+}
+
+.dropdown {
+  position: absolute;
+  width: calc(100% - 40px);
+  background: white;
+  top: 46px;
+  max-height: 400px;
+  box-shadow: 5px 5px 10px 2px lightgray;
+  border: 1px solid var(--colorActiveField);
+  @extend .scrollbar;
+}
+
+.employee-item {
+  display: block;
+  padding: 8px 0;
+  box-sizing: border-box;
+  border-bottom: 1px solid var(--colorActiveField);
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  cursor: pointer;
+  color: #333;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: rgba(48, 155, 230, 0.1);
+    text-decoration: none;
+  }
+}
