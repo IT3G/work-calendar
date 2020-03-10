@@ -32,19 +32,19 @@
   z-index: 10;
 
   &.row_28 {
-    grid-template-columns: 30px 240px repeat(28, minmax(25px, 1fr));
+    grid-template-columns: 240px repeat(28, minmax(25px, 1fr));
   }
 
   &.row_29 {
-    grid-template-columns: 30px 240px repeat(29, minmax(25px, 1fr));
+    grid-template-columns: 240px repeat(29, minmax(25px, 1fr));
   }
 
   &.row_30 {
-    grid-template-columns: 30px 240px repeat(30, minmax(25px, 1fr));
+    grid-template-columns: 240px repeat(30, minmax(25px, 1fr));
   }
 
   &.row_31 {
-    grid-template-columns: 30px 240px repeat(31, minmax(25px, 1fr));
+    grid-template-columns: 240px repeat(31, minmax(25px, 1fr));
   }
 }
 
@@ -52,19 +52,19 @@
   display: grid;
 
   &.row_28 {
-    grid-template-columns: 30px 240px repeat(28, minmax(25px, 1fr));
+    grid-template-columns: 240px repeat(28, minmax(25px, 1fr));
   }
 
   &.row_29 {
-    grid-template-columns: 30px 240px repeat(29, minmax(25px, 1fr));
+    grid-template-columns: 240px repeat(29, minmax(25px, 1fr));
   }
 
   &.row_30 {
-    grid-template-columns: 30px 240px repeat(30, minmax(25px, 1fr));
+    grid-template-columns: 240px repeat(30, minmax(25px, 1fr));
   }
 
   &.row_31 {
-    grid-template-columns: 30px 240px repeat(31, minmax(25px, 1fr));
+    grid-template-columns: 240px repeat(31, minmax(25px, 1fr));
   }
 }
 
@@ -143,13 +143,4 @@ mat-form-field {
     border-radius: 50%;
     margin: 0 auto;
   }
-}
-
-.number {
-  text-align: right;
-  color: #9c9a9a;
-  font-size: 14px;
-  margin-top: 1px;
-  padding-right: 5px;
-  background: var(--teamCommonDay);
 }
