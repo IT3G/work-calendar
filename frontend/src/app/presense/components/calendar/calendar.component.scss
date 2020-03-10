@@ -28,11 +28,11 @@
     }
 
     &.day_HOLIDAY {
-      background-color: $holiday;
+      background-color: var(--dayTypeHoliday);
     }
 
     &.day_PRE_HOLIDAY {
-      background-color: $pre-holiday;
+      background-color: var(--dayTypePreHoliday);
     }
 
     &.type_CUSTOM {

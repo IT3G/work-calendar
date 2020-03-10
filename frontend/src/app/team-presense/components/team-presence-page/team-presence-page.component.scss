@@ -1,5 +1,13 @@
-.agenda__wrapper {
-  margin-top: 70px;
-  display: flex;
-  justify-content: center;
+:host {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  height: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px 10px;
+  box-sizing: border-box;
+}
+
+.select-month {
+  justify-self: center;
 }
