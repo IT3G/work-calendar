@@ -136,6 +136,8 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
         })
       )
     );
+
+    this.subscription.add(this.route.queryParams.subscribe(res => this.filtersForm.patchValue(res)));
   }
 
   private getMonthDays(): Observable<moment.Moment[]> {
@@ -165,7 +167,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
 
   // выставляем текущий проект как основной у пользователя.
   private setUserCurrentProjectToFilter(): void {
-    if (this.route?.snapshot?.queryParams?.project) {
+    if (this.route?.snapshot?.queryParams?.project || this.route?.snapshot?.queryParams?.fromFilter) {
       return;
     }
 
