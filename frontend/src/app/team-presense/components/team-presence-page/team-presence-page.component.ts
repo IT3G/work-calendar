@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import * as moment from 'moment';
 import { BehaviorSubject, forkJoin, Observable, Subscription } from 'rxjs';
-import { distinctUntilChanged, first, map, share, switchMap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, first, map, share, switchMap } from 'rxjs/operators';
 import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
 import { HolidaysApiService } from '../../../core/services/holidays-api.service';
 import { TaskApiService } from '../../../core/services/task-api.service';
@@ -173,12 +173,11 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
 
     this.contextStoreService
       .getCurrentUser$()
-      .pipe(first())
+      .pipe(
+        first(),
+        filter(u => !!u?.lastProjects?.length)
+      )
       .subscribe(user => {
-        if (!user?.lastProjects?.length) {
-          return;
-        }
-
         const maxLastProject = user.lastProjects.sort((a, b) => b.percent - a.percent)[0];
 
         this.filtersForm.patchValue({ project: maxLastProject?.project_id });
