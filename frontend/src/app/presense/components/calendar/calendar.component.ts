@@ -1,11 +1,10 @@
-import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ContextStoreService } from '../../../core/store/context-store.service';
+import { HolidaysModel } from '../../../shared/models/holidays.model';
 import { TaskModel } from '../../../shared/models/tasks.model';
 import { DateConvertService } from '../../../shared/services/date-convert.service';
 import { DayTypeGetterService } from '../../../shared/services/day-type-getter.service';
-import { HolidaysModel } from '../../../shared/models/holidays.model';
-import * as moment from 'moment';
 
 @Component({
   selector: 'app-calendar',
@@ -25,7 +24,7 @@ export class CalendarComponent implements OnChanges {
   ) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.tasks && changes.tasks.currentValue) {
+    if (changes?.tasks?.currentValue || changes?.holidays?.currentValue) {
       this.onDateSelect(this.dateConvertService.convertMomentToNgbDate(this.contextStoreService.getCurrentDate()));
     }
   }
@@ -37,10 +36,6 @@ export class CalendarComponent implements OnChanges {
     this.contextStoreService.setDayType(this.dayTypeGetterService.getDayType(dt, this.tasks));
 
     const existedTask = this.tasks.find(i => dt.isSame(i.dateStart, 'day'));
-    if (existedTask) {
-      this.contextStoreService.setComment(existedTask.comment);
-    } else {
-      this.contextStoreService.setComment(null);
-    }
+    this.contextStoreService.setComment(existedTask?.comment);
   }
 }
