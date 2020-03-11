@@ -1,15 +1,7 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChange,
-  SimpleChanges
-} from '@angular/core';
-import { PresenceModel } from '../../../../shared/models/presence.page.model';
+import { ChangeDetectionStrategy, Component, HostBinding, Input, OnChanges, SimpleChanges } from '@angular/core';
 import * as moment from 'moment';
 import { HolidaysModel } from '../../../../shared/models/holidays.model';
+import { PresenceModel } from '../../../../shared/models/presence.page.model';
 
 @Component({
   selector: 'app-team-presence-table',
@@ -29,6 +21,10 @@ export class TeamPresenceTableComponent implements OnChanges {
 
   @Input()
   holidays: HolidaysModel[];
+
+  @Input()
+  @HostBinding('class.blur')
+  loadInProgress: boolean;
 
   yearAndMonth: string;
   daysInMonth: number;

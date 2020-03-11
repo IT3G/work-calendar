@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import * as moment from 'moment';
 import { BehaviorSubject, forkJoin, Observable, Subscription } from 'rxjs';
-import { distinctUntilChanged, filter, first, map, share, switchMap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, first, map, share, switchMap, tap } from 'rxjs/operators';
 import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
 import { HolidaysApiService } from '../../../core/services/holidays-api.service';
 import { TaskApiService } from '../../../core/services/task-api.service';
@@ -34,6 +34,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
   public jobPositions: SelectInputDataModel[];
   public subdivisions: SelectInputDataModel[];
   public locations: SelectInputDataModel[];
+  public loadInProgress;
 
   private subscription = new Subscription();
 
@@ -57,9 +58,11 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     this.monthData$ = this.date$.pipe(
       map(date => date.format('YYYY-MM-DD')),
       distinctUntilChanged(),
+      tap(() => (this.loadInProgress = true)),
       switchMap(date => this.tasksApi.loadTasksByMonth(date)),
       /** Отсеять сотрудников, которые должны уволиться после окончания текущего месяца. */
       map(this.filterTerminatedEmployees),
+      tap(() => (this.loadInProgress = false)),
       share()
     );
 
