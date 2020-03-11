@@ -1,4 +1,12 @@
-import { Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import { Chart, ChartDataSets } from 'chart.js';
 import * as moment from 'moment';
 import { ProjectNewModel } from '../../../../shared/models/project-new.model';
@@ -7,7 +15,8 @@ import { NewProjectUtils } from '../../../../shared/utils/new-project.utils';
 @Component({
   selector: 'app-profile-projects-chart',
   templateUrl: './profile-projects-chart.component.html',
-  styleUrls: ['./profile-projects-chart.component.scss']
+  styleUrls: ['./profile-projects-chart.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileProjectsChartComponent implements OnChanges {
   @ViewChild('chart', { static: false })
@@ -15,6 +24,9 @@ export class ProfileProjectsChartComponent implements OnChanges {
 
   @Input()
   projects: ProjectNewModel[] = [];
+
+  @Input()
+  projectsMaxPeriod: moment.Moment[];
 
   private readonly colors = [
     'rgba(119, 227, 200,',
@@ -32,10 +44,9 @@ export class ProfileProjectsChartComponent implements OnChanges {
   constructor(private elRef: ElementRef) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes.projects && changes.projects.currentValue) {
-      const datesPeriod = this.getProjectsMaxPeriod(this.projects);
-
-      const datasets: ChartDataSets[] = this.generateDatasetsFromProjects(this.projects, datesPeriod);
+    if (changes?.projects?.currentValue || changes?.projectsMaxPeriod?.currentValue) {
+      console.log(this.projectsMaxPeriod);
+      const datasets: ChartDataSets[] = this.generateDatasetsFromProjects(this.projects, this.projectsMaxPeriod);
 
       this.generateBarChart(datasets);
     }
@@ -56,24 +67,6 @@ export class ProfileProjectsChartComponent implements OnChanges {
         };
       })
     }));
-  }
-
-  private getProjectsMaxPeriod(projects: ProjectNewModel[] = []): moment.Moment[] {
-    const appProjectsMetadata = projects
-      .reduce((acc, i) => [...acc, ...i.metadata], [])
-      .map(m => NewProjectUtils.mapMetadataToDate(m))
-      .sort((a, b) => (a.isBefore(b) ? -1 : 1));
-
-    if (!appProjectsMetadata || !appProjectsMetadata.length) {
-      return [];
-    }
-
-    const firstMetadata = appProjectsMetadata[0];
-    const lastMetadata = appProjectsMetadata[appProjectsMetadata.length - 1];
-    const additionalMonths = 1;
-    const monthsPeriod = lastMetadata.diff(firstMetadata, 'months') + additionalMonths;
-
-    return Array.from(Array(monthsPeriod).keys()).map(i => firstMetadata.clone().add(i, 'month'));
   }
 
   private generateBarChart(datasets: ChartDataSets[]) {
