@@ -69,5 +69,5 @@ button.calendar:active {
 
 // Размытие. Можно использовать на прелоудах
 .blur {
-  filter: blur(2px);
+  filter: blur(2px) grayscale(0.7);
 }
