@@ -34,7 +34,7 @@
   font-weight: 500;
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 9;
 
   &.row_28 {
     grid-template-columns: getGridColumnsByDaysInMonth(28);
