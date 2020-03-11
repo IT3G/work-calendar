@@ -66,3 +66,8 @@ button.calendar:active {
     cursor: pointer;
   }
 }
+
+// Размытие. Можно использовать на прелоудах
+.blur {
+  filter: blur(2px);
+}

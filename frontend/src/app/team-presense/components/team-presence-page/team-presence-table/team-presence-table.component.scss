@@ -1,6 +1,10 @@
 @import 'src/app/shared/styles/color';
 @import 'src/app/shared/styles/scroll';
 
+@function getGridColumnsByDaysInMonth($days) {
+  @return 240px repeat($days, minmax(25px, 1fr));
+}
+
 :host {
   --teamCommonDay: #fafafa;
   --teamBorderColor: #e3e3e3;
@@ -11,10 +15,6 @@
   overflow-y: scroll;
   @extend .scrollbar;
   position: relative;
-
-  &.blur {
-    filter: blur(2px);
-  }
 }
 
 .day {
@@ -37,19 +37,19 @@
   z-index: 10;
 
   &.row_28 {
-    grid-template-columns: 240px repeat(28, minmax(25px, 1fr));
+    grid-template-columns: getGridColumnsByDaysInMonth(28);
   }
 
   &.row_29 {
-    grid-template-columns: 240px repeat(29, minmax(25px, 1fr));
+    grid-template-columns: getGridColumnsByDaysInMonth(29);
   }
 
   &.row_30 {
-    grid-template-columns: 240px repeat(30, minmax(25px, 1fr));
+    grid-template-columns: getGridColumnsByDaysInMonth(30);
   }
 
   &.row_31 {
-    grid-template-columns: 240px repeat(31, minmax(25px, 1fr));
+    grid-template-columns: getGridColumnsByDaysInMonth(31);
   }
 }
 
@@ -57,19 +57,19 @@
   display: grid;
 
   &.row_28 {
-    grid-template-columns: 240px repeat(28, minmax(25px, 1fr));
+    grid-template-columns: getGridColumnsByDaysInMonth(28);
   }
 
   &.row_29 {
-    grid-template-columns: 240px repeat(29, minmax(25px, 1fr));
+    grid-template-columns: getGridColumnsByDaysInMonth(29);
   }
 
   &.row_30 {
-    grid-template-columns: 240px repeat(30, minmax(25px, 1fr));
+    grid-template-columns: getGridColumnsByDaysInMonth(30);
   }
 
   &.row_31 {
-    grid-template-columns: 240px repeat(31, minmax(25px, 1fr));
+    grid-template-columns: getGridColumnsByDaysInMonth(31);
   }
 }
 
