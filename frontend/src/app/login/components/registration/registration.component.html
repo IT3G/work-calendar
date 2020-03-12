@@ -1,0 +1,27 @@
+<div class="login-form" [formGroup]="registrationForm" (keydown.enter)="registry()">
+  <mat-form-field>
+    <input matInput placeholder="Имя" autocomplete="off" formControlName="firstName" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="Фамилия" autocomplete="off" formControlName="lastName" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput placeholder="E-Mail" autocomplete="off" formControlName="username" />
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <input matInput placeholder="Пароль" type="password" autocomplete="off" formControlName="password" />
+  </mat-form-field>
+
+  <div class="form-footer">
+    <button mat-raised-button color="primary" (click)="registry()" [disabled]="registrationForm.invalid">
+      Зарегистрироваться
+    </button>
+
+    <button mat-raised-button color="primary" routerLink="/login">
+      Авторизация
+    </button>
+  </div>
+</div>
