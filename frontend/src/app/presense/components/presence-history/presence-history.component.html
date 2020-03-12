@@ -1,7 +1,7 @@
 <div class="header element start">С</div>
 <div class="header element end">По</div>
 <div class="header element type">Тип</div>
-<div class="header element comment">Комментарий</div>
+<div class="header element comment element-hidden">Комментарий</div>
 <div class="header element"></div>
 
 <ng-template ngFor let-task [ngForOf]="tasks | sortTasksByDateStart">
@@ -12,7 +12,7 @@
       {{ task.type | taskType }}
     </div>
   </div>
-  <div class="element comment">{{ task.comment }}</div>
+  <div class="element comment element-hidden">{{ task.comment }}</div>
 
   <div class="element buttons">
     <ng-container *ngIf="task.type === dayTypes.VACATION">

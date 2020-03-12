@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AuthApiService } from '../../core/services/auth-api.service';
-import { SnackbarService } from '../../shared/services/snackbar.service';
+import { switchMap } from 'rxjs/operators';
+import { AuthApiService } from '../../../core/services/auth-api.service';
+import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-registration',
@@ -10,26 +11,26 @@ import { SnackbarService } from '../../shared/services/snackbar.service';
 })
 export class RegistrationComponent implements OnInit {
   public registrationForm: FormGroup;
-  public successRegistration = false;
-  constructor(private authService: AuthApiService, private snackbar: SnackbarService) {}
+
+  constructor(private authService: AuthApiService, private loginService: LoginService) {}
 
   ngOnInit() {
     this.initForm();
   }
   public registry() {
     const formData = this.registrationForm.value;
-    const obj = {
+    const credentials = {
       username: formData.username,
       password: formData.password,
       name: `${formData.lastName} ${formData.firstName}`
     };
-    this.authService.registration(obj).subscribe(
-      res => {
-        this.successRegistration = true;
-        this.snackbar.showSuccessSnackBar('Пользователь успешно добавлен');
-      },
-      err => this.snackbar.showErrorSnackBar('Произошла ошибка')
-    );
+    this.authService
+      .registration(credentials)
+      .pipe(switchMap(() => this.authService.login({ username: credentials.username, password: credentials.password })))
+      .subscribe(
+        res => this.loginService.onSuccessedLogin(res),
+        () => this.loginService.onError('Ошибка при регистрации')
+      );
   }
 
   private initForm(): void {

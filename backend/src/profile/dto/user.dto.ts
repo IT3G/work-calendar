@@ -83,9 +83,12 @@ export class UserDto {
   @ApiModelProperty()
   authType: string;
 
-  @Expose()
   @ApiModelProperty()
   hashPassword: string;
+
+  @Expose()
+  @ApiModelProperty()
+  accessKey: string;
 
   @Expose()
   @ApiModelProperty()

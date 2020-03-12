@@ -52,33 +52,41 @@ export class TaskService {
 
   async getTasksByMonth(date: string): Promise<PresenceModel[]> {
     const startOfMonth = moment(date)
-      .clone()
       .startOf('month')
       .format('YYYY-MM-DD');
     const endOfMonth = moment(date)
-      .clone()
       .endOf('month')
       .format('YYYY-MM-DD');
 
     const users = await this.userService.getUsers();
     const tasks = await this.getTasksInPeriod(startOfMonth, endOfMonth);
 
-    const day = moment(date)
-      .clone()
-      .startOf('month');
+    const day = moment(date).startOf('month');
 
     const monthDays = Array.from(Array(day.daysInMonth()).keys()).map(i => day.clone().add(i, 'day'));
 
-    const result = users.map(employee => {
-      const currentUserTasks = tasks.filter(i => i.employee === employee.mailNickname);
+    const result = users
+      /** Отсеять сотрудников, уволившихся до начала выбранного месяца */
+      .filter(user => this.filterTerminatedEmployeesByStartOfMonth(user, date))
+      .map(employee => {
+        const currentUserTasks = tasks.filter(i => i.employee === employee.mailNickname);
 
-      return {
-        employee,
-        tasks: monthDays.map(d => this.getLastTaskInCurrentDay(currentUserTasks, d))
-      };
-    });
+        return {
+          employee,
+          tasks: monthDays.map(d => this.getLastTaskInCurrentDay(currentUserTasks, d))
+        };
+      });
 
     return result;
+  }
+
+  private filterTerminatedEmployeesByStartOfMonth(user: UserEntity, date: string): boolean {
+    if (!user.terminationDate) {
+      return true;
+    }
+    const startOfMonth = moment(date).startOf('month');
+    const employeeTerminationDate = moment(user.terminationDate);
+    return startOfMonth.isBefore(employeeTerminationDate);
   }
 
   private getLastTaskInCurrentDay(currentUserTasks: TaskEntity[], currentDay: moment.Moment): TaskEntity {

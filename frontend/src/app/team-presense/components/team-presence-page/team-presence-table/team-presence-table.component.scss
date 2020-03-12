@@ -1,94 +1,106 @@
 @import 'src/app/shared/styles/color';
 @import 'src/app/shared/styles/scroll';
 
-$borderColor: #e3e3e3;
+@function getGridColumnsByDaysInMonth($days) {
+  @return 240px repeat($days, minmax(25px, 1fr));
+}
+
+:host {
+  --teamCommonDay: #fafafa;
+  --teamBorderColor: #e3e3e3;
+
+  display: block;
+  margin: 20px 0;
+  min-height: 200px;
+  overflow-y: scroll;
+  @extend .scrollbar;
+  position: relative;
+}
 
 .day {
   text-align: center;
-  border-right: 1px solid $borderColor;
-  border-bottom: 2px solid $borderColor;
+  border-right: 1px solid var(--teamBorderColor);
+  border-bottom: 2px solid var(--teamBorderColor);
+  background: var(--teamCommonDay);
   min-height: 45px;
 
   &.header {
-    border-bottom: 1px solid $borderColor;
+    border-bottom: 1px solid var(--teamBorderColor);
   }
 }
 
 .table-header {
-  padding-right: 6px;
   display: grid;
   font-weight: 500;
-  margin-top: 30px;
-  overflow-x: scroll;
-  @extend .scrollbar;
+  position: sticky;
+  top: 0;
+  z-index: 9;
 
   &.row_28 {
-    grid-template-columns: 30px 240px repeat(28, 1fr);
+    grid-template-columns: getGridColumnsByDaysInMonth(28);
   }
 
   &.row_29 {
-    grid-template-columns: 30px 240px repeat(29, 1fr);
+    grid-template-columns: getGridColumnsByDaysInMonth(29);
   }
 
   &.row_30 {
-    grid-template-columns: 30px 240px repeat(30, 1fr);
+    grid-template-columns: getGridColumnsByDaysInMonth(30);
   }
 
   &.row_31 {
-    grid-template-columns: 30px 240px repeat(31, 1fr);
+    grid-template-columns: getGridColumnsByDaysInMonth(31);
   }
 }
 
 .table-scrolled {
-  max-height: calc(100vh - 450px);
-  min-height: 100px;
-  overflow-y: scroll;
-  @extend .scrollbar;
-
   display: grid;
 
   &.row_28 {
-    grid-template-columns: 30px 240px repeat(28, 1fr);
+    grid-template-columns: getGridColumnsByDaysInMonth(28);
   }
 
   &.row_29 {
-    grid-template-columns: 30px 240px repeat(29, 1fr);
+    grid-template-columns: getGridColumnsByDaysInMonth(29);
   }
 
   &.row_30 {
-    grid-template-columns: 30px 240px repeat(30, 1fr);
+    grid-template-columns: getGridColumnsByDaysInMonth(30);
   }
 
   &.row_31 {
-    grid-template-columns: 30px 240px repeat(31, 1fr);
+    grid-template-columns: getGridColumnsByDaysInMonth(31);
   }
 }
 
 .title {
   padding: 0 5px;
-  border-right: 1px solid $borderColor;
-  border-bottom: 2px solid $borderColor;
+  border-right: 1px solid var(--teamBorderColor);
+  border-bottom: 2px solid var(--teamBorderColor);
   white-space: nowrap;
+  position: sticky;
+  left: 0;
+  background: var(--teamCommonDay);
 }
 
 .day_HOLIDAY {
-  background-color: $holiday;
+  background-color: var(--dayTypeHoliday);
 }
 
 .day_PRE_HOLIDAY {
-  background-color: $pre-holiday;
+  background-color: var(--dayTypePreHoliday);
 }
 
 .COMMON {
-  background-color: #fafafa;
+  background-color: var(--teamCommonDay);
 }
 
 .COMMON.day_PRE_HOLIDAY {
-  background-color: $pre-holiday;
+  background-color: var(--dayTypePreHoliday);
 }
 
 .COMMON.day_HOLIDAY {
-  background-color: $holiday;
+  background-color: var(--dayTypeHoliday);
 }
 
 .CUSTOM {
@@ -135,53 +147,5 @@ mat-form-field {
     width: 24px;
     border-radius: 50%;
     margin: 0 auto;
-  }
-}
-
-.number {
-  text-align: right;
-  color: #9c9a9a;
-  font-size: 14px;
-  margin-top: 1px;
-  padding-right: 5px;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  .table-scrolled {
-    &.row_28 {
-      grid-template-columns: 30px 240px repeat(28, 20px);
-    }
-
-    &.row_29 {
-      grid-template-columns: 30px 240px repeat(29, 20px);
-    }
-
-    &.row_30 {
-      grid-template-columns: 30px 240px repeat(30, 20px);
-    }
-
-    &.row_31 {
-      grid-template-columns: 30px 240px repeat(31, 20px);
-    }
-  }
-}
-
-@media (min-width: 320px) and (max-width: 767px) {
-  .table-scrolled {
-    &.row_28 {
-      grid-template-columns: 30px 240px repeat(28, 15px);
-    }
-
-    &.row_29 {
-      grid-template-columns: 30px 240px repeat(29, 15px);
-    }
-
-    &.row_30 {
-      grid-template-columns: 30px 240px repeat(30, 15px);
-    }
-
-    &.row_31 {
-      grid-template-columns: 30px 240px repeat(31, 15px);
-    }
   }
 }

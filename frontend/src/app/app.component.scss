@@ -1,11 +1,15 @@
+@import 'src/app/shared/styles/scroll';
+
 :host {
   height: 100vh;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto 1fr;
 }
 
 .content-container {
   flex: 1;
   color: rgba(0, 0, 0, 0.87);
   background-color: #fafafa;
+  overflow: auto;
+  @extend .scrollbar;
 }

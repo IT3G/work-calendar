@@ -7,8 +7,8 @@
   background: white;
 
   display: grid;
-  grid-template-columns: 100px 1fr 200px;
-  grid-template-areas: 'logo nav personal';
+  grid-template-columns: 100px 300px 1fr 100px;
+  grid-template-areas: 'logo search nav personal';
   grid-template-rows: var(--headerHeight);
   align-items: center;
   justify-items: center;
@@ -33,10 +33,14 @@
   grid-area: personal;
 }
 
+.search {
+  grid-area: search;
+}
+
 @media screen and (max-width: 860px) {
   :host {
-    grid-template-columns: 100px 1fr 200px;
     grid-template-areas: 'nav logo personal';
+    grid-template-columns: 100px 1fr 100px;
   }
 
   .main-logo {
@@ -45,5 +49,9 @@
 
   .nav-menu {
     justify-self: center;
+  }
+
+  .search {
+    display: none;
   }
 }

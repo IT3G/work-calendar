@@ -21,7 +21,7 @@ export class AuthApiService {
     return this.http.get<Employee>(`${this.url}/current`);
   }
 
-  public registration(req: AuthRequestModel): Observable<any> {
+  public registration(req: AuthRequestModel): Observable<Employee> {
     return this.http.post<Employee>(`${this.url}/registration`, req);
   }
 }

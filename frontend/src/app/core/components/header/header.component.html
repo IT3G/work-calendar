@@ -2,6 +2,8 @@
   <img [src]="baseUrl + '/settings/logo/' + (logoName$ | async)" />
 </div>
 
+<app-user-search *ngIf="currentUser$ | async" class="search"></app-user-search>
+
 <app-navigation-menu class="nav-menu" [isMobile]="isMobile"></app-navigation-menu>
 
 <app-personal-menu

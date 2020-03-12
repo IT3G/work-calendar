@@ -1,0 +1,9 @@
+<app-profile-projects-chart [projects]="projects" [projectsMaxPeriod]="projectsMaxPeriod"></app-profile-projects-chart>
+
+<app-profile-projects-table
+  *ngIf="projects?.length"
+  [projects]="projects"
+  [projectsMaxPeriod]="projectsMaxPeriod"
+  [isAdmin]="isAdmin"
+  (updateValue)="updateValue.emit($event)"
+></app-profile-projects-table>

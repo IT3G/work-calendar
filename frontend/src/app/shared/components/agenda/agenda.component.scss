@@ -65,3 +65,29 @@
 ::ng-deep.mat-tooltip {
   font-size: 14px;
 }
+
+@media (min-width: 768px) and (max-width: 1200px) {
+  :host {
+    justify-content: center;
+  }
+}
+
+@media (min-width: 320px) and (max-width: 767px) {
+  :host {
+    flex-direction: column-reverse;
+    font-size: 14px;
+    margin-bottom: 15px;
+  }
+
+  .day-type.horizontal {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    row-gap: 10px;
+  }
+
+  .holiday-type.horizontal {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    margin-bottom: 10px;
+  }
+}

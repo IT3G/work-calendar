@@ -1,14 +1,14 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { HolidaysModel, MonthNumber } from '../../models/holidays.model';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
+import { HolidaysModel, MonthNumber } from '../../models/holidays.model';
 
 @Pipe({
   name: 'isHolidayDayForNgbModel'
 })
 export class IsHolidayDayForNgbModelPipe implements PipeTransform {
   transform(dateSrc: NgbDateStruct, holidays: HolidaysModel[]): string {
-    if (!dateSrc || !(holidays && holidays.length)) {
+    if (!dateSrc || !holidays?.length) {
       return `day_WORK`;
     }
 

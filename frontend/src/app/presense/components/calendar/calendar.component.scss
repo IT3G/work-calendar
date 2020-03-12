@@ -14,40 +14,51 @@
     height: 2rem;
     width: 2rem;
   }
+
   .custom-day.selected {
     border: 1px solid black;
   }
+
   .custom-day {
     outline: none;
     border: 1px solid white;
+
     &.type_COMMON {
       background-color: var(--dayTypeCommon);
     }
+
     &.day_HOLIDAY {
-      background-color: $holiday;
+      background-color: var(--dayTypeHoliday);
     }
+
     &.day_PRE_HOLIDAY {
-      background-color: $pre-holiday;
+      background-color: var(--dayTypePreHoliday);
     }
+
     &.type_CUSTOM {
       background-color: var(--dayTypeCustom);
     }
+
     &.type_LEFT {
       background-color: var(--dayTypeLeft);
       color: white;
     }
+
     &.type_VACATION {
       background-color: var(--dayTypeVacation);
       color: white;
+
       &.is-approved {
         background-color: var(--dayTypeVacationApproved);
       }
     }
+
     &.type_SICK {
       background-color: var(--dayTypeSick);
     }
   }
 }
+
 .date-picker {
   transform: scale(1.25) translateY(30px);
 }

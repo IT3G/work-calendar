@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import { InputFile } from 'ngx-input-file';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { AuthSetting } from '../../shared/models/auth-setting.model';
+import { SettingsModel } from '../../shared/models/settings.model';
+import { UpdateSettingsModel } from '../../shared/models/update-settings.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,12 @@ export class ConfigurationApiService {
 
   constructor(private http: HttpClient) {}
 
-  public loadSettings(): Observable<AuthSetting> {
-    return this.http.get<AuthSetting>(this.baseUrl);
+  public loadSettings(): Observable<SettingsModel> {
+    return this.http.get<SettingsModel>(this.baseUrl);
+  }
+
+  public updateSettings(settings: UpdateSettingsModel): Observable<SettingsModel> {
+    return this.http.post<SettingsModel>(this.baseUrl, settings);
   }
 
   public deleteLogo(): Observable<void> {

@@ -1,6 +1,27 @@
-.agenda__wrapper {
-  margin-top: 70px;
+:host {
+  display: grid;
+  grid-template-rows: auto auto minmax(auto, 1fr) auto;
+  max-height: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px 10px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.select-month {
+  justify-self: center;
+}
+
+.loader-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 25;
   display: flex;
+  align-items: center;
   justify-content: center;
 }
 

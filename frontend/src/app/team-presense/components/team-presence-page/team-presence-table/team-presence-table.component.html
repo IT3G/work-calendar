@@ -1,5 +1,4 @@
 <div class="table-header row_{{ daysInMonth }}">
-  <div class="number"></div>
   <div class="title header">Сотрудник</div>
   <div
     class="day header"
@@ -13,7 +12,6 @@
 </div>
 <div class="table-scrolled row_{{ daysInMonth }}">
   <ng-container *ngFor="let data of monthData; index as i">
-    <div class="number">{{ i + 1 }}.</div>
     <div class="title">
       <a [routerLink]="['/profile', data.employee.mailNickname]">{{ data.employee?.username }}</a>
       <div class="jobPosition">{{ data.employee?.jobPosition?.name }}</div>

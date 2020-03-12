@@ -42,9 +42,11 @@ export class SettingsService {
     const settings = await this.getSettings();
 
     if (!settings) {
-      return await this.settingsModel.create(newSettings);
+      await this.settingsModel.create(newSettings);
+      return await this.getSettings();
     }
 
-    return await this.settingsModel.findByIdAndUpdate(settings._id, newSettings);
+    await this.settingsModel.findByIdAndUpdate(settings._id, newSettings);
+    return await this.getSettings();
   }
 }
