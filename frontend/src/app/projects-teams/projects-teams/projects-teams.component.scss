@@ -1,9 +1,5 @@
 @import 'src/app/shared/styles/scroll';
 
-.container {
-  margin-top: 35px;
-}
-
 .tab-scroll-content {
   max-height: calc(100vh - 200px);
   @extend .scrollbar;

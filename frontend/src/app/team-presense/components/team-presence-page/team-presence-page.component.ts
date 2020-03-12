@@ -203,10 +203,10 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
       .filter(p => p && p.percent)
       .sort((a, b) => b.percent - a.percent);
 
-    if (!activeProject && !activeProject.length) {
+    if (!activeProject?.length) {
       return null;
     }
 
-    return activeProject[0].project_id;
+    return activeProject[0]?.project_id;
   }
 }
