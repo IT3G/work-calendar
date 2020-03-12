@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { AuthApiService } from '../../core/services/auth-api.service';
-import { EmployeeApiService } from '../../core/services/employee-api.service';
 import { ContextStoreService } from '../../core/store/context-store.service';
 import { Employee } from '../../shared/models/employee.model';
 import { SettingsModel } from '../../shared/models/settings.model';
@@ -22,7 +21,6 @@ export class LoginPageComponent implements OnInit {
   constructor(
     private authService: AuthApiService,
     private contextStoreService: ContextStoreService,
-    private employeeApiService: EmployeeApiService,
     private router: Router
   ) {}
 

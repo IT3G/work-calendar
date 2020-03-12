@@ -1,43 +1,35 @@
-<div class="wrapper">
-  <div
-    class="login-form"
-    [formGroup]="registrationForm"
-    (keydown.enter)="registry()"
-    *ngIf="!successRegistration; else successRegistrationBlock"
-  >
-    <div class="form-group">
-      <mat-form-field>
-        <input matInput placeholder="Имя" autocomplete="off" formControlName="firstName" />
-      </mat-form-field>
-    </div>
-    <div class="form-group">
-      <mat-form-field>
-        <input matInput placeholder="Фамилия" autocomplete="off" formControlName="lastName" />
-      </mat-form-field>
-    </div>
-    <div class="form-group">
-      <mat-form-field>
-        <input matInput placeholder="E-Mail" autocomplete="off" formControlName="username" />
-      </mat-form-field>
-    </div>
-    <div class="form-group">
-      <mat-form-field class="example-full-width">
-        <input matInput placeholder="Пароль" type="password" autocomplete="off" formControlName="password" />
-      </mat-form-field>
-    </div>
-    <div class="form-footer">
-      <div>
-        <button
-          type="submit"
-          mat-raised-button
-          color="primary"
-          (click)="registry()"
-          [disabled]="registrationForm.invalid"
-        >
-          Зарегистрироваться
-        </button>
-      </div>
+<div class="login-form" [formGroup]="registrationForm" (keydown.enter)="registry()">
+  <div class="form-group">
+    <mat-form-field>
+      <input matInput placeholder="Имя" autocomplete="off" formControlName="firstName" />
+    </mat-form-field>
+  </div>
+  <div class="form-group">
+    <mat-form-field>
+      <input matInput placeholder="Фамилия" autocomplete="off" formControlName="lastName" />
+    </mat-form-field>
+  </div>
+  <div class="form-group">
+    <mat-form-field>
+      <input matInput placeholder="E-Mail" autocomplete="off" formControlName="username" />
+    </mat-form-field>
+  </div>
+  <div class="form-group">
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Пароль" type="password" autocomplete="off" formControlName="password" />
+    </mat-form-field>
+  </div>
+  <div class="form-footer">
+    <div>
+      <button
+        type="submit"
+        mat-raised-button
+        color="primary"
+        (click)="registry()"
+        [disabled]="registrationForm.invalid"
+      >
+        Зарегистрироваться
+      </button>
     </div>
   </div>
-  <ng-template #successRegistrationBlock>Вы успешно зарегистрировались!</ng-template>
 </div>
