@@ -136,8 +136,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       currentProject.metadata = [...currentProject.metadata, newMeta];
     }
 
-    console.log(currentProject);
-
-    this.selectedUser.projectsNew = [...this.selectedUser.projectsNew];
+    this.employeeApiService
+      .updateUserInfo(this.selectedUser.mailNickname, this.selectedUser)
+      .subscribe(user => (this.selectedUser = user));
   }
 }
