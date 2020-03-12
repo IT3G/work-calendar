@@ -17,7 +17,7 @@ export class LoginService {
   onSuccessedLogin(res: Employee): void {
     localStorage.setItem('Authorization', res.accessKey);
     this.contextStoreService.setCurrentUser(res);
-    this.router.navigate(['/presence']);
+    this.router.navigate(['presence', res?.mailNickname]);
   }
 
   onError(errText = 'Произошла ошибка') {

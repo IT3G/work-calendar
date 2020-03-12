@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
 
-  &:hover {
-    text-decoration: none;
+  &.active {
+    text-decoration: underline;
   }
 }
