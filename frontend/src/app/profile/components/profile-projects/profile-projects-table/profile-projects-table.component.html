@@ -10,6 +10,7 @@
       <input
         #el
         type="text"
+        [disabled]="!isAdmin"
         [value]="getProjectPercentByDate(project, date)"
         (blur)="onUpdateValue(project, date, el.value)"
       />

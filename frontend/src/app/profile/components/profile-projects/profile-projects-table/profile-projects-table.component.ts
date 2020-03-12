@@ -24,6 +24,9 @@ export class ProfileProjectsTableComponent implements OnChanges {
   @Input()
   projectsMaxPeriod: moment.Moment[];
 
+  @Input()
+  isAdmin: boolean;
+
   @Output()
   updateValue = new EventEmitter<{ project: ProjectNewModel; date: moment.Moment; value: number }>();
 

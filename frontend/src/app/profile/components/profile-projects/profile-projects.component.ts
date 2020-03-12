@@ -13,6 +13,9 @@ export class ProfileProjectsComponent {
   @Input()
   projects: ProjectNewModel[] = [];
 
+  @Input()
+  isAdmin: boolean;
+
   @Output()
   updateValue = new EventEmitter<{ project: ProjectNewModel; date: moment.Moment; value: number }>();
 

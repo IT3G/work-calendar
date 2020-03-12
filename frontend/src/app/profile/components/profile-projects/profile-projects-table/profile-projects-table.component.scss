@@ -32,4 +32,9 @@ td {
 input {
   width: 40px;
   text-align: center;
+
+  &[disabled] {
+    border: none;
+    background: transparent;
+  }
 }

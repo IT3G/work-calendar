@@ -3,5 +3,6 @@
 <app-profile-projects-table
   [projects]="projects"
   [projectsMaxPeriod]="projectsMaxPeriod"
+  [isAdmin]="isAdmin"
   (updateValue)="updateValue.emit($event)"
 ></app-profile-projects-table>
