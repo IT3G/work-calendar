@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -19,12 +19,15 @@ export class LoginPageComponent implements OnInit {
   constructor(
     private authService: AuthApiService,
     private contextStoreService: ContextStoreService,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
     this.initForm();
     this.settings$ = this.contextStoreService.settings$.pipe(filter(s => !!s));
+    /** Искуственное обнаружение изменений, чтоб подхватилось браузерное автозаполнение */
+    setTimeout(() => this.cdr.detectChanges(), 150);
   }
 
   public login() {
