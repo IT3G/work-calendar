@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { AuthSetting } from '../../shared/models/auth-setting.model';
 import { filter } from 'rxjs/operators';
 import { ContextStoreService } from '../../core/store/context-store.service';
+import { ProjectNewModel } from 'src/app/shared/models/project-new.model';
 
 @Component({
   selector: 'app-user-card',
@@ -14,6 +15,8 @@ export class UserCardComponent implements OnInit {
   @Input()
   user: Employee;
 
+  @Input()
+  isMobileVersion: boolean;
   public settings$: Observable<AuthSetting>;
 
   constructor(private contextStoreService: ContextStoreService) {}

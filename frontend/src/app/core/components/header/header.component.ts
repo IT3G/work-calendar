@@ -19,7 +19,7 @@ export class HeaderComponent implements OnInit {
   public baseUrl = environment.baseUrl;
   public logoName$: Observable<string>;
 
-  constructor(private contextStoreService: ContextStoreService, public breakpointObserver: BreakpointObserver) {}
+  constructor(private contextStoreService: ContextStoreService, private breakpointObserver: BreakpointObserver) {}
 
   ngOnInit() {
     this.currentUser$ = this.contextStoreService.getCurrentUser$();

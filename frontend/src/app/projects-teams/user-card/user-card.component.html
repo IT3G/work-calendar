@@ -13,17 +13,17 @@
         <ngx-avatar size="50" class="avatar-center" value="{{ user.username | usernamePipe }}"></ngx-avatar>
       </ng-template>
     </div>
-
     <div class="label-subdivision" [style]="{ 'background-color': user?.subdivision?._id | colorSubdivision }"></div>
   </div>
 
   <div class="user-name">
-    <a [routerLink]="['/presence', user.mailNickname]">
+    <a [routerLink]="['/presence', user.mailNickname]" class="name">
       <div *ngFor="let nameItem of user.username | usernameToArr">
         {{ nameItem }}
       </div>
     </a>
 
     <div class="jobPosition">{{ user?.jobPosition?.name }}</div>
+    <div class="location" *ngIf="isMobileVersion">{{ user?.location }}</div>
   </div>
 </div>

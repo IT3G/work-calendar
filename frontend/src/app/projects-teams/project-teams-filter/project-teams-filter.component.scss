@@ -4,17 +4,15 @@
   justify-content: center;
 }
 
+app-month-selector,
+app-radio-button-group,
+app-single-select {
+  margin: 10px auto;
+}
+
 @media (min-width: 768px) and (max-width: 1200px) {
   :host {
     flex-direction: column;
-  }
-
-  app-month-selector {
-    margin: 10px auto;
-  }
-
-  app-radio-button-group {
-    margin: 0 auto;
   }
 }
 
@@ -23,16 +21,7 @@
     flex-direction: column;
   }
 
-  app-month-selector {
-    margin: 10px auto;
-  }
-
-  app-radio-button-group {
-    margin: 0 auto;
-    width: 90%;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
+  app-single-select {
+    padding-left: 20px;
   }
 }

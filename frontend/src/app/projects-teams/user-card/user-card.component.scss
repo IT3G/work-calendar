@@ -41,9 +41,7 @@
 @media (min-width: 768px) and (max-width: 1200px) {
   .user-card {
     &.card-s {
-      min-width: 100px;
       min-height: 70px;
-      width: 15vw;
       margin: 5px 0;
     }
 
@@ -63,7 +61,16 @@
 }
 
 @media (min-width: 320px) and (max-width: 767px) {
-  .element-hidden {
-    display: none;
+  .name {
+    display: flex;
+    flex-direction: row;
+
+    div {
+      margin-right: 5px;
+    }
+  }
+
+  .location {
+    font-size: 14px;
   }
 }

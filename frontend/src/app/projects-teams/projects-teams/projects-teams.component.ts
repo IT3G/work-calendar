@@ -15,12 +15,15 @@ import { DictionaryModel } from '../../shared/models/dictionary.model';
 import { Employee } from '../../shared/models/employee.model';
 import { ProjectDataModel } from '../models/project-data.model';
 
+import { BreakpointObserver } from '@angular/cdk/layout';
+
 @Component({
   selector: 'app-projects-teams',
   templateUrl: './projects-teams.component.html',
   styleUrls: ['./projects-teams.component.scss']
 })
 export class ProjectsTeamsComponent implements OnInit, OnDestroy {
+  public isMobileVersion: boolean;
   public location = locationsDictionary;
 
   public filtersForm: FormGroup;
@@ -33,7 +36,8 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private dictionaryApi: DictionaryApiService,
-    private employeeApiService: EmployeeApiService
+    private employeeApiService: EmployeeApiService,
+    private breakpointObserver: BreakpointObserver
   ) {}
 
   ngOnInit() {
@@ -43,6 +47,10 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
     });
 
     this.getData();
+
+    this.breakpointObserver
+      .observe(['(max-width: 767px)'])
+      .subscribe(result => (this.isMobileVersion = result.matches));
   }
 
   ngOnDestroy(): void {

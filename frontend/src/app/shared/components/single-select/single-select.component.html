@@ -1,7 +1,7 @@
 <mat-form-field [ngClass]="{ 'active-field': !!control.value }">
   <mat-select #mySelect [placeholder]="placeholder" [formControl]="control">
     <mat-option *ngFor="let element of elements" [value]="element.value">
-      {{ element.name }}
+      {{ element.name || element.title }}
     </mat-option>
   </mat-select>
 </mat-form-field>

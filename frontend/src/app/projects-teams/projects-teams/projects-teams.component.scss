@@ -4,27 +4,20 @@
   margin-top: 35px;
 }
 
-.project-cell {
-  width: 50px;
-}
-
-.project-table {
-  margin: 0 auto;
-  width: 100%;
-
-  td {
-    padding: 5px;
-    width: 232px;
-    border: 1px solid #dee2e6;
-    vertical-align: super;
-  }
-
-  th {
-  }
+.tab-scroll-content {
+  max-height: calc(100vh - 200px);
+  @extend .scrollbar;
+  overflow-x: hidden;
+  position: relative;
 }
 
 .table-title {
-  margin: 30px auto 0;
+  position: sticky;
+  position: -webkit-sticky;
+  top: -5px;
+  z-index: 1;
+  margin: 0 auto;
+  background-color: white;
   color: #212529;
   font-weight: bolder;
 
@@ -33,13 +26,17 @@
   }
 }
 
-.tab-scroll-content {
-  max-height: calc(100vh - 300px);
-  @extend .scrollbar;
-}
-
-.users-wrapper {
+.project-table {
+  margin: 0 auto;
   width: 100%;
+
+  td,
+  th {
+    padding: 5px;
+    width: 232px;
+    border: 1px solid #dee2e6;
+    vertical-align: super;
+  }
 }
 
 .project-name {
@@ -49,14 +46,35 @@
   color: #212529;
 }
 
+.project-cell {
+  width: 50px;
+}
+
+.users-wrapper {
+  width: 100%;
+}
+
+@media (min-width: 1201px) and (max-width: 1399px) {
+  .project-table {
+    td {
+      width: 200px;
+    }
+  }
+}
+
 @media (min-width: 768px) and (max-width: 1200px) {
   .project-table {
     td {
-      width: 15vw;
+      max-width: 200px;
+      width: 127px;
     }
   }
+}
 
-  .tab-scroll-content {
-    overflow-x: hidden;
+@media (min-width: 320px) and (max-width: 767px) {
+  .project-table {
+    td {
+      width: 100%;
+    }
   }
 }
