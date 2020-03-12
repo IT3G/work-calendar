@@ -19,7 +19,7 @@ login: 5, password: 5, or register
 
 1. Run '/frontend/npm i' and '/backend/npm i' to get dependencies
 
-2. Run '/database/docker-compose up --build' to start MongoDB
+2. Run '/docker/docker-compose up --build' to start MongoDB
 
 3. !!! Create config file '\backend\environments\dev.env', use 'test.env' as example !!!
 

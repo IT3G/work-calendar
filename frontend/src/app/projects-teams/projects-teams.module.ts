@@ -8,6 +8,7 @@ import { UserCardComponent } from './user-card/user-card.component';
 import { ColorSubdivisionPipe } from './pipes/color-subdivision.pipe';
 import { ProjectTeamsFilterComponent } from './project-teams-filter/project-teams-filter.component';
 import { ProjectTeamsFilterPipe } from './pipes/project-teams-filter.pipe';
+import { ProjectTeamsTerminatedEmployeesFilterPipe } from './pipes/project-teams-terminated-employees-filter.pipe';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { ProjectTeamsFilterPipe } from './pipes/project-teams-filter.pipe';
     UserCardComponent,
     ColorSubdivisionPipe,
     ProjectTeamsFilterComponent,
-    ProjectTeamsFilterPipe
+    ProjectTeamsFilterPipe,
+    ProjectTeamsTerminatedEmployeesFilterPipe
   ],
   exports: [ColorSubdivisionPipe],
   imports: [CommonModule, SharedModule]

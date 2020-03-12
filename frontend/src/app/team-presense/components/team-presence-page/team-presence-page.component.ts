@@ -60,8 +60,6 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
       distinctUntilChanged(),
       tap(() => (this.loadInProgress = true)),
       switchMap(date => this.tasksApi.loadTasksByMonth(date)),
-      /** Отсеять сотрудников, которые должны уволиться после окончания текущего месяца. */
-      map(this.filterTerminatedEmployees),
       tap(() => (this.loadInProgress = false)),
       share()
     );
@@ -73,20 +71,6 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-  }
-
-  private filterTerminatedEmployees(presenceModels: PresenceModel[]): PresenceModel[] {
-    const now = moment();
-
-    return presenceModels.filter(({ employee }) => {
-      if (!employee.terminationDate) {
-        return true;
-      }
-
-      const endOfEmployeeTerminationMonth = moment(employee.terminationDate).endOf('month');
-
-      return now.isBefore(endOfEmployeeTerminationMonth);
-    });
   }
 
   private getCommonData() {

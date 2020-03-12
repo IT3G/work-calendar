@@ -13,7 +13,13 @@
   </div>
   <div class="tab-scroll-content">
     <table class="project-table">
-      <tr *ngFor="let project of projectsData | projectTeamsFilter: filtersForm.value">
+      <tr
+        *ngFor="
+          let project of projectsData
+            | projectTeamsFilter: filtersForm.value
+            | projectTeamsTerminatedEmployeesFilter: filtersForm.value
+        "
+      >
         <td>
           <div class="project-name">
             <a [href]="getLink(project.projectId)">
