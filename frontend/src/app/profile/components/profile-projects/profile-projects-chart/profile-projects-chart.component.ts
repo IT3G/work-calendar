@@ -45,7 +45,6 @@ export class ProfileProjectsChartComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes?.projects?.currentValue || changes?.projectsMaxPeriod?.currentValue) {
-      console.log(this.projectsMaxPeriod);
       const datasets: ChartDataSets[] = this.generateDatasetsFromProjects(this.projects, this.projectsMaxPeriod);
 
       this.generateBarChart(datasets);

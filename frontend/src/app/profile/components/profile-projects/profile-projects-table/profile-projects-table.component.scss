@@ -1,0 +1,35 @@
+@import 'src/app/shared/styles/scroll';
+
+:host {
+  display: block;
+  max-width: 100%;
+  overflow: auto;
+  @extend .scrollbar;
+}
+
+tr {
+  border-bottom: 1px solid lightgray;
+}
+
+th,
+td {
+  padding: 5px;
+  text-align: center;
+  border-right: 1px solid lightgray;
+}
+
+.name {
+  width: 200px;
+  position: sticky;
+  left: 0;
+  white-space: nowrap;
+  text-align: left;
+  background-color: #fafafa;
+  z-index: 10;
+  padding: 0 10px;
+}
+
+input {
+  width: 40px;
+  text-align: center;
+}

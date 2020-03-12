@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import * as moment from 'moment';
 import { ProjectNewModel } from '../../../shared/models/project-new.model';
 import { NewProjectUtils } from '../../../shared/utils/new-project.utils';
@@ -12,6 +12,9 @@ import { NewProjectUtils } from '../../../shared/utils/new-project.utils';
 export class ProfileProjectsComponent {
   @Input()
   projects: ProjectNewModel[] = [];
+
+  @Output()
+  updateValue = new EventEmitter<{ project: ProjectNewModel; date: moment.Moment; value: number }>();
 
   projectsMaxPeriod: moment.Moment[];
 
