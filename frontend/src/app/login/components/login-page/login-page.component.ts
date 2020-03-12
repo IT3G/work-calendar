@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { AuthApiService } from '../../core/services/auth-api.service';
-import { ContextStoreService } from '../../core/store/context-store.service';
-import { SettingsModel } from '../../shared/models/settings.model';
-import { LoginService } from '../services/login.service';
+import { AuthApiService } from '../../../core/services/auth-api.service';
+import { ContextStoreService } from '../../../core/store/context-store.service';
+import { SettingsModel } from '../../../shared/models/settings.model';
+import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-login-page',

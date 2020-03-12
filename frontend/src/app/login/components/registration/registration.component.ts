@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { switchMap } from 'rxjs/operators';
-import { AuthApiService } from '../../core/services/auth-api.service';
-import { LoginService } from '../services/login.service';
+import { AuthApiService } from '../../../core/services/auth-api.service';
+import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-registration',
@@ -12,11 +12,7 @@ import { LoginService } from '../services/login.service';
 export class RegistrationComponent implements OnInit {
   public registrationForm: FormGroup;
 
-  constructor(
-    private authService: AuthApiService,
-
-    private loginService: LoginService
-  ) {}
+  constructor(private authService: AuthApiService, private loginService: LoginService) {}
 
   ngOnInit() {
     this.initForm();
