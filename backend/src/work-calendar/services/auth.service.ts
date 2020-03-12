@@ -93,7 +93,7 @@ export class AuthService {
       this.config.FEATURE_AUTH_TYPE === 'LDAP' && this.config.MAIL_POSTFIX ? `@${this.config.MAIL_POSTFIX}` : '';
 
     const data: UserDto = {
-      _id: null,
+      _id: undefined,
       username: userInfo.name,
       patronymic: null,
       location: null,

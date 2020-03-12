@@ -1,4 +1,4 @@
-import { Body, Controller, Get, NotAcceptableException, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Logger, NotAcceptableException, Post, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { UserDto } from '../../profile/dto/user.dto';
@@ -11,6 +11,8 @@ import { LdapService } from '../services/ldap.service';
 @ApiUseTags('Auth')
 @Controller('auth')
 export class AuthController {
+  private readonly logger = new Logger();
+
   constructor(
     private ldapService: LdapService,
     private usersService: UsersService,
@@ -72,6 +74,7 @@ export class AuthController {
       const newUser = await this.authService.registration(credentials);
       return this.mapper.map(UserDto, newUser);
     } catch (e) {
+      this.logger.error(e);
       throw new NotAcceptableException('user not found');
     }
   }
