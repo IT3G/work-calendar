@@ -2,4 +2,28 @@
   display: flex;
   align-items: baseline;
   justify-content: center;
+  padding: 15px 0;
+}
+
+app-month-selector,
+app-radio-button-group,
+app-single-select {
+  margin: 10px auto;
+}
+
+@media (min-width: 768px) and (max-width: 1200px) {
+  :host {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 767px) {
+  :host {
+    flex-direction: column;
+  }
+
+  app-single-select {
+    padding-left: 20px;
+    width: 100%;
+  }
 }
