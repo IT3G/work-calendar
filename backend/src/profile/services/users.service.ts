@@ -43,4 +43,9 @@ export class UsersService {
     await this.userModel.updateOne({ mailNickname: login }, { ...data });
     return await this.getUserByLogin(login);
   }
+
+  async storeRefreshToken(login: string, token: string): Promise<UserEntity> {
+    await this.userModel.updateOne({ mailNickname: login }, { $push: { refreshTokens: token } });
+    return await this.getUserByLogin(login);
+  }
 }

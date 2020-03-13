@@ -9,6 +9,8 @@ import { UsersService } from '../../profile/services/users.service';
 import { JwtSignModel } from '../models/jwt-sign.model';
 import { LoginModel } from '../models/login.model';
 import { LdapService } from './ldap.service';
+import { v4 as uuidv4 } from 'uuid';
+import { JwtRefreshSignModel } from '../models/jwt-refresh-sign.model';
 
 @Injectable()
 export class AuthService {
@@ -58,7 +60,7 @@ export class AuthService {
     }
   }
 
-  getJWTbyUser(user: UserEntity): string {
+  getJWTTokensForUser(user: UserEntity): { accessKey: string; refreshToken: string } {
     const sign: JwtSignModel = {
       mailNickname: user.mailNickname,
       username: user.username,
@@ -66,8 +68,17 @@ export class AuthService {
       position: user.position,
       email: user.email
     };
+    const accessKey = this.jwtService.sign(sign);
 
-    return this.jwtService.sign(sign);
+    const refreshSign: JwtRefreshSignModel = {
+      mailNickname: user.mailNickname,
+      refresh: uuidv4()
+    };
+    const refreshToken = this.jwtService.sign(refreshSign, { expiresIn: this.config.JWT_REFRESH_EXPIRES });
+
+    this.usersService.storeRefreshToken(refreshSign.mailNickname, refreshSign.refresh);
+
+    return { accessKey, refreshToken };
   }
 
   /** подтвердить валидность сеесси и получить автоизованного Пользователя по запросу */
@@ -109,6 +120,7 @@ export class AuthService {
       jobPosition: null,
       projectsNew: null,
       accessKey: null,
+      refreshToken: null,
       skype: null,
       telegram: null,
       authType: 'hash',

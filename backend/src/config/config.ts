@@ -36,6 +36,7 @@ export class Config {
   MINIO_ACCESS_KEY: string;
   MINIO_SECRET_KEY: string;
   MINIO_BUCKET_NAME: string;
+  JWT_REFRESH_EXPIRES: string;
 }
 
 let config;

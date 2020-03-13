@@ -27,7 +27,10 @@ export class AuthController {
 
       const dto = this.mapper.map(UserDto, userEntity);
 
-      dto.accessKey = `Bearer ${this.authService.getJWTbyUser(userEntity)}`;
+      const { accessKey, refreshToken } = this.authService.getJWTTokensForUser(userEntity);
+
+      dto.accessKey = `Bearer ${accessKey}`;
+      dto.refreshToken = refreshToken;
       return dto;
     } catch (e) {
       throw new NotAcceptableException(e.message ? e.message : e);

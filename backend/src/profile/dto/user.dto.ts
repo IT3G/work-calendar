@@ -92,6 +92,10 @@ export class UserDto {
 
   @Expose()
   @ApiModelProperty()
+  refreshToken: string;
+
+  @Expose()
+  @ApiModelProperty()
   terminationDate: string;
 
   @Expose()

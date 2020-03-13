@@ -68,6 +68,7 @@ export class LdapService implements OnApplicationShutdown {
       telegram: null,
       hashPassword: null,
       accessKey: null,
+      refreshToken: null,
       terminationDate: null,
       lastProjects: null
     };

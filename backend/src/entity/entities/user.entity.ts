@@ -23,4 +23,5 @@ export interface UserEntity extends Document {
   authType: string;
   hashPassword: string;
   terminationDate: string;
+  refreshTokens: string[];
 }
