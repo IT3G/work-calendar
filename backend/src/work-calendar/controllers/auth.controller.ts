@@ -37,6 +37,11 @@ export class AuthController {
     }
   }
 
+  @Post('/token')
+  async refreshToken(@Body() payload: { token: string }) {
+    throw new NotAcceptableException('user not found');
+  }
+
   @Get('/current')
   async getCurrentUser(@Req() req: Request): Promise<UserDto> {
     try {

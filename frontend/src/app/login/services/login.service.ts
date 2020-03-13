@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { TokensPayload } from 'src/app/shared/models/tokens-payload.model';
+
 import { ContextStoreService } from '../../core/store/context-store.service';
 import { Employee } from '../../shared/models/employee.model';
 import { SnackbarService } from '../../shared/services/snackbar.service';
@@ -31,5 +33,10 @@ export class LoginService {
     localStorage.removeItem('RefreshToken');
     this.contextStoreService.setCurrentUser(null);
     this.router.navigate(['login']);
+  }
+
+  onTokenRefresh({ accessKey, refreshToken }: TokensPayload): void {
+    localStorage.setItem('Authorization', accessKey);
+    localStorage.setItem('RefreshToken', refreshToken);
   }
 }
