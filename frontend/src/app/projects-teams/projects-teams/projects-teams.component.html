@@ -1,63 +1,61 @@
-<app-project-teams-filter [filtersForm]="filtersForm" [subdivision]="subdivisionData"></app-project-teams-filter>
+<div class="sticky-header">
+  <app-project-teams-filter [filtersForm]="filtersForm" [subdivision]="subdivisionData"></app-project-teams-filter>
 
-<div class="tab-scroll-content" *ngIf="isMobileVersion; else desktopTable">
-  <table *ngFor="let project of projectsData | projectTeamsFilter: filtersForm.value" class="project-table">
-    <tr>
-      <th class="project-name" colspan="3">
-        <a [href]="getLink(project.projectId)">
-          {{ project.projectName }}
-        </a>
-        (человек на проекте: {{ project.users.length }})
-      </th>
-    </tr>
-    <tr>
-      <td class="project-cell">
-        <div class="users-wrapper" *ngFor="let loc of location">
-          <div *ngFor="let user of project.users | userForLocation: loc">
-            <app-user-card
-              [user]="user"
-              [isMobileVersion]="isMobileVersion"
-              [projectId]="project.projectId"
-            ></app-user-card>
-          </div>
-        </div>
-      </td>
-    </tr>
-  </table>
+  <div class="projects-grid">
+    <div class="location border" *ngFor="let loc of location">
+      {{ loc }}
+    </div>
+  </div>
 </div>
 
-<ng-template class="tab-scroll-content" #desktopTable>
-  <div class="table-title">
-    <table class="project-table">
-      <tr>
-        <td *ngFor="let loc of location">
-          {{ loc }}
-        </td>
-      </tr>
-    </table>
-  </div>
-  <table *ngFor="let project of projectsData | projectTeamsFilter: filtersForm.value" class="project-table">
-    <tr>
-      <th class="project-name" colspan="6">
+<ng-container *ngIf="isMobileVersion; else desktopTable">
+  <div class="projects-grid">
+    <ng-container *ngFor="let project of projectsData | projectTeamsFilter: filtersForm.value" class="project-table">
+      <!-- <app-projects-title></app-projects-title> -->
+      <div class="project-name">
         <a [href]="getLink(project.projectId)">
           {{ project.projectName }}
+          <span class="total">(Человек на проекте: {{ project.users.length }})</span>
         </a>
 
-        (человек на проекте: {{ project.users.length }})
-
-        <div *ngFor="let subdivision of subdivisionData">
+        <div *ngFor="let subdivision of subdivisionData" class="statistics">
           {{ project.users | usersQuantityBySubdivision: subdivision.title }}
         </div>
-      </th>
-    </tr>
-    <tr>
-      <td class="project-cell" *ngFor="let loc of location">
-        <div class="users-wrapper">
-          <div *ngFor="let user of project.users | userForLocation: loc">
-            <app-user-card [user]="user" [projectId]="project.projectId"></app-user-card>
-          </div>
+      </div>
+
+      <ng-container *ngFor="let loc of location">
+        <div *ngFor="let user of project.users | userForLocation: loc">
+          <app-user-card
+            [user]="user"
+            [isMobileVersion]="isMobileVersion"
+            [projectId]="project.projectId"
+          ></app-user-card>
         </div>
-      </td>
-    </tr>
-  </table>
+      </ng-container>
+    </ng-container>
+  </div>
+</ng-container>
+
+<ng-template #desktopTable>
+  <div class="projects-grid">
+    <ng-container *ngFor="let project of projectsData | projectTeamsFilter: filtersForm.value" class="project-table">
+      <!-- <app-projects-title></app-projects-title> -->
+      <div class="project-name border">
+        <a [href]="getLink(project.projectId)">
+          {{ project.projectName }}
+          <span class="total">(Человек на проекте: {{ project.users.length }})</span>
+        </a>
+
+        <div *ngFor="let subdivision of subdivisionData" class="statistics">
+          {{ project.users | usersQuantityBySubdivision: subdivision.title }}
+        </div>
+      </div>
+
+      <div *ngFor="let loc of location" class="border">
+        <div *ngFor="let user of project.users | userForLocation: loc">
+          <app-user-card [user]="user" [projectId]="project.projectId"></app-user-card>
+        </div>
+      </div>
+    </ng-container>
+  </div>
 </ng-template>

@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
+
 import { radioButtonGroupCommonColor } from '../../shared/const/subdivision-colors.const';
 import { NewProjectUtils } from '../../shared/utils/new-project.utils';
 import { ProjectDataModel } from '../models/project-data.model';
@@ -12,8 +13,7 @@ export class ProjectTeamsFilterPipe implements PipeTransform {
     if (!projectsData) {
       return [];
     }
-
-    if (!filter) {
+    if (!filter?.subdivision) {
       return projectsData;
     }
 

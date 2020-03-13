@@ -40,11 +40,6 @@
 
 @media (min-width: 768px) and (max-width: 1200px) {
   .user-card {
-    &.card-s {
-      min-height: 70px;
-      margin: 5px 0;
-    }
-
     .user-name {
       padding: 5px 0 5px 5px;
       font-size: 14px;
@@ -60,7 +55,7 @@
   }
 }
 
-@media (min-width: 320px) and (max-width: 767px) {
+@media (max-width: 767px) {
   .name {
     display: flex;
     flex-direction: row;

@@ -16,7 +16,7 @@ app-single-select {
   }
 }
 
-@media (min-width: 320px) and (max-width: 767px) {
+@media (max-width: 767px) {
   :host {
     flex-direction: column;
   }

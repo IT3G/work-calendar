@@ -1,76 +1,68 @@
 @import 'src/app/shared/styles/scroll';
 
-.tab-scroll-content {
-  max-height: calc(100vh - 200px);
-  @extend .scrollbar;
-  overflow-x: hidden;
-  position: relative;
+:host {
+  display: block;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.table-title {
+.sticky-header {
+  top: 0;
   position: sticky;
-  position: -webkit-sticky;
-  top: -5px;
-  z-index: 1;
-  margin: 0 auto;
-  background-color: white;
-  color: #212529;
-  font-weight: bolder;
+  background: #fafafa;
+  z-index: 9;
+}
 
-  td {
-    text-align: center;
-  }
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.location {
+  font-weight: 600;
+  font-size: 18px;
+  text-align: center;
+}
+
+.border {
+  border: 1px solid #dee2e6;
 }
 
 .project-table {
   margin: 0 auto;
   width: 100%;
-
-  td,
-  th {
-    padding: 5px;
-    width: 232px;
-    border: 1px solid #dee2e6;
-    vertical-align: super;
-  }
 }
 
 .project-name {
   text-transform: uppercase;
   text-align: center;
   font-weight: bolder;
-  color: #212529;
+  grid-column-start: 1;
+  grid-column-end: 7;
 }
 
-.project-cell {
-  width: 50px;
+.total {
+  text-transform: none;
 }
 
-.users-wrapper {
-  width: 100%;
+.statistics {
+  font-size: 16px;
+  font-weight: 500;
+  color: #898c8f;
+  text-transform: none;
 }
 
-@media (min-width: 1201px) and (max-width: 1399px) {
-  .project-table {
-    td {
-      width: 200px;
-    }
+@media (max-width: 767px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
   }
-}
 
-@media (min-width: 768px) and (max-width: 1200px) {
-  .project-table {
-    td {
-      max-width: 200px;
-      width: 127px;
-    }
+  .project-name {
+    grid-column-start: 1;
+    grid-column-end: 1;
   }
-}
 
-@media (min-width: 320px) and (max-width: 767px) {
-  .project-table {
-    td {
-      width: 100%;
-    }
+  .location {
+    display: none;
   }
 }
