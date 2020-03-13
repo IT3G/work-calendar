@@ -10,8 +10,8 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { UNAUTHORIZED } from 'http-status-codes';
-import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { LoginService } from 'src/app/login/services/login.service';
 
 import { AuthApiService } from '../services/auth-api.service';
@@ -47,10 +47,7 @@ export class AuthInterceptor implements HttpInterceptor {
       catchError((err: HttpErrorResponse) => {
         if (err && err.status === UNAUTHORIZED) {
           if (isSessionInProgress) {
-            this.authService.refreshTokens(refreshToken).subscribe(
-              tokens => this.loginService.onTokenRefresh(tokens),
-              () => this.loginService.onLogOut()
-            );
+            return this.attemptRefreshTokens(refreshToken);
           } else {
             this.context.setCurrentUser(null);
             this.router.navigate(['login']);
@@ -58,6 +55,16 @@ export class AuthInterceptor implements HttpInterceptor {
         }
 
         return next.handle(request);
+      })
+    );
+  }
+
+  private attemptRefreshTokens(refreshToken: string) {
+    return this.authService.refreshTokens(refreshToken).pipe(
+      tap(tokens => this.loginService.onTokenRefresh(tokens)),
+      catchError(() => {
+        this.loginService.onLogOut();
+        return of(null);
       })
     );
   }
