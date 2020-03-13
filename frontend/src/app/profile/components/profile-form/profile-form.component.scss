@@ -65,7 +65,7 @@ button {
   }
 }
 
-@media (min-width: 320px) and (max-width: 767px) {
+@media (max-width: 767px) {
   .profile-form {
     grid-template-columns: 1fr;
   }
