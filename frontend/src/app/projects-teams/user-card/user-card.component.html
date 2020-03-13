@@ -17,7 +17,7 @@
   </div>
 
   <div class="user-name">
-    <a [routerLink]="['/presence', user.mailNickname]" class="name">
+    <a [routerLink]="['/profile', user.mailNickname]" class="name">
       <div *ngFor="let nameItem of user.username | usernameToArr">
         {{ nameItem }}
       </div>
