@@ -2,6 +2,8 @@ import { Document } from 'mongoose';
 import { JobPositionEntity } from './job-position.entity.model';
 import { ProjectNewEntity } from './project-new.entity';
 import { SubdivisionEntity } from './subdivision.entity.model';
+import { RefreshToken } from 'src/profile/models/refresh-token.model';
+import { RefreshTokenEntity } from './refresh-token.entity.model';
 
 export interface UserEntity extends Document {
   username: string;
@@ -23,5 +25,5 @@ export interface UserEntity extends Document {
   authType: string;
   hashPassword: string;
   terminationDate: string;
-  refreshTokens: string[];
+  refreshTokens: RefreshTokenEntity[];
 }

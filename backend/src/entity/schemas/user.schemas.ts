@@ -39,5 +39,10 @@ export const UserSchema = new Schema({
   authType: String,
   hashPassword: String,
   terminationDate: String,
-  refreshTokens: [String]
+  refreshTokens: [
+    {
+      token: String,
+      date: Date
+    }
+  ]
 });

@@ -76,7 +76,16 @@ export class AuthService {
     };
     const refreshToken = this.jwtService.sign(refreshSign, { expiresIn: this.config.JWT_REFRESH_EXPIRES });
 
-    this.usersService.storeRefreshToken(refreshSign.mailNickname, refreshSign.refresh);
+    /** Сохранить новый токен */
+    const date = new Date();
+    this.usersService.storeRefreshToken(refreshSign.mailNickname, {
+      date,
+      token: refreshSign.refresh
+    });
+
+    /** Удалить протухшие токены */
+    date.setDate(date.getDate() - Number.parseInt(this.config.JWT_REFRESH_EXPIRES.replace(/\D/g, ''), 10));
+    this.usersService.removeOutdatedTokens(refreshSign.mailNickname, date);
 
     return { accessKey, refreshToken };
   }

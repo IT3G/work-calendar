@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserEntity } from '../../entity/entities/user.entity';
 import { UserDto } from '../dto/user.dto';
+import { RefreshToken } from '../models/refresh-token.model';
 
 @Injectable()
 export class UsersService {
@@ -44,8 +45,18 @@ export class UsersService {
     return await this.getUserByLogin(login);
   }
 
-  async storeRefreshToken(login: string, token: string): Promise<UserEntity> {
+  /** Сохранить новый токен в бд */
+  async storeRefreshToken(login: string, token: RefreshToken): Promise<UserEntity> {
     await this.userModel.updateOne({ mailNickname: login }, { $push: { refreshTokens: token } });
+    return await this.getUserByLogin(login);
+  }
+
+  /** Удалить протухшие токены в бд */
+  async removeOutdatedTokens(login: string, expiryDate: Date): Promise<UserEntity> {
+    await this.userModel.updateOne(
+      { mailNickname: login },
+      { $pull: { refreshTokens: { date: { $lte: expiryDate } } } }
+    );
     return await this.getUserByLogin(login);
   }
 }
