@@ -9,8 +9,7 @@ import { UsersService } from '../../profile/services/users.service';
 import { JwtSignModel } from '../models/jwt-sign.model';
 import { LoginModel } from '../models/login.model';
 import { LdapService } from './ldap.service';
-import { v4 as uuidv4 } from 'uuid';
-import { JwtRefreshSignModel } from '../models/jwt-refresh-sign.model';
+import { RefreshTokenService } from './refresh-token.service';
 
 @Injectable()
 export class AuthService {
@@ -18,7 +17,8 @@ export class AuthService {
     private readonly ldapService: LdapService,
     private readonly usersService: UsersService,
     private jwtService: JwtService,
-    private config: Config
+    private config: Config,
+    private refreshTokenService: RefreshTokenService
   ) {}
 
   async auth(credentials: LoginModel) {
@@ -69,23 +69,7 @@ export class AuthService {
       email: user.email
     };
     const accessKey = this.jwtService.sign(sign);
-
-    const refreshSign: JwtRefreshSignModel = {
-      mailNickname: user.mailNickname,
-      refresh: uuidv4()
-    };
-    const refreshToken = this.jwtService.sign(refreshSign, { expiresIn: this.config.JWT_REFRESH_EXPIRES });
-
-    /** Сохранить новый токен */
-    const date = new Date();
-    this.usersService.storeRefreshToken(refreshSign.mailNickname, {
-      date,
-      token: refreshSign.refresh
-    });
-
-    /** Удалить протухшие токены */
-    date.setDate(date.getDate() - Number.parseInt(this.config.JWT_REFRESH_EXPIRES.replace(/\D/g, ''), 10));
-    this.usersService.removeOutdatedTokens(refreshSign.mailNickname, date);
+    const refreshToken = this.refreshTokenService.generateRefreshToken(user);
 
     return { accessKey, refreshToken };
   }
@@ -93,7 +77,7 @@ export class AuthService {
   /** подтвердить валидность сеесси и получить автоизованного Пользователя по запросу */
   async verifyByRequesAndGetUser(req: Request): Promise<UserEntity> {
     const authHeader = req.header('Authorization');
-    const [bearer, jwt] = authHeader.split(' ');
+    const [, jwt] = authHeader.split(' ');
 
     return await this.verifyAndGetUser(jwt);
   }
