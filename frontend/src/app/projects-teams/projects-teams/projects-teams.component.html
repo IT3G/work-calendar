@@ -1,5 +1,9 @@
 <div class="sticky-header">
-  <app-project-teams-filter [filtersForm]="filtersForm" [subdivision]="subdivisionData"></app-project-teams-filter>
+  <app-project-teams-filter
+    [filtersForm]="filtersForm"
+    [subdivision]="subdivisionData"
+    [isMobileVersion]="isMobileVersion"
+  ></app-project-teams-filter>
 
   <div class="projects-grid">
     <div class="location" *ngFor="let loc of location">

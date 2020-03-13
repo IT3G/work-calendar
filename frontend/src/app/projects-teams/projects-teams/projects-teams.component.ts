@@ -1,10 +1,8 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-
 import * as moment from 'moment';
 import { forkJoin, Subscription } from 'rxjs';
-
 import { DictionaryApiService } from '../../core/services/dictionary-api.service';
 import { EmployeeApiService } from '../../core/services/employee-api.service';
 import { ToggleButtonDataModel } from '../../shared/components/radio-button-group/radio-button-group.model';
@@ -49,7 +47,7 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
 
     this.getData();
 
-    this.breakpointObserver
+    this.subscription = this.breakpointObserver
       .observe(['(max-width: 767px)'])
       .subscribe(result => (this.isMobileVersion = result.matches));
   }
