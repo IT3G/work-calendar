@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Logger, NotAcceptableException, Post, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Logger,
+  NotAcceptableException,
+  Post,
+  Req,
+  UnauthorizedException
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { UserDto } from '../../profile/dto/user.dto';
@@ -7,6 +16,7 @@ import { CustomMapper } from '../../shared/services/custom-mapper.service';
 import { LoginModel } from '../models/login.model';
 import { AuthService } from '../services/auth.service';
 import { LdapService } from '../services/ldap.service';
+import { RefreshTokenService } from '../services/refresh-token.service';
 @ApiBearerAuth()
 @ApiUseTags('Auth')
 @Controller('auth')
@@ -17,7 +27,8 @@ export class AuthController {
     private ldapService: LdapService,
     private usersService: UsersService,
     private authService: AuthService,
-    private mapper: CustomMapper
+    private mapper: CustomMapper,
+    private refreshTokenService: RefreshTokenService
   ) {}
 
   @Post()
@@ -29,8 +40,9 @@ export class AuthController {
 
       const { accessKey, refreshToken } = this.authService.getJWTTokensForUser(userEntity);
 
-      dto.accessKey = `Bearer ${accessKey}`;
+      dto.accessKey = accessKey;
       dto.refreshToken = refreshToken;
+
       return dto;
     } catch (e) {
       throw new NotAcceptableException(e.message ? e.message : e);
@@ -38,8 +50,15 @@ export class AuthController {
   }
 
   @Post('/token')
-  async refreshToken(@Body() payload: { token: string }) {
-    throw new NotAcceptableException('user not found');
+  async refreshToken(@Req() req: Request): Promise<{ accessKey: string; refreshToken: string }> {
+    const token = req.header('RefreshToken');
+    try {
+      const user = await this.refreshTokenService.verifyAndGetUser(token);
+      const { accessKey, refreshToken } = this.authService.getJWTTokensForUser(user);
+      return { accessKey, refreshToken };
+    } catch (e) {
+      throw new UnauthorizedException();
+    }
   }
 
   @Get('/current')

@@ -10,7 +10,7 @@ import { JwtRefreshSignModel } from '../models/jwt-refresh-sign.model';
 export class RefreshTokenService {
   constructor(private jwtService: JwtService, private config: Config, private readonly usersService: UsersService) {}
 
-  public generateRefreshToken(user: UserEntity): string {
+  generateRefreshToken(user: UserEntity): string {
     const login = user.mailNickname;
     const refreshSign: JwtRefreshSignModel = {
       mailNickname: login,
@@ -22,6 +22,22 @@ export class RefreshTokenService {
     this.removeOutdatedTokens(login);
 
     return refreshToken;
+  }
+
+  async verifyAndGetUser(token: string): Promise<UserEntity> {
+    if (!token) {
+      return Promise.reject('No token provided');
+    }
+
+    const res: JwtRefreshSignModel = this.jwtService.verify(token);
+    const user = await this.usersService.getUserByLogin(res.mailNickname);
+
+    const isValidToken = user.refreshTokens.some(i => i.token === res.refresh);
+    if (!isValidToken) {
+      return Promise.reject('Invalid token');
+    }
+
+    return user;
   }
 
   /** Сохранить новый токен */

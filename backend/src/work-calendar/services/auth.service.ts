@@ -68,7 +68,7 @@ export class AuthService {
       position: user.position,
       email: user.email
     };
-    const accessKey = this.jwtService.sign(sign);
+    const accessKey = `Bearer ${this.jwtService.sign(sign)}`;
     const refreshToken = this.refreshTokenService.generateRefreshToken(user);
 
     return { accessKey, refreshToken };

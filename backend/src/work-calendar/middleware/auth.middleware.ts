@@ -7,7 +7,7 @@ import { AuthService } from '../services/auth.service';
 export class AuthMiddleware implements NestMiddleware {
   constructor(private authService: AuthService, private config: Config) {}
 
-  async use(req: Request, res: Response, next: Function) {
+  async use(req: Request, res: Response, next: () => void) {
     const urls: string[] = JSON.parse(this.config.UNAUTH_URLS);
 
     const isUnauthUrl =
