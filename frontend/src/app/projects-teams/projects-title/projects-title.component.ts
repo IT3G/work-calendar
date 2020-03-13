@@ -10,7 +10,7 @@ import { ProjectDataModel } from '../models/project-data.model';
 })
 export class ProjectsTitleComponent {
   @Input()
-  project: ProjectDataModel[];
+  project: ProjectDataModel;
 
   @Input()
   subdivisionData: ToggleButtonDataModel[];

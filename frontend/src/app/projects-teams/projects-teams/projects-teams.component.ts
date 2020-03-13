@@ -29,6 +29,7 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
 
   public projectsData: ProjectDataModel[];
   public subdivisionData: ToggleButtonDataModel[];
+  public loadInProgress: boolean;
 
   private subscription = new Subscription();
 
@@ -57,13 +58,14 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
   }
 
   private getData() {
+    this.loadInProgress = true;
     const users$ = this.employeeApiService.loadAllEmployees();
     const projects$ = this.dictionaryApi.getAll('project');
     const subdivision$ = this.dictionaryApi.getAll('subdivision');
 
     forkJoin([users$, projects$, subdivision$]).subscribe(res => {
       const [usersAll, projects, subdivision] = res;
-
+      this.loadInProgress = false;
       // делаем выборку пользователей для каждого проекта,
       // и фильтруем проекты вообще без пользователей
       this.projectsData = this.getUsersForProjects(projects, usersAll);
