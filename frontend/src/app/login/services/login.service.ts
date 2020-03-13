@@ -17,6 +17,7 @@ export class LoginService {
 
   onSuccessedLogin(res: Employee): void {
     localStorage.setItem('Authorization', res.accessKey);
+    localStorage.setItem('RefreshToken', res.refreshToken);
     this.contextStoreService.setCurrentUser(res);
     this.router.navigate(['presence', res?.mailNickname]);
   }
@@ -27,6 +28,7 @@ export class LoginService {
 
   onLogOut(): void {
     localStorage.removeItem('Authorization');
+    localStorage.removeItem('RefreshToken');
     this.contextStoreService.setCurrentUser(null);
     this.router.navigate(['login']);
   }

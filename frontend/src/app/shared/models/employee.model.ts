@@ -20,6 +20,7 @@ export class Employee {
   subdivision: DictionaryModel;
   jobPosition: DictionaryModel;
   accessKey: string;
+  refreshToken: string;
   projectsNew: ProjectNewModel[];
   terminationDate: string;
   lastProjects: LastProjectModel[];

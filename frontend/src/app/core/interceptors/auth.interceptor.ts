@@ -8,9 +8,11 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { UNAUTHORIZED } from 'http-status-codes';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+
 import { ContextStoreService } from '../store/context-store.service';
 
 @Injectable({
@@ -21,11 +23,13 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const jwt = localStorage.getItem('Authorization');
+    const refreshToken = localStorage.getItem('RefreshToken');
 
-    if (jwt) {
+    if (jwt && refreshToken) {
       request = request.clone({
         setHeaders: {
-          Authorization: jwt
+          Authorization: jwt,
+          RefreshToken: refreshToken
         }
       });
     }
