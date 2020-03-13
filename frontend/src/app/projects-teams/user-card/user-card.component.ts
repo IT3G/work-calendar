@@ -17,9 +17,6 @@ export class UserCardComponent implements OnInit {
   user: Employee;
 
   @Input()
-  projectId: string;
-
-  @Input()
   isMobileVersion: boolean;
 
   public settings$: Observable<SettingsModel>;

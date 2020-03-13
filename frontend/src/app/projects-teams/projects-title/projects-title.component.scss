@@ -1,0 +1,29 @@
+:host {
+  display: block;
+  border-left: 1px solid #dee2e6;
+  border-right: 1px solid #dee2e6;
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: bolder;
+  grid-column-start: 1;
+  grid-column-end: 7;
+}
+
+.total {
+  text-transform: none;
+}
+
+.statistics {
+  font-size: 16px;
+  font-weight: 500;
+  color: #898c8f;
+  text-transform: none;
+}
+
+@media (max-width: 767px) {
+  :host {
+    grid-column-start: 1;
+    grid-column-end: 1;
+    border: none;
+  }
+}

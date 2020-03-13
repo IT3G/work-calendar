@@ -1,12 +1,11 @@
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { BehaviorSubject } from 'rxjs';
 import * as moment from 'moment';
-import { radioButtonGroupCommonColor } from '../../shared/const/subdivision-colors.const';
+import { BehaviorSubject } from 'rxjs';
 import { ToggleButtonDataModel } from '../../shared/components/radio-button-group/radio-button-group.model';
-
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { SelectInputDataModel } from '../../shared/components/single-select/single-select.component';
+import { radioButtonGroupCommonColor } from '../../shared/const/subdivision-colors.const';
 
 export interface ProjectTeamsFilterModel {
   month: moment.Moment;

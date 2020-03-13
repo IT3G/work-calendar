@@ -1,7 +1,10 @@
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+
 import * as moment from 'moment';
 import { forkJoin, Subscription } from 'rxjs';
+
 import { DictionaryApiService } from '../../core/services/dictionary-api.service';
 import { EmployeeApiService } from '../../core/services/employee-api.service';
 import { ToggleButtonDataModel } from '../../shared/components/radio-button-group/radio-button-group.model';
@@ -14,8 +17,6 @@ import {
 import { DictionaryModel } from '../../shared/models/dictionary.model';
 import { Employee } from '../../shared/models/employee.model';
 import { ProjectDataModel } from '../models/project-data.model';
-
-import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-projects-teams',

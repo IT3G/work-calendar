@@ -22,9 +22,6 @@
   font-weight: 600;
   font-size: 18px;
   text-align: center;
-}
-
-.border {
   border: 1px solid #dee2e6;
 }
 
@@ -33,36 +30,14 @@
   width: 100%;
 }
 
-.project-name {
-  text-transform: uppercase;
-  text-align: center;
-  font-weight: bolder;
-  grid-column-start: 1;
-  grid-column-end: 7;
-}
-
-.total {
-  text-transform: none;
-}
-
-.statistics {
-  font-size: 16px;
-  font-weight: 500;
-  color: #898c8f;
-  text-transform: none;
-}
-
 @media (max-width: 767px) {
   .projects-grid {
     grid-template-columns: 1fr;
   }
 
-  .project-name {
-    grid-column-start: 1;
-    grid-column-end: 1;
-  }
-
+  .desktop-item,
   .location {
     display: none;
+    border: none;
   }
 }

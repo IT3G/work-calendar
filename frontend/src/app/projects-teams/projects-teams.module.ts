@@ -10,6 +10,7 @@ import { ProjectTeamsFilterComponent } from './project-teams-filter/project-team
 import { ProjectTeamsFilterPipe } from './pipes/project-teams-filter.pipe';
 import { UsersQuantityBySubdivisionPipe } from './pipes/users-quantity-by-subdivision.pipe';
 import { ProjectTeamsTerminatedEmployeesFilterPipe } from './pipes/project-teams-terminated-employees-filter.pipe';
+import { ProjectsTitleComponent } from './projects-title/projects-title.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ProjectTeamsTerminatedEmployeesFilterPipe } from './pipes/project-teams
     ColorSubdivisionPipe,
     ProjectTeamsFilterComponent,
     ProjectTeamsFilterPipe,
-    ProjectTeamsTerminatedEmployeesFilterPipe
+    ProjectTeamsTerminatedEmployeesFilterPipe,
+    ProjectsTitleComponent
   ],
   exports: [ColorSubdivisionPipe],
   imports: [CommonModule, SharedModule]

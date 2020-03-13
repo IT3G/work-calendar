@@ -2,60 +2,34 @@
   <app-project-teams-filter [filtersForm]="filtersForm" [subdivision]="subdivisionData"></app-project-teams-filter>
 
   <div class="projects-grid">
-    <div class="location border" *ngFor="let loc of location">
+    <div class="location" *ngFor="let loc of location">
       {{ loc }}
     </div>
   </div>
 </div>
 
-<ng-container *ngIf="isMobileVersion; else desktopTable">
-  <div class="projects-grid">
-    <ng-container *ngFor="let project of projectsData | projectTeamsFilter: filtersForm.value" class="project-table">
-      <!-- <app-projects-title></app-projects-title> -->
-      <div class="project-name">
-        <a [href]="getLink(project.projectId)">
-          {{ project.projectName }}
-          <span class="total">(Человек на проекте: {{ project.users.length }})</span>
-        </a>
+<div class="projects-grid">
+  <ng-container *ngFor="let project of projectsData | projectTeamsFilter: filtersForm.value" class="project-table">
+    <app-projects-title [project]="project" [subdivisionData]="subdivisionData"></app-projects-title>
 
-        <div *ngFor="let subdivision of subdivisionData" class="statistics">
-          {{ project.users | usersQuantityBySubdivision: subdivision.title }}
-        </div>
-      </div>
+    <ng-container
+      *ngTemplateOutlet="isMobileVersion ? mobileTable : desktopTable; context: { project: project }"
+    ></ng-container>
+  </ng-container>
+</div>
 
-      <ng-container *ngFor="let loc of location">
-        <div *ngFor="let user of project.users | userForLocation: loc">
-          <app-user-card
-            [user]="user"
-            [isMobileVersion]="isMobileVersion"
-            [projectId]="project.projectId"
-          ></app-user-card>
-        </div>
-      </ng-container>
-    </ng-container>
-  </div>
-</ng-container>
+<ng-template #mobileTable let-project="project">
+  <ng-container *ngFor="let loc of location">
+    <div *ngFor="let user of project.users | userForLocation: loc">
+      <app-user-card [user]="user" [isMobileVersion]="isMobileVersion"></app-user-card>
+    </div>
+  </ng-container>
+</ng-template>
 
-<ng-template #desktopTable>
-  <div class="projects-grid">
-    <ng-container *ngFor="let project of projectsData | projectTeamsFilter: filtersForm.value" class="project-table">
-      <!-- <app-projects-title></app-projects-title> -->
-      <div class="project-name border">
-        <a [href]="getLink(project.projectId)">
-          {{ project.projectName }}
-          <span class="total">(Человек на проекте: {{ project.users.length }})</span>
-        </a>
-
-        <div *ngFor="let subdivision of subdivisionData" class="statistics">
-          {{ project.users | usersQuantityBySubdivision: subdivision.title }}
-        </div>
-      </div>
-
-      <div *ngFor="let loc of location" class="border">
-        <div *ngFor="let user of project.users | userForLocation: loc">
-          <app-user-card [user]="user" [projectId]="project.projectId"></app-user-card>
-        </div>
-      </div>
-    </ng-container>
+<ng-template #desktopTable let-project="project">
+  <div class="border desktop-item" *ngFor="let loc of location">
+    <div *ngFor="let user of project.users | userForLocation: loc">
+      <app-user-card [user]="user"></app-user-card>
+    </div>
   </div>
 </ng-template>
