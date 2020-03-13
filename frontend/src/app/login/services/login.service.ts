@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { ContextStoreService } from '../../core/store/context-store.service';
 import { Employee } from '../../shared/models/employee.model';
 import { SnackbarService } from '../../shared/services/snackbar.service';
@@ -22,5 +23,11 @@ export class LoginService {
 
   onError(errText = 'Произошла ошибка') {
     this.snackbar.showErrorSnackBar(errText);
+  }
+
+  onLogOut(): void {
+    localStorage.removeItem('Authorization');
+    this.contextStoreService.setCurrentUser(null);
+    this.router.navigate(['login']);
   }
 }
