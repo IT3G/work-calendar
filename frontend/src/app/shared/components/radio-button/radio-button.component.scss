@@ -23,7 +23,7 @@
   background-color: var(--color);
 }
 
-@media (min-width: 320px) and (max-width: 767px) {
+@media (max-width: 767px) {
   .radio + label {
     margin: 5px;
   }
