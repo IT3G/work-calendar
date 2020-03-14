@@ -7,8 +7,8 @@
   background: white;
 
   display: grid;
-  grid-template-columns: 100px 300px 1fr 100px;
-  grid-template-areas: 'logo search nav personal';
+  grid-template-columns: 100px 300px 1fr 30px 100px;
+  grid-template-areas: 'logo search nav my-presence personal';
   grid-template-rows: var(--headerHeight);
   align-items: center;
   justify-items: center;
@@ -37,10 +37,23 @@
   grid-area: search;
 }
 
+.my-presence {
+  grid-area: my-presence;
+  font-size: 20px;
+  cursor: pointer;
+  transition: ease-in-out 0.2s;
+  color: black;
+
+  &.active,
+  &:hover {
+    transform: scale(1.15);
+  }
+}
+
 @media screen and (max-width: 860px) {
   :host {
-    grid-template-areas: 'nav logo personal';
-    grid-template-columns: 100px 1fr 100px;
+    grid-template-areas: 'nav logo my-presence personal';
+    grid-template-columns: 100px 1fr 30px 100px;
   }
 
   .main-logo {

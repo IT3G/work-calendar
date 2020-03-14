@@ -16,14 +16,6 @@
   </div>
   <div dd-panel>
     <div class="user-info">Привет, {{ ((selectedUser$ | async).username?.split(' '))[1] }}!</div>
-    <a
-      class="nav-item"
-      *ngIf="isAuth$ | async"
-      [routerLink]="['/presence', (selectedUser$ | async).mailNickname]"
-      routerLinkActive="active"
-    >
-      Мое присутствие
-    </a>
 
     <a
       mat-menu-item
