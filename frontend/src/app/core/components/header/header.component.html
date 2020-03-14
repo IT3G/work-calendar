@@ -9,6 +9,7 @@
 <a
   class="my-presence"
   *ngIf="currentUser$ | async as user"
+  matTooltip="Моё присутствие"
   [routerLink]="['/presence', user.mailNickname]"
   routerLinkActive="active"
 >
