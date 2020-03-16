@@ -48,29 +48,10 @@ export class AuthInterceptor implements HttpInterceptor {
           if (isSessionInProgress && !this.isRefreshingTokens) {
             this.isRefreshingTokens = true;
             this.tokensSubject$.next(null);
-            return this.authService.refreshTokens(refreshToken).pipe(
-              tap(tokens => {
-                this.loginService.onTokenRefresh(tokens);
-                this.tokensSubject$.next(tokens);
-                this.isRefreshingTokens = false;
-              }),
-              switchMap(tokens => {
-                request = request.clone({
-                  setHeaders: {
-                    Authorization: tokens.accessKey,
-                    RefreshToken: tokens.refreshToken
-                  }
-                });
-                return next.handle(request);
-              }),
-              catchError(() => {
-                this.isRefreshingTokens = false;
-                this.loginService.onLogOut();
-                return next.handle(request);
-              })
-            );
+            return this.refreshTokenAndRetryRequest(request, next, refreshToken);
           }
           if (isSessionInProgress && this.isRefreshingTokens) {
+            /** Ожидаем получение новых токенов для запросов */
             return this.tokensSubject$.pipe(
               filter(tokens => Boolean(tokens)),
               first(),
@@ -90,6 +71,30 @@ export class AuthInterceptor implements HttpInterceptor {
           }
           return next.handle(request);
         }
+        return next.handle(request);
+      })
+    );
+  }
+
+  private refreshTokenAndRetryRequest(request: HttpRequest<any>, next: HttpHandler, refreshToken: string) {
+    return this.authService.refreshTokens(refreshToken).pipe(
+      tap(tokens => {
+        this.loginService.onTokenRefresh(tokens);
+        this.tokensSubject$.next(tokens);
+        this.isRefreshingTokens = false;
+      }),
+      switchMap(tokens => {
+        request = request.clone({
+          setHeaders: {
+            Authorization: tokens.accessKey,
+            RefreshToken: tokens.refreshToken
+          }
+        });
+        return next.handle(request);
+      }),
+      catchError(() => {
+        this.isRefreshingTokens = false;
+        this.loginService.onLogOut();
         return next.handle(request);
       })
     );
