@@ -1,3 +1,4 @@
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Observable, Subscription } from 'rxjs';
@@ -25,6 +26,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   public projects: DictionaryModel[];
   public selectedTabIndex = this.route.snapshot.queryParams.tab || 0;
 
+  public isMobile: boolean;
+  public subscription: Subscription = new Subscription();
+
   public users$: Observable<Employee[]>;
   public settings$: Observable<AuthSetting>;
 
@@ -37,7 +41,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     private employeeApiService: EmployeeApiService,
     private route: ActivatedRoute,
     private router: Router,
-    private followApi: FollowApiService
+    private followApi: FollowApiService,
+    private breakpointObserver: BreakpointObserver
   ) {}
 
   ngOnInit() {
@@ -47,10 +52,15 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.isAdmin$ = this.contextStoreService.isCurrentUserAdmin$();
     this.settings$ = this.contextStoreService.settings$.pipe(filter(s => !!s));
     this.getUserInfo();
+
+    this.subscription = this.breakpointObserver
+      .observe(['(max-width: 767px)'])
+      .subscribe(result => (this.isMobile = result.matches));
   }
 
   ngOnDestroy() {
     this.userSubscriptions.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   public onUpdateProfile(employee: Employee): void {

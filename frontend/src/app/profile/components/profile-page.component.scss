@@ -62,12 +62,13 @@
   :host {
     width: 100vw;
     grid-template-columns: 1fr;
-    grid-template-rows: 160px 50px 50px auto;
+    grid-template-rows: 80px 25px 40px auto;
     grid-template-areas:
       'avatar'
       'name'
       'presence'
       'tabs';
+    gap: 10px;
   }
 
   .avatar {
@@ -75,6 +76,7 @@
   }
 
   .presence {
+    height: 40px;
     width: 40vw;
     margin: 0 auto;
   }

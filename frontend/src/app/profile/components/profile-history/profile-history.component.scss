@@ -16,22 +16,17 @@
     padding: 8px 4px;
     vertical-align: super;
     border-bottom: 1px solid #dee2e6;
+    min-width: 110px;
   }
 
-  .change-date {
-    width: 110px;
-  }
-
-  .date {
+  .change-date,
+  .date,
+  .type {
     width: 110px;
   }
 
   .employee {
     width: 150px;
-  }
-
-  .type {
-    width: 110px;
   }
 
   .comment {
@@ -46,7 +41,8 @@
 }
 
 @media (max-width: 767px) {
-  .element-hidden {
-    display: none;
+  .tab-scroll-content {
+    max-height: calc(100vh - 350px);
+    overflow-y: hidden;
   }
 }
