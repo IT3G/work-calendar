@@ -38,7 +38,8 @@
 
 @media (min-width: 768px) and (max-width: 1200px) {
   :host {
-    width: 100vw;
+    width: 95vw;
+    padding: 10px;
     grid-template-columns: 1fr;
     grid-template-rows: 160px 50px 50px auto;
     grid-template-areas:
@@ -60,7 +61,8 @@
 
 @media (max-width: 767px) {
   :host {
-    width: 100vw;
+    width: 95vw;
+    padding: 5px;
     grid-template-columns: 1fr;
     grid-template-rows: 80px 25px 40px auto;
     grid-template-areas:

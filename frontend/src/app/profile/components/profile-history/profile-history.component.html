@@ -1,24 +1,22 @@
-<div class="tab-scroll-content">
-  <table class="history-table">
-    <tr>
-      <td class="change-date">Дата изменения</td>
-      <td class="date">Дата</td>
-      <td class="employee">Кому</td>
-      <td class="type">Вид</td>
-      <td class="comment element-hidden">Комментарий</td>
-    </tr>
-    <tr *ngFor="let element of taskHistory$ | async | sortTasksByDateStart">
-      <td class="change-date">{{ element.dtCreated | datePipe: 'DD MMMM, HH:mm' }}</td>
-      <td class="date">
-        {{ element.dateStart | datePipe: 'DD MMMM' }}
-        <span *ngIf="hasDateRange(element)">по {{ element.dateEnd | datePipe: 'DD MMMM' }}</span>
-      </td>
-      <td class="employee">{{ element.employee }}</td>
-      <td class="type">{{ dayType[element.type] | taskType }}</td>
-      <td class="comment">{{ element.comment }}</td>
-    </tr>
-  </table>
-</div>
+<table class="history-table">
+  <tr>
+    <td class="change-date">Дата изменения</td>
+    <td class="date">Дата</td>
+    <td class="employee">Кому</td>
+    <td class="type">Вид</td>
+    <td class="comment element-hidden">Комментарий</td>
+  </tr>
+  <tr *ngFor="let element of taskHistory$ | async | sortTasksByDateStart">
+    <td class="change-date">{{ element.dtCreated | datePipe: 'DD MMMM, HH:mm' }}</td>
+    <td class="date">
+      {{ element.dateStart | datePipe: 'DD MMMM' }}
+      <span *ngIf="hasDateRange(element)">по {{ element.dateEnd | datePipe: 'DD MMMM' }}</span>
+    </td>
+    <td class="employee">{{ element.employee }}</td>
+    <td class="type">{{ dayType[element.type] | taskType }}</td>
+    <td class="comment">{{ element.comment }}</td>
+  </tr>
+</table>
 
 <ng-template #emptyHistory>
   <div class="empty-history">Нет истории изменений.</div>

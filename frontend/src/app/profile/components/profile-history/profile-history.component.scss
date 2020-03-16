@@ -1,10 +1,5 @@
 @import 'src/app/shared/styles/scroll';
 
-.tab-scroll-content {
-  max-height: calc(100vh - 260px);
-  @extend .scrollbar;
-}
-
 .history-table {
   width: 100%;
 
@@ -38,11 +33,4 @@
   text-align: center;
   color: #b9b7b7;
   padding: 20px 0;
-}
-
-@media (max-width: 767px) {
-  .tab-scroll-content {
-    max-height: calc(100vh - 350px);
-    overflow-y: hidden;
-  }
 }
