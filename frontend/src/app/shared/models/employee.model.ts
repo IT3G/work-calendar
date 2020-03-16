@@ -1,5 +1,6 @@
 import { DictionaryModel } from './dictionary.model';
-import { ProjectNew } from './project-new';
+import { LastProjectModel } from './last-project.model';
+import { ProjectNewModel } from './project-new.model';
 
 export class Employee {
   _id: string;
@@ -10,15 +11,16 @@ export class Employee {
   whenCreated: string;
   email: string;
   telNumber: string;
-  telegram: string;
   skype: string;
+  telegram: string;
   physicalDeliveryOfficeName: string;
   mailNickname: string;
   isAdmin: boolean;
   hasMailing: boolean;
   subdivision: DictionaryModel;
   jobPosition: DictionaryModel;
-  hashPassword: string;
-  projectsNew: ProjectNew[];
+  accessKey: string;
+  projectsNew: ProjectNewModel[];
   terminationDate: string;
+  lastProjects: LastProjectModel[];
 }

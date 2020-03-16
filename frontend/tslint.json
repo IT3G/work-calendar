@@ -74,6 +74,32 @@
     "use-life-cycle-interface": true,
     "use-pipe-transform-interface": true,
     "component-class-suffix": true,
-    "directive-class-suffix": true
+    "directive-class-suffix": true,
+    "ordered-imports": [
+      true,
+      {
+        "import-sources-order": "case-insensitive",
+        "named-imports-order": "case-insensitive",
+        "module-source-path": "full",
+        "grouped-imports": true,
+        "groups": [
+          {
+            "name": "angular",
+            "match": "^@angular.*",
+            "order": 1
+          },
+          {
+            "name": "internal modules",
+            "match": "^\\..*",
+            "order": 3
+          },
+          {
+            "name": "third party imports",
+            "match": ".*",
+            "order": 2
+          }
+        ]
+      }
+    ]
   }
 }

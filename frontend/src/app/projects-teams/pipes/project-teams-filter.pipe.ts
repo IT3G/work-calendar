@@ -1,21 +1,19 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import * as moment from 'moment';
-import { ProjectNew } from '../../shared/models/project-new';
-import { NewProjectUtils } from '../../shared/utils/new-project.utils';
-import { ProjectTeamsFilterModel } from '../project-teams-filter/project-teams-filter.component';
-import { ProjectData } from '../projects-teams/projects-teams.component';
+
 import { radioButtonGroupCommonColor } from '../../shared/const/subdivision-colors.const';
+import { NewProjectUtils } from '../../shared/utils/new-project.utils';
+import { ProjectDataModel } from '../models/project-data.model';
+import { ProjectTeamsFilterModel } from '../project-teams-filter/project-teams-filter.component';
 
 @Pipe({
   name: 'projectTeamsFilter'
 })
 export class ProjectTeamsFilterPipe implements PipeTransform {
-  transform(projectsData: ProjectData[], filter: ProjectTeamsFilterModel): ProjectData[] {
+  transform(projectsData: ProjectDataModel[], filter: ProjectTeamsFilterModel): ProjectDataModel[] {
     if (!projectsData) {
       return [];
     }
-
-    if (!filter) {
+    if (!filter?.subdivision) {
       return projectsData;
     }
 
@@ -24,11 +22,9 @@ export class ProjectTeamsFilterPipe implements PipeTransform {
 
     const activeProjectsData = projectsData
       .map(prjData => {
-        const usersForProject = prjData.users.filter(
-          u =>
-            u.projectsNew &&
-            u.projectsNew.some(p => p.project_id === prjData.projectID && this.isProjectAtMonth(p, filter.month))
-        );
+        const usersForProject = prjData.users
+          .filter(u => !!u)
+          .filter(u => NewProjectUtils.isUserHaveSameOrLastProjectInCurrentMonth(u, filter.month, prjData.projectId));
 
         return { ...prjData, users: usersForProject };
       })
@@ -53,9 +49,5 @@ export class ProjectTeamsFilterPipe implements PipeTransform {
 
       return { ...project, users: filteredUsers };
     });
-  }
-
-  private isProjectAtMonth(p: ProjectNew, date: moment.Moment): boolean {
-    return p.metadata.some(m => NewProjectUtils.mapMetadataToDate(m).isSame(date, 'month'));
   }
 }

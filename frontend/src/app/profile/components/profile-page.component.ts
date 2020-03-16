@@ -1,16 +1,19 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import * as moment from 'moment';
 import { combineLatest, Observable, Subscription } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { EmployeeApiService } from '../../core/services/employee-api.service';
 import { FollowApiService } from '../../core/services/follow-api.service';
 import { ContextStoreService } from '../../core/store/context-store.service';
-import { AuthSetting } from '../../shared/models/auth-setting.model';
 import { DictionaryModel } from '../../shared/models/dictionary.model';
 import { Employee } from '../../shared/models/employee.model';
 import { FollowModel, UserFollow } from '../../shared/models/follow.model';
+import { ProjectNewModel, ProjectStatsMetadataNewModel } from '../../shared/models/project-new.model';
+import { SettingsModel } from '../../shared/models/settings.model';
+import { NewProjectUtils } from '../../shared/utils/new-project.utils';
 
 @Component({
   selector: 'app-team',
@@ -30,7 +33,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   public subscription: Subscription = new Subscription();
 
   public users$: Observable<Employee[]>;
-  public settings$: Observable<AuthSetting>;
+  public settings$: Observable<SettingsModel>;
 
   public userFollow: UserFollow;
 
@@ -65,7 +68,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   public onUpdateProfile(employee: Employee): void {
     this.employeeApiService.updateUserInfo(this.login, employee).subscribe(() => {
-      this.contextStoreService.update();
       this.loadFollow(this.selectedUser._id);
     });
   }
@@ -123,5 +125,29 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   public loadFollow(userId: string) {
     this.userSubscriptions.add(this.followApi.getUserFollow(userId).subscribe(res => (this.userFollow = res)));
+  }
+
+  public onUpdateValue(value: { project: ProjectNewModel; date: moment.Moment; value: number }) {
+    const currentProject = this.selectedUser.projectsNew.find(p => p.project_id === value.project.project_id);
+    let metadata = currentProject.metadata.find(m => NewProjectUtils.mapMetadataToDate(m).isSame(value.date, 'month'));
+
+    if (metadata?.percent === value.value) {
+      return;
+    }
+
+    if (metadata) {
+      metadata.percent = value.value;
+    } else {
+      const newMeta: ProjectStatsMetadataNewModel = {
+        month: +value.date.format('M'),
+        year: +value.date.format('YYYY'),
+        percent: value.value
+      };
+      currentProject.metadata = [...currentProject.metadata, newMeta];
+    }
+
+    this.employeeApiService
+      .updateUserInfo(this.selectedUser.mailNickname, this.selectedUser)
+      .subscribe(user => (this.selectedUser = user));
   }
 }

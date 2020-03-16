@@ -1,13 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { Subscription, combineLatest, from, EMPTY } from 'rxjs';
+import { SwPush } from '@angular/service-worker';
+import { combineLatest, EMPTY, from, Subscription } from 'rxjs';
+import { catchError, filter, switchMap } from 'rxjs/operators';
 import { ConfigurationApiService } from './core/services/configuration-api.service';
 import { GitInfoService } from './core/services/git-info.service';
-import { ContextStoreService } from './core/store/context-store.service';
-import { SwPush } from '@angular/service-worker';
-import { filter, switchMap, catchError } from 'rxjs/operators';
 import { PushApiService } from './core/services/push-api.service';
-import { environment } from '../environments/environment';
+import { ContextStoreService } from './core/store/context-store.service';
 
 @Component({
   selector: 'app-root',
@@ -27,9 +26,10 @@ export class AppComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.getInfoFromStore();
-    this.addGitVersionToPageTitle();
+    this.getSettings();
     this.initWebPush();
+
+    this.contextStoreService.settings$.subscribe(s => this.addGitVersionToPageTitle(s?.TITLE));
   }
 
   ngOnDestroy() {
@@ -53,23 +53,16 @@ export class AppComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
-  private getInfoFromStore() {
+  private getSettings() {
     this.configurationApi.loadSettings().subscribe(res => this.contextStoreService.settings$.next(res));
   }
 
   /** Добавление версии в заголовок */
-  private addGitVersionToPageTitle(): void {
-    const currentTitle = this.getPageTitle();
+  private addGitVersionToPageTitle(title: string): void {
+    const currentTitle = title || this.title.getTitle();
 
     this.gitInfo.getVersionAsString().subscribe(version => {
       this.title.setTitle(`${currentTitle} (версия от ${version})`);
     });
-  }
-
-  private getPageTitle(): string {
-    if (environment.pageTitle) {
-      return environment.pageTitle;
-    }
-    return this.title.getTitle();
   }
 }

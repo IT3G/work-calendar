@@ -1,25 +1,20 @@
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import * as moment from 'moment';
 import { forkJoin, Subscription } from 'rxjs';
 import { DictionaryApiService } from '../../core/services/dictionary-api.service';
 import { EmployeeApiService } from '../../core/services/employee-api.service';
+import { ToggleButtonDataModel } from '../../shared/components/radio-button-group/radio-button-group.model';
 import { locationsDictionary } from '../../shared/const/locations-dictionary.const';
-import { Employee } from '../../shared/models/employee.model';
 import {
   notFindColor,
   radioButtonGroupCommonColor,
   subdivisionColors
 } from '../../shared/const/subdivision-colors.const';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { DictionaryModel } from '../../shared/models/dictionary.model';
-import { ToggleButtonDataModel } from '../../shared/components/radio-button-group/radio-button-group.model';
-
-export interface ProjectData {
-  projectName: string;
-  projectID: string;
-  users: Employee[];
-}
+import { Employee } from '../../shared/models/employee.model';
+import { ProjectDataModel } from '../models/project-data.model';
 
 @Component({
   selector: 'app-projects-teams',
@@ -27,21 +22,22 @@ export interface ProjectData {
   styleUrls: ['./projects-teams.component.scss']
 })
 export class ProjectsTeamsComponent implements OnInit, OnDestroy {
+  public isMobileVersion: boolean;
   public location = locationsDictionary;
 
   public filtersForm: FormGroup;
 
-  public projectsData: ProjectData[];
+  public projectsData: ProjectDataModel[];
   public subdivisionData: ToggleButtonDataModel[];
+  public loadInProgress: boolean;
 
   private subscription = new Subscription();
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
     private fb: FormBuilder,
     private dictionaryApi: DictionaryApiService,
-    private employeeApiService: EmployeeApiService
+    private employeeApiService: EmployeeApiService,
+    private breakpointObserver: BreakpointObserver
   ) {}
 
   ngOnInit() {
@@ -51,6 +47,10 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
     });
 
     this.getData();
+
+    this.subscription = this.breakpointObserver
+      .observe(['(max-width: 767px)'])
+      .subscribe(result => (this.isMobileVersion = result.matches));
   }
 
   ngOnDestroy(): void {
@@ -58,13 +58,14 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
   }
 
   private getData() {
+    this.loadInProgress = true;
     const users$ = this.employeeApiService.loadAllEmployees();
     const projects$ = this.dictionaryApi.getAll('project');
     const subdivision$ = this.dictionaryApi.getAll('subdivision');
 
     forkJoin([users$, projects$, subdivision$]).subscribe(res => {
       const [usersAll, projects, subdivision] = res;
-
+      this.loadInProgress = false;
       // делаем выборку пользователей для каждого проекта,
       // и фильтруем проекты вообще без пользователей
       this.projectsData = this.getUsersForProjects(projects, usersAll);
@@ -74,14 +75,14 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
     });
   }
 
-  private getUsersForProjects(projects: DictionaryModel[], usersAll: Employee[]): ProjectData[] {
+  private getUsersForProjects(projects: DictionaryModel[], usersAll: Employee[]): ProjectDataModel[] {
     return projects
       .map(project => {
         const users = usersAll.filter(u => u.projectsNew && u.projectsNew.some(p => p.project_id === project._id));
 
         return {
           projectName: project.name,
-          projectID: project._id,
+          projectId: project._id,
           users
         };
       })

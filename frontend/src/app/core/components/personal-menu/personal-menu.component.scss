@@ -1,0 +1,53 @@
+:host {
+  --color: #ffffff;
+}
+
+.avatar-button {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+
+  .avatar {
+    margin-right: 10px;
+  }
+
+  &:active {
+    background-color: var(--color);
+  }
+
+  &:hover {
+    background-color: var(--color);
+  }
+}
+
+.user-info {
+  padding: 10px 25px;
+  font-weight: 600;
+}
+
+.item-logout {
+  --colorize: var(--color);
+  padding: 10px 25px;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  background-color: var(--colorize);
+  cursor: pointer;
+}
+
+.nav-item {
+  color: #333;
+  padding: 10px 25px;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  &.active {
+    text-decoration: underline;
+  }
+}

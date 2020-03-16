@@ -3,17 +3,16 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import * as moment from 'moment';
 import { BehaviorSubject, forkJoin, Observable, Subscription } from 'rxjs';
-import { distinctUntilChanged, map, share, switchMap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, first, map, share, switchMap, tap } from 'rxjs/operators';
 import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
-import { locationsDictionary } from '../../../shared/const/locations-dictionary.const';
-import { DictionaryModel } from '../../../shared/models/dictionary.model';
-import { PresenceModel } from '../../../shared/models/presence.page.model';
 import { HolidaysApiService } from '../../../core/services/holidays-api.service';
-import { HolidaysModel } from '../../../shared/models/holidays.model';
 import { TaskApiService } from '../../../core/services/task-api.service';
-import { Employee } from '../../../shared/models/employee.model';
 import { ContextStoreService } from '../../../core/store/context-store.service';
 import { SelectInputDataModel } from '../../../shared/components/single-select/single-select.component';
+import { locationsDictionary } from '../../../shared/const/locations-dictionary.const';
+import { DictionaryModel } from '../../../shared/models/dictionary.model';
+import { HolidaysModel } from '../../../shared/models/holidays.model';
+import { PresenceModel } from '../../../shared/models/presence.page.model';
 
 @Component({
   selector: 'app-team-presence',
@@ -35,6 +34,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
   public jobPositions: SelectInputDataModel[];
   public subdivisions: SelectInputDataModel[];
   public locations: SelectInputDataModel[];
+  public loadInProgress;
 
   private subscription = new Subscription();
 
@@ -58,31 +58,19 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     this.monthData$ = this.date$.pipe(
       map(date => date.format('YYYY-MM-DD')),
       distinctUntilChanged(),
+      tap(() => (this.loadInProgress = true)),
       switchMap(date => this.tasksApi.loadTasksByMonth(date)),
-      /** Отсеять сотрудников, которые должны уволиться после окончания текущего месяца. */
-      map(this.filterTerminatedEmployees),
+      tap(() => (this.loadInProgress = false)),
       share()
     );
 
     this.updateQueryParamsOnChange();
+
+    this.setUserCurrentProjectToFilter();
   }
 
   ngOnDestroy() {
     this.subscription.unsubscribe();
-  }
-
-  private filterTerminatedEmployees(presenceModels: PresenceModel[]): PresenceModel[] {
-    const now = moment();
-
-    return presenceModels.filter(({ employee }) => {
-      if (!employee.terminationDate) {
-        return true;
-      }
-
-      const endOfEmployeeTerminationMonth = moment(employee.terminationDate).endOf('month');
-
-      return now.isBefore(endOfEmployeeTerminationMonth);
-    });
   }
 
   private getCommonData() {
@@ -98,18 +86,8 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
         this.holidays = holidays;
         this.projects = projects.map(item => this.mapperToSelectInputDataModel(item));
         this.jobPositions = jobPositions.map(item => this.mapperToSelectInputDataModel(item));
-        this.subdivisions = subdivisions.map(item => {
-          return {
-            value: item.name,
-            name: item.name
-          };
-        });
-        this.locations = locationsDictionary.map(item => {
-          return {
-            value: item,
-            name: item
-          };
-        });
+        this.subdivisions = subdivisions.map(item => ({ value: item.name, name: item.name }));
+        this.locations = locationsDictionary.map(item => ({ value: item, name: item }));
       })
     );
   }
@@ -145,6 +123,8 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
         })
       )
     );
+
+    this.subscription.add(this.route.queryParams.subscribe(res => this.filtersForm.patchValue(res)));
   }
 
   private getMonthDays(): Observable<moment.Moment[]> {
@@ -170,43 +150,24 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     if (filters) {
       this.filtersForm.patchValue(filters);
     }
-
-    this.subscription.add(
-      this.contextStoreService
-        .getCurrentUser$()
-        .subscribe(res => this.filtersForm.patchValue({ project: this.getMainProject(res) }))
-    );
   }
 
-  // получаем основной на текущий момент проект
-  // у залогиненого пользователя, с максимальным %
-  private getMainProject(user: Employee): string {
-    if (!user.projectsNew && !user.projectsNew.length) {
-      return null;
+  // выставляем текущий проект как основной у пользователя.
+  private setUserCurrentProjectToFilter(): void {
+    if (this.route?.snapshot?.queryParams?.project || this.route?.snapshot?.queryParams?.fromFilter) {
+      return;
     }
 
-    const year = moment().year();
-    const month = moment().month() + 1;
+    this.contextStoreService
+      .getCurrentUser$()
+      .pipe(
+        first(),
+        filter(u => !!u?.lastProjects?.length)
+      )
+      .subscribe(user => {
+        const maxLastProject = user.lastProjects.sort((a, b) => b.percent - a.percent)[0];
 
-    // тк у проекта метадата - массив с инфой по месяцам,
-    // мапим проекты, чтобы получить массив
-    // с активными на текущий момент проектами, без массива метадат
-    const activeProject = user.projectsNew
-      .map(project => {
-        const metadata = project.metadata.find(pr => pr.year === year && pr.month === month);
-        return {
-          project_name: project.project_name,
-          project_id: project.project_id,
-          percent: metadata ? metadata.percent : null
-        };
-      })
-      .filter(p => p && p.percent)
-      .sort((a, b) => b.percent - a.percent);
-
-    if (!activeProject && !activeProject.length) {
-      return null;
-    }
-
-    return activeProject[0].project_id;
+        this.filtersForm.patchValue({ project: maxLastProject?.project_id });
+      });
   }
 }
