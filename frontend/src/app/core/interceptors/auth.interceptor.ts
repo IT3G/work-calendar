@@ -14,7 +14,6 @@ import { catchError, filter, first, switchMap, tap } from 'rxjs/operators';
 import { LoginService } from 'src/app/login/services/login.service';
 import { TokensPayload } from 'src/app/shared/models/tokens-payload.model';
 
-import { environment } from '../../../environments/environment';
 import { AuthApiService } from '../services/auth-api.service';
 
 @Injectable({
@@ -72,9 +71,6 @@ export class AuthInterceptor implements HttpInterceptor {
             );
           }
           if (isSessionInProgress && this.isRefreshingTokens) {
-            if (request.url === `${environment.baseUrl}/auth/token`) {
-              return next.handle(request);
-            }
             return this.tokensSubject$.pipe(
               filter(tokens => Boolean(tokens)),
               first(),

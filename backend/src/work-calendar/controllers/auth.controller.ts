@@ -57,7 +57,7 @@ export class AuthController {
       const { accessKey, refreshToken } = this.authService.getJWTTokensForUser(user);
       return { accessKey, refreshToken };
     } catch (e) {
-      throw new UnauthorizedException();
+      throw new NotAcceptableException('token unacceptable');
     }
   }
 
