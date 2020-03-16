@@ -7,26 +7,24 @@ import {
   HTTP_INTERCEPTORS
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 
 import { UNAUTHORIZED } from 'http-status-codes';
-import { Observable, of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { catchError, filter, first, switchMap, tap } from 'rxjs/operators';
 import { LoginService } from 'src/app/login/services/login.service';
+import { TokensPayload } from 'src/app/shared/models/tokens-payload.model';
 
+import { environment } from '../../../environments/environment';
 import { AuthApiService } from '../services/auth-api.service';
-import { ContextStoreService } from '../store/context-store.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(
-    private router: Router,
-    private context: ContextStoreService,
-    private authService: AuthApiService,
-    private loginService: LoginService
-  ) {}
+  private isRefreshingTokens = false;
+  private tokensSubject$ = new BehaviorSubject<TokensPayload>(null);
+
+  constructor(private authService: AuthApiService, private loginService: LoginService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const jwt = localStorage.getItem('Authorization');
@@ -45,26 +43,58 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(request).pipe(
       catchError((err: HttpErrorResponse) => {
-        if (err && err.status === UNAUTHORIZED) {
-          if (isSessionInProgress) {
-            return this.attemptRefreshTokens(refreshToken);
-          } else {
-            this.context.setCurrentUser(null);
-            this.router.navigate(['login']);
+        const isUnauthorized = err && err.status === UNAUTHORIZED;
+
+        if (isUnauthorized) {
+          if (isSessionInProgress && !this.isRefreshingTokens) {
+            this.isRefreshingTokens = true;
+            this.tokensSubject$.next(null);
+            return this.authService.refreshTokens(refreshToken).pipe(
+              tap(tokens => {
+                this.loginService.onTokenRefresh(tokens);
+                this.tokensSubject$.next(tokens);
+                this.isRefreshingTokens = false;
+              }),
+              switchMap(tokens => {
+                request = request.clone({
+                  setHeaders: {
+                    Authorization: tokens.accessKey,
+                    RefreshToken: tokens.refreshToken
+                  }
+                });
+                return next.handle(request);
+              }),
+              catchError(() => {
+                this.isRefreshingTokens = false;
+                this.loginService.onLogOut();
+                return next.handle(request);
+              })
+            );
           }
+          if (isSessionInProgress && this.isRefreshingTokens) {
+            if (request.url === `${environment.baseUrl}/auth/token`) {
+              return next.handle(request);
+            }
+            return this.tokensSubject$.pipe(
+              filter(tokens => Boolean(tokens)),
+              first(),
+              switchMap(tokens => {
+                request = request.clone({
+                  setHeaders: {
+                    Authorization: tokens.accessKey,
+                    RefreshToken: tokens.refreshToken
+                  }
+                });
+                return next.handle(request);
+              })
+            );
+          }
+          if (!isSessionInProgress) {
+            this.loginService.onLogOut();
+          }
+          return next.handle(request);
         }
-
         return next.handle(request);
-      })
-    );
-  }
-
-  private attemptRefreshTokens(refreshToken: string) {
-    return this.authService.refreshTokens(refreshToken).pipe(
-      tap(tokens => this.loginService.onTokenRefresh(tokens)),
-      catchError(() => {
-        this.loginService.onLogOut();
-        return of(null);
       })
     );
   }
