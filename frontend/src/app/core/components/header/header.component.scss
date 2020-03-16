@@ -1,30 +1,70 @@
-.contaienr {
-  display: flex;
+:host {
+  --headerHeight: 80px;
+  height: var(--headerHeight);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: white;
+
+  display: grid;
+  grid-template-columns: 100px 300px 1fr 30px 100px;
+  grid-template-areas: 'logo search nav my-presence personal';
+  grid-template-rows: var(--headerHeight);
   align-items: center;
-  padding: 10px 20px;
+  justify-items: center;
+  box-shadow: -1px -1px 3px 0px;
 }
 
-.avatar {
-  margin-right: 10px;
+.main-logo {
+  height: 55px;
+  grid-area: logo;
+  img {
+    height: inherit;
+    display: block;
+  }
 }
 
-.user-info-container {
-  display: flex;
-  align-items: center;
+.nav-menu {
+  grid-area: nav;
+  justify-self: start;
 }
 
-.mobile-menu {
-  display: none;
+.personal-menu {
+  grid-area: personal;
+}
+
+.search {
+  grid-area: search;
+}
+
+.my-presence {
+  grid-area: my-presence;
+  font-size: 20px;
   cursor: pointer;
+  transition: ease-in-out 0.2s;
+  color: black;
+
+  &.active,
+  &:hover {
+    transform: scale(1.15);
+  }
 }
 
-@media (max-width: 750px) {
-  .menu {
-    display: none;
+@media screen and (max-width: 860px) {
+  :host {
+    grid-template-areas: 'nav logo my-presence personal';
+    grid-template-columns: 100px 1fr 30px 100px;
   }
 
-  .mobile-menu {
-    display: block;
-    padding-right: 14px;
+  .main-logo {
+    height: 35px;
+  }
+
+  .nav-menu {
+    justify-self: center;
+  }
+
+  .search {
+    display: none;
   }
 }

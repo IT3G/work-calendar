@@ -20,7 +20,7 @@ export interface UserEntity extends Document {
   subdivision: SubdivisionEntity;
   jobPosition: JobPositionEntity;
   projectsNew: ProjectNewEntity[];
-  authType?: string;
-  hashPassword?: string;
-  terminationDate?: string;
+  authType: string;
+  hashPassword: string;
+  terminationDate: string;
 }

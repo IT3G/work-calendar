@@ -1,0 +1,23 @@
+<mat-form-field class="control">
+  <input
+    [(ngModel)]="filter"
+    matInput
+    name="filter"
+    autocomplete="off"
+    placeholder="Быстрый поиск по Ф.И.О."
+    (keyup)="getFilteredEmployees(); showDropdown = true"
+    (focus)="showDropdown = true"
+    (blur)="onFilterBlur()"
+    (keyup.enter)="onFilterEnterPress()"
+  />
+</mat-form-field>
+
+<div class="dropdown" *ngIf="showDropdown && filteredEmployees?.length">
+  <a
+    class="employee-item"
+    *ngFor="let employee of filteredEmployees"
+    [routerLink]="['presence', employee.mailNickname]"
+  >
+    {{ employee.username }}
+  </a>
+</div>

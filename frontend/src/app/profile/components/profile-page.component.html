@@ -39,7 +39,11 @@
     </mat-tab>
 
     <mat-tab label="Проекты">
-      <app-profile-projects [projects]="selectedUser.projectsNew"></app-profile-projects>
+      <app-profile-projects
+        [projects]="selectedUser.projectsNew"
+        [isAdmin]="isAdmin$ | async"
+        (updateValue)="onUpdateValue($event)"
+      ></app-profile-projects>
     </mat-tab>
 
     <mat-tab label="Подписки">

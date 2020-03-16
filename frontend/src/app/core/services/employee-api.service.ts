@@ -22,15 +22,15 @@ export class EmployeeApiService {
     return this.http.get<Employee>(`${environment.baseUrl}/users/${id}`);
   }
 
-  public updateUserInfo(login: string, data: Employee): Observable<Object> {
-    return this.http.post<Object>(`${environment.baseUrl}/users/login/${login}`, data);
+  public updateUserInfo(login: string, data: Employee): Observable<Employee> {
+    return this.http.post<Employee>(`${environment.baseUrl}/users/login/${login}`, data);
   }
 
   public updateUserPatronymic(login: string, data: string): Observable<Employee> {
     return this.http.post<Employee>(`${environment.baseUrl}/users/patronymic/${login}`, { patronymic: data });
   }
 
-  public addNewUser(data: { username: string }): Observable<Object> {
-    return this.http.post<Object>(`${environment.baseUrl}/auth/add`, data);
+  public addNewUser(data: { username: string }): Observable<Employee> {
+    return this.http.post<Employee>(`${environment.baseUrl}/auth/add`, data);
   }
 }

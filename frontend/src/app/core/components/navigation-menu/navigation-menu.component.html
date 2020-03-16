@@ -1,27 +1,16 @@
-<nav class="nav">
-  <a class="nav-item" *ngIf="isAuth$ | async" routerLink="/presence" routerLinkActive="active">Мое присутствие</a>
-  <a class="nav-item" *ngIf="isAuth$ | async" routerLink="/team-presence" routerLinkActive="active">Команда</a>
-  <a class="nav-item" *ngIf="isAuth$ | async" routerLink="/projects-teams" routerLinkActive="active">Проекты</a>
-  <a class="nav-item" *ngIf="isAuth$ | async" routerLink="/profile" routerLinkActive="active">Профиль</a>
+<app-dropdown ddPanelPosition="left" *ngIf="isMobile; else desktopMenu">
+  <div dd-trigger>
+    <mat-icon>menu</mat-icon>
+  </div>
+  <div dd-panel>
+    <a class="nav-item" *ngIf="isAuth$ | async" routerLink="/team-presence" routerLinkActive="active">Присутствие</a>
+    <a class="nav-item" *ngIf="isAuth$ | async" routerLink="/projects-teams" routerLinkActive="active">Проекты</a>
+  </div>
+</app-dropdown>
 
-  <button
-    mat-button
-    class="nav-item"
-    *ngIf="(isAuth$ | async) && (isAdmin$ | async)"
-    [ngClass]="{
-      active: router.url === '/employee-list' || router.url === '/projects'
-    }"
-    [matMenuTriggerFor]="menu"
-  >
-    Администр.
-  </button>
-  <mat-menu #menu="matMenu">
-    <a mat-menu-item class="nav-item" routerLink="/admin/employee-list" routerLinkActive="active">Сотрудники</a>
-    <a mat-menu-item class="nav-item" routerLink="/admin/dictionary" routerLinkActive="active">Справочники</a>
-    <a mat-menu-item class="nav-item" routerLink="/admin/holidays" routerLinkActive="active">
-      Производственный календарь
-    </a>
-  </mat-menu>
-
-  <a class="btn btn-outline-primary" *ngIf="isAuth$ | async" (click)="logout()">Выйти</a>
-</nav>
+<ng-template #desktopMenu>
+  <nav class="nav">
+    <a class="nav-item" *ngIf="isAuth$ | async" routerLink="/team-presence" routerLinkActive="active">Присутствие</a>
+    <a class="nav-item" *ngIf="isAuth$ | async" routerLink="/projects-teams" routerLinkActive="active">Проекты</a>
+  </nav>
+</ng-template>

@@ -1,0 +1,27 @@
+<div class="login-form" [formGroup]="loginForm" (keydown.enter)="login()">
+  <mat-form-field>
+    <input matInput placeholder="E-Mail" autocomplete="off" formControlName="username" />
+    <span matSuffix *ngIf="(settings$ | async)?.FEATURE_AUTH_TYPE !== 'PASSWORD'" class="input-login__suffix">
+      {{ (settings$ | async)?.MAIL_POSTFIX }}
+    </span>
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <input matInput placeholder="password" type="password" autocomplete="off" formControlName="password" />
+  </mat-form-field>
+
+  <div class="form-footer">
+    <button mat-raised-button color="primary" (click)="login()" [disabled]="loginForm.invalid">
+      Войти
+    </button>
+
+    <button
+      *ngIf="(settings$ | async)?.FEATURE_AUTH_TYPE === 'PASSWORD'"
+      mat-raised-button
+      color="primary"
+      routerLink="/registration"
+    >
+      Регистрация
+    </button>
+  </div>
+</div>

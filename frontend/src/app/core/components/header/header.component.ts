@@ -1,7 +1,8 @@
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AppRoutingModule } from '../../../routing/app-routing.module';
+import { filter, map } from 'rxjs/operators';
+import { environment } from '../../../../environments/environment';
 import { Employee } from '../../../shared/models/employee.model';
 import { ContextStoreService } from '../../store/context-store.service';
 
@@ -14,18 +15,19 @@ export class HeaderComponent implements OnInit {
   @Output() mobileMenuClick = new EventEmitter<void>();
 
   public currentUser$: Observable<Employee>;
+  public isMobile: boolean;
+  public baseUrl = environment.baseUrl;
+  public logoName$: Observable<string>;
 
-  constructor(private router: Router, private contextStoreService: ContextStoreService) {}
+  constructor(private contextStoreService: ContextStoreService, private breakpointObserver: BreakpointObserver) {}
 
   ngOnInit() {
     this.currentUser$ = this.contextStoreService.getCurrentUser$();
-  }
+    this.logoName$ = this.contextStoreService.settings$.pipe(
+      filter(s => !!s),
+      map(s => s.LOGO_NAME)
+    );
 
-  onSwipe(evt: { deltaX: number }): void {
-    const toRight = Math.abs(evt.deltaX) > 40 && evt.deltaX > 0;
-    const increment = toRight === true ? -1 : 1;
-
-    const nextRoute = AppRoutingModule.getNext(this.router, increment);
-    this.router.navigate([nextRoute]);
+    this.breakpointObserver.observe(['(max-width: 860px)']).subscribe(result => (this.isMobile = result.matches));
   }
 }

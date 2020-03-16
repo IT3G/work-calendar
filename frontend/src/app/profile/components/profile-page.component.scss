@@ -4,7 +4,7 @@
   padding: 20px;
   box-sizing: border-box;
   display: grid;
-  grid-template-columns: 160px auto;
+  grid-template-columns: 160px minmax(auto, 1040px);
   grid-template-rows: 160px 50px auto;
   grid-template-areas:
     'avatar tabs'
