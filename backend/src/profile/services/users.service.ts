@@ -59,4 +59,10 @@ export class UsersService {
     );
     return await this.getUserByLogin(login);
   }
+
+  /** Удалить токен из бд */
+  async removeUserToken(login: string, tokenId: string): Promise<UserEntity> {
+    await this.userModel.updateOne({ mailNickname: login }, { $pull: { refreshTokens: { _id: tokenId } } });
+    return await this.getUserByLogin(login);
+  }
 }

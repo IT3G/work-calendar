@@ -5,6 +5,8 @@ import { UserEntity } from '../../entity/entities/user.entity';
 import { UsersService } from '../../profile/services/users.service';
 import { v4 as uuidv4 } from 'uuid';
 import { JwtRefreshSignModel } from '../models/jwt-refresh-sign.model';
+// tslint:disable-next-line: no-var-requires
+const ms = require('ms');
 
 @Injectable()
 export class RefreshTokenService {
@@ -19,7 +21,6 @@ export class RefreshTokenService {
     const refreshToken = this.jwtService.sign(refreshSign, { expiresIn: this.config.JWT_REFRESH_EXPIRES });
 
     this.saveRefreshToken(login, refreshSign.refresh);
-    this.removeOutdatedTokens(login);
 
     return refreshToken;
   }
@@ -30,12 +31,19 @@ export class RefreshTokenService {
     }
 
     const res: JwtRefreshSignModel = this.jwtService.verify(token);
-    const user = await this.usersService.getUserByLogin(res.mailNickname);
 
-    const isValidToken = user.refreshTokens.some(i => i.token === res.refresh);
-    if (!isValidToken) {
+    const login = res.mailNickname;
+    await this.removeOutdatedTokens(login);
+    const user = await this.usersService.getUserByLogin(login);
+
+    const tokenEntity = user.refreshTokens.find(i => i.token === res.refresh);
+
+    if (!tokenEntity) {
       return Promise.reject('Invalid token');
     }
+
+    /** Текущий токен удаляем чтобы не захламлять бд, т.к. на его место будет выдан новый */
+    this.usersService.removeUserToken(login, tokenEntity._id);
 
     return user;
   }
@@ -50,9 +58,9 @@ export class RefreshTokenService {
   }
 
   /** Удалить протухшие токены */
-  private removeOutdatedTokens(login: string): void {
+  private removeOutdatedTokens(login: string): Promise<UserEntity> {
     const date = new Date();
-    date.setDate(date.getDate() - Number.parseInt(this.config.JWT_REFRESH_EXPIRES.replace(/\D/g, ''), 10));
-    this.usersService.removeOutdatedTokens(login, date);
+    date.setMilliseconds(date.getMilliseconds() - ms(this.config.JWT_REFRESH_EXPIRES));
+    return this.usersService.removeOutdatedTokens(login, date);
   }
 }
