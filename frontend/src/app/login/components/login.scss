@@ -25,3 +25,10 @@
   display: flex;
   justify-content: space-around;
 }
+
+@media (max-width: 767px) {
+  .login-form {
+    max-width: 200px;
+    padding: 15px;
+  }
+}

@@ -18,6 +18,7 @@
 .main-logo {
   height: 55px;
   grid-area: logo;
+
   img {
     height: inherit;
     display: block;
@@ -52,6 +53,7 @@
 
 @media screen and (max-width: 860px) {
   :host {
+    --headerHeight: 50px;
     grid-template-areas: 'nav logo my-presence personal';
     grid-template-columns: 100px 1fr 30px 100px;
   }
