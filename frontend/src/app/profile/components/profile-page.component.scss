@@ -24,6 +24,7 @@
 .presence {
   grid-area: presence;
   height: 45px;
+
   &:focus {
     outline: none;
   }
@@ -33,4 +34,56 @@
   grid-area: name;
   font-weight: bolder;
   text-align: center;
+}
+
+@media (min-width: 768px) and (max-width: 1200px) {
+  :host {
+    width: 95vw;
+    padding: 10px;
+    grid-template-columns: 1fr;
+    grid-template-rows: 160px 50px 50px auto;
+    grid-template-areas:
+      'avatar'
+      'name'
+      'presence'
+      'tabs';
+  }
+
+  .avatar {
+    margin: 0 auto;
+  }
+
+  .presence {
+    margin: 0 auto;
+    width: 30vw;
+  }
+}
+
+@media (max-width: 767px) {
+  :host {
+    width: 95vw;
+    padding: 5px;
+    grid-template-columns: 1fr;
+    grid-template-rows: 80px 25px 40px auto;
+    grid-template-areas:
+      'avatar'
+      'name'
+      'presence'
+      'tabs';
+    gap: 10px;
+  }
+
+  .avatar {
+    margin: 0 auto;
+  }
+
+  .presence {
+    height: 40px;
+    width: 40vw;
+    margin: 0 auto;
+  }
+
+  .tabs {
+    width: 90vw;
+  }
 }

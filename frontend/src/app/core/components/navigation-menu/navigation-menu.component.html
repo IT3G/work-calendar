@@ -3,30 +3,14 @@
     <mat-icon>menu</mat-icon>
   </div>
   <div dd-panel>
-    <a
-      class="nav-item"
-      *ngIf="isAuth$ | async"
-      [routerLink]="['presence', (selectedUser$ | async).mailNickname]"
-      routerLinkActive="active"
-    >
-      Мое присутствие
-    </a>
-    <a class="nav-item" *ngIf="isAuth$ | async" routerLink="/team-presence" routerLinkActive="active">Команда</a>
+    <a class="nav-item" *ngIf="isAuth$ | async" routerLink="/team-presence" routerLinkActive="active">Присутствие</a>
     <a class="nav-item" *ngIf="isAuth$ | async" routerLink="/projects-teams" routerLinkActive="active">Проекты</a>
   </div>
 </app-dropdown>
 
 <ng-template #desktopMenu>
   <nav class="nav">
-    <a
-      class="nav-item"
-      *ngIf="isAuth$ | async"
-      [routerLink]="['presence', (selectedUser$ | async).mailNickname]"
-      routerLinkActive="active"
-    >
-      Мое присутствие
-    </a>
-    <a class="nav-item" *ngIf="isAuth$ | async" routerLink="/team-presence" routerLinkActive="active">Команда</a>
+    <a class="nav-item" *ngIf="isAuth$ | async" routerLink="/team-presence" routerLinkActive="active">Присутствие</a>
     <a class="nav-item" *ngIf="isAuth$ | async" routerLink="/projects-teams" routerLinkActive="active">Проекты</a>
   </nav>
 </ng-template>

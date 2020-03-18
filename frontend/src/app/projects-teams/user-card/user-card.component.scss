@@ -37,3 +37,35 @@
   font-size: 12px;
   color: rgb(117, 114, 114);
 }
+
+@media (min-width: 768px) and (max-width: 1200px) {
+  .user-card {
+    .user-name {
+      padding: 5px 0 5px 5px;
+      font-size: 14px;
+    }
+  }
+
+  .label-subdivision {
+    width: 10px;
+  }
+
+  .element-hidden {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .name {
+    display: flex;
+    flex-direction: row;
+
+    div {
+      margin-right: 5px;
+    }
+  }
+
+  .location {
+    font-size: 14px;
+  }
+}

@@ -1,10 +1,5 @@
 @import 'src/app/shared/styles/scroll';
 
-.tab-scroll-content {
-  max-height: calc(100vh - 260px);
-  @extend .scrollbar;
-}
-
 .history-table {
   width: 100%;
 
@@ -16,21 +11,19 @@
     padding: 8px 4px;
     vertical-align: super;
     border-bottom: 1px solid #dee2e6;
+    min-width: 110px;
   }
 
-  .change-date {
-    width: 110px;
-  }
-
-  .date {
-    width: 110px;
-  }
-  .employee {
-    width: 150px;
-  }
+  .change-date,
+  .date,
   .type {
     width: 110px;
   }
+
+  .employee {
+    width: 150px;
+  }
+
   .comment {
     width: 200px;
   }

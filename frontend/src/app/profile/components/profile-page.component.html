@@ -3,12 +3,16 @@
     class="avatar"
     *ngIf="(settings$ | async)?.FEATURE_AVATAR_SOURCE === 'CONFLUENCE'; else noAvatar"
     [src]="selectedUser | avatarSource"
-    size="160"
+    [size]="isMobile ? 80 : 160"
     value="{{ selectedUser.username | usernamePipe }}"
   ></ngx-avatar>
 
   <ng-template #noAvatar>
-    <ngx-avatar class="avatar" size="160" value="{{ selectedUser.username | usernamePipe }}"></ngx-avatar>
+    <ngx-avatar
+      class="avatar"
+      [size]="isMobile ? 80 : 160"
+      value="{{ selectedUser.username | usernamePipe }}"
+    ></ngx-avatar>
   </ng-template>
 
   <div class="user-name">{{ selectedUser.username }}</div>

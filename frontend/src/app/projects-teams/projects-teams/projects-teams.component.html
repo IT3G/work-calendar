@@ -1,40 +1,43 @@
-<div class="container-fit">
-  <app-project-teams-filter [filtersForm]="filtersForm" [subdivision]="subdivisionData"></app-project-teams-filter>
+<div class="sticky-header">
+  <app-project-teams-filter
+    [filtersForm]="filtersForm"
+    [subdivision]="subdivisionData"
+    [isMobileVersion]="isMobileVersion"
+  ></app-project-teams-filter>
 
-  <div class="table-title">
-    <table class="project-table">
-      <tr>
-        <td></td>
-        <td *ngFor="let loc of location">
-          {{ loc }}
-        </td>
-      </tr>
-    </table>
+  <div class="projects-grid">
+    <div class="location" *ngFor="let loc of location">
+      {{ loc }}
+    </div>
   </div>
-  <div class="tab-scroll-content">
-    <table class="project-table">
-      <tr
-        *ngFor="
-          let project of projectsData
-            | projectTeamsFilter: filtersForm.value
-            | projectTeamsTerminatedEmployeesFilter: filtersForm.value
-        "
-      >
-        <td>
-          <div class="project-name">
-            <a [href]="getLink(project.projectId)">
-              {{ project.projectName }}
-            </a>
-          </div>
-        </td>
-        <td class="project-cell" *ngFor="let loc of location">
-          <div class="users-wrapper">
-            <div *ngFor="let user of project.users | userForLocation: loc">
-              <app-user-card [user]="user"></app-user-card>
-            </div>
-          </div>
-        </td>
-      </tr>
-    </table>
+</div>
+
+<div class="projects-grid">
+  <ng-container *ngFor="let project of projectsData | projectTeamsFilter: filtersForm.value" class="project-table">
+    <app-projects-title [project]="project" [subdivisionData]="subdivisionData"></app-projects-title>
+
+    <ng-container
+      *ngTemplateOutlet="isMobileVersion ? mobileTable : desktopTable; context: { project: project }"
+    ></ng-container>
+  </ng-container>
+</div>
+
+<ng-template #mobileTable let-project="project">
+  <ng-container *ngFor="let loc of location">
+    <div *ngFor="let user of project.users | userForLocation: loc">
+      <app-user-card [user]="user" [isMobileVersion]="isMobileVersion"></app-user-card>
+    </div>
+  </ng-container>
+</ng-template>
+
+<ng-template #desktopTable let-project="project">
+  <div class="border desktop-item" *ngFor="let loc of location">
+    <div *ngFor="let user of project.users | userForLocation: loc">
+      <app-user-card [user]="user"></app-user-card>
+    </div>
   </div>
+</ng-template>
+
+<div class="loader-container" *ngIf="loadInProgress">
+  <app-spring-spinner [animationDuration]="1000" [size]="80" color="#90caf9"></app-spring-spinner>
 </div>

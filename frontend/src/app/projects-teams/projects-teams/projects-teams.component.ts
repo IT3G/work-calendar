@@ -1,3 +1,4 @@
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import * as moment from 'moment';
@@ -21,19 +22,22 @@ import { ProjectDataModel } from '../models/project-data.model';
   styleUrls: ['./projects-teams.component.scss']
 })
 export class ProjectsTeamsComponent implements OnInit, OnDestroy {
+  public isMobileVersion: boolean;
   public location = locationsDictionary;
 
   public filtersForm: FormGroup;
 
   public projectsData: ProjectDataModel[];
   public subdivisionData: ToggleButtonDataModel[];
+  public loadInProgress: boolean;
 
   private subscription = new Subscription();
 
   constructor(
     private fb: FormBuilder,
     private dictionaryApi: DictionaryApiService,
-    private employeeApiService: EmployeeApiService
+    private employeeApiService: EmployeeApiService,
+    private breakpointObserver: BreakpointObserver
   ) {}
 
   ngOnInit() {
@@ -43,6 +47,10 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
     });
 
     this.getData();
+
+    this.subscription = this.breakpointObserver
+      .observe(['(max-width: 767px)'])
+      .subscribe(result => (this.isMobileVersion = result.matches));
   }
 
   ngOnDestroy(): void {
@@ -50,13 +58,14 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
   }
 
   private getData() {
+    this.loadInProgress = true;
     const users$ = this.employeeApiService.loadAllEmployees();
     const projects$ = this.dictionaryApi.getAll('project');
     const subdivision$ = this.dictionaryApi.getAll('subdivision');
 
     forkJoin([users$, projects$, subdivision$]).subscribe(res => {
       const [usersAll, projects, subdivision] = res;
-
+      this.loadInProgress = false;
       // делаем выборку пользователей для каждого проекта,
       // и фильтруем проекты вообще без пользователей
       this.projectsData = this.getUsersForProjects(projects, usersAll);

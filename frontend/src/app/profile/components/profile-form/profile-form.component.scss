@@ -1,13 +1,8 @@
 @import 'src/app/shared/styles/scroll';
 
-:host {
-  display: block;
-  max-height: calc(100vh - 260px);
-  @extend .scrollbar;
-}
-
 button {
   margin-right: 10px;
+
   &:last-child {
     margin-right: 0;
   }
@@ -36,6 +31,7 @@ button {
 .span-project {
   padding-left: 10px;
 }
+
 .delete {
   width: 20px;
   height: 20px;
@@ -55,4 +51,20 @@ button {
 
 ::ng-deep .mat-tab-body {
   padding: 20px 10px;
+}
+
+@media (min-width: 768px) and (max-width: 1200px) {
+  .profile-form {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .profile-form {
+    grid-template-columns: 1fr;
+  }
+
+  .form-footer {
+    grid-column: 1 / 2;
+  }
 }

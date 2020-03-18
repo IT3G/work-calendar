@@ -14,6 +14,9 @@ export class UserCardComponent implements OnInit {
   @Input()
   user: Employee;
 
+  @Input()
+  isMobileVersion: boolean;
+
   public settings$: Observable<SettingsModel>;
 
   constructor(private contextStoreService: ContextStoreService) {}
