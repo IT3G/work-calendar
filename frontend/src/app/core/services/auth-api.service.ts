@@ -16,8 +16,8 @@ export class AuthApiService {
 
   constructor(private http: HttpClient) {}
 
-  public login(req: AuthRequestModel): Observable<Employee> {
-    return this.http.post<Employee>(this.url, req);
+  public login(req: AuthRequestModel): Observable<TokensPayload> {
+    return this.http.post<TokensPayload>(this.url, req);
   }
 
   public getCurrentUser(): Observable<Employee> {

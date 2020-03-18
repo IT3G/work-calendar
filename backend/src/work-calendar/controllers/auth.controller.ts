@@ -17,6 +17,7 @@ import { LoginModel } from '../models/login.model';
 import { AuthService } from '../services/auth.service';
 import { LdapService } from '../services/ldap.service';
 import { RefreshTokenService } from '../services/refresh-token.service';
+import { LoginDto } from '../dto/login.dto';
 @ApiBearerAuth()
 @ApiUseTags('Auth')
 @Controller('auth')
@@ -32,30 +33,29 @@ export class AuthController {
   ) {}
 
   @Post()
-  async auth(@Body() credentials: LoginModel): Promise<UserDto> {
+  async auth(@Body() credentials: LoginModel): Promise<LoginDto> {
     try {
       const userEntity = await this.authService.auth(credentials);
+      const userDto = this.mapper.map(UserDto, userEntity);
 
-      const dto = this.mapper.map(UserDto, userEntity);
+      const { accessKey, refreshToken } = await this.authService.getJWTTokensForUser(userEntity);
 
-      const { accessKey, refreshToken } = this.authService.getJWTTokensForUser(userEntity);
-
-      dto.accessKey = accessKey;
-      dto.refreshToken = refreshToken;
-
-      return dto;
+      return { accessKey, refreshToken, user: userDto };
     } catch (e) {
       throw new NotAcceptableException(e.message ? e.message : e);
     }
   }
 
   @Post('/token')
-  async refreshToken(@Req() req: Request): Promise<{ accessKey: string; refreshToken: string }> {
+  async refreshToken(@Req() req: Request): Promise<LoginDto> {
     const token = req.header('RefreshToken');
     try {
-      const user = await this.refreshTokenService.verifyAndGetUser(token);
-      const { accessKey, refreshToken } = this.authService.getJWTTokensForUser(user);
-      return { accessKey, refreshToken };
+      const userEntity = await this.refreshTokenService.verifyAndGetUser(token);
+      const userDto = this.mapper.map(UserDto, userEntity);
+
+      const { accessKey, refreshToken } = await this.authService.getJWTTokensForUser(userEntity);
+
+      return { accessKey, refreshToken, user: userDto };
     } catch (e) {
       throw new NotAcceptableException('token unacceptable');
     }

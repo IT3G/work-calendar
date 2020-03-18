@@ -17,11 +17,11 @@ export class LoginService {
     private snackbar: SnackbarService
   ) {}
 
-  onSuccessedLogin(res: Employee): void {
+  onSuccessedLogin(res: TokensPayload): void {
     localStorage.setItem('Authorization', res.accessKey);
     localStorage.setItem('RefreshToken', res.refreshToken);
-    this.contextStoreService.setCurrentUser(res);
-    this.router.navigate(['presence', res?.mailNickname]);
+    this.contextStoreService.setCurrentUser(res.user);
+    this.router.navigate(['presence', res?.user?.mailNickname]);
   }
 
   onError(errText = 'Произошла ошибка') {

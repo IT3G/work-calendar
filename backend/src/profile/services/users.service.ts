@@ -44,25 +44,4 @@ export class UsersService {
     await this.userModel.updateOne({ mailNickname: login }, { ...data });
     return await this.getUserByLogin(login);
   }
-
-  /** Сохранить новый токен в бд */
-  async storeRefreshToken(login: string, token: RefreshToken): Promise<UserEntity> {
-    await this.userModel.updateOne({ mailNickname: login }, { $push: { refreshTokens: token } });
-    return await this.getUserByLogin(login);
-  }
-
-  /** Удалить протухшие токены в бд */
-  async removeOutdatedTokens(login: string, expiryDate: Date): Promise<UserEntity> {
-    await this.userModel.updateOne(
-      { mailNickname: login },
-      { $pull: { refreshTokens: { date: { $lte: expiryDate } } } }
-    );
-    return await this.getUserByLogin(login);
-  }
-
-  /** Удалить токен из бд */
-  async removeUserToken(login: string, tokenId: string): Promise<UserEntity> {
-    await this.userModel.updateOne({ mailNickname: login }, { $pull: { refreshTokens: { _id: tokenId } } });
-    return await this.getUserByLogin(login);
-  }
 }

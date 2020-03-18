@@ -10,6 +10,7 @@ import { JwtSignModel } from '../models/jwt-sign.model';
 import { LoginModel } from '../models/login.model';
 import { LdapService } from './ldap.service';
 import { RefreshTokenService } from './refresh-token.service';
+import * as moment from 'moment';
 
 @Injectable()
 export class AuthService {
@@ -53,14 +54,14 @@ export class AuthService {
     }
 
     if (user) {
-      return Promise.resolve(user);
+      return user;
     } else {
       const newUser = await this.usersService.addUser(ldapResult);
-      return Promise.resolve(newUser);
+      return newUser;
     }
   }
 
-  getJWTTokensForUser(user: UserEntity): { accessKey: string; refreshToken: string } {
+  async getJWTTokensForUser(user: UserEntity): Promise<{ accessKey: string; refreshToken: string }> {
     const sign: JwtSignModel = {
       mailNickname: user.mailNickname,
       username: user.username,
@@ -69,7 +70,7 @@ export class AuthService {
       email: user.email
     };
     const accessKey = `Bearer ${this.jwtService.sign(sign)}`;
-    const refreshToken = this.refreshTokenService.generateRefreshToken(user);
+    const refreshToken = await this.refreshTokenService.generateRefreshToken(user);
 
     return { accessKey, refreshToken };
   }
@@ -102,7 +103,7 @@ export class AuthService {
       patronymic: null,
       location: null,
       position: null,
-      whenCreated: null,
+      whenCreated: moment().toISOString(),
       email: `${userInfo.username}${emailPostfix}`,
       telNumber: null,
       physicalDeliveryOfficeName: null,
@@ -112,8 +113,6 @@ export class AuthService {
       subdivision: null,
       jobPosition: null,
       projectsNew: null,
-      accessKey: null,
-      refreshToken: null,
       skype: null,
       telegram: null,
       authType: 'hash',
