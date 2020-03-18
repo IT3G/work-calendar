@@ -40,8 +40,7 @@ export class RefreshTokenService {
     }
     try {
       const res: JwtRefreshSignModel = this.jwtService.verify(token);
-      const tokenEntity = await this.getTokenByParams({ token: res.refresh });
-
+      const tokenEntity = await this.getTokenByParams({ token });
       if (!tokenEntity) {
         throw new NotFoundException('Token not found');
       }
@@ -57,7 +56,7 @@ export class RefreshTokenService {
   }
 
   private async createOrUpdateRefreshToken(userId: string, token: string): Promise<void> {
-    const currentToken = await this.refreshTokenModel.findOne({ userId, token });
+    const currentToken = await this.refreshTokenModel.findOne({ userId });
 
     if (currentToken) {
       await this.refreshTokenModel.findByIdAndUpdate(currentToken._id, { token, date: new Date() });
