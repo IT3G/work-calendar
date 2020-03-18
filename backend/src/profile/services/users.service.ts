@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserEntity } from '../../entity/entities/user.entity';
 import { UserDto } from '../dto/user.dto';
-import { RefreshToken } from '../models/refresh-token.model';
 
 @Injectable()
 export class UsersService {
