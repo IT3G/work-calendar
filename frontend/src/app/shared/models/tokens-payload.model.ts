@@ -1,7 +1,7 @@
 import { Employee } from './employee.model';
 
 export interface TokensPayload {
-  accessKey: string;
+  accessToken: string;
   refreshToken: string;
   user: Employee;
 }

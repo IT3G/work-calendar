@@ -9,7 +9,7 @@ export class LoginDto {
 
   @Expose()
   @ApiModelProperty()
-  accessKey: string;
+  accessToken: string;
 
   @Expose()
   @ApiModelProperty()

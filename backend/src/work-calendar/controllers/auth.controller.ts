@@ -29,10 +29,10 @@ export class AuthController {
       const userEntity = await this.authService.auth(credentials);
 
       const userDto = this.mapper.map(UserDto, userEntity);
-      const accessKey = await this.tokenService.getAccessTokensForUser(userEntity);
+      const accessToken = await this.tokenService.getAccessTokensForUser(userEntity);
       const refreshToken = await this.tokenService.generateRefreshToken(userEntity);
 
-      return { accessKey, refreshToken, user: userDto };
+      return { accessToken, refreshToken, user: userDto };
     } catch (e) {
       throw new NotAcceptableException(e.message ? e.message : e);
     }
@@ -46,10 +46,10 @@ export class AuthController {
       const userEntity = await this.usersService.getUserById(newToken.userId);
 
       const userDto = this.mapper.map(UserDto, userEntity);
-      const accessKey = await this.tokenService.getAccessTokensForUser(userEntity);
+      const accessToken = await this.tokenService.getAccessTokensForUser(userEntity);
       const refreshToken = await this.tokenService.generateRefreshToken(userEntity);
 
-      return { accessKey, refreshToken, user: userDto };
+      return { accessToken, refreshToken, user: userDto };
     } catch (e) {
       throw new NotAcceptableException('token unacceptable');
     }

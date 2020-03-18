@@ -7,13 +7,11 @@ import {
   HTTP_INTERCEPTORS
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
 import { UNAUTHORIZED } from 'http-status-codes';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { catchError, filter, first, switchMap, tap } from 'rxjs/operators';
 import { LoginService } from 'src/app/login/services/login.service';
 import { TokensPayload } from 'src/app/shared/models/tokens-payload.model';
-
 import { AuthApiService } from '../services/auth-api.service';
 
 @Injectable({
@@ -58,7 +56,7 @@ export class AuthInterceptor implements HttpInterceptor {
               switchMap(tokens => {
                 request = request.clone({
                   setHeaders: {
-                    Authorization: tokens.accessKey,
+                    Authorization: tokens.accessToken,
                     RefreshToken: tokens.refreshToken
                   }
                 });
@@ -86,7 +84,7 @@ export class AuthInterceptor implements HttpInterceptor {
       switchMap(tokens => {
         request = request.clone({
           setHeaders: {
-            Authorization: tokens.accessKey,
+            Authorization: tokens.accessToken,
             RefreshToken: tokens.refreshToken
           }
         });

@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-
 import { TokensPayload } from 'src/app/shared/models/tokens-payload.model';
-
 import { ContextStoreService } from '../../core/store/context-store.service';
-import { Employee } from '../../shared/models/employee.model';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 
 @Injectable({
@@ -18,7 +15,7 @@ export class LoginService {
   ) {}
 
   onSuccessedLogin(res: TokensPayload): void {
-    localStorage.setItem('Authorization', res.accessKey);
+    localStorage.setItem('Authorization', res.accessToken);
     localStorage.setItem('RefreshToken', res.refreshToken);
     this.contextStoreService.setCurrentUser(res.user);
     this.router.navigate(['presence', res?.user?.mailNickname]);
@@ -35,8 +32,8 @@ export class LoginService {
     this.router.navigate(['login']);
   }
 
-  onTokenRefresh({ accessKey, refreshToken }: TokensPayload): void {
-    localStorage.setItem('Authorization', accessKey);
+  onTokenRefresh({ accessToken, refreshToken }: TokensPayload): void {
+    localStorage.setItem('Authorization', accessToken);
     localStorage.setItem('RefreshToken', refreshToken);
   }
 }
