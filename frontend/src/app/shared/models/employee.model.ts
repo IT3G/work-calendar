@@ -19,8 +19,6 @@ export class Employee {
   hasMailing: boolean;
   subdivision: DictionaryModel;
   jobPosition: DictionaryModel;
-  accessKey: string;
-  refreshToken: string;
   projectsNew: ProjectNewModel[];
   terminationDate: string;
   lastProjects: LastProjectModel[];

@@ -27,8 +27,8 @@ export class AuthController {
   async auth(@Body() credentials: LoginModel): Promise<LoginDto> {
     try {
       const userEntity = await this.authService.auth(credentials);
-      const userDto = this.mapper.map(UserDto, userEntity);
 
+      const userDto = this.mapper.map(UserDto, userEntity);
       const accessKey = await this.tokenService.getAccessTokensForUser(userEntity);
       const refreshToken = await this.tokenService.generateRefreshToken(userEntity);
 
