@@ -35,6 +35,7 @@
   position: sticky;
   top: 0;
   z-index: 9;
+  min-width: min-content;
 
   &.row_28 {
     grid-template-columns: getGridColumnsByDaysInMonth(28);
@@ -55,6 +56,7 @@
 
 .table-scrolled {
   display: grid;
+  min-width: min-content;
 
   &.row_28 {
     grid-template-columns: getGridColumnsByDaysInMonth(28);
@@ -147,5 +149,11 @@ mat-form-field {
     width: 24px;
     border-radius: 50%;
     margin: 0 auto;
+  }
+}
+
+@media (max-width: 767px) {
+  :host {
+    height: 50vh;
   }
 }
