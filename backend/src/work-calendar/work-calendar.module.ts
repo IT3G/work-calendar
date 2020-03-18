@@ -15,7 +15,7 @@ import { AuthService } from './services/auth.service';
 import { LdapService } from './services/ldap.service';
 import { TaskService } from './services/task.service';
 import { VacationResolutionService } from './services/vacation-resolution.service';
-import { RefreshTokenService } from './services/refresh-token.service';
+import { TokenService } from './services/token.service';
 
 const config = getConfig();
 
@@ -35,7 +35,7 @@ const config = getConfig();
   ],
   controllers: [AuthController, TasksController],
   providers: [
-    RefreshTokenService,
+    TokenService,
     LdapService,
     AuthService,
     TaskService,

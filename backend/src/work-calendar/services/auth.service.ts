@@ -9,7 +9,6 @@ import { UsersService } from '../../profile/services/users.service';
 import { JwtSignModel } from '../models/jwt-sign.model';
 import { LoginModel } from '../models/login.model';
 import { LdapService } from './ldap.service';
-import { RefreshTokenService } from './refresh-token.service';
 import * as moment from 'moment';
 
 @Injectable()
@@ -18,8 +17,7 @@ export class AuthService {
     private readonly ldapService: LdapService,
     private readonly usersService: UsersService,
     private jwtService: JwtService,
-    private config: Config,
-    private refreshTokenService: RefreshTokenService
+    private config: Config
   ) {}
 
   async auth(credentials: LoginModel) {
@@ -61,7 +59,7 @@ export class AuthService {
     }
   }
 
-  async getJWTTokensForUser(user: UserEntity): Promise<{ accessKey: string; refreshToken: string }> {
+  async getAccessTokensForUser(user: UserEntity): Promise<string> {
     const sign: JwtSignModel = {
       mailNickname: user.mailNickname,
       username: user.username,
@@ -69,10 +67,8 @@ export class AuthService {
       position: user.position,
       email: user.email
     };
-    const accessKey = `Bearer ${this.jwtService.sign(sign)}`;
-    const refreshToken = await this.refreshTokenService.generateRefreshToken(user);
 
-    return { accessKey, refreshToken };
+    return `Bearer ${this.jwtService.sign(sign)}`;
   }
 
   /** подтвердить валидность сеесси и получить автоизованного Пользователя по запросу */

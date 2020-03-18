@@ -15,7 +15,7 @@ import { ConfluenceAvatarService } from './services/avatars/confluence-avatars.s
 import { DefaultAvatarsService } from './services/avatars/default-avatars.service';
 import { FollowService } from './services/follow.service';
 import { UsersService } from './services/users.service';
-import { RefreshTokenService } from 'src/work-calendar/services/refresh-token.service';
+import { TokenService } from '../work-calendar/services/token.service';
 
 const config = getConfig();
 
@@ -49,7 +49,6 @@ const avatarServiceProvider = {
     FollowService,
     AdminActionGuard,
     avatarServiceProvider,
-    RefreshTokenService,
     {
       provide: Config,
       useValue: config

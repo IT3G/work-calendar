@@ -12,12 +12,11 @@ import { Model } from 'mongoose';
 const ms = require('ms');
 
 @Injectable()
-export class RefreshTokenService {
+export class TokenService {
   constructor(
     @InjectModel('RefreshToken') private readonly refreshTokenModel: Model<RefreshTokenEntity>,
     private jwtService: JwtService,
-    private config: Config,
-    private readonly usersService: UsersService
+    private config: Config
   ) {}
 
   async generateRefreshToken(user: UserEntity): Promise<string> {
@@ -34,24 +33,19 @@ export class RefreshTokenService {
     return refreshToken;
   }
 
-  async verifyAndGetUser(token: string): Promise<UserEntity> {
+  async verifyAndGetRefreshToken(token: string): Promise<RefreshTokenEntity> {
     if (!token) {
       throw new NotAcceptableException('No token provided');
     }
     try {
-      const res: JwtRefreshSignModel = this.jwtService.verify(token);
-      const tokenEntity = await this.getTokenByParams({ token });
-      if (!tokenEntity) {
-        throw new NotFoundException('Token not found');
-      }
-
-      return await this.usersService.getUserById(tokenEntity.userId);
+      this.jwtService.verify(token);
+      return await this.getRefreshTokenByParams({ token });
     } catch (e) {
       throw new NotAcceptableException();
     }
   }
 
-  private async getTokenByParams(params: Partial<RefreshTokenEntity>): Promise<RefreshTokenEntity> {
+  private async getRefreshTokenByParams(params: Partial<RefreshTokenEntity>): Promise<RefreshTokenEntity> {
     return await this.refreshTokenModel.findOne(params);
   }
 

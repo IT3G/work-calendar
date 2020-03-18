@@ -16,8 +16,8 @@ import { CustomMapper } from '../../shared/services/custom-mapper.service';
 import { LoginModel } from '../models/login.model';
 import { AuthService } from '../services/auth.service';
 import { LdapService } from '../services/ldap.service';
-import { RefreshTokenService } from '../services/refresh-token.service';
 import { LoginDto } from '../dto/login.dto';
+import { TokenService } from '../services/token.service';
 @ApiBearerAuth()
 @ApiUseTags('Auth')
 @Controller('auth')
@@ -29,7 +29,7 @@ export class AuthController {
     private usersService: UsersService,
     private authService: AuthService,
     private mapper: CustomMapper,
-    private refreshTokenService: RefreshTokenService
+    private tokenService: TokenService
   ) {}
 
   @Post()
@@ -38,7 +38,8 @@ export class AuthController {
       const userEntity = await this.authService.auth(credentials);
       const userDto = this.mapper.map(UserDto, userEntity);
 
-      const { accessKey, refreshToken } = await this.authService.getJWTTokensForUser(userEntity);
+      const accessKey = await this.authService.getAccessTokensForUser(userEntity);
+      const refreshToken = await this.tokenService.generateRefreshToken(userEntity);
 
       return { accessKey, refreshToken, user: userDto };
     } catch (e) {
@@ -48,12 +49,14 @@ export class AuthController {
 
   @Post('/token')
   async refreshToken(@Req() req: Request): Promise<LoginDto> {
-    const token = req.header('RefreshToken');
     try {
-      const userEntity = await this.refreshTokenService.verifyAndGetUser(token);
+      const token = req.header('RefreshToken');
+      const newToken = await this.tokenService.verifyAndGetRefreshToken(token);
+      const userEntity = await this.usersService.getUserById(newToken.userId);
       const userDto = this.mapper.map(UserDto, userEntity);
 
-      const { accessKey, refreshToken } = await this.authService.getJWTTokensForUser(userEntity);
+      const accessKey = await this.authService.getAccessTokensForUser(userEntity);
+      const refreshToken = await this.tokenService.generateRefreshToken(userEntity);
 
       return { accessKey, refreshToken, user: userDto };
     } catch (e) {
