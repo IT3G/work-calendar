@@ -38,11 +38,5 @@ export const UserSchema = new Schema({
   jobPosition: { type: Schema.Types.ObjectId, ref: 'JobPosition' },
   authType: String,
   hashPassword: String,
-  terminationDate: String,
-  refreshTokens: [
-    {
-      token: String,
-      date: Date
-    }
-  ]
+  terminationDate: String
 });
