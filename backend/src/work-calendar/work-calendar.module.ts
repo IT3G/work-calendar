@@ -14,8 +14,8 @@ import { AuthMiddleware } from './middleware/auth.middleware';
 import { AuthService } from './services/auth.service';
 import { LdapService } from './services/ldap.service';
 import { TaskService } from './services/task.service';
-import { VacationResolutionService } from './services/vacation-resolution.service';
 import { TokenService } from './services/token.service';
+import { VacationResolutionService } from './services/vacation-resolution.service';
 
 const config = getConfig();
 

@@ -1,24 +1,16 @@
 import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import * as crypto from 'crypto';
-import { Request } from 'express';
+import * as moment from 'moment';
 import { Config } from '../../config/config';
 import { UserEntity } from '../../entity/entities/user.entity';
 import { UserDto } from '../../profile/dto/user.dto';
 import { UsersService } from '../../profile/services/users.service';
-import { JwtSignModel } from '../models/jwt-sign.model';
 import { LoginModel } from '../models/login.model';
 import { LdapService } from './ldap.service';
-import * as moment from 'moment';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private readonly ldapService: LdapService,
-    private readonly usersService: UsersService,
-    private jwtService: JwtService,
-    private config: Config
-  ) {}
+  constructor(private ldapService: LdapService, private usersService: UsersService, private config: Config) {}
 
   async auth(credentials: LoginModel) {
     let user: UserEntity;
@@ -57,36 +49,6 @@ export class AuthService {
       const newUser = await this.usersService.addUser(ldapResult);
       return newUser;
     }
-  }
-
-  async getAccessTokensForUser(user: UserEntity): Promise<string> {
-    const sign: JwtSignModel = {
-      mailNickname: user.mailNickname,
-      username: user.username,
-      location: user.location,
-      position: user.position,
-      email: user.email
-    };
-
-    return `Bearer ${this.jwtService.sign(sign)}`;
-  }
-
-  /** подтвердить валидность сеесси и получить автоизованного Пользователя по запросу */
-  async verifyByRequesAndGetUser(req: Request): Promise<UserEntity> {
-    const authHeader = req.header('Authorization');
-    const [, jwt] = authHeader.split(' ');
-
-    return await this.verifyAndGetUser(jwt);
-  }
-
-  /** подтвердить валидность сеесси и получить автоизованного Пользователя по JWT */
-  async verifyAndGetUser(jwt: string): Promise<UserEntity> {
-    if (!jwt) {
-      return Promise.reject('JWT not found');
-    }
-
-    const res: JwtSignModel = this.jwtService.verify(jwt);
-    return await this.usersService.getUserByLogin(res.mailNickname);
   }
 
   async registration(userInfo: LoginModel): Promise<UserEntity> {

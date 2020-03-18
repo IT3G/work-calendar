@@ -1,22 +1,13 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Logger,
-  NotAcceptableException,
-  Post,
-  Req,
-  UnauthorizedException
-} from '@nestjs/common';
+import { Body, Controller, Get, Logger, NotAcceptableException, Post, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
 import { Request } from 'express';
 import { UserDto } from '../../profile/dto/user.dto';
 import { UsersService } from '../../profile/services/users.service';
 import { CustomMapper } from '../../shared/services/custom-mapper.service';
+import { LoginDto } from '../dto/login.dto';
 import { LoginModel } from '../models/login.model';
 import { AuthService } from '../services/auth.service';
 import { LdapService } from '../services/ldap.service';
-import { LoginDto } from '../dto/login.dto';
 import { TokenService } from '../services/token.service';
 @ApiBearerAuth()
 @ApiUseTags('Auth')
@@ -38,7 +29,7 @@ export class AuthController {
       const userEntity = await this.authService.auth(credentials);
       const userDto = this.mapper.map(UserDto, userEntity);
 
-      const accessKey = await this.authService.getAccessTokensForUser(userEntity);
+      const accessKey = await this.tokenService.getAccessTokensForUser(userEntity);
       const refreshToken = await this.tokenService.generateRefreshToken(userEntity);
 
       return { accessKey, refreshToken, user: userDto };
@@ -53,9 +44,9 @@ export class AuthController {
       const token = req.header('RefreshToken');
       const newToken = await this.tokenService.verifyAndGetRefreshToken(token);
       const userEntity = await this.usersService.getUserById(newToken.userId);
-      const userDto = this.mapper.map(UserDto, userEntity);
 
-      const accessKey = await this.authService.getAccessTokensForUser(userEntity);
+      const userDto = this.mapper.map(UserDto, userEntity);
+      const accessKey = await this.tokenService.getAccessTokensForUser(userEntity);
       const refreshToken = await this.tokenService.generateRefreshToken(userEntity);
 
       return { accessKey, refreshToken, user: userDto };
@@ -67,7 +58,7 @@ export class AuthController {
   @Get('/current')
   async getCurrentUser(@Req() req: Request): Promise<UserDto> {
     try {
-      const user = await this.authService.verifyByRequesAndGetUser(req);
+      const user = await this.tokenService.verifyByRequesAndGetUser(req);
       return this.mapper.map(UserDto, user);
     } catch (e) {
       throw new NotAcceptableException('user not found');

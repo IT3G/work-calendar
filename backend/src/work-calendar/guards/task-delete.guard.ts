@@ -1,15 +1,15 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { AuthService } from '../services/auth.service';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Request } from 'express';
-import { TaskService } from '../services/task.service';
 import * as moment from 'moment';
 import { AdminActionGuard } from '../../profile/guards/admin-action.guard';
+import { TaskService } from '../services/task.service';
+import { TokenService } from '../services/token.service';
 
 /** Guard для контроля запроса удаления Задачи */
 @Injectable()
 export class TaskDeleteGuard implements CanActivate {
   constructor(
-    private authService: AuthService,
+    private tokenService: TokenService,
     private taskService: TaskService,
     private adminActionGuard: AdminActionGuard
   ) {}
@@ -27,7 +27,7 @@ export class TaskDeleteGuard implements CanActivate {
       return true;
     }
 
-    const authUser = await this.authService.verifyByRequesAndGetUser(request);
+    const authUser = await this.tokenService.verifyByRequesAndGetUser(request);
     const task = await this.taskService.getTaskById(taskId);
 
     /** владелец может удалить свое событие, которое еще не началось */
