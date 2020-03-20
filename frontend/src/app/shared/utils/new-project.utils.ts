@@ -58,4 +58,22 @@ export class NewProjectUtils {
 
     return isSameProjectInMonth || isSameLastProjectInMonth;
   }
+
+  public static getProjectMetadataByDate(
+    employee: Employee,
+    date: moment.Moment,
+    projectId: string
+  ): ProjectStatsMetadataNewModel {
+    const metadata = employee?.projectsNew
+      .find(p => p.project_id === projectId)
+      ?.metadata.find(m => NewProjectUtils.mapMetadataToDate(m).isSame(date, 'month'));
+
+    if (metadata) {
+      return metadata;
+    }
+
+    return employee?.lastProjects?.find(
+      p => p.project_id === projectId && NewProjectUtils.mapMetadataToDate(p).isBefore(date, 'month')
+    );
+  }
 }

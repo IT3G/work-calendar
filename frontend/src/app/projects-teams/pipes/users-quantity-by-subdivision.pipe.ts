@@ -1,6 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { Moment } from 'moment';
 import { Employee } from 'src/app/shared/models/employee.model';
+import { NewProjectUtils } from '../../shared/utils/new-project.utils';
 
 @Pipe({
   name: 'usersQuantityBySubdivision'
@@ -17,18 +18,14 @@ export class UsersQuantityBySubdivisionPipe implements PipeTransform {
       return '';
     }
 
-    const month = +date.format('M');
-    const year = +date.format('YYYY');
+    const usersWithProjectInCurrentMonth = usersForCurrentSubdivision.filter(u =>
+      NewProjectUtils.isUserHaveSameOrLastProjectInCurrentMonth(u, date, projectId)
+    );
 
-    const userDetails = usersForCurrentSubdivision.map(user => {
-      const project = user.projectsNew.find(p => p.project_id === projectId);
-      if (!project) {
-        return user.lastProjects.find(p => p.project_id === projectId);
-      }
-      return project.metadata.find(m => m.month === month && m.year === year);
-    });
-    const summary = userDetails.filter(p => !!p).reduce((acc, val) => acc + val.percent, 0);
+    const summary = usersWithProjectInCurrentMonth
+      .map(u => NewProjectUtils.getProjectMetadataByDate(u, date, projectId))
+      .reduce((acc, val) => acc + val.percent, 0);
 
-    return `${subdivisionName}: ${summary / 100} (${usersForCurrentSubdivision.length} чел.)`;
+    return `${subdivisionName}: ${summary / 100} ч/м (${usersWithProjectInCurrentMonth.length} чел.)`;
   }
 }
