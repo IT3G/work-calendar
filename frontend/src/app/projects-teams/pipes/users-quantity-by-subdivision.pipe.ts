@@ -1,22 +1,34 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { Moment } from 'moment';
 import { Employee } from 'src/app/shared/models/employee.model';
-import { ProjectDataModel } from '../models/project-data.model';
 
 @Pipe({
   name: 'usersQuantityBySubdivision'
 })
 export class UsersQuantityBySubdivisionPipe implements PipeTransform {
-  transform(users: Employee[], subdivisionName: string): string {
+  transform(users: Employee[], subdivisionName: string, projectId: string, date: Moment): string {
     if (!users?.length) {
       return '';
     }
 
-    const usersQuantity = users.filter(u => u?.subdivision?.name === subdivisionName).length;
+    const usersForCurrentSubdivision = users.filter(u => u?.subdivision?.name === subdivisionName);
 
-    if (!usersQuantity) {
+    if (!usersForCurrentSubdivision.length) {
       return '';
     }
 
-    return `${subdivisionName}: ${usersQuantity}`;
+    const month = +date.format('M');
+    const year = +date.format('YYYY');
+
+    const userDetails = usersForCurrentSubdivision.map(user => {
+      const project = user.projectsNew.find(p => p.project_id === projectId);
+      if (!project) {
+        return user.lastProjects.find(p => p.project_id === projectId);
+      }
+      return project.metadata.find(m => m.month === month && m.year === year);
+    });
+    const summary = userDetails.filter(p => !!p).reduce((acc, val) => acc + val.percent, 0);
+
+    return `${subdivisionName}: ${summary / 100} (${usersForCurrentSubdivision.length} чел.)`;
   }
 }

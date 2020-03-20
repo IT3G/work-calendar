@@ -25,7 +25,7 @@ export class NewProjectUtils {
         return false;
       }
 
-      return p.metadata.some(m => NewProjectUtils.mapMetadataToDate(m).isSame(date, 'month'));
+      return p.metadata.filter(m => m.percent).some(m => NewProjectUtils.mapMetadataToDate(m).isSame(date, 'month'));
     });
   }
 

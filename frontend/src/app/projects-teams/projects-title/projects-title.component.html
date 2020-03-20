@@ -1,8 +1,10 @@
 <a routerLink="/team-presence" [queryParams]="{ project: project.projectId }">
   {{ project.projectName }}
-  <span class="total">(Человек на проекте: {{ project.users.length }})</span>
+  <span class="total">(Человек на проекте: {{ project | usersQuantityByProject: date }})</span>
 </a>
 
-<div *ngFor="let subdivision of subdivisionData" class="statistics">
-  {{ project.users | usersQuantityBySubdivision: subdivision.title }}
+<div class="statistics">
+  <div *ngFor="let subdivision of subdivisionData" class="statistic">
+    {{ project.users | usersQuantityBySubdivision: subdivision.title:project.projectId:date }}
+  </div>
 </div>

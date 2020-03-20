@@ -144,5 +144,5 @@ function lastProjectsMapper(val: null, src: UserEntity): LastProjectDto[] {
         percent: projectLastMetadata.percent
       };
     })
-    .filter(p => !!p);
+    .filter(p => !!p?.percent);
 }

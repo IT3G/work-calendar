@@ -38,6 +38,15 @@
   color: rgb(117, 114, 114);
 }
 
+.percent {
+  position: absolute;
+  top: 4px;
+  right: 3px;
+  font-weight: 600;
+  font-size: 11px;
+  color: #757272;
+}
+
 @media (min-width: 768px) and (max-width: 1200px) {
   .user-card {
     .user-name {
@@ -67,5 +76,14 @@
 
   .location {
     font-size: 14px;
+  }
+
+  .percent {
+    position: absolute;
+    top: 4px;
+    right: 3px;
+    font-weight: 600;
+    font-size: 11px;
+    color: #757272;
   }
 }
