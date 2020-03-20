@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import * as moment from 'moment';
 import { ToggleButtonDataModel } from '../../shared/components/radio-button-group/radio-button-group.model';
 import { ProjectDataModel } from '../models/project-data.model';
 
@@ -11,6 +12,9 @@ import { ProjectDataModel } from '../models/project-data.model';
 export class ProjectsTitleComponent {
   @Input()
   project: ProjectDataModel;
+
+  @Input()
+  date: moment.Moment;
 
   @Input()
   subdivisionData: ToggleButtonDataModel[];

@@ -1,16 +1,16 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProjectsTeamsComponent } from './projects-teams/projects-teams.component';
-
-import { UserForLocationPipe } from './pipes/user-for-location.pipe';
+import { NgModule } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
-import { UserCardComponent } from './user-card/user-card.component';
 import { ColorSubdivisionPipe } from './pipes/color-subdivision.pipe';
-import { ProjectTeamsFilterComponent } from './project-teams-filter/project-teams-filter.component';
 import { ProjectTeamsFilterPipe } from './pipes/project-teams-filter.pipe';
-import { UsersQuantityBySubdivisionPipe } from './pipes/users-quantity-by-subdivision.pipe';
 import { ProjectTeamsTerminatedEmployeesFilterPipe } from './pipes/project-teams-terminated-employees-filter.pipe';
+import { UserForLocationPipe } from './pipes/user-for-location.pipe';
+import { UsersQuantityByProjectPipe } from './pipes/users-quantity-by-project.pipe';
+import { UsersQuantityBySubdivisionPipe } from './pipes/users-quantity-by-subdivision.pipe';
+import { ProjectTeamsFilterComponent } from './project-teams-filter/project-teams-filter.component';
+import { ProjectsTeamsComponent } from './projects-teams/projects-teams.component';
 import { ProjectsTitleComponent } from './projects-title/projects-title.component';
+import { UserCardComponent } from './user-card/user-card.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +18,7 @@ import { ProjectsTitleComponent } from './projects-title/projects-title.componen
     UserForLocationPipe,
     UserCardComponent,
     UsersQuantityBySubdivisionPipe,
+    UsersQuantityByProjectPipe,
     ColorSubdivisionPipe,
     ProjectTeamsFilterComponent,
     ProjectTeamsFilterPipe,

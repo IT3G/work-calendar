@@ -14,7 +14,11 @@
 
 <div class="projects-grid">
   <ng-container *ngFor="let project of projectsData | projectTeamsFilter: filtersForm.value" class="project-table">
-    <app-projects-title [project]="project" [subdivisionData]="subdivisionData"></app-projects-title>
+    <app-projects-title
+      [date]="filtersForm.get('month').value"
+      [project]="project"
+      [subdivisionData]="subdivisionData"
+    ></app-projects-title>
 
     <ng-container
       *ngTemplateOutlet="isMobileVersion ? mobileTable : desktopTable; context: { project: project }"
@@ -25,7 +29,12 @@
 <ng-template #mobileTable let-project="project">
   <ng-container *ngFor="let loc of location">
     <div *ngFor="let user of project.users | userForLocation: loc">
-      <app-user-card [user]="user" [isMobileVersion]="isMobileVersion"></app-user-card>
+      <app-user-card
+        [user]="user"
+        [isMobileVersion]="isMobileVersion"
+        [projectId]="project.projectId"
+        [date]="filtersForm.get('month').value"
+      ></app-user-card>
     </div>
   </ng-container>
 </ng-template>
@@ -33,7 +42,11 @@
 <ng-template #desktopTable let-project="project">
   <div class="border desktop-item" *ngFor="let loc of location">
     <div *ngFor="let user of project.users | userForLocation: loc">
-      <app-user-card [user]="user"></app-user-card>
+      <app-user-card
+        [user]="user"
+        [projectId]="project.projectId"
+        [date]="filtersForm.get('month').value"
+      ></app-user-card>
     </div>
   </div>
 </ng-template>
