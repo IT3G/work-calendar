@@ -29,6 +29,6 @@ export class UsersQuantityBySubdivisionPipe implements PipeTransform {
     });
     const summary = userDetails.filter(p => !!p).reduce((acc, val) => acc + val.percent, 0);
 
-    return `${subdivisionName}: ${usersForCurrentSubdivision.length} - ${summary / 100} ч;`;
+    return `${subdivisionName}: ${summary / 100} (${usersForCurrentSubdivision.length} чел.)`;
   }
 }

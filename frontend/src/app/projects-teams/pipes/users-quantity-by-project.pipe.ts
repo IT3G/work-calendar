@@ -20,6 +20,6 @@ export class UsersQuantityByProjectPipe implements PipeTransform {
     });
     const summary = projectUserDetails.filter(p => !!p).reduce((acc, val) => acc + val.percent, 0);
 
-    return `${project.users.length} - ${summary / 100} ч`;
+    return `${summary / 100} (${project.users.length} чел.)`;
   }
 }
