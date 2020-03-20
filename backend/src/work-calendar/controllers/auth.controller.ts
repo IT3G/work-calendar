@@ -4,9 +4,11 @@ import { Request } from 'express';
 import { UserDto } from '../../profile/dto/user.dto';
 import { UsersService } from '../../profile/services/users.service';
 import { CustomMapper } from '../../shared/services/custom-mapper.service';
+import { LoginDto } from '../dto/login.dto';
 import { LoginModel } from '../models/login.model';
 import { AuthService } from '../services/auth.service';
 import { LdapService } from '../services/ldap.service';
+import { TokenService } from '../services/token.service';
 @ApiBearerAuth()
 @ApiUseTags('Auth')
 @Controller('auth')
@@ -17,27 +19,46 @@ export class AuthController {
     private ldapService: LdapService,
     private usersService: UsersService,
     private authService: AuthService,
-    private mapper: CustomMapper
+    private mapper: CustomMapper,
+    private tokenService: TokenService
   ) {}
 
   @Post()
-  async auth(@Body() credentials: LoginModel): Promise<UserDto> {
+  async auth(@Body() credentials: LoginModel): Promise<LoginDto> {
     try {
       const userEntity = await this.authService.auth(credentials);
 
-      const dto = this.mapper.map(UserDto, userEntity);
+      const userDto = this.mapper.map(UserDto, userEntity);
+      const accessToken = await this.tokenService.getAccessTokensForUser(userEntity);
+      const refreshToken = await this.tokenService.generateRefreshToken(userEntity);
 
-      dto.accessKey = `Bearer ${this.authService.getJWTbyUser(userEntity)}`;
-      return dto;
+      return { accessToken, refreshToken, user: userDto };
     } catch (e) {
       throw new NotAcceptableException(e.message ? e.message : e);
+    }
+  }
+
+  @Post('/token')
+  async refreshToken(@Req() req: Request): Promise<LoginDto> {
+    try {
+      const token = req.header('RefreshToken');
+      const newToken = await this.tokenService.verifyAndGetRefreshToken(token);
+      const userEntity = await this.usersService.getUserById(newToken.userId);
+
+      const userDto = this.mapper.map(UserDto, userEntity);
+      const accessToken = await this.tokenService.getAccessTokensForUser(userEntity);
+      const refreshToken = await this.tokenService.generateRefreshToken(userEntity);
+
+      return { accessToken, refreshToken, user: userDto };
+    } catch (e) {
+      throw new NotAcceptableException('token unacceptable');
     }
   }
 
   @Get('/current')
   async getCurrentUser(@Req() req: Request): Promise<UserDto> {
     try {
-      const user = await this.authService.verifyByRequesAndGetUser(req);
+      const user = await this.tokenService.verifyByRequesAndGetUser(req);
       return this.mapper.map(UserDto, user);
     } catch (e) {
       throw new NotAcceptableException('user not found');

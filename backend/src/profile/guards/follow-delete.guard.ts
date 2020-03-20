@@ -1,15 +1,15 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Request } from 'express';
-import { AdminActionGuard } from './admin-action.guard';
-import { AuthService } from '../../work-calendar/services/auth.service';
-import { FollowService } from '../services/follow.service';
 import { FollowEntity } from '../../entity/entities/follow.entity.model';
+import { TokenService } from '../../work-calendar/services/token.service';
+import { FollowService } from '../services/follow.service';
+import { AdminActionGuard } from './admin-action.guard';
 
 /** Guard для контроля запроса удаления Задачи */
 @Injectable()
 export class FollowDeleteGuard implements CanActivate {
   constructor(
-    private authService: AuthService,
+    private tokenService: TokenService,
     private followService: FollowService,
     private adminActionGuard: AdminActionGuard
   ) {}
@@ -27,7 +27,7 @@ export class FollowDeleteGuard implements CanActivate {
       return true;
     }
 
-    const authUser = await this.authService.verifyByRequesAndGetUser(request);
+    const authUser = await this.tokenService.verifyByRequesAndGetUser(request);
     const follow: FollowEntity = await this.followService.getOneFollowsByID(followId);
 
     /** владелец может удалить свои подписки */
