@@ -24,6 +24,9 @@
     </a>
 
     <div class="jobPosition">{{ user?.jobPosition?.name }}</div>
+
     <div class="location" *ngIf="isMobileVersion">{{ user?.location }}</div>
+
+    <div class="percent ">{{ getPercent() }}</div>
   </div>
 </div>
