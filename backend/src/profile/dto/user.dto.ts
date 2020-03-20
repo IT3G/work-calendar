@@ -88,10 +88,6 @@ export class UserDto {
 
   @Expose()
   @ApiModelProperty()
-  accessKey: string;
-
-  @Expose()
-  @ApiModelProperty()
   terminationDate: string;
 
   @Expose()

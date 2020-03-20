@@ -8,6 +8,7 @@ import { SettingsSchema } from './schemas/settings.schema';
 import { SubdivisionSchema } from './schemas/subdivision.schemas';
 import { TaskSchema } from './schemas/task.schemas';
 import { UserSchema } from './schemas/user.schemas';
+import { RefreshTokenSchema } from './schemas/refresh-token.schema';
 
 const mongoModule = MongooseModule.forFeature([
   { name: 'Users', schema: UserSchema },
@@ -17,7 +18,8 @@ const mongoModule = MongooseModule.forFeature([
   { name: 'Subdivision', schema: SubdivisionSchema },
   { name: 'Holidays', schema: HolidaysSchema },
   { name: 'Follow', schema: FollowSchema },
-  { name: 'Settings', schema: SettingsSchema }
+  { name: 'Settings', schema: SettingsSchema },
+  { name: 'RefreshToken', schema: RefreshTokenSchema }
 ]);
 
 @Module({

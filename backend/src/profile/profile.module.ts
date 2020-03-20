@@ -3,8 +3,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { Config, getConfig } from '../config/config';
 import { EntityModule } from '../entity/entity.module';
 import { SharedModule } from '../shared/shared.module';
-import { AuthService } from '../work-calendar/services/auth.service';
 import { LdapService } from '../work-calendar/services/ldap.service';
+import { TokenService } from '../work-calendar/services/token.service';
 import { AvatarsController } from './controllers/avatars.controller';
 import { FollowController } from './controllers/follow.controller';
 import { UsersController } from './controllers/users.controller';
@@ -44,7 +44,7 @@ const avatarServiceProvider = {
   providers: [
     UsersService,
     LdapService,
-    AuthService,
+    TokenService,
     FollowService,
     AdminActionGuard,
     avatarServiceProvider,
