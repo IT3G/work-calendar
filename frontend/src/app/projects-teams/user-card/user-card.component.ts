@@ -38,9 +38,9 @@ export class UserCardComponent implements OnInit {
     const month = +this.date.format('M');
     const year = +this.date.format('YYYY');
 
-    const currentProject = this.user.projectsNew.find(p => p.project_id === this.projectId);
+    const currentProject = this.user?.projectsNew?.find(p => p.project_id === this.projectId);
 
-    const infoForCurrentMonth = currentProject.metadata.find(m => m.month === month && m.year === year);
+    const infoForCurrentMonth = currentProject?.metadata.find(m => m.month === month && m.year === year);
 
     if (!infoForCurrentMonth) {
       const currentProjectForLastPeriod = this.user.lastProjects.find(p => p.project_id === this.projectId);

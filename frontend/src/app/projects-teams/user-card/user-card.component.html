@@ -27,6 +27,6 @@
 
     <div class="location" *ngIf="isMobileVersion">{{ user?.location }}</div>
 
-    <div class="percent ">{{ getPercent() }}</div>
+    <div class="percent" *ngIf="projectId">{{ getPercent() }}</div>
   </div>
 </div>
