@@ -4,6 +4,7 @@ import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { EmployeeApiService } from 'src/app/core/services/employee-api.service';
 import { SnackbarService } from 'src/app/shared/services/snackbar.service';
 import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
@@ -37,7 +38,7 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
     this.filter = new FormControl();
     this.ar.queryParams.subscribe(res => this.filter.setValue(res.project));
     this.projects$ = this.dictionaryApi.getAll('project');
-    this.subscription.add(this.employeeApi.loadAllEmployees().subscribe(res => (this.employees = res)));
+    this.employeeApi.loadAllEmployees().subscribe(res => (this.employees = res));
     this.setDisplayedColumns();
   }
 
@@ -56,12 +57,16 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
         return;
       }
 
-      this.employeeApi.addNewUser({ username: result }).subscribe(
-        () => {
-          this.snackbar.showSuccessSnackBar('Пользователь успешно добавлен');
-        },
-        error => this.showErrorMessage(error)
-      );
+      this.employeeApi
+        .addNewUser({ username: result })
+        .pipe(switchMap(() => this.employeeApi.loadAllEmployees()))
+        .subscribe(
+          res => {
+            this.employees = res;
+            this.snackbar.showSuccessSnackBar('Пользователь успешно добавлен');
+          },
+          error => this.showErrorMessage(error)
+        );
     });
   }
 
