@@ -1,10 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
-
+import * as moment from 'moment';
 import { radioButtonGroupCommonColor } from '../../shared/const/subdivision-colors.const';
 import { NewProjectUtils } from '../../shared/utils/new-project.utils';
 import { ProjectDataModel } from '../models/project-data.model';
 import { ProjectTeamsFilterModel } from '../project-teams-filter/project-teams-filter.component';
-
 @Pipe({
   name: 'projectTeamsFilter'
 })
@@ -24,6 +23,7 @@ export class ProjectTeamsFilterPipe implements PipeTransform {
       .map(prjData => {
         const usersForProject = prjData.users
           .filter(u => !!u)
+          .filter(u => !u.terminationDate || filter.month.isSameOrBefore(moment(u.terminationDate), 'month'))
           .filter(u => NewProjectUtils.isUserHaveSameOrLastProjectInCurrentMonth(u, filter.month, prjData.projectId));
 
         return { ...prjData, users: usersForProject };
