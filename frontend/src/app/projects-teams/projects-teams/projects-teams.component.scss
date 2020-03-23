@@ -18,6 +18,11 @@
   grid-template-columns: repeat(6, 1fr);
 }
 
+.location-grid {
+  display: grid;
+  grid-template-rows: repeat(6, 1fr);
+}
+
 .location {
   font-weight: 600;
   font-size: 18px;

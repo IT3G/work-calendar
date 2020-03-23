@@ -51,6 +51,17 @@
   </div>
 </ng-template>
 
+<div class="location-grid">
+  <div class="location" *ngFor="let loc of location">
+    <p>{{ loc }}</p>
+    <ng-container *ngFor="let project of projectsData | projectTeamsFilter: filtersForm.value" class="">
+      <div *ngFor="let user of project.users | userForLocation: loc">
+        <app-user-card [user]="user" [date]="filtersForm.get('month').value"></app-user-card>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
 <div class="loader-container" *ngIf="loadInProgress">
   <app-spring-spinner [animationDuration]="1000" [size]="80" color="#90caf9"></app-spring-spinner>
 </div>
