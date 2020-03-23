@@ -42,12 +42,9 @@
   padding: 10px 25px;
   display: flex;
   align-items: center;
-
-  &:hover {
-    text-decoration: none;
-  }
+  text-decoration: underline;
 
   &.active {
-    text-decoration: underline;
+    text-decoration: none;
   }
 }

@@ -3,9 +3,10 @@
   padding: 10px 25px;
   display: flex;
   align-items: center;
+  text-decoration: underline;
 
   &.active {
-    text-decoration: underline;
+    text-decoration: none;
   }
 }
 
