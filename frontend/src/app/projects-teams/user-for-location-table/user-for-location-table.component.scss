@@ -1,0 +1,28 @@
+@import 'src/app/shared/styles/scroll';
+
+.location-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-width: 300px;
+  overflow-x: scroll;
+  @extend .scrollbar;
+}
+
+.location-row {
+  border: 1px solid #dee2e6;
+  display: flex;
+  flex-direction: row;
+}
+
+.location-p {
+  position: sticky;
+  left: 0;
+  min-width: 200px;
+  min-height: 110px;
+  background-color: #fafafa;
+  z-index: 8;
+  margin: auto 0;
+  text-align: center;
+  font-weight: 600;
+  font-size: 18px;
+}

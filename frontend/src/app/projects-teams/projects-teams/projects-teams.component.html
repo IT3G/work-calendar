@@ -5,13 +5,20 @@
     [isMobileVersion]="isMobileVersion"
   ></app-project-teams-filter>
 
-  <div class="projects-grid">
-    <div class="location" *ngFor="let loc of location">
-      {{ loc }}
-    </div>
-  </div>
+  <mat-form-field>
+    <mat-label>Вид</mat-label>
+    <mat-select [(value)]="selected">
+      <mat-option value="option1">по проектам</mat-option>
+      <mat-option value="option2">по регионам</mat-option>
+    </mat-select>
+  </mat-form-field>
 </div>
 
+<div class="projects-grid">
+  <div class="location" *ngFor="let loc of location">
+    {{ loc }}
+  </div>
+</div>
 <div class="projects-grid">
   <ng-container *ngFor="let project of projectsData | projectTeamsFilter: filtersForm.value" class="project-table">
     <app-projects-title
@@ -51,10 +58,12 @@
   </div>
 </ng-template>
 
+<!-- <app-user-for-location-table></app-user-for-location-table> -->
+
 <div class="location-grid">
-  <div class="location" *ngFor="let loc of location">
-    <p>{{ loc }}</p>
-    <ng-container *ngFor="let project of projectsData | projectTeamsFilter: filtersForm.value" class="">
+  <div class="location-row" *ngFor="let loc of location">
+    <div class="location-p">{{ loc }}</div>
+    <ng-container *ngFor="let project of projectsData | projectTeamsFilter: filtersForm.value">
       <div *ngFor="let user of project.users | userForLocation: loc">
         <app-user-card [user]="user" [date]="filtersForm.get('month').value"></app-user-card>
       </div>

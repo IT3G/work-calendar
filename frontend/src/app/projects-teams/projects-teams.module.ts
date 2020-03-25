@@ -11,6 +11,7 @@ import { ProjectTeamsFilterComponent } from './project-teams-filter/project-team
 import { ProjectsTeamsComponent } from './projects-teams/projects-teams.component';
 import { ProjectsTitleComponent } from './projects-title/projects-title.component';
 import { UserCardComponent } from './user-card/user-card.component';
+import { UserForLocationTableComponent } from './user-for-location-table/user-for-location-table.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { UserCardComponent } from './user-card/user-card.component';
     ProjectTeamsFilterComponent,
     ProjectTeamsFilterPipe,
     ProjectTeamsTerminatedEmployeesFilterPipe,
-    ProjectsTitleComponent
+    ProjectsTitleComponent,
+    UserForLocationTableComponent
   ],
   exports: [ColorSubdivisionPipe],
   imports: [CommonModule, SharedModule]
