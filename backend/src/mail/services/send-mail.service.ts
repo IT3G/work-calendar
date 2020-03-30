@@ -24,10 +24,16 @@ export class SendMailService {
 
     const users = data.address.join(',');
 
-    let message = `Пользователь ${data.author} изменил присутсвие на <b>${data.date}</b> для ${data.user} на <u>${data.status}</u>`;
+    /** Преобразовать iso-строку даты в формат дд-мм-гггг */
+    const parseDateToRussianFormat = (isoDate: string) => isoDate.replace(/(\d{4}).?(\d{2}).?(\d{2})/, '$3.$2.$1');
+
+    const date = parseDateToRussianFormat(data.date);
+
+    let message = `Пользователь ${data.author} изменил присутсвие на <b>${date}</b> для ${data.user} на <u>${data.status}</u>`;
 
     if (data.dateEnd) {
-      message = `Пользователь ${data.author} изменил присутсвие c <b>${data.date}</b> по <b>${data.dateEnd}</b> для ${data.user} на <u>${data.status}</u>`;
+      const dateEnd = parseDateToRussianFormat(data.dateEnd);
+      message = `Пользователь ${data.author} изменил присутсвие c <b>${date}</b> по <b>${dateEnd}</b> для ${data.user} на <u>${data.status}</u>`;
     }
 
     if (data.comment) {

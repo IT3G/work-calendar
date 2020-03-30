@@ -169,12 +169,18 @@ export class TaskService {
         return;
       }
 
-      let body = `Пользователь ${userCreated.username} изменил присутсвие на ${task.dateStart} для ${
+      /** Преобразовать iso-строку даты в формат дд-мм-гггг */
+      const parseDateToRussianFormat = (isoDate: string) => isoDate.replace(/(\d{4}).?(\d{2}).?(\d{2})/, '$3.$2.$1');
+
+      const dateStart = parseDateToRussianFormat(task.dateStart);
+
+      let body = `Пользователь ${userCreated.username} изменил присутсвие на ${dateStart} для ${
         userSubject.username
       } на ${this.getTaskTypeName(task.type as TaskType)}`;
 
       if (task.dateEnd) {
-        body = `Пользователь ${userCreated.username} изменил присутсвие c ${task.dateStart} по ${task.dateEnd} для ${
+        const dateEnd = parseDateToRussianFormat(task.dateEnd);
+        body = `Пользователь ${userCreated.username} изменил присутсвие c ${dateStart} по ${dateEnd} для ${
           userSubject.username
         } на ${this.getTaskTypeName(task.type as TaskType)}`;
       }
