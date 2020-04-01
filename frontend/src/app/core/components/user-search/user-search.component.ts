@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Employee } from '../../../shared/models/employee.model';
 import { EmployeeApiService } from '../../services/employee-api.service';
@@ -9,10 +9,11 @@ import { EmployeeApiService } from '../../services/employee-api.service';
   styleUrls: ['./user-search.component.scss']
 })
 export class UserSearchComponent implements OnInit {
-  filter: string = '';
+  filter = '';
   employees: Employee[] = [];
   filteredEmployees: Employee[];
   showDropdown: boolean;
+  activeIndex = 0;
 
   constructor(private employeeApi: EmployeeApiService, private router: Router) {}
 
@@ -20,6 +21,16 @@ export class UserSearchComponent implements OnInit {
     this.employeeApi.loadAllEmployees().subscribe(e => {
       this.employees = e;
     });
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  doSomething(event: KeyboardEvent): void {
+    if (event.code == 'ArrowUp' && this.activeIndex > 0) {
+      this.activeIndex--;
+    }
+    if (event.code == 'ArrowDown' && this.activeIndex < this.filteredEmployees?.length - 1) {
+      this.activeIndex++;
+    }
   }
 
   onFilterBlur() {
@@ -38,6 +49,12 @@ export class UserSearchComponent implements OnInit {
 
     if (this.filteredEmployees.length === 1) {
       this.router.navigateByUrl(`/presence/${this.filteredEmployees[0].mailNickname}`);
+      this.onFilterBlur();
+      return;
+    }
+
+    if (this.filteredEmployees.length > 1) {
+      this.router.navigateByUrl(`/presence/${this.filteredEmployees[this.activeIndex].mailNickname}`);
       this.onFilterBlur();
       return;
     }
