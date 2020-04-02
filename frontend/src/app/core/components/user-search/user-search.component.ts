@@ -35,8 +35,8 @@ export class UserSearchComponent implements OnInit {
     if (event.code == 'ArrowDown' && this.activeIndex < this.filteredEmployees?.length - 1) {
       this.activeIndex++;
       const str = `list${this.activeIndex}`;
-      const elmnt = document.getElementById(str);
-      elmnt.scrollIntoView();
+      const element = document.getElementById(str);
+      element.scrollIntoView();
       window.scrollTo(0, 0);
     }
   }
@@ -44,6 +44,10 @@ export class UserSearchComponent implements OnInit {
   onFilterBlur() {
     /** Таймаут нужен, чтоб успела отработать навигация */
     setTimeout(() => (this.showDropdown = false), 200);
+
+    document.getElementById('employeeInput').blur();
+    this.filter = '';
+    this.activeIndex = 0;
   }
 
   /**
