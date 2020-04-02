@@ -27,9 +27,17 @@ export class UserSearchComponent implements OnInit {
   doSomething(event: KeyboardEvent): void {
     if (event.code == 'ArrowUp' && this.activeIndex > 0) {
       this.activeIndex--;
+      const str = `list${this.activeIndex}`;
+      const elmnt = document.getElementById(str);
+      elmnt.scrollIntoView();
+      window.scrollTo(0, 0);
     }
     if (event.code == 'ArrowDown' && this.activeIndex < this.filteredEmployees?.length - 1) {
       this.activeIndex++;
+      const str = `list${this.activeIndex}`;
+      const elmnt = document.getElementById(str);
+      elmnt.scrollIntoView();
+      window.scrollTo(0, 0);
     }
   }
 

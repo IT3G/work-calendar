@@ -19,6 +19,7 @@
     activeIndex="id"
     [routerLink]="['presence', employee.mailNickname]"
     [ngClass]="{ focus: activeIndex === id }"
+    id="list{{ id }}"
   >
     {{ employee.username }}
   </a>
