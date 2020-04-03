@@ -3,10 +3,11 @@ import { Config } from '../../config/config';
 import { SendMailRequestModel } from '../models/send-mail.request.model';
 
 import * as nodemailer from 'nodemailer';
+import { DateFormatter } from '../../shared/services/date-formatter.service';
 
 @Injectable()
 export class SendMailService {
-  constructor(private config: Config) {}
+  constructor(private config: Config, private dateFormatter: DateFormatter) {}
 
   public async sendMail(data: SendMailRequestModel): Promise<string> {
     if (this.config.FEATURE_SEND_MAIL !== 'YES') {
@@ -24,15 +25,12 @@ export class SendMailService {
 
     const users = data.address.join(',');
 
-    /** Преобразовать iso-строку даты в формат дд-мм-гггг */
-    const parseDateToRussianFormat = (isoDate: string) => isoDate.replace(/(\d{4}).?(\d{2}).?(\d{2})/, '$3.$2.$1');
-
-    const date = parseDateToRussianFormat(data.date);
+    const date = this.dateFormatter.parseDateStringToRussianLocale(data.date);
 
     let message = `Пользователь ${data.author} изменил присутсвие на <b>${date}</b> для ${data.user} на <u>${data.status}</u>`;
 
     if (data.dateEnd) {
-      const dateEnd = parseDateToRussianFormat(data.dateEnd);
+      const dateEnd = this.dateFormatter.parseDateStringToRussianLocale(data.dateEnd);
       message = `Пользователь ${data.author} изменил присутсвие c <b>${date}</b> по <b>${dateEnd}</b> для ${data.user} на <u>${data.status}</u>`;
     }
 
