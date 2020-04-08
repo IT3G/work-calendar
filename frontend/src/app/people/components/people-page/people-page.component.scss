@@ -1,5 +1,21 @@
 @import 'src/app/shared/styles/scroll';
 
+:host {
+  display: block;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.sticky-header {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  top: 0;
+  position: sticky;
+  background: #fafafa;
+  z-index: 9;
+}
+
 .location-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -25,4 +41,16 @@
   text-align: center;
   font-weight: 600;
   font-size: 18px;
+}
+
+@media (min-width: 768px) and (max-width: 1200px) {
+  .sticky-header {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 767px) {
+  .sticky-header {
+    flex-direction: column;
+  }
 }

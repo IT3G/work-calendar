@@ -1,9 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import {
-  notFindColor,
-  radioButtonGroupCommonColor,
-  subdivisionColors
-} from '../../shared/const/subdivision-colors.const';
+import { notFindColor, radioButtonGroupCommonColor, subdivisionColors } from '../const/subdivision-colors.const';
 
 @Pipe({
   name: 'colorSubdivision'

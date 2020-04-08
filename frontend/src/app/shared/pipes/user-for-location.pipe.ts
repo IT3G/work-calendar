@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Employee } from '../../shared/models/employee.model';
-import { LocationEnum } from '../../shared/models/location.enum';
+import { Employee } from '../models/employee.model';
+import { LocationEnum } from '../models/location.enum';
 
 @Pipe({
   name: 'userForLocation'

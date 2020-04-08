@@ -4,14 +4,6 @@
     [subdivision]="subdivisionData"
     [isMobileVersion]="isMobileVersion"
   ></app-project-teams-filter>
-
-  <mat-form-field>
-    <mat-label>Вид</mat-label>
-    <mat-select [(value)]="selected">
-      <mat-option value="option1">по проектам</mat-option>
-      <mat-option value="option2">по регионам</mat-option>
-    </mat-select>
-  </mat-form-field>
 </div>
 
 <div class="projects-grid">
@@ -57,20 +49,3 @@
     </div>
   </div>
 </ng-template>
-
-<!-- <app-user-for-location-table></app-user-for-location-table> -->
-
-<div class="location-grid">
-  <div class="location-row" *ngFor="let loc of location">
-    <div class="location-p">{{ loc }}</div>
-    <ng-container *ngFor="let project of projectsData | projectTeamsFilter: filtersForm.value">
-      <div *ngFor="let user of project.users | userForLocation: loc">
-        <app-user-card [user]="user" [date]="filtersForm.get('month').value"></app-user-card>
-      </div>
-    </ng-container>
-  </div>
-</div>
-
-<div class="loader-container" *ngIf="loadInProgress">
-  <app-spring-spinner [animationDuration]="1000" [size]="80" color="#90caf9"></app-spring-spinner>
-</div>

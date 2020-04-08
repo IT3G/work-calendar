@@ -5,6 +5,7 @@ import { AuthGuardService as AuthGuard } from '../core/guards/auth-guard.service
 import { IsAdminGuardService } from '../core/guards/is-admin-guard.service';
 import { LoginPageComponent } from '../login/components/login-page/login-page.component';
 import { RegistrationComponent } from '../login/components/registration/registration.component';
+import { PeoplePageComponent } from '../people/components/people-page/people-page.component';
 import { PresencePageComponent } from '../presense/components/presence-page/presence-page.component';
 import { ProfilePageComponent } from '../profile/components/profile-page.component';
 import { ProjectsTeamsComponent } from '../projects-teams/projects-teams/projects-teams.component';
@@ -19,6 +20,7 @@ const routes: Routes = [
   { path: 'presence/:id', component: PresencePageComponent, canActivate: [AuthGuard] },
   { path: 'team-presence', component: TeamPresencePageComponent, canActivate: [AuthGuard] },
   { path: 'projects-teams', component: ProjectsTeamsComponent, canActivate: [AuthGuard] },
+  { path: 'people', component: PeoplePageComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginPageComponent },
   { path: 'registration', component: RegistrationComponent },
   { path: 'admin', loadChildren: '../admin/admin.module#AdminModule', canActivate: [AuthGuard, IsAdminGuardService] },

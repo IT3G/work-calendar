@@ -3,8 +3,9 @@ import { LocationEnum } from '../models/location.enum';
 export const locationsDictionary: LocationEnum[] = [
   LocationEnum.kemerovo,
   LocationEnum.krasnodar,
-  LocationEnum.moscow,
+  LocationEnum.sanktPetersburg,
   LocationEnum.samara,
   LocationEnum.saratov,
-  LocationEnum.tyumen
+  LocationEnum.tyumen,
+  LocationEnum.moscow
 ];
