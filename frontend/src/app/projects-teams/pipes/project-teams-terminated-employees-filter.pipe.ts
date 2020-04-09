@@ -1,9 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { ProjectDataModel } from '../models/project-data.model';
-import { ProjectTeamsFilterModel } from '../project-teams-filter/project-teams-filter.component';
-import { Employee } from 'src/app/shared/models/employee.model';
-import { Moment } from 'moment';
 import * as moment from 'moment';
+import { Moment } from 'moment';
+import { Employee } from 'src/app/shared/models/employee.model';
+import { ProjectTeamsFilterModel } from '../../shared/components/project-teams-filter/project-teams-filter.component';
+import { ProjectDataModel } from '../models/project-data.model';
 
 @Pipe({
   name: 'projectTeamsTerminatedEmployeesFilter'

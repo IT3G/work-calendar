@@ -1,9 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
-
+import { ProjectTeamsFilterModel } from '../../shared/components/project-teams-filter/project-teams-filter.component';
 import { radioButtonGroupCommonColor } from '../../shared/const/subdivision-colors.const';
 import { NewProjectUtils } from '../../shared/utils/new-project.utils';
 import { ProjectDataModel } from '../models/project-data.model';
-import { ProjectTeamsFilterModel } from '../project-teams-filter/project-teams-filter.component';
 
 @Pipe({
   name: 'projectTeamsFilter'
