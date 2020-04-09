@@ -49,3 +49,7 @@
     </div>
   </div>
 </ng-template>
+
+<div class="loader-container" *ngIf="loadInProgress">
+  <app-spring-spinner [animationDuration]="1000" [size]="80" color="#90caf9"></app-spring-spinner>
+</div>

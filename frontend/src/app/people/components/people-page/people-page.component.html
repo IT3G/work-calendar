@@ -8,9 +8,11 @@
 
 <div class="location-grid">
   <div class="location-row" *ngFor="let loc of location">
-    <div class="location-p">{{ loc }}</div>
-    <div *ngFor="let user of locationUser[loc]">
-      <app-user-card [user]="user" [date]="filtersForm.get('month').value"></app-user-card>
+    <div class="location">{{ loc }}</div>
+    <div class="user-grid">
+      <div *ngFor="let user of locationUser[loc]">
+        <app-user-card [user]="user" [date]="filtersForm.get('month').value"></app-user-card>
+      </div>
     </div>
   </div>
 </div>

@@ -8,8 +8,8 @@
   display: flex;
 
   &.card-s {
-    min-width: 100px;
-    min-height: 80px;
+    min-width: 188px;
+    height: 110px;
   }
 
   .user-name {
@@ -24,7 +24,7 @@
 }
 
 .avatar-area {
-  padding: 8px;
+  padding: 25px 8px;
   position: absolute;
 }
 
@@ -53,6 +53,11 @@
       padding: 5px 0 5px 5px;
       font-size: 14px;
     }
+
+    &.card-s {
+      min-width: 100px;
+      min-height: 80px;
+    }
   }
 
   .label-subdivision {
@@ -65,6 +70,13 @@
 }
 
 @media (max-width: 767px) {
+  .user-card {
+    &.card-s {
+      min-width: 100px;
+      min-height: 80px;
+    }
+  }
+
   .name {
     display: flex;
     flex-direction: row;
