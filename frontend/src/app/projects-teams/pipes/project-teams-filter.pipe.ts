@@ -23,6 +23,7 @@ export class ProjectTeamsFilterPipe implements PipeTransform {
       .map(prjData => {
         const usersForProject = prjData.users
           .filter(u => !!u)
+          .filter(u => !u.terminationDate || filter.month.isSameOrBefore(moment(u.terminationDate), 'month'))
           .filter(u => NewProjectUtils.isUserHaveSameOrLastProjectInCurrentMonth(u, filter.month, prjData.projectId));
 
         return { ...prjData, users: usersForProject };

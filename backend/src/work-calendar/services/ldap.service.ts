@@ -48,7 +48,7 @@ export class LdapService implements OnApplicationShutdown {
   private mapToSendOnClient(attributes: Array<{ type: string; data: string }>): UserDto {
     const whenCreated = this.getAttribute(attributes, 'whenCreated');
     return {
-      _id: null,
+      _id: undefined,
       username: this.getAttribute(attributes, 'cn'),
       patronymic: null,
       location: this.getAttribute(attributes, 'l'),
