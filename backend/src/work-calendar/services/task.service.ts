@@ -12,6 +12,7 @@ import { WebPushService } from '../../web-push/services/web-push.service';
 import { TaskDto } from '../dto/task.dto';
 import { PresenceModel } from '../models/presence.model';
 import { TaskType } from '../models/task-type.enum';
+import { DateFormatter } from '../../shared/services/date-formatter.service';
 
 @Injectable()
 export class TaskService {
@@ -22,7 +23,8 @@ export class TaskService {
     private sendMailService: SendMailService,
     private userService: UsersService,
     private followService: FollowService,
-    private webPushService: WebPushService
+    private webPushService: WebPushService,
+    private dateFormatter: DateFormatter
   ) {}
 
   async getTasks(): Promise<TaskEntity[]> {
@@ -169,12 +171,15 @@ export class TaskService {
         return;
       }
 
-      let body = `Пользователь ${userCreated.username} изменил присутсвие на ${task.dateStart} для ${
+      const dateStart = this.dateFormatter.parseDateStringToRussianLocale(task.dateStart);
+
+      let body = `Пользователь ${userCreated.username} изменил присутсвие на ${dateStart} для ${
         userSubject.username
       } на ${this.getTaskTypeName(task.type as TaskType)}`;
 
       if (task.dateEnd) {
-        body = `Пользователь ${userCreated.username} изменил присутсвие c ${task.dateStart} по ${task.dateEnd} для ${
+        const dateEnd = this.dateFormatter.parseDateStringToRussianLocale(task.dateEnd);
+        body = `Пользователь ${userCreated.username} изменил присутсвие c ${dateStart} по ${dateEnd} для ${
           userSubject.username
         } на ${this.getTaskTypeName(task.type as TaskType)}`;
       }
