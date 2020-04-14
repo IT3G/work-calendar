@@ -79,11 +79,21 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
     return projects
       .map(project => {
         const users = usersAll.filter(u => u.projectsNew && u.projectsNew.some(p => p.project_id === project._id));
+        const usersWithOtherCities = users.map(user =>
+          user.location === 'Москва' ||
+          user.location === 'Саратов' ||
+          user.location === 'Кемерово' ||
+          user.location === 'Краснодар' ||
+          user.location === 'Самара' ||
+          user.location === 'Тюмень'
+            ? user
+            : { ...user, location: 'Остальные' }
+        );
 
         return {
           projectName: project.name,
           projectId: project._id,
-          users
+          users: usersWithOtherCities
         };
       })
       .filter(item => item.users && item.users.length);

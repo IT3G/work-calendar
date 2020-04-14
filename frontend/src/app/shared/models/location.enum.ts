@@ -5,5 +5,5 @@ export enum LocationEnum {
   krasnodar = 'Краснодар',
   kemerovo = 'Кемерово',
   tyumen = 'Тюмень',
-  sanktPetersburg = 'Санкт-Петербург'
+  others = 'Остальные'
 }

@@ -39,17 +39,19 @@
 
 .user-grid {
   display: grid;
+  width: 100%;
   grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
   border-left: 1px solid #dee2e6;
 }
 
-@media (min-width: 1201px) and (max-width: 1378px) {
+@media (min-width: 861px) and (max-width: 1378px) {
   .user-grid {
     grid-template-columns: repeat(5, 1fr);
   }
 }
 
-@media (min-width: 768px) and (max-width: 1200px) {
+@media (min-width: 768px) and (max-width: 860px) {
   .sticky-header {
     flex-direction: column;
   }
@@ -76,5 +78,6 @@
   .user-grid {
     grid-template-columns: 1fr;
     border-left: none;
+    gap: 0;
   }
 }

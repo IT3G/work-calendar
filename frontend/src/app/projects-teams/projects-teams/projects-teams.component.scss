@@ -21,12 +21,11 @@
   grid-template-columns: repeat(7, 1fr);
 }
 
-.location-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  min-width: 300px;
-  overflow-x: scroll;
-  @extend .scrollbar;
+.location-sticky {
+  position: sticky;
+  top: 89px;
+  background: #fafafa;
+  z-index: 8;
 }
 
 .location {
@@ -44,6 +43,20 @@
 @media (min-width: 768px) and (max-width: 1200px) {
   .sticky-header {
     flex-direction: column;
+  }
+
+  .location-sticky {
+    top: 147px;
+  }
+
+  .location {
+    font-size: 16px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 900px) {
+  .location-sticky {
+    top: 190px;
   }
 }
 

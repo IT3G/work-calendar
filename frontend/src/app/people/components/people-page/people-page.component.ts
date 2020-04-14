@@ -80,7 +80,18 @@ export class PeoplePageComponent implements OnInit, OnDestroy {
     }
     const filteredUsers = usersAll.filter(user => user.location);
 
-    const locationOfUsers = filteredUsers.reduce((result, array) => {
+    const usersWithOtherCities = filteredUsers.map(user =>
+      user.location === 'Москва' ||
+      user.location === 'Саратов' ||
+      user.location === 'Кемерово' ||
+      user.location === 'Краснодар' ||
+      user.location === 'Самара' ||
+      user.location === 'Тюмень'
+        ? user
+        : { ...user, location: 'Остальные' }
+    );
+
+    const locationOfUsers = usersWithOtherCities.reduce((result, array) => {
       const {
         _id,
         username,
@@ -131,7 +142,6 @@ export class PeoplePageComponent implements OnInit, OnDestroy {
       return result;
     }, {});
 
-    console.log(locationOfUsers);
     return locationOfUsers;
   }
 
