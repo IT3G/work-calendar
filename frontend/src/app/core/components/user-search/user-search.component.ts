@@ -13,7 +13,7 @@ export class UserSearchComponent implements OnInit {
   employees: Employee[] = [];
   filteredEmployees: Employee[];
   showDropdown: boolean;
-  activeIndex = 0;
+  activeIndex: number = null;
 
   @ViewChild('quickSearch') quickSearch: ElementRef;
 
@@ -21,12 +21,19 @@ export class UserSearchComponent implements OnInit {
 
   ngOnInit() {
     this.employeeApi.loadAllEmployees().subscribe(e => {
+      this.filteredEmployees = [...e];
       this.employees = e;
     });
   }
 
   @HostListener('document:keydown', ['$event'])
   onKeeDown(event: KeyboardEvent): void {
+    if (!this.activeIndex === null) {
+      this.activeIndex = 0;
+      this.onActiveElementChange();
+      return;
+    }
+
     if (event.code == 'ArrowUp' && this.activeIndex > 0) {
       this.activeIndex--;
       this.onActiveElementChange();
@@ -47,7 +54,11 @@ export class UserSearchComponent implements OnInit {
   onFilterBlur() {
     /** Таймаут нужен, чтоб успела отработать навигация */
     setTimeout(() => {
-      (this.showDropdown = false), (this.filter = ''), (this.activeIndex = 0), this.quickSearch.nativeElement.blur();
+      this.showDropdown = false;
+      this.filter = '';
+      this.activeIndex = null;
+      this.quickSearch.nativeElement.blur();
+      this.getFilteredEmployees();
     }, 200);
   }
 
@@ -66,7 +77,7 @@ export class UserSearchComponent implements OnInit {
       return;
     }
 
-    if (this.filteredEmployees.length > 1) {
+    if (this.filteredEmployees.length > 1 && this.activeIndex) {
       this.router.navigateByUrl(`/presence/${this.filteredEmployees[this.activeIndex].mailNickname}`);
       this.onFilterBlur();
       return;
