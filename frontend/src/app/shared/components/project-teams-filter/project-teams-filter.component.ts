@@ -29,6 +29,9 @@ export class ProjectTeamsFilterComponent implements OnInit {
   @Input()
   subdivisions: SelectInputDataModel[];
 
+  @Input()
+  hideMonths: boolean;
+
   public filterInfo = radioButtonGroupCommonColor;
   public date$ = new BehaviorSubject<moment.Moment>(moment());
   public defaultState: string;

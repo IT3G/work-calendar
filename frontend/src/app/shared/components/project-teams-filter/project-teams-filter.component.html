@@ -1,4 +1,9 @@
-<app-month-selector [date]="date$ | async" (nextMonth)="nextMonth()" (prevMonth)="prevMonth()"></app-month-selector>
+<app-month-selector
+  *ngIf="!hideMonths"
+  [date]="date$ | async"
+  (nextMonth)="nextMonth()"
+  (prevMonth)="prevMonth()"
+></app-month-selector>
 
 <ng-template #desktopSelect>
   <app-radio-button-group
