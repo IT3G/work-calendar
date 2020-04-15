@@ -9,14 +9,18 @@
     (focus)="showDropdown = true"
     (blur)="onFilterBlur()"
     (keyup.enter)="onFilterEnterPress()"
+    #quickSearch
   />
 </mat-form-field>
 
 <div class="dropdown" *ngIf="showDropdown && filteredEmployees?.length">
   <a
     class="employee-item"
-    *ngFor="let employee of filteredEmployees"
+    *ngFor="let employee of filteredEmployees; let id = index"
+    activeIndex="id"
     [routerLink]="['presence', employee.mailNickname]"
+    [ngClass]="{ focus: activeIndex === id }"
+    id="list{{ id }}"
   >
     {{ employee.username }}
   </a>
