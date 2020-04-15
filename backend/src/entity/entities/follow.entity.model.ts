@@ -1,9 +1,8 @@
 import { Document } from 'mongoose';
-import { UserEntity } from './user.entity';
 
 export interface FollowEntity extends Document {
-  followerId: UserEntity; // кто подписан
-  followingId: UserEntity; // на кого подписан
+  followerId: String; // кто подписан
+  followingId: String; // на кого подписан
   followType: FollowType; // тип подписки добавлен или в черном списке )))
 }
 

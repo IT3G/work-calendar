@@ -27,7 +27,11 @@ export class FollowService {
     const followers = await this.getUserFollowers(userId);
     const allForUser = await this.getAllStaticFollowsForUser(userId);
     /** Исключить сотрудников с датой увольнения. */
-    const allEmployedFollowersForUser = allForUser.filter(rec => rec.followingId && !rec.followingId.terminationDate);
+    const allEmployedFollowersForUser = allForUser.filter(rec => {
+      const user = (rec.followingId as unknown) as UserEntity;
+
+      return user && !user.terminationDate;
+    });
 
     return {
       following,
