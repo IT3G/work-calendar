@@ -11,9 +11,11 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { FileInputResetComponent } from './components/file-input-reset/file-input-reset.component';
 import { MonthSelectorComponent } from './components/month-selector/month-selector.component';
+import { ProjectTeamsFilterComponent } from './components/project-teams-filter/project-teams-filter.component';
 import { RadioButtonGroupComponent } from './components/radio-button-group/radio-button-group.component';
 import { RadioButtonComponent } from './components/radio-button/radio-button.component';
 import { SingleSelectComponent } from './components/single-select/single-select.component';
+import { UserCardComponent } from './components/user-card/user-card.component';
 import { ClickOutsideDirective } from './directives/click-outside.directive';
 import { pipes } from './pipes';
 
@@ -35,7 +37,9 @@ const components = [
   RadioButtonComponent,
   RadioButtonGroupComponent,
   SingleSelectComponent,
-  DropdownComponent
+  DropdownComponent,
+  UserCardComponent,
+  ProjectTeamsFilterComponent
 ];
 
 const directives = [ClickOutsideDirective];

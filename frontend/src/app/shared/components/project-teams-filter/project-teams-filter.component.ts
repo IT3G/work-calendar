@@ -2,9 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import * as moment from 'moment';
 import { BehaviorSubject } from 'rxjs';
-import { ToggleButtonDataModel } from '../../shared/components/radio-button-group/radio-button-group.model';
-import { SelectInputDataModel } from '../../shared/components/single-select/single-select.component';
-import { radioButtonGroupCommonColor } from '../../shared/const/subdivision-colors.const';
+import { radioButtonGroupCommonColor } from '../../const/subdivision-colors.const';
+import { ToggleButtonDataModel } from '../radio-button-group/radio-button-group.model';
+import { SelectInputDataModel } from '../single-select/single-select.component';
 
 export interface ProjectTeamsFilterModel {
   month: moment.Moment;
@@ -28,6 +28,9 @@ export class ProjectTeamsFilterComponent implements OnInit {
 
   @Input()
   subdivisions: SelectInputDataModel[];
+
+  @Input()
+  hideMonths: boolean;
 
   public filterInfo = radioButtonGroupCommonColor;
   public date$ = new BehaviorSubject<moment.Moment>(moment());

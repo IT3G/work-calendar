@@ -6,5 +6,6 @@ export const locationsDictionary: LocationEnum[] = [
   LocationEnum.moscow,
   LocationEnum.samara,
   LocationEnum.saratov,
-  LocationEnum.tyumen
+  LocationEnum.tyumen,
+  LocationEnum.others
 ];

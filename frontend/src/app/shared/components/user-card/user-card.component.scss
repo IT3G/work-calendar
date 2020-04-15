@@ -8,8 +8,8 @@
   display: flex;
 
   &.card-s {
-    min-width: 100px;
-    min-height: 80px;
+    min-width: 188px;
+    height: 110px;
   }
 
   .user-name {
@@ -24,7 +24,7 @@
 }
 
 .avatar-area {
-  padding: 8px;
+  padding: 25px 8px;
   position: absolute;
 }
 
@@ -49,22 +49,51 @@
 
 @media (min-width: 768px) and (max-width: 1200px) {
   .user-card {
+    margin: 5px 0;
+    font-size: 14px;
+
+    &.card-s {
+      min-width: 100px;
+      height: 155px;
+    }
+
     .user-name {
-      padding: 5px 0 5px 5px;
-      font-size: 14px;
+      display: block;
+      padding: 8px;
+      margin-top: 50px;
     }
   }
 
-  .label-subdivision {
-    width: 10px;
+  .avatar-area {
+    padding: 6%;
+    position: absolute;
+    z-index: 2;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
   }
 
-  .element-hidden {
-    display: none;
+  .label-subdivision {
+    width: 100%;
+    height: 25px;
+    position: absolute;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+  }
+
+  .percent {
+    color: #000000;
   }
 }
 
 @media (max-width: 767px) {
+  .user-card {
+    &.card-s {
+      min-width: 100px;
+      min-height: 80px;
+    }
+  }
+
   .name {
     display: flex;
     flex-direction: row;

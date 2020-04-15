@@ -5,6 +5,7 @@
   <div dd-panel>
     <a class="nav-item" *ngIf="isAuth$ | async" routerLink="/team-presence" routerLinkActive="active">Присутствие</a>
     <a class="nav-item" *ngIf="isAuth$ | async" routerLink="/projects-teams" routerLinkActive="active">Проекты</a>
+    <a class="nav-item" *ngIf="isAuth$ | async" routerLink="/people" routerLinkActive="active">Люди</a>
   </div>
 </app-dropdown>
 
@@ -12,5 +13,6 @@
   <nav class="nav">
     <a class="nav-item" *ngIf="isAuth$ | async" routerLink="/team-presence" routerLinkActive="active">Присутствие</a>
     <a class="nav-item" *ngIf="isAuth$ | async" routerLink="/projects-teams" routerLinkActive="active">Проекты</a>
+    <a class="nav-item" *ngIf="isAuth$ | async" routerLink="/people" routerLinkActive="active">Люди</a>
   </nav>
 </ng-template>

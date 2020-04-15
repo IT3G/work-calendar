@@ -2,9 +2,9 @@ import { Component, Input, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { ContextStoreService } from '../../core/store/context-store.service';
-import { Employee } from '../../shared/models/employee.model';
-import { SettingsModel } from '../../shared/models/settings.model';
+import { ContextStoreService } from '../../../core/store/context-store.service';
+import { Employee } from '../../models/employee.model';
+import { SettingsModel } from '../../models/settings.model';
 
 @Component({
   selector: 'app-user-card',

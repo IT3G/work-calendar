@@ -1,3 +1,4 @@
+import { LayoutModule } from '@angular/cdk/layout';
 import { CommonModule, registerLocaleData } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import localeRu from '@angular/common/locales/ru';
@@ -17,6 +18,7 @@ import { AuthInterceptorProvider } from './core/interceptors/auth.interceptor';
 import { AuthApiService } from './core/services/auth-api.service';
 import { CustomDateAdapter } from './core/services/custom-date-adapter.service';
 import { LoginModule } from './login/login.module';
+import { PeopleModule } from './people/people.module';
 import { PresenseModule } from './presense/presense.module';
 import { ProfileModule } from './profile/profile.module';
 import { ProjectsTeamsModule } from './projects-teams/projects-teams.module';
@@ -24,7 +26,6 @@ import { AppRoutingModule } from './routing/app-routing.module';
 import { AppLoadService } from './shared/services/app-load.service';
 import { SharedModule } from './shared/shared.module';
 import { TeamPresenseModule } from './team-presense/team-presense.module';
-import { LayoutModule } from '@angular/cdk/layout';
 
 registerLocaleData(localeRu);
 moment.locale('ru');
@@ -56,7 +57,8 @@ export function onInit(appLoadService: AppLoadService) {
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       registrationStrategy: 'registerImmediately'
-    })
+    }),
+    PeopleModule
   ],
   exports: [],
   providers: [

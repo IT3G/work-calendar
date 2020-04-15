@@ -15,6 +15,18 @@ app-single-select {
   :host {
     flex-direction: column;
   }
+
+  app-radio-button-group {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 900px) {
+  app-radio-button-group {
+    max-width: 600px;
+  }
 }
 
 @media (max-width: 767px) {

@@ -15,6 +15,7 @@ import {
 import { DictionaryModel } from '../../shared/models/dictionary.model';
 import { Employee } from '../../shared/models/employee.model';
 import { ProjectDataModel } from '../models/project-data.model';
+import { mainLocations, LocationEnum } from 'src/app/shared/models/location.enum';
 
 @Component({
   selector: 'app-projects-teams',
@@ -79,11 +80,14 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
     return projects
       .map(project => {
         const users = usersAll.filter(u => u.projectsNew && u.projectsNew.some(p => p.project_id === project._id));
+        const usersWithOtherCities = users.map(user =>
+          mainLocations.includes(user.location as LocationEnum) ? user : { ...user, location: LocationEnum.others }
+        );
 
         return {
           projectName: project.name,
           projectId: project._id,
-          users
+          users: usersWithOtherCities
         };
       })
       .filter(item => item.users && item.users.length);

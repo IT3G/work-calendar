@@ -4,14 +4,13 @@
     [subdivision]="subdivisionData"
     [isMobileVersion]="isMobileVersion"
   ></app-project-teams-filter>
-
-  <div class="projects-grid">
-    <div class="location" *ngFor="let loc of location">
-      {{ loc }}
-    </div>
-  </div>
 </div>
 
+<div class="projects-grid location-sticky">
+  <div class="location" *ngFor="let loc of location">
+    {{ loc }}
+  </div>
+</div>
 <div class="projects-grid">
   <ng-container *ngFor="let project of projectsData | projectTeamsFilter: filtersForm.value" class="project-table">
     <app-projects-title
