@@ -6,10 +6,10 @@
   ></app-project-teams-filter>
 </div>
 
-<div class="location-grid">
+<div class="location-grid" *ngIf="!loadInProgress">
   <div class="location-row" *ngFor="let loc of location">
     <div class="location">{{ loc }}</div>
-    <div class="user-grid">
+    <div class="user-grid" *ngIf="locationUser">
       <div *ngFor="let user of locationUser[loc]">
         <app-user-card [user]="user" [date]="filtersForm.get('month').value"></app-user-card>
       </div>

@@ -7,3 +7,12 @@ export enum LocationEnum {
   tyumen = 'Тюмень',
   others = 'Остальные'
 }
+
+export const mainLocations = [
+  LocationEnum.moscow,
+  LocationEnum.saratov,
+  LocationEnum.samara,
+  LocationEnum.krasnodar,
+  LocationEnum.kemerovo,
+  LocationEnum.tyumen
+];

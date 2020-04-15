@@ -16,6 +16,7 @@ import {
 import { DictionaryModel } from '../../../shared/models/dictionary.model';
 import { Employee } from '../../../shared/models/employee.model';
 import { LocationUserModel } from '../../models/location-user.model';
+import { mainLocations, LocationEnum } from 'src/app/shared/models/location.enum';
 
 @Component({
   selector: 'app-people-page',
@@ -81,14 +82,7 @@ export class PeoplePageComponent implements OnInit, OnDestroy {
     const filteredUsers = usersAll.filter(user => user.location);
 
     const usersWithOtherCities = filteredUsers.map(user =>
-      user.location === 'Москва' ||
-      user.location === 'Саратов' ||
-      user.location === 'Кемерово' ||
-      user.location === 'Краснодар' ||
-      user.location === 'Самара' ||
-      user.location === 'Тюмень'
-        ? user
-        : { ...user, location: 'Остальные' }
+      mainLocations.includes(user.location as LocationEnum) ? user : { ...user, location: LocationEnum.others }
     );
 
     const locationOfUsers = usersWithOtherCities.reduce((result, array) => {
