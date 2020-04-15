@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Employee } from '../../../shared/models/employee.model';
 import { EmployeeApiService } from '../../services/employee-api.service';
@@ -15,6 +15,8 @@ export class UserSearchComponent implements OnInit {
   showDropdown: boolean;
   activeIndex = 0;
 
+  @ViewChild('quickSearch') quickSearch: ElementRef;
+
   constructor(private employeeApi: EmployeeApiService, private router: Router) {}
 
   ngOnInit() {
@@ -24,30 +26,29 @@ export class UserSearchComponent implements OnInit {
   }
 
   @HostListener('document:keydown', ['$event'])
-  doSomething(event: KeyboardEvent): void {
+  onKeeDown(event: KeyboardEvent): void {
     if (event.code == 'ArrowUp' && this.activeIndex > 0) {
       this.activeIndex--;
-      const str = `list${this.activeIndex}`;
-      const elmnt = document.getElementById(str);
-      elmnt.scrollIntoView();
-      window.scrollTo(0, 0);
+      this.onActiveElementChange();
     }
     if (event.code == 'ArrowDown' && this.activeIndex < this.filteredEmployees?.length - 1) {
       this.activeIndex++;
-      const str = `list${this.activeIndex}`;
-      const element = document.getElementById(str);
-      element.scrollIntoView();
-      window.scrollTo(0, 0);
+      this.onActiveElementChange();
     }
+  }
+
+  onActiveElementChange() {
+    const str = `list${this.activeIndex}`;
+    const element = document.getElementById(str);
+    element.scrollIntoView();
+    window.scrollTo(0, 0);
   }
 
   onFilterBlur() {
     /** Таймаут нужен, чтоб успела отработать навигация */
-    setTimeout(() => (this.showDropdown = false), 200);
-
-    document.getElementById('employeeInput').blur();
-    this.filter = '';
-    this.activeIndex = 0;
+    setTimeout(() => {
+      (this.showDropdown = false), (this.filter = ''), (this.activeIndex = 0), this.quickSearch.nativeElement.blur();
+    }, 200);
   }
 
   /**
