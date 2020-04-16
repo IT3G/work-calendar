@@ -75,10 +75,6 @@ export class DescriptionComponent implements OnInit {
     });
   }
 
-  public resetComment(): void {
-    this.form.get('comment').setValue(null, { emitEvent: false });
-  }
-
   private getInfoFromStore(): void {
     this.getCurrentDateSub.add(
       this.contextStoreService
