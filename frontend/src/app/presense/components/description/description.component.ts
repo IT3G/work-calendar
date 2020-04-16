@@ -25,7 +25,6 @@ export class DescriptionComponent implements OnInit {
   public form: FormGroup;
   public options: AgendaOptionsModel[];
   private getCurrentDateSub = new Subscription();
-  private getDayTypeSub = new Subscription();
   private getCommentSub = new Subscription();
 
   constructor(
@@ -73,6 +72,8 @@ export class DescriptionComponent implements OnInit {
       this.snackbar.showSuccessSnackBar('Событие добавлено');
       this.onAddTask.emit(res);
     });
+
+    this.initForm();
   }
 
   public resetComment(): void {
@@ -87,16 +88,6 @@ export class DescriptionComponent implements OnInit {
         .subscribe(res => {
           this.form.get('dateStart').setValue(res.toDate(), { emitEvent: false });
           this.form.get('dateEnd').setValue(null, { emitEvent: false });
-        })
-    );
-
-    this.getDayTypeSub.add(
-      this.contextStoreService
-        .getDayType$()
-        .pipe(filter(i => !!i))
-        .subscribe(res => {
-          const agenda = AgendaOptions.find(o => o.id === res);
-          this.form.get('type').setValue(agenda, { emitEvent: false });
         })
     );
 
