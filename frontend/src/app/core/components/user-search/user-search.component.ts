@@ -28,7 +28,7 @@ export class UserSearchComponent implements OnInit {
 
   @HostListener('document:keydown', ['$event'])
   onKeeDown(event: KeyboardEvent): void {
-    if (!this.activeIndex === null) {
+    if (this.activeIndex === null) {
       this.activeIndex = 0;
       this.onActiveElementChange();
       return;
