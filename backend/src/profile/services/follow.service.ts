@@ -65,11 +65,6 @@ export class FollowService {
 
     let followingByProjects = this.matchUsersAndActiveProjects(user, allUsers);
 
-    /** Если у пользователя нет проектов, то он подписан на всех */
-    if (!this.haveProjectsInCurrentMonth(user.projectsNew)) {
-      followingByProjects = allUsers;
-    }
-
     const addedFollowing = await this.followModel.find({ followerId: user.id, followType: FollowType.add });
 
     const removedFollowing = await this.followModel.find({ followerId: user.id, followType: FollowType.remove });
