@@ -1,5 +1,6 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { NavigationStart, Router } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
 import * as moment from 'moment';
 import { combineLatest, EMPTY, from, Subscription } from 'rxjs';
@@ -23,22 +24,31 @@ export class AppComponent implements OnInit, OnDestroy {
     private contextStoreService: ContextStoreService,
     private configurationApi: ConfigurationApiService,
     private swPush: SwPush,
-    private pushApi: PushApiService
+    private pushApi: PushApiService,
+    private route: Router
   ) {}
 
   @HostBinding('class.thirdSeptember') isThirdSeptember: boolean = false;
 
   ngOnInit() {
-    this.checkIsThirdSeptember();
     this.getSettings();
     this.initWebPush();
+    this.thirdSeptemberAnimations();
 
     this.contextStoreService.settings$.subscribe(s => this.addGitVersionToPageTitle(s?.TITLE));
   }
 
-  private checkIsThirdSeptember() {
+  private thirdSeptemberAnimations() {
     const now = moment();
-    this.isThirdSeptember = now.date() === 3 && now.month() === 8;
+    const isThirdSeptember = now.date() === 1 && now.month() === 8;
+
+    if (isThirdSeptember) {
+      this.subscription.add(
+        this.route.events.pipe(filter(event => event instanceof NavigationStart)).subscribe(() => {
+          this.isThirdSeptember = !this.isThirdSeptember;
+        })
+      );
+    }
   }
 
   ngOnDestroy() {
