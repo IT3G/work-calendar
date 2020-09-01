@@ -69,7 +69,7 @@ export class HolidaysComponent implements OnInit {
     return data.toString().replace(/\+/g, '');
   }
 
-  private mapper(src: ParseResult, file: File): HolidaysYearModel[] {
+  private mapper(src: ParseResult<any>, file: File): HolidaysYearModel[] {
     return src.data.map(item => {
       const year = item[HolidaysRawData.yearMonth];
       const Jan = this.removeChar(item[HolidaysRawData.Jan]);
