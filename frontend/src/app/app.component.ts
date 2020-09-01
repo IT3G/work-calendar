@@ -1,6 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { SwPush } from '@angular/service-worker';
+import * as moment from 'moment';
 import { combineLatest, EMPTY, from, Subscription } from 'rxjs';
 import { catchError, filter, switchMap } from 'rxjs/operators';
 import { ConfigurationApiService } from './core/services/configuration-api.service';
@@ -25,11 +26,19 @@ export class AppComponent implements OnInit, OnDestroy {
     private pushApi: PushApiService
   ) {}
 
+  @HostBinding('class.thirdSeptember') isThirdSeptember: boolean = false;
+
   ngOnInit() {
+    this.checkIsThirdSeptember();
     this.getSettings();
     this.initWebPush();
 
     this.contextStoreService.settings$.subscribe(s => this.addGitVersionToPageTitle(s?.TITLE));
+  }
+
+  private checkIsThirdSeptember() {
+    const now = moment();
+    this.isThirdSeptember = now.date() === 3 && now.month() === 8;
   }
 
   ngOnDestroy() {
