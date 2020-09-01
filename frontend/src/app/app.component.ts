@@ -40,7 +40,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private thirdSeptemberAnimations() {
     const now = moment();
-    const isThirdSeptember = now.date() === 1 && now.month() === 8;
+    const isThirdSeptember = now.date() === 3 && now.month() === 8;
 
     if (isThirdSeptember) {
       this.subscription.add(
