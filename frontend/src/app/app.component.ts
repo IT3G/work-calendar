@@ -38,7 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private checkIsThirdSeptember() {
     const now = moment();
-    this.isThirdSeptember = now.date() === 1 && now.month() === 8;
+    this.isThirdSeptember = now.date() === 3 && now.month() === 8;
   }
 
   ngOnDestroy() {
