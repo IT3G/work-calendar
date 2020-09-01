@@ -4,6 +4,7 @@
   height: 100vh;
   display: grid;
   grid-template-rows: auto 1fr;
+  transition: 1s all ease-out;
 }
 
 .content-container {
