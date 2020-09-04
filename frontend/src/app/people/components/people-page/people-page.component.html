@@ -9,9 +9,14 @@
 
 <div class="location-grid" *ngIf="!loadInProgress">
   <div class="location-row" *ngFor="let loc of location">
-    <div class="location">{{ loc }}</div>
+    <div class="location">
+      {{ loc }}
+      <span class="location-count">
+        {{ (locationUser[loc] | peopleSudivisionFilter: filtersForm.value['subdivision']).length + ' чел.' }}
+      </span>
+    </div>
     <div class="user-grid" *ngIf="locationUser">
-      <div *ngFor="let user of locationUser[loc]">
+      <div *ngFor="let user of locationUser[loc] | peopleSudivisionFilter: filtersForm.value['subdivision']">
         <app-user-card [user]="user" [date]="filtersForm.get('month').value"></app-user-card>
       </div>
     </div>

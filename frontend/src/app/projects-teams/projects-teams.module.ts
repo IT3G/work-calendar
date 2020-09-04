@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+
 import { SharedModule } from '../shared/shared.module';
 import { ProjectTeamsFilterPipe } from './pipes/project-teams-filter.pipe';
 import { ProjectTeamsTerminatedEmployeesFilterPipe } from './pipes/project-teams-terminated-employees-filter.pipe';
@@ -15,9 +16,9 @@ import { ProjectsTitleComponent } from './projects-title/projects-title.componen
     UsersQuantityBySubdivisionPipe,
     UsersQuantityByProjectPipe,
     ProjectTeamsTerminatedEmployeesFilterPipe,
-    ProjectsTitleComponent
+    ProjectsTitleComponent,
   ],
   exports: [],
-  imports: [CommonModule, SharedModule]
+  imports: [CommonModule, SharedModule],
 })
 export class ProjectsTeamsModule {}
