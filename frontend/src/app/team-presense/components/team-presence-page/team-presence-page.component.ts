@@ -1,9 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+
 import * as moment from 'moment';
 import { BehaviorSubject, forkJoin, Observable, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, first, map, share, switchMap, tap } from 'rxjs/operators';
+import { EmployeeApiService } from 'src/app/core/services/employee-api.service';
+
 import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
 import { HolidaysApiService } from '../../../core/services/holidays-api.service';
 import { TaskApiService } from '../../../core/services/task-api.service';
@@ -17,7 +20,7 @@ import { PresenceModel } from '../../../shared/models/presence.page.model';
 @Component({
   selector: 'app-team-presence',
   templateUrl: './team-presence-page.component.html',
-  styleUrls: ['./team-presence-page.component.scss']
+  styleUrls: ['./team-presence-page.component.scss'],
 })
 export class TeamPresencePageComponent implements OnInit, OnDestroy {
   private qParamsSnapshotMonth = this.route.snapshot.queryParams.date;
@@ -45,7 +48,8 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private dictionaryApi: DictionaryApiService,
     private holidaysApi: HolidaysApiService,
-    private contextStoreService: ContextStoreService
+    private contextStoreService: ContextStoreService,
+    private employeeApiService: EmployeeApiService
   ) {}
 
   ngOnInit() {
@@ -56,10 +60,10 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     this.getCommonData();
 
     this.monthData$ = this.date$.pipe(
-      map(date => date.format('YYYY-MM-DD')),
+      map((date) => date.format('YYYY-MM-DD')),
       distinctUntilChanged(),
       tap(() => (this.loadInProgress = true)),
-      switchMap(date => this.tasksApi.loadTasksByMonth(date)),
+      switchMap((date) => this.tasksApi.loadTasksByMonth(date)),
       tap(() => (this.loadInProgress = false)),
       share()
     );
@@ -74,20 +78,21 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
   }
 
   private getCommonData() {
+    const locations$ = this.employeeApiService.getEmployeesLocations();
     const holidays$ = this.holidaysApi.getAllHolidays();
     const projects$ = this.dictionaryApi.getAll('project');
     const jobPositions$ = this.dictionaryApi.getAll('jobPosition');
     const subdivisions$ = this.dictionaryApi.getAll('subdivision');
 
     this.subscription.add(
-      forkJoin([holidays$, projects$, jobPositions$, subdivisions$]).subscribe(res => {
-        const [holidays, projects, jobPositions, subdivisions] = res;
+      forkJoin([holidays$, projects$, jobPositions$, subdivisions$, locations$]).subscribe((res) => {
+        const [holidays, projects, jobPositions, subdivisions, location] = res;
 
         this.holidays = holidays;
-        this.projects = projects.map(item => this.mapperToSelectInputDataModel(item));
-        this.jobPositions = jobPositions.map(item => this.mapperToSelectInputDataModel(item));
-        this.subdivisions = subdivisions.map(item => ({ value: item.name, name: item.name }));
-        this.locations = locationsDictionary.map(item => ({ value: item, name: item }));
+        this.projects = projects.map((item) => this.mapperToSelectInputDataModel(item));
+        this.jobPositions = jobPositions.map((item) => this.mapperToSelectInputDataModel(item));
+        this.subdivisions = subdivisions.map((item) => ({ value: item.name, name: item.name }));
+        this.locations = location.filter((value) => !!value).map((item) => ({ value: item, name: item }));
       })
     );
   }
@@ -95,7 +100,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
   private mapperToSelectInputDataModel(item: DictionaryModel): SelectInputDataModel {
     return {
       value: item._id,
-      name: item.name
+      name: item.name,
     };
   }
 
@@ -109,31 +114,35 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
 
   private updateQueryParamsOnChange() {
     this.subscription.add(
-      this.date$.subscribe(date =>
+      this.date$.subscribe((date) =>
         this.router.navigate([], {
-          queryParams: { ...this.route.snapshot.queryParams, date: moment(date).format('MM-YYYY') }
+          queryParams: { ...this.route.snapshot.queryParams, date: moment(date).format('MM-YYYY') },
         })
       )
     );
 
     this.subscription.add(
-      this.filtersForm.valueChanges.subscribe(filters =>
+      this.filtersForm.valueChanges.subscribe((filters) =>
         this.router.navigate([], {
-          queryParams: { ...this.route.snapshot.queryParams, ...filters }
+          queryParams: { ...this.route.snapshot.queryParams, ...filters },
         })
       )
     );
 
-    this.subscription.add(this.route.queryParams.subscribe(res => this.filtersForm.patchValue(res)));
+    this.subscription.add(
+      this.route.queryParams.subscribe((res) => {
+        return this.filtersForm.patchValue(res);
+      })
+    );
   }
 
   private getMonthDays(): Observable<moment.Moment[]> {
     return this.date$.pipe(
-      map(date => {
+      map((date) => {
         const startOfMonth = date.clone().startOf('month');
         const daysInMonth = date.daysInMonth();
 
-        return Array.from(Array(daysInMonth).keys()).map(i => startOfMonth.clone().add(i, 'day'));
+        return Array.from(Array(daysInMonth).keys()).map((i) => startOfMonth.clone().add(i, 'day'));
       })
     );
   }
@@ -144,7 +153,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
       subdivision: [null],
       jobPosition: [null],
       project: [null],
-      location: [null]
+      location: [null],
     });
 
     if (filters) {
@@ -162,9 +171,9 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
       .getCurrentUser$()
       .pipe(
         first(),
-        filter(u => !!u?.lastProjects?.length)
+        filter((u) => !!u?.lastProjects?.length)
       )
-      .subscribe(user => {
+      .subscribe((user) => {
         const maxLastProject = user.lastProjects.sort((a, b) => b.percent - a.percent)[0];
 
         this.filtersForm.patchValue({ project: maxLastProject?.project_id });

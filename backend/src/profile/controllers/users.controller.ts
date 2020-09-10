@@ -16,6 +16,12 @@ export class UsersController {
     return this.mapper.mapArray(UserDto, users);
   }
 
+  @Get('/locations')
+  async getUsersLocation(): Promise<UserDto[]> {
+    const users = await this.userService.getUsersLocation();
+    return this.mapper.mapArray(UserDto, users);
+  }
+
   @Get(':id')
   async getUserById(@Param('id') id): Promise<UserDto> {
     const user = await this.userService.getUserById(id);

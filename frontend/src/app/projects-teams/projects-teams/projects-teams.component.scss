@@ -14,6 +14,10 @@
   position: sticky;
   background: #fafafa;
   z-index: 9;
+
+  app-teams-filters {
+    flex-grow: 1;
+  }
 }
 
 .projects-grid {

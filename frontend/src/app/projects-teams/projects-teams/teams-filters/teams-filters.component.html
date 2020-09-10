@@ -1,0 +1,28 @@
+<form class="form" [formGroup]="filtersForm">
+  <app-month-selector [date]="date$ | async" (nextMonth)="nextMonth()" (prevMonth)="prevMonth()"></app-month-selector>
+
+  <mat-form-field [ngClass]="{ 'active-field': filtersForm.controls['name'].value }">
+    <input matInput formControlName="name" placeholder="Ф.И.О." />
+    <button
+      mat-button
+      *ngIf="filtersForm.controls['name'].value"
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="filtersForm.controls['name'].reset()"
+    >
+      <i class="fa fa-times icon-btn active-clear-button"></i>
+    </button>
+  </mat-form-field>
+
+  <app-single-select formControlName="project" [elements]="projects" [placeholder]="'Проект'"></app-single-select>
+
+  <app-single-select
+    *ngIf="subdivisions"
+    formControlName="subdivision"
+    [elements]="subdivisions"
+    [placeholder]="'Подразделение'"
+  ></app-single-select>
+
+  <app-single-select formControlName="location" [elements]="locations" [placeholder]="'Регион'"></app-single-select>
+</form>
