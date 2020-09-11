@@ -12,7 +12,7 @@
     *ngFor="let project of projectsData | projectTeamsFilter: filtersForm.value; trackBy: trackByFn"
     class="project-table"
   >
-    <ng-container *ngIf="project.users.length || project !== filtersForm.value.project">
+    <ng-container *ngIf="getProjectVisability(project)">
       <app-projects-title
         [date]="filtersForm.get('month').value"
         [project]="project"

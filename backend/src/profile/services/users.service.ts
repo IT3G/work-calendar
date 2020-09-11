@@ -12,8 +12,11 @@ export class UsersService {
     return await this.userModel.find().populate('jobPosition').populate('subdivision').sort({ username: 'asc' }).exec();
   }
 
-  async getUsersLocation(): Promise<UserEntity[]> {
-    return await this.userModel.find().distinct('location').exec();
+  async getUsersLocation(): Promise<string[]> {
+    return await this.userModel
+      .find({ $or: [{ terminationDate: { $gte: new Date().toISOString() } }, { terminationDate: null }] })
+      .distinct('location')
+      .exec();
   }
 
   async getUserByLogin(mailNickname: string): Promise<UserEntity> {

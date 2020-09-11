@@ -26,6 +26,8 @@ import { LocationUserModel } from '../../models/location-user.model';
 })
 export class PeoplePageComponent implements OnInit, OnDestroy {
   public isMobileVersion: boolean;
+
+  /** уникальные города пользователей */
   public location: Set<string> = new Set();
 
   public filtersForm: FormGroup;

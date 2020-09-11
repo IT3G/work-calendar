@@ -85,14 +85,11 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
     return projects
       .map((project) => {
         const users = usersAll.filter((u) => u.projectsNew && u.projectsNew.some((p) => p.project_id === project._id));
-        const usersWithOtherCities = users.map((user) =>
-          mainLocations.includes(user.location as LocationEnum) ? user : { ...user, location: LocationEnum.others }
-        );
 
         return {
           projectName: project.name,
           projectId: project._id,
-          users: usersWithOtherCities,
+          users: users,
         };
       })
       .filter((item) => item.users && item.users.length);
@@ -106,5 +103,13 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
   /** Для перерисовки контента */
   public trackByFn(index, item) {
     return index;
+  }
+
+  /** видимость названия проекта и самого проекта */
+  public getProjectVisability(project: ProjectDataModel) {
+    const filter = this.filtersForm.value;
+    return filter.name || filter.project || filter.location
+      ? project.projectName === filter.project || project.users.length
+      : true;
   }
 }

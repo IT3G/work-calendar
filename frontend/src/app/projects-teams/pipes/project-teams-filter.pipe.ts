@@ -15,6 +15,7 @@ export class ProjectTeamsFilterPipe implements PipeTransform {
     if (!projectsData) {
       return [];
     }
+
     const activeProjectsData = projectsData
       .map((prjData) => {
         const usersForProject = prjData.users
