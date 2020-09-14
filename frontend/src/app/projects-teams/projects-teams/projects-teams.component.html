@@ -1,36 +1,36 @@
 <div class="sticky-header">
-  <app-project-teams-filter
-    [filtersForm]="filtersForm"
-    [subdivision]="subdivisionData"
-    [isMobileVersion]="isMobileVersion"
-  ></app-project-teams-filter>
+  <app-teams-filters [filtersForm]="filtersForm" [locations]="locations" [projects]="projects"></app-teams-filters>
 </div>
 
 <div class="projects-grid location-sticky">
-  <div class="location" *ngFor="let loc of location">
-    {{ loc }}
+  <div class="location" *ngFor="let subdivision of subdivisionData">
+    {{ subdivision }}
   </div>
 </div>
 <div class="projects-grid">
-  <ng-container *ngFor="let project of projectsData | projectTeamsFilter: filtersForm.value" class="project-table">
-    <app-projects-title
-      [date]="filtersForm.get('month').value"
-      [project]="project"
-      [subdivisionData]="subdivisionData"
-    ></app-projects-title>
+  <ng-container
+    *ngFor="let project of projectsData | projectTeamsFilter: filtersForm.value; trackBy: trackByFn"
+    class="project-table"
+  >
+    <ng-container *ngIf="getProjectVisability(project)">
+      <app-projects-title
+        [date]="filtersForm.get('month').value"
+        [project]="project"
+        *ngIf="!isMobileVersion"
+      ></app-projects-title>
 
-    <ng-container
-      *ngTemplateOutlet="isMobileVersion ? mobileTable : desktopTable; context: { project: project }"
-    ></ng-container>
+      <ng-container
+        *ngTemplateOutlet="isMobileVersion ? mobileTable : desktopTable; context: { project: project }"
+      ></ng-container>
+    </ng-container>
   </ng-container>
 </div>
 
 <ng-template #mobileTable let-project="project">
-  <ng-container *ngFor="let loc of location">
-    <div *ngFor="let user of project.users | userForLocation: loc">
+  <ng-container *ngFor="let subdivision of subdivisionData">
+    <div *ngFor="let user of project.users | userForSubdivision: subdivision">
       <app-user-card
         [user]="user"
-        [isMobileVersion]="isMobileVersion"
         [projectId]="project.projectId"
         [date]="filtersForm.get('month').value"
       ></app-user-card>
@@ -39,8 +39,8 @@
 </ng-template>
 
 <ng-template #desktopTable let-project="project">
-  <div class="border desktop-item" *ngFor="let loc of location">
-    <div *ngFor="let user of project.users | userForLocation: loc">
+  <div class="border desktop-item" *ngFor="let subdivision of subdivisionData">
+    <div *ngFor="let user of project.users | userForSubdivision: subdivision">
       <app-user-card
         [user]="user"
         [projectId]="project.projectId"
