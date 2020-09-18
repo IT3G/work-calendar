@@ -1,8 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
 import * as moment from 'moment';
-import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { filter, withLatestFrom } from 'rxjs/operators';
+
 import { TaskApiService } from '../../../core/services/task-api.service';
 import { ContextStoreService } from '../../../core/store/context-store.service';
 import { AgendaOptions } from '../../../shared/const/agenda-options.const';
@@ -14,7 +16,7 @@ import { SnackbarService } from '../../../shared/services/snackbar.service';
 @Component({
   selector: 'app-description',
   templateUrl: './description.component.html',
-  styleUrls: ['./description.component.scss']
+  styleUrls: ['./description.component.scss'],
 })
 export class DescriptionComponent implements OnInit {
   @Input() selectedUser: Employee;
@@ -24,6 +26,7 @@ export class DescriptionComponent implements OnInit {
 
   public form: FormGroup;
   public options: AgendaOptionsModel[];
+  private activeDateControlName$ = new BehaviorSubject<'dateStart' | 'dateEnd'>('dateStart');
   private getCurrentDateSub = new Subscription();
   private getCommentSub = new Subscription();
 
@@ -40,12 +43,16 @@ export class DescriptionComponent implements OnInit {
     this.options = AgendaOptions;
   }
 
+  public setActiveDateControl(controlName: 'dateStart' | 'dateEnd'): void {
+    this.activeDateControlName$.next(controlName);
+  }
+
   private initForm(): void {
     this.form = this.fb.group({
       dateStart: [null, Validators.required],
       dateEnd: [null],
       type: [null, Validators.required],
-      comment: [null]
+      comment: [null],
     });
   }
 
@@ -65,10 +72,10 @@ export class DescriptionComponent implements OnInit {
       dtCreated: moment().toISOString(),
       approved: false,
       attachment: null,
-      employeeCreated: this.contextStoreService.getCurrentUser().mailNickname
+      employeeCreated: this.contextStoreService.getCurrentUser().mailNickname,
     };
 
-    this.taskApiService.addTask(taskFormVal).subscribe(res => {
+    this.taskApiService.addTask(taskFormVal).subscribe((res) => {
       this.snackbar.showSuccessSnackBar('Событие добавлено');
       this.onAddTask.emit(res);
     });
@@ -80,15 +87,17 @@ export class DescriptionComponent implements OnInit {
     this.getCurrentDateSub.add(
       this.contextStoreService
         .getCurrentDate$()
-        .pipe(filter(i => !!i))
-        .subscribe(res => {
-          this.form.get('dateStart').setValue(res.toDate(), { emitEvent: false });
-          this.form.get('dateEnd').setValue(null, { emitEvent: false });
+        .pipe(
+          filter((i) => !!i),
+          withLatestFrom(this.activeDateControlName$)
+        )
+        .subscribe(([res, controlName]) => {
+          this.form.get(controlName).setValue(res.toDate(), { emitEvent: false });
         })
     );
 
     this.getCommentSub.add(
-      this.contextStoreService.getComment$().subscribe(res => {
+      this.contextStoreService.getComment$().subscribe((res) => {
         this.form.get('comment').setValue(res, { emitEvent: false });
       })
     );
