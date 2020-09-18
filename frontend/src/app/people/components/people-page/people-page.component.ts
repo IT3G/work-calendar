@@ -214,8 +214,4 @@ export class PeoplePageComponent implements OnInit, OnDestroy {
       };
     });
   }
-
-  public test123(test: any): void {
-    console.log(test);
-  }
 }
