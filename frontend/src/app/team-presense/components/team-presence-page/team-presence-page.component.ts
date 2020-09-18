@@ -114,11 +114,11 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
 
   private updateQueryParamsOnChange() {
     this.subscription.add(
-      this.date$.subscribe((date) =>
+      this.date$.subscribe((date) => {
         this.router.navigate([], {
           queryParams: { ...this.route.snapshot.queryParams, date: moment(date).format('MM-YYYY') },
-        })
-      )
+        });
+      })
     );
 
     this.subscription.add(

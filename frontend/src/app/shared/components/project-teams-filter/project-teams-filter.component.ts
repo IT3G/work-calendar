@@ -1,7 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { ActivatedRoute, Params } from '@angular/router';
+
 import * as moment from 'moment';
 import { BehaviorSubject } from 'rxjs';
+
 import { radioButtonGroupCommonColor } from '../../const/subdivision-colors.const';
 import { ToggleButtonDataModel } from '../radio-button-group/radio-button-group.model';
 import { SelectInputDataModel } from '../single-select/single-select.component';
@@ -14,9 +17,9 @@ export interface ProjectTeamsFilterModel {
 @Component({
   selector: 'app-project-teams-filter',
   templateUrl: './project-teams-filter.component.html',
-  styleUrls: ['./project-teams-filter.component.scss']
+  styleUrls: ['./project-teams-filter.component.scss'],
 })
-export class ProjectTeamsFilterComponent implements OnInit {
+export class ProjectTeamsFilterComponent {
   @Input()
   isMobileVersion: boolean;
 
@@ -34,12 +37,6 @@ export class ProjectTeamsFilterComponent implements OnInit {
 
   public filterInfo = radioButtonGroupCommonColor;
   public date$ = new BehaviorSubject<moment.Moment>(moment());
-  public defaultState: string;
-
-  ngOnInit(): void {
-    this.defaultState = this.filterInfo[0].value;
-    this.filtersForm.patchValue({ subdivision: this.defaultState });
-  }
 
   public prevMonth(): void {
     const newData = this.date$.value.clone().subtract(1, 'months');

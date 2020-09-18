@@ -29,9 +29,9 @@
 }
 
 .location {
-  min-width: 180px;
+  min-width: 220px;
   background-color: #fafafa;
-  margin: auto 0;
+  margin: 30px 0;
   text-align: center;
   font-weight: 600;
   font-size: 18px;
@@ -39,7 +39,17 @@
   .location-count {
     color: #898c8f;
     display: block;
+    span {
+      display: block;
+    }
   }
+}
+
+.total-users {
+  display: block;
+  color: #898c8f;
+  font-size: 20px;
+  margin-bottom: 30px;
 }
 
 .user-grid {

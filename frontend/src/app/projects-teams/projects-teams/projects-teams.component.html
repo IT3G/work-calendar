@@ -47,6 +47,9 @@
         [date]="filtersForm.get('month').value"
       ></app-user-card>
     </div>
+    <span class="total-by-subdivision">
+      {{ project.users | usersQuantityBySubdivision: subdivision:project.projectId:filtersForm.get('month').value }}
+    </span>
   </div>
 </ng-template>
 

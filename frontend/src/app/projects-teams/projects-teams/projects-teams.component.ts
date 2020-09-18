@@ -76,7 +76,11 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
       this.projectsData = this.getUsersForProjects(projects, usersAll);
       this.projects = projects.map((item) => ({ value: item.name, name: item.name }));
 
-      this.subdivisionData = subdivision.concat(['Не указано / Другое']);
+      this.subdivisionData = subdivision
+        .filter((value) => {
+          return value !== 'СТП';
+        })
+        .concat(['Не указано / Другое']);
       this.locations = location.filter((city) => !!city).map((item) => ({ value: item, name: item }));
     });
   }
@@ -110,6 +114,6 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
     const filter = this.filtersForm.value;
     return filter.name || filter.project || filter.location
       ? project.projectName === filter.project || project.users.length
-      : true;
+      : project.users.length;
   }
 }
