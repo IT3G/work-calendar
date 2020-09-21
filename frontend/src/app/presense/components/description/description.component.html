@@ -1,12 +1,19 @@
 <form class="form-container" [formGroup]="form">
   <mat-form-field class="control datesFrom">
-    <input matInput formControlName="dateStart" [matDatepicker]="picker" placeholder="с" />
+    <input
+      (focus)="setActiveDateControl('dateStart')"
+      matInput
+      formControlName="dateStart"
+      [matDatepicker]="picker"
+      placeholder="с"
+    />
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
   </mat-form-field>
 
   <mat-form-field class="control datesFor">
     <input
+      (focus)="setActiveDateControl('dateEnd')"
       matInput
       formControlName="dateEnd"
       [min]="form.get('dateStart').value"
