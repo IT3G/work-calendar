@@ -22,7 +22,7 @@
 
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(var(--total-columns, 5), 1fr);
 }
 
 .location-sticky {

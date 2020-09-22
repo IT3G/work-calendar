@@ -45,9 +45,7 @@ export class PeoplePageComponent implements OnInit, OnDestroy {
   public totalUsers: number;
 
   /** все подразделения */
-  public allSubdivisions = AllSubdivisions.filter((subdivision) => {
-    return subdivision.value !== 'all-items';
-  });
+  public allSubdivisions: string[];
 
   constructor(
     private fb: FormBuilder,
@@ -138,6 +136,12 @@ export class PeoplePageComponent implements OnInit, OnDestroy {
       this.loadInProgress = false;
 
       this.locationUser = this.getUsersByLocation(usersAll);
+
+      this.allSubdivisions = subdivision
+        .map((sub) => {
+          return sub.name;
+        })
+        .concat('Не указано');
 
       this.subdivisionData = this.getColorForSubdivisions(subdivision);
       this.location.forEach((location) => this.locationUser[location]);

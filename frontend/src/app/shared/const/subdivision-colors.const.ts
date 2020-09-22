@@ -32,7 +32,7 @@ export const radioButtonGroupCommonColor: ToggleButtonDataModel[] = [
   {
     title: 'Не указано',
     color: '#8befed',
-    value: 'undefined-value',
+    value: 'Не указано',
   },
 ];
 

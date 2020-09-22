@@ -15,16 +15,11 @@
         <ng-container *ngFor="let subdivision of allSubdivisions">
           <span
             *ngIf="
-              (locationUser[loc] | peopleSudivisionFilter: subdivision.value).length &&
+              (locationUser[loc] | peopleSudivisionFilter: subdivision).length &&
               filtersForm.value['subdivision'] === 'all-items'
             "
           >
-            {{
-              subdivision.title +
-                ': ' +
-                (locationUser[loc] | peopleSudivisionFilter: subdivision.value).length +
-                ' чел.'
-            }}
+            {{ subdivision + ': ' + (locationUser[loc] | peopleSudivisionFilter: subdivision).length + ' чел.' }}
           </span>
         </ng-container>
         <span>
