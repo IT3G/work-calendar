@@ -10,7 +10,7 @@
     (valueChosen)="changeSubdivision($event)"
     [data]="subdivision"
     [groupName]="'jobPositions-filter'"
-    [defaultChoice]="defaultState"
+    [defaultChoice]="filtersForm.value['subdivision']"
   ></app-radio-button-group>
 </ng-template>
 

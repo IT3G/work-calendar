@@ -14,7 +14,7 @@ export class PeopleSubdivisonFilterPipe implements PipeTransform {
       }
 
       /** для "не указано" */
-      if (filter === 'undefined-value') {
+      if (filter === 'Не указано') {
         return user.subdivision ? false : true;
       }
 

@@ -1,10 +1,11 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
 import * as moment from 'moment';
 import { forkJoin, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { SelectInputDataModel } from 'src/app/shared/components/single-select/single-select.component';
 import { LocationEnum, mainLocations } from 'src/app/shared/models/location.enum';
 
@@ -33,11 +34,15 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
 
   private subscription = new Subscription();
 
+  /** количество колонок в гриде */
+  public totalColumnsProjectGrid: SafeStyle;
+
   constructor(
     private fb: FormBuilder,
     private dictionaryApi: DictionaryApiService,
     private employeeApiService: EmployeeApiService,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit() {
@@ -62,7 +67,13 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
   private getData() {
     this.loadInProgress = true;
     const location$ = this.employeeApiService.getEmployeesLocations();
-    const users$ = this.employeeApiService.loadAllEmployees();
+    const users$ = this.employeeApiService
+      .loadAllEmployees()
+      .pipe(
+        map((users) =>
+          users.filter((user) => (user.terminationDate ? new Date(user.terminationDate) > new Date() : true))
+        )
+      );
     const projects$ = this.dictionaryApi.getAll('project');
     const subdivision$ = this.dictionaryApi
       .getAll('subdivision')
@@ -75,12 +86,40 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
       // и фильтруем проекты вообще без пользователей
       this.projectsData = this.getUsersForProjects(projects, usersAll);
       this.projects = projects.map((item) => ({ value: item.name, name: item.name }));
+      this.subdivisionData = subdivision
+        .filter((value) => {
+          return this.getNumberOfUsersBySubdivision(value, usersAll);
+        })
+        .concat(['Не указано / Другое']);
 
-      this.subdivisionData = subdivision.concat(['Не указано / Другое']);
       this.locations = location.filter((city) => !!city).map((item) => ({ value: item, name: item }));
+
+      this.totalColumnsProjectGrid = this.sanitizer.bypassSecurityTrustStyle(
+        `--total-columns: ${this.subdivisionData.length}`
+      );
     });
   }
 
+  /** количество людей по подразделениям на текущий месяц в проекте */
+  private getNumberOfUsersBySubdivision(subdivison: string, users: Employee[]): boolean {
+    return !!users.reduce((acc, user) => {
+      if (user.subdivision?.name === subdivison && user.projectsNew?.length && this.isAnyCurrentProject(user)) {
+        return (acc = acc + 1);
+      }
+      return acc;
+    }, 0);
+  }
+
+  /** есть ли текущий проект */
+  private isAnyCurrentProject(user: Employee): boolean {
+    const month = +this.filtersForm.get('month').value.format('M');
+    const year = +this.filtersForm.get('month').value.format('YYYY');
+    return !!user.projectsNew.find((project) => {
+      return project.metadata.find((data) => {
+        return data.month === month && data.year === year;
+      });
+    });
+  }
   private getUsersForProjects(projects: DictionaryModel[], usersAll: Employee[]): ProjectDataModel[] {
     return projects
       .map((project) => {
@@ -110,6 +149,6 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
     const filter = this.filtersForm.value;
     return filter.name || filter.project || filter.location
       ? project.projectName === filter.project || project.users.length
-      : true;
+      : project.users.length;
   }
 }

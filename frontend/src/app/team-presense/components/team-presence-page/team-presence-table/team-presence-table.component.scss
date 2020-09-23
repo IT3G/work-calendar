@@ -83,6 +83,19 @@
   position: sticky;
   left: 0;
   background: var(--teamCommonDay);
+
+  .fio-n-position {
+    margin-left: 20px;
+  }
+
+  .numbering {
+    position: absolute;
+    left: 7px;
+  }
+
+  .numbering-more {
+    left: 1px;
+  }
 }
 
 .day_HOLIDAY {

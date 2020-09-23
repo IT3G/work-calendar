@@ -11,9 +11,21 @@
   <div class="location-row" *ngFor="let loc of location">
     <div class="location">
       {{ loc }}
-      <span class="location-count">
-        {{ (locationUser[loc] | peopleSudivisionFilter: filtersForm.value['subdivision']).length + ' чел.' }}
-      </span>
+      <div class="location-count">
+        <ng-container *ngFor="let subdivision of allSubdivisions">
+          <span
+            *ngIf="
+              (locationUser[loc] | peopleSudivisionFilter: subdivision).length &&
+              filtersForm.value['subdivision'] === 'all-items'
+            "
+          >
+            {{ subdivision + ': ' + (locationUser[loc] | peopleSudivisionFilter: subdivision).length + ' чел.' }}
+          </span>
+        </ng-container>
+        <span>
+          Итого: {{ (locationUser[loc] | peopleSudivisionFilter: filtersForm.value['subdivision']).length + ' чел.' }}
+        </span>
+      </div>
     </div>
     <div class="user-grid" *ngIf="locationUser">
       <div *ngFor="let user of locationUser[loc] | peopleSudivisionFilter: filtersForm.value['subdivision']">
@@ -21,6 +33,7 @@
       </div>
     </div>
   </div>
+  <span class="total-users">Всего: {{ totalUsers }} чел.</span>
 </div>
 
 <div class="loader-container" *ngIf="loadInProgress">
