@@ -93,7 +93,6 @@ export class FollowService {
     const user = await this.userService.getUserById(userId);
 
     const followersByProjects = this.matchUsersAndActiveProjects(user, allUsers);
-    const followersByEmptyProject = allUsers.filter(userItem => !this.haveProjectsInCurrentMonth(userItem.projectsNew));
 
     const addedFollowersArr = await this.followModel.find({ followingId: user.id, followType: FollowType.add });
 
@@ -105,7 +104,7 @@ export class FollowService {
     const addedUsers = addedFollowersArr.map(item => item.followerId).map(u => u.toString());
     const removedUsers = removedFollowersArr.map(item => item.followerId).map(u => u.toString());
 
-    return this.addUserToArr(addedUsers, [...followersByProjects, ...followersByEmptyProject], allUsers)
+    return this.addUserToArr(addedUsers, [...followersByProjects], allUsers)
       .filter(u => this.removeMyselfFromArr(u.id, user.id))
       .filter(u => this.removeUsersFromArr(removedUsers, u.id))
       .filter(u => u && !u.terminationDate);
