@@ -13,7 +13,7 @@
 <div class="table-scrolled row_{{ daysInMonth }}">
   <ng-container *ngFor="let data of monthData; index as i">
     <div class="title">
-      <span class="numbering" [class.numbering-more]="i > 9">{{ i + 1 }}.</span>
+      <span class="numbering" [class.numbering-more]="i > 8">{{ i + 1 }}.</span>
       <div class="fio-n-position">
         <a [routerLink]="['/presence', data.employee.mailNickname]">
           {{ data.employee?.username }}
