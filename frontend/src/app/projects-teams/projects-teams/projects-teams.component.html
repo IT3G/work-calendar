@@ -7,22 +7,24 @@
     {{ subdivision }}
   </div>
 </div>
-<div class="projects-grid" [attr.style]="totalColumnsProjectGrid">
+<div>
   <ng-container
     *ngFor="let project of projectsData | projectTeamsFilter: filtersForm.value; trackBy: trackByFn"
     class="project-table"
   >
-    <ng-container *ngIf="getProjectVisability(project)">
-      <app-projects-title
-        [date]="filtersForm.get('month').value"
-        [project]="project"
-        *ngIf="!isMobileVersion"
-      ></app-projects-title>
+    <div class="projects-grid" [attr.style]="totalColumnsProjectGrid">
+      <ng-container *ngIf="getProjectVisability(project)">
+        <app-projects-title
+          [date]="filtersForm.get('month').value"
+          [project]="project"
+          *ngIf="!isMobileVersion"
+        ></app-projects-title>
 
-      <ng-container
-        *ngTemplateOutlet="isMobileVersion ? mobileTable : desktopTable; context: { project: project }"
-      ></ng-container>
-    </ng-container>
+        <ng-container
+          *ngTemplateOutlet="isMobileVersion ? mobileTable : desktopTable; context: { project: project }"
+        ></ng-container>
+      </ng-container>
+    </div>
   </ng-container>
 </div>
 

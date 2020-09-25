@@ -8,6 +8,10 @@
   grid-column-start: 1;
   grid-column-end: 8;
   padding: 5px 0;
+  position: sticky;
+  top: 114px;
+  z-index: 4;
+  background-color: #fafafa;
 }
 
 .total {
