@@ -55,6 +55,8 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
 
     this.getData();
 
+    this.subscribeToMonthChange();
+
     this.subscription = this.breakpointObserver
       .observe(['(max-width: 767px)'])
       .subscribe((result) => (this.isMobileVersion = result.matches));
@@ -62,6 +64,12 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+  }
+
+  private subscribeToMonthChange(): void {
+    this.filtersForm.controls['month'].valueChanges.subscribe(() => {
+      this.getData();
+    });
   }
 
   private getData() {
