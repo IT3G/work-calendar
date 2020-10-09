@@ -34,6 +34,10 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
 
   private subscription = new Subscription();
 
+  private users: Employee[];
+
+  private subdivisonWithNoOthers: string[];
+
   /** количество колонок в гриде */
   public totalColumnsProjectGrid: SafeStyle;
 
@@ -68,7 +72,7 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
 
   private subscribeToMonthChange(): void {
     this.filtersForm.controls['month'].valueChanges.subscribe(() => {
-      this.getData();
+      this.setSubdivisions();
     });
   }
 
@@ -89,23 +93,29 @@ export class ProjectsTeamsComponent implements OnInit, OnDestroy {
 
     forkJoin([users$, projects$, subdivision$, location$]).subscribe((res) => {
       const [usersAll, projects, subdivision, location] = res;
+      this.users = usersAll;
+      this.subdivisonWithNoOthers = subdivision;
       this.loadInProgress = false;
       // делаем выборку пользователей для каждого проекта,
       // и фильтруем проекты вообще без пользователей
       this.projectsData = this.getUsersForProjects(projects, usersAll);
       this.projects = projects.map((item) => ({ value: item.name, name: item.name }));
-      this.subdivisionData = subdivision
-        .filter((value) => {
-          return this.getNumberOfUsersBySubdivision(value, usersAll);
-        })
-        .concat(['Не указано / Другое']);
+      this.setSubdivisions();
 
       this.locations = location.filter((city) => !!city).map((item) => ({ value: item, name: item }));
-
-      this.totalColumnsProjectGrid = this.sanitizer.bypassSecurityTrustStyle(
-        `--total-columns: ${this.subdivisionData.length}`
-      );
     });
+  }
+
+  private setSubdivisions(): void {
+    this.subdivisionData = this.subdivisonWithNoOthers
+      .filter((value) => {
+        return this.getNumberOfUsersBySubdivision(value, this.users);
+      })
+      .concat(['Не указано / Другое']);
+
+    this.totalColumnsProjectGrid = this.sanitizer.bypassSecurityTrustStyle(
+      `--total-columns: ${this.subdivisionData.length}`
+    );
   }
 
   /** количество людей по подразделениям на текущий месяц в проекте */
