@@ -1,12 +1,13 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { Employee } from '../../../shared/models/employee.model';
 import { EmployeeApiService } from '../../services/employee-api.service';
 
 @Component({
   selector: 'app-user-search',
   templateUrl: './user-search.component.html',
-  styleUrls: ['./user-search.component.scss']
+  styleUrls: ['./user-search.component.scss'],
 })
 export class UserSearchComponent implements OnInit {
   filter = '';
@@ -20,7 +21,7 @@ export class UserSearchComponent implements OnInit {
   constructor(private employeeApi: EmployeeApiService, private router: Router) {}
 
   ngOnInit() {
-    this.employeeApi.loadAllEmployees().subscribe(e => {
+    this.employeeApi.loadAllEmployees().subscribe((e) => {
       this.filteredEmployees = [...e];
       this.employees = e;
     });
@@ -34,11 +35,11 @@ export class UserSearchComponent implements OnInit {
       return;
     }
 
-    if (event.code == 'ArrowUp' && this.activeIndex > 0) {
+    if (event.code === 'ArrowUp' && this.activeIndex > 0) {
       this.activeIndex--;
       this.onActiveElementChange();
     }
-    if (event.code == 'ArrowDown' && this.activeIndex < this.filteredEmployees?.length - 1) {
+    if (event.code === 'ArrowDown' && this.activeIndex < this.filteredEmployees?.length - 1) {
       this.activeIndex++;
       this.onActiveElementChange();
     }
@@ -47,7 +48,7 @@ export class UserSearchComponent implements OnInit {
   onActiveElementChange() {
     const str = `list${this.activeIndex}`;
     const element = document.getElementById(str);
-    element.scrollIntoView();
+    element?.scrollIntoView();
     window.scrollTo(0, 0);
   }
 
@@ -88,6 +89,6 @@ export class UserSearchComponent implements OnInit {
   }
 
   getFilteredEmployees(): void {
-    this.filteredEmployees = this.employees.filter(e => e.username.toLowerCase().includes(this.filter.toLowerCase()));
+    this.filteredEmployees = this.employees.filter((e) => e.username.toLowerCase().includes(this.filter.toLowerCase()));
   }
 }
