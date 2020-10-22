@@ -77,7 +77,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   }
 
   public updateSelectedUser(employee: Employee): void {
-    console.log(employee);
     this.selectedUser = employee;
   }
 
