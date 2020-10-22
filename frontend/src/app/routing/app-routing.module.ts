@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Router, RouterModule, Routes } from '@angular/router';
+
 import { environment } from '../../environments/environment';
 import { AuthGuardService as AuthGuard } from '../core/guards/auth-guard.service';
 import { IsAdminGuardService } from '../core/guards/is-admin-guard.service';
@@ -24,13 +25,13 @@ const routes: Routes = [
   { path: 'login', component: LoginPageComponent },
   { path: 'registration', component: RegistrationComponent },
   { path: 'admin', loadChildren: '../admin/admin.module#AdminModule', canActivate: [AuthGuard, IsAdminGuardService] },
-  { path: '', redirectTo: 'team-presence', pathMatch: 'full' }
+  { path: '', redirectTo: 'team-presence', pathMatch: 'full' },
 ];
 
 @NgModule({
   /** Для тестового стенда используем хэши в роуте. Для остальных нет */
   imports: [RouterModule.forRoot(routes, { useHash: environment.envName === 'test' })],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class AppRoutingModule {
   public static getNext(router: Router, increment: number): string {

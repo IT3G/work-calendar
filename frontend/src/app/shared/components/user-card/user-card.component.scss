@@ -47,6 +47,19 @@
   color: #757272;
 }
 
+.user-skills {
+  display: flex;
+  grid-area: skills;
+  justify-content: left;
+  flex-wrap: wrap;
+  .skill-logo {
+    margin-right: 5px;
+    height: 20px;
+    width: 20px;
+    object-fit: contain;
+  }
+}
+
 @media (min-width: 768px) and (max-width: 1200px) {
   .user-card {
     margin: 5px 0;

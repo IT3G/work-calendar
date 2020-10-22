@@ -8,6 +8,7 @@ import { ProfileModule } from './profile/profile.module';
 import { SettingsModule } from './settings/settings.module';
 import { WebPushModule } from './web-push/web-push.module';
 import { WorkCalendarModule } from './work-calendar/work-calendar.module';
+import { SkillsModule } from './skills/skills.module';
 
 const config = getConfig();
 
@@ -25,9 +26,10 @@ const url = `${config.DATABASE_URL}`;
     MongooseModule.forRoot(url, {
       useNewUrlParser: true,
       useCreateIndex: true,
-      useFindAndModify: false
-    })
+      useFindAndModify: false,
+    }),
+    SkillsModule,
   ],
-  providers: [{ provide: Config, useValue: config }]
+  providers: [{ provide: Config, useValue: config }],
 })
 export class AppModule {}

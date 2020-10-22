@@ -9,8 +9,8 @@ export const UserSchema = new Schema({
     {
       dateStart: String,
       dateEnd: String,
-      project: { type: Schema.Types.ObjectId, ref: 'Project' }
-    }
+      project: { type: Schema.Types.ObjectId, ref: 'Project' },
+    },
   ],
   projectsNew: [
     {
@@ -20,10 +20,10 @@ export const UserSchema = new Schema({
         {
           month: Number,
           year: Number,
-          percent: Number
-        }
-      ]
-    }
+          percent: Number,
+        },
+      ],
+    },
   ],
   whenCreated: String,
   email: String,
@@ -36,7 +36,8 @@ export const UserSchema = new Schema({
   hasMailing: Boolean,
   subdivision: { type: Schema.Types.ObjectId, ref: 'Subdivision' },
   jobPosition: { type: Schema.Types.ObjectId, ref: 'JobPosition' },
+  skills: [{ type: Schema.Types.ObjectId, ref: 'Skills' }],
   authType: String,
   hashPassword: String,
-  terminationDate: String
+  terminationDate: String,
 });

@@ -48,6 +48,7 @@
     <div *ngIf="(isAuth$ | async) && (isAdmin$ | async)">
       <hr />
       <a mat-menu-item class="nav-item" routerLink="/admin/settings" routerLinkActive="active">Настройки</a>
+      <a mat-menu-item class="nav-item" routerLink="/admin/skills" routerLinkActive="active">Навыки</a>
       <a mat-menu-item class="nav-item" routerLink="/admin/employee-list" routerLinkActive="active">Сотрудники</a>
       <a mat-menu-item class="nav-item" routerLink="/admin/dictionary" routerLinkActive="active">Справочники</a>
       <a mat-menu-item class="nav-item" routerLink="/admin/holidays" routerLinkActive="active">
@@ -55,8 +56,6 @@
       </a>
     </div>
 
-    <div class="item-logout" (click)="logout()" [style.--colorize]="color">
-      Выйти
-    </div>
+    <div class="item-logout" (click)="logout()" [style.--colorize]="color">Выйти</div>
   </div>
 </app-dropdown>

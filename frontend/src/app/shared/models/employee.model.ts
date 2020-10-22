@@ -1,6 +1,7 @@
 import { DictionaryModel } from './dictionary.model';
 import { LastProjectModel } from './last-project.model';
 import { ProjectNewModel } from './project-new.model';
+import { SkillsModel } from './skills.model';
 
 export class Employee {
   _id: string;
@@ -22,4 +23,5 @@ export class Employee {
   projectsNew: ProjectNewModel[];
   terminationDate: string;
   lastProjects: LastProjectModel[];
+  skills: SkillsModel[];
 }

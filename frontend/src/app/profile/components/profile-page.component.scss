@@ -5,9 +5,10 @@
   box-sizing: border-box;
   display: grid;
   grid-template-columns: 160px minmax(auto, 1040px);
-  grid-template-rows: 160px 50px auto;
+  grid-template-rows: 160px minmax(min-content, max-content) 50px 1fr;
   grid-template-areas:
     'avatar tabs'
+    'skills tabs'
     'name tabs'
     'presence tabs';
   gap: 20px;
@@ -34,6 +35,19 @@
   grid-area: name;
   font-weight: bolder;
   text-align: center;
+}
+
+.user-skills {
+  display: flex;
+  grid-area: skills;
+  justify-content: center;
+  flex-wrap: wrap;
+  .skill-logo {
+    margin-left: 5px;
+    height: 30px;
+    width: 30px;
+    object-fit: contain;
+  }
 }
 
 @media (min-width: 768px) and (max-width: 1200px) {

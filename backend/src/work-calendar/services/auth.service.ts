@@ -76,7 +76,8 @@ export class AuthService {
       authType: 'hash',
       terminationDate: null,
       lastProjects: null,
-      hashPassword: crypto.createHmac('sha256', userInfo.password).digest('hex')
+      hashPassword: crypto.createHmac('sha256', userInfo.password).digest('hex'),
+      skills: null,
     };
 
     return this.usersService.addUser(data);

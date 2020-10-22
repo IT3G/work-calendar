@@ -9,7 +9,13 @@ export class UsersService {
   constructor(@InjectModel('Users') private readonly userModel: Model<UserEntity>) {}
 
   async getUsers(): Promise<UserEntity[]> {
-    return await this.userModel.find().populate('jobPosition').populate('subdivision').sort({ username: 'asc' }).exec();
+    return await this.userModel
+      .find()
+      .populate('jobPosition')
+      .populate('subdivision')
+      .populate('skills')
+      .sort({ username: 'asc' })
+      .exec();
   }
 
   async getUsersLocation(): Promise<string[]> {
@@ -25,11 +31,12 @@ export class UsersService {
       .findOne({ mailNickname: employeeRegex })
       .populate('jobPosition')
       .populate('subdivision')
+      .populate('skills')
       .exec();
   }
 
   async getUserById(id: string): Promise<UserEntity> {
-    return await this.userModel.findById(id).populate('jobPosition').populate('subdivision').exec();
+    return await this.userModel.findById(id).populate('jobPosition').populate('subdivision').populate('skills').exec();
   }
 
   async addUser(userInfo: UserDto): Promise<UserEntity> {

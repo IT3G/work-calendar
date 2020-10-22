@@ -28,10 +28,10 @@ export class MinioStorageService implements FileStorage {
 
       return new Promise((res, rej) => {
         const bufs = [];
-        file.on('data', function(d) {
+        file.on('data', function (d) {
           bufs.push(d);
         });
-        file.on('end', function() {
+        file.on('end', function () {
           res(Buffer.concat(bufs));
         });
       });
@@ -53,11 +53,11 @@ export class MinioStorageService implements FileStorage {
   private async init(): Promise<void> {
     try {
       this.minioClient = new Minio.Client({
-        endPoint: this.config.MINIO_END_POINT,
+        endPoint: 'localhost',
         port: +this.config.MINIO_PORT,
         useSSL: this.config.MINIO_USE_SSL === 'YES',
         accessKey: this.config.MINIO_ACCESS_KEY,
-        secretKey: this.config.MINIO_SECRET_KEY
+        secretKey: this.config.MINIO_SECRET_KEY,
       });
 
       await this.initBucket(this.config.MINIO_BUCKET_NAME);

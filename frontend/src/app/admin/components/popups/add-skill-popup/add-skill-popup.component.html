@@ -1,0 +1,36 @@
+<div class="profile-form" [formGroup]="addSkillFormGroup">
+  <mat-form-field class="form-group">
+    <input matInput placeholder="имя" autocomplete="off" formControlName="name" />
+  </mat-form-field>
+
+  <mat-form-field class="form-group">
+    <input matInput placeholder="подсказка" autocomplete="off" formControlName="hint" />
+  </mat-form-field>
+
+  <ng-template #uploadLogo>
+    <div class="file-container">
+      <input-file
+        fileAccept="image/*"
+        placeholder=""
+        formControlName="logoName"
+        [fileLimit]="1"
+        (acceptedFile)="addLogo($event)"
+      ></input-file>
+      <div class="file-placeholder">Добавьте или перетащите</div>
+    </div>
+  </ng-template>
+</div>
+
+<div class="logo-container">
+  <div class="page-title">Логотип</div>
+  <div class="logo-preview" *ngIf="logoName; else uploadLogo">
+    <img class="logo" [src]="baseUrl + '/skills/logo/' + logoName" />
+
+    <button mat-raised-button color="primary" (click)="deleteLogo()">Удалить лого</button>
+  </div>
+</div>
+<div class="buttons">
+  <button mat-button (click)="onEnter()" [disabled]="!addSkillFormGroup.valid">Добавить</button>
+
+  <button mat-button (click)="onNoClick()">Закрыть</button>
+</div>

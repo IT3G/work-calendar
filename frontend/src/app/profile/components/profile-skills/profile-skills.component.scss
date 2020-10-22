@@ -1,0 +1,44 @@
+table {
+  margin-top: 20px;
+  width: 100%;
+}
+
+tr:hover {
+  background: lightcyan;
+}
+
+button {
+  margin: 15px 0 5px;
+}
+
+.delete {
+  width: 30px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.dictionary-control {
+  width: 30%;
+  margin: 0 20px;
+}
+
+.icon-btn {
+  color: gray;
+  &:hover {
+    color: black;
+  }
+}
+
+.icon {
+  width: 9%;
+}
+
+.logo {
+  object-fit: contain;
+  width: 30px;
+  height: 30px;
+}
+
+table + .other-skills-header {
+  margin-top: 40px;
+}
