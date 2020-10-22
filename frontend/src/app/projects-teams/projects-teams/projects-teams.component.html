@@ -42,6 +42,9 @@
 
 <ng-template #desktopTable let-project="project">
   <div class="border desktop-item" *ngFor="let subdivision of subdivisionData">
+    <span class="total-by-subdivision">
+      {{ project.users | usersQuantityBySubdivision: subdivision:project.projectId:filtersForm.get('month').value }}
+    </span>
     <div *ngFor="let user of project.users | userForSubdivision: subdivision">
       <app-user-card
         [user]="user"
@@ -49,9 +52,6 @@
         [date]="filtersForm.get('month').value"
       ></app-user-card>
     </div>
-    <span class="total-by-subdivision">
-      {{ project.users | usersQuantityBySubdivision: subdivision:project.projectId:filtersForm.get('month').value }}
-    </span>
   </div>
 </ng-template>
 
