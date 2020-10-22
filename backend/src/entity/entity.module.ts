@@ -9,6 +9,7 @@ import { SubdivisionSchema } from './schemas/subdivision.schemas';
 import { TaskSchema } from './schemas/task.schemas';
 import { UserSchema } from './schemas/user.schemas';
 import { RefreshTokenSchema } from './schemas/refresh-token.schema';
+import { SkillsSchema } from './schemas/skills.schemas';
 
 const mongoModule = MongooseModule.forFeature([
   { name: 'Users', schema: UserSchema },
@@ -19,11 +20,12 @@ const mongoModule = MongooseModule.forFeature([
   { name: 'Holidays', schema: HolidaysSchema },
   { name: 'Follow', schema: FollowSchema },
   { name: 'Settings', schema: SettingsSchema },
-  { name: 'RefreshToken', schema: RefreshTokenSchema }
+  { name: 'RefreshToken', schema: RefreshTokenSchema },
+  { name: 'Skills', schema: SkillsSchema },
 ]);
 
 @Module({
   imports: [mongoModule],
-  exports: [mongoModule]
+  exports: [mongoModule],
 })
 export class EntityModule {}

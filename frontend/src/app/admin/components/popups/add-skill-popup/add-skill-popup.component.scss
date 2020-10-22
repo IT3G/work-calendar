@@ -1,0 +1,25 @@
+.mat-form-field {
+  width: 100%;
+}
+
+.buttons {
+  margin-top: 50px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.logo-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 202px;
+
+  & .logo {
+    height: 132px;
+    width: 100%;
+    object-fit: contain;
+    margin-bottom: 20px;
+  }
+}

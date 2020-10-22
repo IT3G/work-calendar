@@ -15,6 +15,12 @@
     ></ngx-avatar>
   </ng-template>
 
+  <div class="user-skills">
+    <div class="image-wrapper" *ngFor="let skill of selectedUser.skills">
+      <img class="skill-logo" [src]="baseUrl + '/skills/logo/' + skill.logoName" [title]="skill.hint" />
+    </div>
+  </div>
+
   <div class="user-name">{{ selectedUser.username }}</div>
 
   <button
@@ -64,6 +70,15 @@
 
     <mat-tab label="История">
       <app-profile-history [userLogin]="selectedUser?.mailNickname"></app-profile-history>
+    </mat-tab>
+
+    <mat-tab label="Скиллы">
+      <app-profile-skills
+        [selectedUser]="selectedUser"
+        [currentUser]="currentUser$ | async"
+        [isAdmin]="isAdmin$ | async"
+        (updateSelectedUser)="updateSelectedUser($event)"
+      ></app-profile-skills>
     </mat-tab>
   </mat-tab-group>
 </ng-container>

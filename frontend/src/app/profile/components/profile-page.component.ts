@@ -1,9 +1,11 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import * as moment from 'moment';
 import { combineLatest, Observable, Subscription } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
+
 import { environment } from '../../../environments/environment';
 import { EmployeeApiService } from '../../core/services/employee-api.service';
 import { FollowApiService } from '../../core/services/follow-api.service';
@@ -18,7 +20,7 @@ import { NewProjectUtils } from '../../shared/utils/new-project.utils';
 @Component({
   selector: 'app-team',
   templateUrl: './profile-page.component.html',
-  styleUrls: ['./profile-page.component.scss']
+  styleUrls: ['./profile-page.component.scss'],
 })
 export class ProfilePageComponent implements OnInit, OnDestroy {
   public selectedUser: Employee;
@@ -31,6 +33,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   public isMobile: boolean;
   public subscription: Subscription = new Subscription();
+
+  public baseUrl = environment.baseUrl;
 
   public users$: Observable<Employee[]>;
   public settings$: Observable<SettingsModel>;
@@ -51,14 +55,14 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.users$ = this.employeeApiService.loadAllEmployees();
 
-    this.currentUser$ = this.contextStoreService.getCurrentUser$().pipe(filter(user => !!user));
+    this.currentUser$ = this.contextStoreService.getCurrentUser$().pipe(filter((user) => !!user));
     this.isAdmin$ = this.contextStoreService.isCurrentUserAdmin$();
-    this.settings$ = this.contextStoreService.settings$.pipe(filter(s => !!s));
+    this.settings$ = this.contextStoreService.settings$.pipe(filter((s) => !!s));
     this.getUserInfo();
 
     this.subscription = this.breakpointObserver
       .observe(['(max-width: 767px)'])
-      .subscribe(result => (this.isMobile = result.matches));
+      .subscribe((result) => (this.isMobile = result.matches));
   }
 
   ngOnDestroy() {
@@ -72,12 +76,16 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     });
   }
 
+  public updateSelectedUser(employee: Employee): void {
+    this.selectedUser = employee;
+  }
+
   public addFollow(data: FollowModel): void {
-    this.followApi.addFollow(data).subscribe(res => this.loadFollow(this.selectedUser._id));
+    this.followApi.addFollow(data).subscribe((res) => this.loadFollow(this.selectedUser._id));
   }
 
   public deleteFollowing(id: string) {
-    this.followApi.deleteFollow(id).subscribe(res => this.loadFollow(this.selectedUser._id));
+    this.followApi.deleteFollow(id).subscribe((res) => this.loadFollow(this.selectedUser._id));
   }
 
   public getAvatarSrc() {
@@ -86,7 +94,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   public tabChange(id: number) {
     this.router.navigate([], {
-      queryParams: { ...this.route.snapshot.queryParams, tab: id }
+      queryParams: { ...this.route.snapshot.queryParams, tab: id },
     });
   }
 
@@ -94,7 +102,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.userSubscriptions.add(
       this.route.params
         .pipe(switchMap((params: { id?: string }) => (params.id ? this.getUserFromApi(params.id) : this.currentUser$)))
-        .subscribe(user => {
+        .subscribe((user) => {
           this.selectedUser = user;
           this.login = user.mailNickname;
           this.loadFollow(user._id);
@@ -103,7 +111,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     );
 
     this.userSubscriptions.add(
-      this.route.queryParams.pipe(filter(query => !!query.tab)).subscribe(query => (this.selectedTabIndex = query.tab))
+      this.route.queryParams
+        .pipe(filter((query) => !!query.tab))
+        .subscribe((query) => (this.selectedTabIndex = query.tab))
     );
   }
 
@@ -124,12 +134,14 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
   }
 
   public loadFollow(userId: string) {
-    this.userSubscriptions.add(this.followApi.getUserFollow(userId).subscribe(res => (this.userFollow = res)));
+    this.userSubscriptions.add(this.followApi.getUserFollow(userId).subscribe((res) => (this.userFollow = res)));
   }
 
   public onUpdateValue(value: { project: ProjectNewModel; date: moment.Moment; value: number }) {
-    const currentProject = this.selectedUser.projectsNew.find(p => p.project_id === value.project.project_id);
-    let metadata = currentProject.metadata.find(m => NewProjectUtils.mapMetadataToDate(m).isSame(value.date, 'month'));
+    const currentProject = this.selectedUser.projectsNew.find((p) => p.project_id === value.project.project_id);
+    const metadata = currentProject.metadata.find((m) =>
+      NewProjectUtils.mapMetadataToDate(m).isSame(value.date, 'month')
+    );
 
     if (metadata?.percent === value.value) {
       return;
@@ -141,13 +153,13 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       const newMeta: ProjectStatsMetadataNewModel = {
         month: +value.date.format('M'),
         year: +value.date.format('YYYY'),
-        percent: value.value
+        percent: value.value,
       };
       currentProject.metadata = [...currentProject.metadata, newMeta];
     }
 
     this.employeeApiService
       .updateUserInfo(this.selectedUser.mailNickname, this.selectedUser)
-      .subscribe(user => (this.selectedUser = user));
+      .subscribe((user) => (this.selectedUser = user));
   }
 }

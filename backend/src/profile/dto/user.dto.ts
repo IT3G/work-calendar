@@ -1,6 +1,7 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { Expose, Transform, Type } from 'class-transformer';
 import * as moment from 'moment';
+import { SkillsDto } from 'src/skills/dto/skills.dto';
 import { DictionaryDto } from '../../dictionary/dto/dictionary.dto';
 import { ProjectNewMetadataEntity } from '../../entity/entities/project-new-metadata.entity';
 import { UserEntity } from '../../entity/entities/user.entity';
@@ -80,6 +81,11 @@ export class UserDto {
   @ApiModelProperty()
   projectsNew: ProjectNewDto[];
 
+  @Expose()
+  @Type(() => SkillsDto)
+  @ApiModelProperty()
+  skills: SkillsDto[];
+
   @ApiModelProperty()
   authType: string;
 
@@ -121,8 +127,10 @@ function lastProjectsMapper(val: null, src: UserEntity): LastProjectDto[] {
   }
 
   return src.projectsNew
-    .map(p => {
-      const projectLastMetadata = p.metadata.find(m => m.year === lastMetadata.year && m.month === lastMetadata.month);
+    .map((p) => {
+      const projectLastMetadata = p.metadata.find(
+        (m) => m.year === lastMetadata.year && m.month === lastMetadata.month
+      );
 
       /** Если нет проекта в последнем месяце, то проект не включаем */
       if (!projectLastMetadata) {
@@ -141,8 +149,8 @@ function lastProjectsMapper(val: null, src: UserEntity): LastProjectDto[] {
         project_name: p.project_name,
         year: projectLastMetadata.year,
         month: projectLastMetadata.month,
-        percent: projectLastMetadata.percent
+        percent: projectLastMetadata.percent,
       };
     })
-    .filter(p => !!p?.percent);
+    .filter((p) => !!p?.percent);
 }

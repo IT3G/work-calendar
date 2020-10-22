@@ -2,7 +2,9 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
+
 import { InputFileModule } from 'ngx-input-file';
+
 import { MaterialModule } from '../material.module';
 import { SharedModule } from '../shared/shared.module';
 import { DictionaryAdminComponent } from './components/dictionary-admin/dictionary-admin.component';
@@ -12,7 +14,9 @@ import { CalendarBlockComponent } from './components/holidays/calendar-block/cal
 import { HolidaysComponent } from './components/holidays/holidays.component';
 import { HolidaysYearFilterPipe } from './components/holidays/pipes/holidays-year-filter.pipe';
 import { AddPopupComponent } from './components/popups/add-popup/add-popup.component';
+import { AddSkillPopupComponent } from './components/popups/add-skill-popup/add-skill-popup.component';
 import { SettingsComponent } from './components/settings/settings.component';
+import { SkillsAdminComponent } from './components/skills-admin/skills-admin.component';
 import { SubdivisionAdmComponent } from './components/subdivision-adm/subdivision-adm.component';
 
 const routes: Routes = [
@@ -20,7 +24,8 @@ const routes: Routes = [
   { path: 'employee-list', component: EmployeeListComponent },
   { path: 'holidays', component: HolidaysComponent },
   { path: 'dictionary', component: DictionaryAdminComponent },
-  { path: '', redirectTo: 'projects', pathMatch: 'full' }
+  { path: '', redirectTo: 'projects', pathMatch: 'full' },
+  { path: 'skills', component: SkillsAdminComponent },
 ];
 
 const components = [
@@ -31,7 +36,9 @@ const components = [
   HolidaysComponent,
   CalendarBlockComponent,
   SubdivisionAdmComponent,
-  SettingsComponent
+  SettingsComponent,
+  SkillsAdminComponent,
+  AddSkillPopupComponent,
 ];
 
 const pieps = [HolidaysYearFilterPipe];
@@ -48,7 +55,7 @@ const entryComponents = [AddPopupComponent, EmployeeAddComponent];
     ReactiveFormsModule,
     SharedModule,
     InputFileModule,
-    RouterModule.forChild(routes)
-  ]
+    RouterModule.forChild(routes),
+  ],
 })
 export class AdminModule {}

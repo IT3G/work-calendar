@@ -1,0 +1,65 @@
+<div class="skills">
+  <ng-container *ngIf="selectedUser.skills.length">
+    <h2>Скиллы пользователя</h2>
+    <table
+      *ngIf="selectedUser.skills.length"
+      mat-table
+      [dataSource]="selectedUser.skills"
+      [trackBy]="trackByFn"
+      class="mat-elevation-z7"
+    >
+      <ng-container matColumnDef="icon">
+        <th mat-header-cell *matHeaderCellDef>Иконка</th>
+        <td mat-cell *matCellDef="let skill" class="icon">
+          <img class="logo" [src]="baseUrl + '/skills/logo/' + skill.logoName" [title]="skill.hint" />
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Скилл</th>
+        <td mat-cell *matCellDef="let skill">
+          {{ skill?.name }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="delete">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td class="delete" mat-cell *matCellDef="let skill" (click)="deleteSkill(skill)">
+          <i class="fa fa-remove icon-btn" aria-hidden="true"></i>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="profileSkillsDisplayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: profileSkillsDisplayedColumns"></tr>
+    </table>
+  </ng-container>
+
+  <ng-container *ngIf="(skills$ | async)?.length">
+    <h2 class="other-skills-header">Доступые скиллы</h2>
+    <table mat-table [dataSource]="skills$ | async" [trackBy]="trackByFn" class="mat-elevation-z7">
+      <ng-container matColumnDef="icon">
+        <th mat-header-cell *matHeaderCellDef>Иконка</th>
+        <td mat-cell *matCellDef="let skill" class="icon">
+          <img class="logo" [src]="baseUrl + '/skills/logo/' + skill.logoName" [title]="skill.hint" />
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Скилл</th>
+        <td mat-cell *matCellDef="let skill">
+          {{ skill?.name }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="add">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td class="delete" mat-cell *matCellDef="let skill" (click)="addSkill(skill)">
+          <i class="fa fa-plus icon-btn" aria-hidden="true"></i>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="allSkillsDisplayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: allSkillsDisplayedColumns"></tr>
+    </table>
+  </ng-container>
+</div>

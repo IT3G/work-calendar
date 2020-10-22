@@ -13,7 +13,7 @@ export class LdapService implements OnApplicationShutdown {
     readerDn: this.configService.READER_DOMAIN_NAME,
     readerPwd: this.configService.READER_PASSWORD,
     serverUrl: this.configService.LDAP_SERVER_URL,
-    suffix: this.configService.LDAP_SUFFIX
+    suffix: this.configService.LDAP_SUFFIX,
   };
 
   client: any;
@@ -25,18 +25,18 @@ export class LdapService implements OnApplicationShutdown {
   public async auth(credentials: LoginModel, add?: boolean): Promise<UserDto> {
     this.client = ldap.createClient({
       url: this.config.serverUrl,
-      reconnect: true
+      reconnect: true,
     });
 
-    this.client.on('error', e => {
+    this.client.on('error', (e) => {
       this.logger.error('Ошибка авторизации', e.stack);
     });
     const filter = await this.getFilter(credentials.username);
     const user = await this.search(filter, credentials.password, add);
     const result = user[0];
-    result.attributes = result.attributes.map(el => ({
+    result.attributes = result.attributes.map((el) => ({
       type: el.type,
-      data: this.stringFromUTF8Array(el._vals[0])
+      data: this.stringFromUTF8Array(el._vals[0]),
     }));
 
     this.client.destroy();
@@ -68,12 +68,13 @@ export class LdapService implements OnApplicationShutdown {
       telegram: null,
       hashPassword: null,
       terminationDate: null,
-      lastProjects: null
+      lastProjects: null,
+      skills: null,
     };
   }
 
   private getAttribute(attributes: Array<{ type: string; data: string }>, val: string) {
-    const attr = attributes.find(el => el.type === val);
+    const attr = attributes.find((el) => el.type === val);
 
     return attr ? attr.data : null;
   }
@@ -81,7 +82,7 @@ export class LdapService implements OnApplicationShutdown {
   private getFilter(username: string): Promise<string> {
     const login = `${username}${this.configService.MAIL_POSTFIX}`;
     return new Promise((resolve, reject) => {
-      this.client.bind(this.config.readerDn, this.config.readerPwd, err => {
+      this.client.bind(this.config.readerDn, this.config.readerPwd, (err) => {
         if (err) {
           reject('Reader bind failed ' + err);
           return;
@@ -100,26 +101,26 @@ export class LdapService implements OnApplicationShutdown {
         this.config.suffix,
         {
           filter,
-          scope: 'sub'
+          scope: 'sub',
         },
         (err, searchRes) => {
           const searchList = [];
 
-          searchRes.on('searchEntry', entry => {
+          searchRes.on('searchEntry', (entry) => {
             searchList.push(entry);
           });
 
-          searchRes.on('error', e => {
+          searchRes.on('error', (e) => {
             this.logger.error('Ошибка при поиске пользователя', e.stack);
           });
 
-          searchRes.on('end', retVal => {
+          searchRes.on('end', (retVal) => {
             if (!searchList.length) {
               reject({ user: null });
               return;
             }
 
-            this.client.bind(searchList[0].objectName, password, error => {
+            this.client.bind(searchList[0].objectName, password, (error) => {
               if (add && !error) {
                 resolve(searchList);
               }

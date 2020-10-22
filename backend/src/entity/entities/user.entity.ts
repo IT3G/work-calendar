@@ -1,6 +1,7 @@
 import { Document } from 'mongoose';
 import { JobPositionEntity } from './job-position.entity.model';
 import { ProjectNewEntity } from './project-new.entity';
+import { SkillsEntity } from './skills.entity.model';
 import { SubdivisionEntity } from './subdivision.entity.model';
 
 export interface UserEntity extends Document {
@@ -19,6 +20,7 @@ export interface UserEntity extends Document {
   hasMailing: boolean;
   subdivision: SubdivisionEntity;
   jobPosition: JobPositionEntity;
+  skills: SkillsEntity[];
   projectsNew: ProjectNewEntity[];
   authType: string;
   hashPassword: string;
