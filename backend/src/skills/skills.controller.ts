@@ -57,7 +57,6 @@ export class SkillsController {
   @UseInterceptors(FileInterceptor('file'))
   async uploadLogo(@UploadedFile() file): Promise<void> {
     await this.skillsService.saveLogo(file);
-    return;
   }
 
   @Delete('logo/:name')
