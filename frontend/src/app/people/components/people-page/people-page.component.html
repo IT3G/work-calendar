@@ -29,7 +29,7 @@
     </div>
     <div class="user-grid" *ngIf="locationUser">
       <div *ngFor="let user of locationUser[loc] | peopleSudivisionFilter: filtersForm.value['subdivision']">
-        <app-user-card [user]="user" [date]="filtersForm.get('month').value"></app-user-card>
+        <app-user-card [user]="user" [date]="filtersForm.get('month').value" theme="peoples-page"></app-user-card>
       </div>
     </div>
   </div>

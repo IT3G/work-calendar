@@ -60,6 +60,13 @@
   }
 }
 
+:host[theme='peoples-page'] {
+  .skill-logo {
+    height: 15px;
+    width: 15px;
+  }
+}
+
 @media (min-width: 768px) and (max-width: 1200px) {
   .user-card {
     margin: 5px 0;
