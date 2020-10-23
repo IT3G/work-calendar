@@ -174,6 +174,7 @@ export class PeoplePageComponent implements OnInit, OnDestroy {
         projectsNew,
         terminationDate,
         lastProjects,
+        skills,
       } = array;
 
       result[location] = [
@@ -198,6 +199,7 @@ export class PeoplePageComponent implements OnInit, OnDestroy {
           projectsNew,
           terminationDate,
           lastProjects,
+          skills,
         },
       ];
 

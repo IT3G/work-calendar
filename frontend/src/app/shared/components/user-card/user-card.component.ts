@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostBinding, Input, OnInit } from '@angular/core';
 
 import * as moment from 'moment';
 import { Observable } from 'rxjs';
@@ -15,6 +15,10 @@ import { SettingsModel } from '../../models/settings.model';
   styleUrls: ['./user-card.component.scss'],
 })
 export class UserCardComponent implements OnInit {
+  @HostBinding('attr.theme')
+  @Input()
+  public theme: string;
+
   @Input()
   user: Employee;
 

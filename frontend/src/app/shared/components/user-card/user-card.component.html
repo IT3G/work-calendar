@@ -21,14 +21,16 @@
       <div *ngFor="let nameItem of user.username | usernameToArr">
         {{ nameItem }}
       </div>
-      <div class="user-skills">
-        <div class="image-wrapper" *ngFor="let skill of user.skills">
-          <img class="skill-logo" [src]="baseUrl + '/skills/logo/' + skill.logoName" [title]="skill.hint" />
-        </div>
-      </div>
     </a>
-
     <div class="jobPosition">{{ user?.jobPosition?.name }}</div>
+    <div class="user-skills">
+      <img
+        class="skill-logo"
+        *ngFor="let skill of user.skills"
+        [src]="baseUrl + '/skills/logo/' + skill.logoName"
+        [title]="skill.hint"
+      />
+    </div>
 
     <div class="location" *ngIf="isMobileVersion">{{ user?.location }}</div>
 
