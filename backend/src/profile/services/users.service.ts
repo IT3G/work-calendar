@@ -45,7 +45,21 @@ export class UsersService {
   }
 
   async updateUserByLogin(login: string, data: UserDto): Promise<UserEntity> {
-    await this.userModel.updateOne({ mailNickname: login }, { ...data });
+    const skillsId = new Set();
+    const newSkills = { ...data }.skills.filter((skill) => {
+      if (skillsId.has(skill._id)) {
+        return false;
+      }
+      skillsId.add(skill._id);
+      return true;
+    });
+    await this.userModel.updateOne(
+      { mailNickname: login },
+      {
+        ...data,
+        skills: newSkills,
+      }
+    );
     return await this.getUserByLogin(login);
   }
 }
