@@ -97,6 +97,18 @@ export class UserDto {
   terminationDate: string;
 
   @Expose()
+  @ApiModelProperty()
+  birthday: string;
+
+  @Expose()
+  @ApiModelProperty()
+  remoteWork: boolean;
+
+  @Expose()
+  @ApiModelProperty()
+  lastTimeOnline: string;
+
+  @Expose()
   @Type(() => LastProjectDto)
   @Transform(lastProjectsMapper)
   @ApiModelProperty()

@@ -7,6 +7,18 @@
     <input placeholder="email" matInput autocomplete="off" formControlName="email" />
   </mat-form-field>
 
+  <mat-form-field class="form-group control control-date">
+    <input
+      placeholder="день рождения"
+      matInput
+      autocomplete="off"
+      formControlName="birthday"
+      [matDatepicker]="birthday"
+    />
+    <mat-datepicker-toggle matSuffix [for]="birthday"></mat-datepicker-toggle>
+    <mat-datepicker #birthday></mat-datepicker>
+  </mat-form-field>
+
   <mat-form-field class="form-group">
     <mat-select placeholder="позиция" formControlName="jobPosition">
       <mat-option *ngFor="let jobPosition of jobPositions" [value]="jobPosition">{{ jobPosition?.name }}</mat-option>
@@ -37,7 +49,7 @@
     <input placeholder="telegram" matInput autocomplete="off" formControlName="telegram" />
   </mat-form-field>
 
-  <mat-form-field class=" form-group control control-date">
+  <mat-form-field class="form-group control control-date">
     <input
       placeholder="дата выхода"
       matInput
@@ -64,6 +76,8 @@
   <mat-checkbox *ngIf="isAdmin" class="form-group checkbox" color="primary" formControlName="isAdmin">
     админ
   </mat-checkbox>
+
+  <mat-checkbox class="form-group checkbox" color="primary" formControlName="remoteWork">удаленная работа</mat-checkbox>
 
   <div class="form-footer">
     <button type="submit" mat-raised-button color="primary" *ngIf="!isEdit && canEdit" (click)="editStart()">

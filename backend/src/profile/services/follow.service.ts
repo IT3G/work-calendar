@@ -27,7 +27,7 @@ export class FollowService {
     const followers = await this.getUserFollowers(userId);
     const allForUser = await this.getAllStaticFollowsForUser(userId);
     /** Исключить сотрудников с датой увольнения. */
-    const allEmployedFollowersForUser = allForUser.filter(rec => {
+    const allEmployedFollowersForUser = allForUser.filter((rec) => {
       const user = (rec.followingId as unknown) as UserEntity;
 
       return user && !user.terminationDate;
@@ -36,17 +36,13 @@ export class FollowService {
     return {
       following,
       followers,
-      allForUser: allEmployedFollowersForUser
+      allForUser: allEmployedFollowersForUser,
     };
   }
 
   /** Получение одной подписки по ID */
   async getOneFollowsByID(followId: string): Promise<FollowEntity> {
-    return await this.followModel
-      .findById(followId)
-      .populate('followingId')
-      .populate('followerId')
-      .exec();
+    return await this.followModel.findById(followId).populate('followingId').populate('followerId').exec();
   }
 
   /** Получение всех ручных подписок пользователя */
@@ -63,19 +59,19 @@ export class FollowService {
     const allUsers = await this.userService.getUsers();
     const user = await this.userService.getUserById(userId);
 
-    let followingByProjects = this.matchUsersAndActiveProjects(user, allUsers);
+    const followingByProjects = this.matchUsersAndActiveProjects(user, allUsers);
 
     const addedFollowing = await this.followModel.find({ followerId: user.id, followType: FollowType.add });
 
     const removedFollowing = await this.followModel.find({ followerId: user.id, followType: FollowType.remove });
 
-    const addedUsers = addedFollowing.map(item => item.followingId).map(u => u.toString());
-    const removedUsers = removedFollowing.map(item => item.followingId).map(u => u.toString());
+    const addedUsers = addedFollowing.map((item) => item.followingId).map((u) => u.toString());
+    const removedUsers = removedFollowing.map((item) => item.followingId).map((u) => u.toString());
 
     return this.addUserToArr(addedUsers, followingByProjects, allUsers)
-      .filter(u => this.removeMyselfFromArr(u.id, user.id))
-      .filter(u => this.removeUsersFromArr(removedUsers, u.id))
-      .filter(u => u && !u.terminationDate);
+      .filter((u) => this.removeMyselfFromArr(u.id, user.id))
+      .filter((u) => this.removeUsersFromArr(removedUsers, u.id))
+      .filter((u) => u && !u.terminationDate);
   }
 
   async addFollow(data: FollowDto): Promise<FollowEntity> {
@@ -85,6 +81,14 @@ export class FollowService {
 
   async deleteFollow(id: string): Promise<FollowEntity> {
     return this.followModel.findByIdAndDelete(id);
+  }
+
+  async deleteFollowByFollowingId(id: string): Promise<void> {
+    await this.followModel.deleteMany({ followingId: id });
+  }
+
+  async deleteFollowByFollowerId(id: string): Promise<void> {
+    await this.followModel.deleteMany({ followerId: id });
   }
 
   /** Получение людей подписанных на пользователя */
@@ -98,16 +102,16 @@ export class FollowService {
 
     const removedFollowersArr = await this.followModel.find({
       followingId: user.id,
-      followType: FollowType.remove
+      followType: FollowType.remove,
     });
 
-    const addedUsers = addedFollowersArr.map(item => item.followerId).map(u => u.toString());
-    const removedUsers = removedFollowersArr.map(item => item.followerId).map(u => u.toString());
+    const addedUsers = addedFollowersArr.map((item) => item.followerId).map((u) => u.toString());
+    const removedUsers = removedFollowersArr.map((item) => item.followerId).map((u) => u.toString());
 
     return this.addUserToArr(addedUsers, [...followersByProjects], allUsers)
-      .filter(u => this.removeMyselfFromArr(u.id, user.id))
-      .filter(u => this.removeUsersFromArr(removedUsers, u.id))
-      .filter(u => u && !u.terminationDate);
+      .filter((u) => this.removeMyselfFromArr(u.id, user.id))
+      .filter((u) => this.removeUsersFromArr(removedUsers, u.id))
+      .filter((u) => u && !u.terminationDate);
   }
 
   // Добавление пользователя в массив
@@ -118,14 +122,14 @@ export class FollowService {
       return mainArr;
     }
 
-    const usersAbsentInMainArr = addedUsers.filter(element => !mainArr.some(elem => element === elem.id));
+    const usersAbsentInMainArr = addedUsers.filter((element) => !mainArr.some((elem) => element === elem.id));
 
     if (!usersAbsentInMainArr.length) {
       return mainArr;
     }
 
-    const userArr = usersAbsentInMainArr.map(item => {
-      return allUsers.find(el => el.id === item);
+    const userArr = usersAbsentInMainArr.map((item) => {
+      return allUsers.find((el) => el.id === item);
     });
 
     return [...mainArr, ...userArr];
@@ -142,10 +146,10 @@ export class FollowService {
   private matchUsersAndActiveProjects(selectedUser: UserEntity, allUsers: UserEntity[]): UserEntity[] {
     const selectedUserActiveProjects = this.getActiveUserProjects(selectedUser);
 
-    return allUsers.filter(user => {
+    return allUsers.filter((user) => {
       const userActiveProjects = this.getActiveUserProjects(user);
 
-      return userActiveProjects.some(pr => selectedUserActiveProjects.includes(pr));
+      return userActiveProjects.some((pr) => selectedUserActiveProjects.includes(pr));
     });
   }
 
@@ -156,9 +160,9 @@ export class FollowService {
 
     const currentDate = moment();
     return user.projectsNew
-      .filter(p => p.metadata.some(m => currentDate.isSame(this.mapMetadataToDate(m), 'month')))
-      .filter(p => p.project_id)
-      .map(p => p.project_id.toString());
+      .filter((p) => p.metadata.some((m) => currentDate.isSame(this.mapMetadataToDate(m), 'month')))
+      .filter((p) => p.project_id)
+      .map((p) => p.project_id.toString());
   }
 
   private haveProjectsInCurrentMonth(projects: ProjectNewEntity[]): boolean {
@@ -167,7 +171,7 @@ export class FollowService {
     }
 
     const currentDate = moment();
-    return projects.some(p => p.metadata.some(m => currentDate.isSame(this.mapMetadataToDate(m), 'month')));
+    return projects.some((p) => p.metadata.some((m) => currentDate.isSame(this.mapMetadataToDate(m), 'month')));
   }
 
   private mapMetadataToDate(m: ProjectNewMetadataEntity): moment.Moment {

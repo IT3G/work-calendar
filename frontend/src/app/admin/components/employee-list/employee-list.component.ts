@@ -3,10 +3,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+
 import { Observable, Subscription } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { first, share, switchMap, take, tap } from 'rxjs/operators';
 import { EmployeeApiService } from 'src/app/core/services/employee-api.service';
 import { SnackbarService } from 'src/app/shared/services/snackbar.service';
+
 import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
 import { DictionaryModel } from '../../../shared/models/dictionary.model';
 import { Employee } from '../../../shared/models/employee.model';
@@ -15,7 +17,7 @@ import { EmployeeAddComponent } from './employee-add/employee-add.component';
 @Component({
   selector: 'app-employee-list',
   templateUrl: './employee-list.component.html',
-  styleUrls: ['./employee-list.component.scss']
+  styleUrls: ['./employee-list.component.scss'],
 })
 export class EmployeeListComponent implements OnInit, OnDestroy {
   public employees: Employee[];
@@ -36,9 +38,9 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.filter = new FormControl();
-    this.ar.queryParams.subscribe(res => this.filter.setValue(res.project));
+    this.ar.queryParams.subscribe((res) => this.filter.setValue(res.project));
     this.projects$ = this.dictionaryApi.getAll('project');
-    this.employeeApi.loadAllEmployees().subscribe(res => (this.employees = res));
+    this.employeeApi.loadAllEmployees().subscribe((res) => (this.employees = res));
     this.setDisplayedColumns();
   }
 
@@ -49,10 +51,10 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
   public openDialog(): void {
     const dialogRef = this.dialog.open(EmployeeAddComponent, {
       width: '250px',
-      data: { login: this.login }
+      data: { login: this.login },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (!result) {
         return;
       }
@@ -61,25 +63,42 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
         .addNewUser({ username: result })
         .pipe(switchMap(() => this.employeeApi.loadAllEmployees()))
         .subscribe(
-          res => {
+          (res) => {
             this.employees = res;
             this.snackbar.showSuccessSnackBar('Пользователь успешно добавлен');
           },
-          error => this.showErrorMessage(error)
+          (error) => this.showErrorMessage(error)
         );
     });
+  }
+
+  public delete(user: Employee) {
+    this.employeeApi
+      .deleteUser(user._id)
+      .pipe(
+        first(),
+        switchMap(() => this.employeeApi.loadAllEmployees())
+      )
+      .subscribe((res) => {
+        this.employees = res;
+        this.snackbar.showSuccessSnackBar('Пользователь успешно удален');
+      });
   }
 
   private setDisplayedColumns(): void {
     this.displayedColumns = [
       'username',
       'login',
+      'birthday',
       'jobPosition',
+      'releaseDate',
+      'terminationDate',
       'subdivision',
       'projects',
       'location',
       'telNumber',
-      'isAdmin'
+      'isAdmin',
+      'deleteUser',
     ];
   }
 

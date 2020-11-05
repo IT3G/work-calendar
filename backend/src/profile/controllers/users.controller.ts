@@ -1,4 +1,4 @@
-import { Body, Controller, Get, NotFoundException, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
 import { CustomMapper } from '../../shared/services/custom-mapper.service';
 import { UserDto } from '../dto/user.dto';
@@ -53,6 +53,17 @@ export class UsersController {
     return this.mapper.map(UserDto, editedUser);
   }
 
+  @Post('/login/time/:login')
+  async updateLastTimeOnline(@Param('login') login: string): Promise<void> {
+    const editedUser = await this.userService.getUserByLogin(login);
+
+    if (!editedUser) {
+      throw new NotFoundException('User does not exist!');
+    }
+
+    await this.userService.updateLastTimeOnline(login);
+  }
+
   @Post('/patronymic/:login')
   async editUserPatronymic(@Param('login') login, @Body() data): Promise<UserDto> {
     const editedUser = await this.userService.getUserByLogin(login);
@@ -65,5 +76,17 @@ export class UsersController {
     await editedUser.save();
 
     return this.mapper.map(UserDto, editedUser);
+  }
+
+  @Delete('/delete/:id')
+  async deleteUser(@Param('id') id: string): Promise<void> {
+    /**FIX: фикснауть как фронт фиксанет задваиваемые запросы **/
+    // const editedUser = await this.userService.getUserByLogin(login);
+
+    // if (!editedUser) {
+    //   throw new NotFoundException('User does not exist!');
+    // }
+
+    return await this.userService.deleteUser(id);
   }
 }

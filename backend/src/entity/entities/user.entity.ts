@@ -25,4 +25,7 @@ export interface UserEntity extends Document {
   authType: string;
   hashPassword: string;
   terminationDate: string;
+  birthday: string;
+  remoteWork: boolean;
+  lastTimeOnline: string;
 }

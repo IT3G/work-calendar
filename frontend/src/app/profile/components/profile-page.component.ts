@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 import { combineLatest, Observable, Subscription } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
+import { ProfileProjectsService } from 'src/app/shared/services/profile-projects.service';
 
 import { environment } from '../../../environments/environment';
 import { EmployeeApiService } from '../../core/services/employee-api.service';
@@ -49,7 +50,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private followApi: FollowApiService,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private profileProjectsService: ProfileProjectsService
   ) {}
 
   ngOnInit() {
@@ -63,11 +65,20 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.subscription = this.breakpointObserver
       .observe(['(max-width: 767px)'])
       .subscribe((result) => (this.isMobile = result.matches));
+
+    this.subscribeToSelectedUserChange();
   }
 
   ngOnDestroy() {
     this.userSubscriptions.unsubscribe();
     this.subscription.unsubscribe();
+  }
+
+  private subscribeToSelectedUserChange() {
+    this.contextStoreService.getSelectedUser().subscribe((user) => {
+      console.log('subscribe');
+      this.selectedUser = user;
+    });
   }
 
   public onUpdateProfile(employee: Employee): void {
@@ -103,6 +114,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       this.route.params
         .pipe(switchMap((params: { id?: string }) => (params.id ? this.getUserFromApi(params.id) : this.currentUser$)))
         .subscribe((user) => {
+          console.log('route');
+          this.contextStoreService.setSelectedUser(user);
           this.selectedUser = user;
           this.login = user.mailNickname;
           this.loadFollow(user._id);
@@ -157,6 +170,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       };
       currentProject.metadata = [...currentProject.metadata, newMeta];
     }
+
+    console.log(currentProject);
+    console.log(this.selectedUser);
 
     this.employeeApiService
       .updateUserInfo(this.selectedUser.mailNickname, this.selectedUser)

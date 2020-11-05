@@ -78,6 +78,9 @@ export class AuthService {
       lastProjects: null,
       hashPassword: crypto.createHmac('sha256', userInfo.password).digest('hex'),
       skills: null,
+      birthday: moment().toISOString(),
+      remoteWork: null,
+      lastTimeOnline: moment().toISOString(),
     };
 
     return this.usersService.addUser(data);

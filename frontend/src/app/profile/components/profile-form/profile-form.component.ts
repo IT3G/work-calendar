@@ -1,6 +1,8 @@
-import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+
 import { forkJoin } from 'rxjs';
+
 import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
 import { DictionaryModel } from '../../../shared/models/dictionary.model';
 import { Employee } from '../../../shared/models/employee.model';
@@ -8,7 +10,7 @@ import { Employee } from '../../../shared/models/employee.model';
 @Component({
   selector: 'app-profile-form',
   templateUrl: './profile-form.component.html',
-  styleUrls: ['./profile-form.component.scss']
+  styleUrls: ['./profile-form.component.scss'],
 })
 export class ProfileFormComponent implements OnChanges {
   @Input()
@@ -45,6 +47,10 @@ export class ProfileFormComponent implements OnChanges {
     this.profileForm.get('hasMailing').enable();
 
     if (this.isAdmin) {
+      this.profileForm.get('whenCreated').enable();
+      this.profileForm.get('username').enable();
+      this.profileForm.get('birthday').enable();
+      this.profileForm.get('remoteWork').enable();
       this.profileForm.get('subdivision').enable();
       this.profileForm.get('jobPosition').enable();
       this.profileForm.get('isAdmin').enable();
@@ -77,7 +83,9 @@ export class ProfileFormComponent implements OnChanges {
       jobPosition: [null],
       subdivision: [null],
       whenCreated: [user.whenCreated],
-      terminationDate: [user.terminationDate]
+      terminationDate: [user.terminationDate],
+      birthday: [user.birthday],
+      remoteWork: [user.remoteWork],
     });
     this.profileForm.disable();
   }
@@ -86,7 +94,7 @@ export class ProfileFormComponent implements OnChanges {
     const jobPositions$ = this.dictionaryApi.getAll('jobPosition');
     const subdivisions$ = this.dictionaryApi.getAll('subdivision');
 
-    forkJoin([jobPositions$, subdivisions$]).subscribe(res => {
+    forkJoin([jobPositions$, subdivisions$]).subscribe((res) => {
       const [jobPositions, subdivisions] = res;
       this.jobPositions = jobPositions;
       this.subdivisions = subdivisions;
@@ -96,10 +104,10 @@ export class ProfileFormComponent implements OnChanges {
       }
 
       const jobPosition = this.jobPositions.find(
-        jp => this.selectedUser.jobPosition && jp._id === this.selectedUser.jobPosition._id
+        (jp) => this.selectedUser.jobPosition && jp._id === this.selectedUser.jobPosition._id
       );
       const subdivision = this.subdivisions.find(
-        sd => this.selectedUser.subdivision && sd._id === this.selectedUser.subdivision._id
+        (sd) => this.selectedUser.subdivision && sd._id === this.selectedUser.subdivision._id
       );
 
       this.profileForm.patchValue({ jobPosition, subdivision });

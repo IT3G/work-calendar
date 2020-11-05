@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
+
 import { Moment } from 'moment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+
 import { DayType } from '../../shared/const/day-type.const';
 import { Employee } from '../../shared/models/employee.model';
 import { SettingsModel } from '../../shared/models/settings.model';
@@ -14,6 +16,7 @@ export class ContextStoreService {
   private currentDate = new BehaviorSubject<Moment>(null);
   private dayType = new BehaviorSubject<DayType>(null);
   private comment = new BehaviorSubject<string>(null);
+  private selectedUser$ = new BehaviorSubject<Employee>(null);
 
   public getCurrentDate$(): Observable<Moment> {
     return this.currentDate;
@@ -53,12 +56,24 @@ export class ContextStoreService {
 
   public isCurrentUserAdmin$(): Observable<boolean> {
     return this.currentUser.pipe(
-      filter(user => !!user),
+      filter((user) => !!user),
       map((user: Employee) => user.isAdmin)
     );
   }
 
   public setCurrentUser(user: Employee): void {
     this.currentUser.next(user);
+  }
+
+  public setSelectedUser(user: Employee): void {
+    this.selectedUser$.next(user);
+  }
+
+  public getSelectedUser(): Observable<Employee> {
+    return this.selectedUser$.asObservable();
+  }
+
+  public getSelectedUserValue(): Employee {
+    return this.selectedUser$.value;
   }
 }

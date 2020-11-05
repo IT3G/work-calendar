@@ -18,7 +18,18 @@ td {
   border-right: 1px solid lightgray;
 }
 
+.date {
+  position: relative;
+  .fa-icon {
+    position: absolute;
+    top: -6px;
+    right: 1px;
+    cursor: pointer;
+  }
+}
+
 .name {
+  position: relative;
   width: 200px;
   position: sticky;
   left: 0;
@@ -27,6 +38,13 @@ td {
   background-color: #fafafa;
   z-index: 10;
   padding: 0 10px;
+
+  .fa-icon {
+    position: absolute;
+    top: 12px;
+    right: 9px;
+    cursor: pointer;
+  }
 }
 
 input {
@@ -37,4 +55,8 @@ input {
     border: none;
     background: transparent;
   }
+}
+
+button {
+  margin-top: 20px;
 }
