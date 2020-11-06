@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
+import { MaterialModule } from '../material.module';
 import { SharedModule } from '../shared/shared.module';
 import { ProfileFormComponent } from './components/profile-form/profile-form.component';
 import { ProfileHistoryComponent } from './components/profile-history/profile-history.component';
@@ -24,6 +25,6 @@ const components = [
 
 @NgModule({
   declarations: [...components],
-  imports: [CommonModule, SharedModule],
+  imports: [MaterialModule, CommonModule, SharedModule],
 })
 export class ProfileModule {}

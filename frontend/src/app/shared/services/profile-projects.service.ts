@@ -20,14 +20,12 @@ export class ProfileProjectsService {
 
     const deletableProjectIndex = this.selectedUser.projectsNew.findIndex((p) => p.project_id === project.project_id);
     const filteredProjects = this.selectedUser.projectsNew.filter((p, index) => {
-      console.log(index, deletableProjectIndex);
       return index !== deletableProjectIndex;
     });
 
     this.employeeApiService
       .updateUserInfo(this.selectedUser.mailNickname, { ...this.selectedUser, projectsNew: [...filteredProjects] })
       .subscribe((user) => {
-        console.log('service');
         this.contextStoreService.setSelectedUser(user);
       });
   }
@@ -49,7 +47,6 @@ export class ProfileProjectsService {
     this.employeeApiService
       .updateUserInfo(this.selectedUser.mailNickname, { ...this.selectedUser, projectsNew: [...filteredProjects] })
       .subscribe((user) => {
-        console.log('service');
         this.contextStoreService.setSelectedUser(user);
       });
   }

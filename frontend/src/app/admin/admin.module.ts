@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
 import { RouterModule, Routes } from '@angular/router';
 
 import { InputFileModule } from 'ngx-input-file';
@@ -59,5 +60,6 @@ const entryComponents = [AddPopupComponent, EmployeeAddComponent];
     InputFileModule,
     RouterModule.forChild(routes),
   ],
+  exports: [CommonModule],
 })
 export class AdminModule {}

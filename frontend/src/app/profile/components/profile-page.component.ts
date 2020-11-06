@@ -76,7 +76,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   private subscribeToSelectedUserChange() {
     this.contextStoreService.getSelectedUser().subscribe((user) => {
-      console.log('subscribe');
       this.selectedUser = user;
     });
   }
@@ -114,7 +113,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       this.route.params
         .pipe(switchMap((params: { id?: string }) => (params.id ? this.getUserFromApi(params.id) : this.currentUser$)))
         .subscribe((user) => {
-          console.log('route');
           this.contextStoreService.setSelectedUser(user);
           this.selectedUser = user;
           this.login = user.mailNickname;
@@ -170,9 +168,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       };
       currentProject.metadata = [...currentProject.metadata, newMeta];
     }
-
-    console.log(currentProject);
-    console.log(this.selectedUser);
 
     this.employeeApiService
       .updateUserInfo(this.selectedUser.mailNickname, this.selectedUser)
