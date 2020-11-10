@@ -1,8 +1,8 @@
 <div class="skills">
-  <ng-container *ngIf="selectedUser.skills.length && userCanEdit()">
+  <ng-container *ngIf="selectedUser.skills?.length && userCanEdit()">
     <h2>Скиллы пользователя</h2>
     <table
-      *ngIf="selectedUser.skills.length"
+      *ngIf="selectedUser.skills?.length"
       mat-table
       [dataSource]="selectedUser.skills"
       [trackBy]="trackByFn"
