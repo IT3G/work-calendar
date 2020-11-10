@@ -53,13 +53,13 @@ export class ProfileSkillsComponent implements OnInit {
   }
 
   private initSkills() {
-    const userSkillsId = this.selectedUser.skills.map((skill) => {
+    const userSkillsId = this.selectedUser.skills?.map((skill) => {
       return skill._id;
     });
     this.skills$ = this.skillsApi.getAll().pipe(
       map((skills) => {
         return skills.filter((skill) => {
-          return !userSkillsId.includes(skill._id);
+          return !userSkillsId?.includes(skill._id);
         });
       })
     );
@@ -70,7 +70,7 @@ export class ProfileSkillsComponent implements OnInit {
   }
 
   public deleteSkill(skill: SkillsModel): void {
-    const newSkills = this.selectedUser.skills.filter((res) => {
+    const newSkills = this.selectedUser.skills?.filter((res) => {
       return res._id !== skill._id;
     });
     this.employeeApiService
@@ -84,7 +84,9 @@ export class ProfileSkillsComponent implements OnInit {
 
   public addSkill(skill: SkillsModel): void {
     this.employeeApiService
-      .updateUserInfo(this.selectedUser.mailNickname, <Employee>{ skills: [...this.selectedUser.skills, skill] })
+      .updateUserInfo(this.selectedUser.mailNickname, <Employee>{
+        skills: this.selectedUser.skills ? [...this.selectedUser.skills, skill] : [skill],
+      })
       .subscribe((user) => {
         this.updateSelectedUser.emit(user);
         this.selectedUser = user;
