@@ -13,13 +13,14 @@ import { MatDialog } from '@angular/material/dialog';
 import * as moment from 'moment';
 import { filter, first, switchMap } from 'rxjs/operators';
 import { DICTIONARIES } from 'src/app/admin/components/dictionary-admin/dictionaries.cont';
-import { AddProjectToProfilePopupComponent } from 'src/app/admin/components/popups/add-project-to-profile-popup/add-project-to-profile-popup.component';
 import { DictionaryApiService } from 'src/app/core/services/dictionary-api.service';
+import { EmployeeApiService } from 'src/app/core/services/employee-api.service';
+import { ContextStoreService } from 'src/app/core/store/context-store.service';
 import { DictionaryModel } from 'src/app/shared/models/dictionary.model';
-import { ProfileProjectsService } from 'src/app/shared/services/profile-projects.service';
 
 import { ProjectNewModel } from '../../../../shared/models/project-new.model';
 import { NewProjectUtils } from '../../../../shared/utils/new-project.utils';
+import { AddProjectToProfilePopupComponent } from '../../pop-up/add-project-to-profile-popup/add-project-to-profile-popup.component';
 
 @Component({
   selector: 'app-profile-projects-table',
@@ -27,7 +28,7 @@ import { NewProjectUtils } from '../../../../shared/utils/new-project.utils';
   styleUrls: ['./profile-projects-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProfileProjectsTableComponent implements OnChanges, OnInit {
+export class ProfileProjectsTableComponent implements OnChanges {
   @Input()
   projects: ProjectNewModel[] = [];
 
@@ -37,31 +38,18 @@ export class ProfileProjectsTableComponent implements OnChanges, OnInit {
   @Input()
   isAdmin: boolean;
 
+  @Input()
+  projectDict: DictionaryModel[];
+
   @Output()
   updateValue = new EventEmitter<{ project: ProjectNewModel; date: moment.Moment; value: number }>();
 
-  private projectDict: DictionaryModel[];
-
-  constructor(
-    private profileProjectsService: ProfileProjectsService,
-    private dialog: MatDialog,
-    private dictionaryApi: DictionaryApiService
-  ) {}
-
-  public ngOnInit() {
-    this.initProjectsDict();
-  }
+  constructor(private employeeApiService: EmployeeApiService, private contextStoreService: ContextStoreService) {}
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes?.projectsMaxPeriod.currentValue) {
+    if (changes?.projectsMaxPeriod?.currentValue) {
       this.projectsMaxPeriod = [...this.projectsMaxPeriod].reverse();
     }
-  }
-
-  private initProjectsDict(): void {
-    this.dictionaryApi.getAll('project').subscribe((value) => {
-      this.projectDict = value;
-    });
   }
 
   getProjectPercentByDate(project: ProjectNewModel, date: moment.Moment) {
@@ -74,31 +62,41 @@ export class ProfileProjectsTableComponent implements OnChanges, OnInit {
     this.updateValue.emit({ project, date, value: +value });
   }
 
-  public openDialog(): void {
-    const dialogRef = this.dialog.open(AddProjectToProfilePopupComponent, {
-      width: '400px',
-      data: { value: this.projectDict },
+  public deleteProject(project: ProjectNewModel): void {
+    const selectedUser = this.contextStoreService.getSelectedUserValue();
+
+    const deletableProjectIndex = selectedUser.projectsNew.findIndex((p) => p.project_id === project.project_id);
+    const filteredProjects = selectedUser.projectsNew.filter((p, index) => {
+      return index !== deletableProjectIndex;
     });
 
-    dialogRef
-      .afterClosed()
-      .pipe(
-        first(),
-        filter((res) => !!res)
-      )
-      .subscribe((res) => {
-        console.log(res);
-        // this.snackbar.showSuccessSnackBar('Операция выполнена успешно');
-        // const currentDictionaryState = this.selectedDictionary$.value.filter(d => d._id !== res._id);
-        // this.selectedDictionary$.next([...currentDictionaryState, res].sort(this.sortByName));
+    this.employeeApiService
+      .updateUserInfo(selectedUser.mailNickname, { ...selectedUser, projectsNew: [...filteredProjects] })
+      .pipe(first())
+      .subscribe((user) => {
+        this.contextStoreService.setSelectedUser(user);
       });
   }
 
-  public deleteProject(project: ProjectNewModel): void {
-    this.profileProjectsService.deleteProject(project);
-  }
-
   public deleteMonth(date: moment.Moment) {
-    this.profileProjectsService.deleteMonthFromProjects(date);
+    const month = date.month() + 1;
+    const year = date.year();
+    const selectedUser = this.contextStoreService.getSelectedUserValue();
+
+    const filteredProjects = selectedUser.projectsNew
+      .map((p, index) => {
+        const newMetadata = p.metadata.filter((metadata) => {
+          return metadata.month !== month || metadata.year !== year;
+        });
+        return { ...p, metadata: newMetadata };
+      })
+      .filter((p) => (p.metadata.length ? true : false));
+
+    this.employeeApiService
+      .updateUserInfo(selectedUser.mailNickname, { ...selectedUser, projectsNew: [...filteredProjects] })
+      .pipe(first())
+      .subscribe((user) => {
+        this.contextStoreService.setSelectedUser(user);
+      });
   }
 }

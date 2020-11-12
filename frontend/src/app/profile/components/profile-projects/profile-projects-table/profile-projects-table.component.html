@@ -1,5 +1,5 @@
 <table>
-  <tr>
+  <tr class="table-header">
     <th class="name">Название проекта</th>
     <th *ngFor="let date of projectsMaxPeriod" class="date">
       <i class="fa fa-minus fa-icon" (click)="deleteMonth(date)"></i>
@@ -23,4 +23,3 @@
     </td>
   </tr>
 </table>
-<button mat-raised-button color="primary" (click)="openDialog()">Добавить проект</button>

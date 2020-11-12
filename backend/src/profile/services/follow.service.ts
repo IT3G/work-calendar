@@ -7,13 +7,8 @@ import { ProjectNewMetadataEntity } from '../../entity/entities/project-new-meta
 import { ProjectNewEntity } from '../../entity/entities/project-new.entity';
 import { UserEntity } from '../../entity/entities/user.entity';
 import { FollowDto } from '../dto/follow.dto';
+import { UserFollow } from '../models/user-follow.model';
 import { UsersService } from './users.service';
-
-export interface UserFollow {
-  following: UserEntity[];
-  followers: UserEntity[];
-  allForUser: FollowEntity[];
-}
 
 @Injectable()
 export class FollowService {

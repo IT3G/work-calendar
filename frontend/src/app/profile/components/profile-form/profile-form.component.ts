@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 import { forkJoin } from 'rxjs';
-
+import * as moment from 'moment';
 import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
 import { DictionaryModel } from '../../../shared/models/dictionary.model';
 import { Employee } from '../../../shared/models/employee.model';

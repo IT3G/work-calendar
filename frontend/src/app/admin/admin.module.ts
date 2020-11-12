@@ -15,7 +15,6 @@ import { CalendarBlockComponent } from './components/holidays/calendar-block/cal
 import { HolidaysComponent } from './components/holidays/holidays.component';
 import { HolidaysYearFilterPipe } from './components/holidays/pipes/holidays-year-filter.pipe';
 import { AddPopupComponent } from './components/popups/add-popup/add-popup.component';
-import { AddProjectToProfilePopupComponent } from './components/popups/add-project-to-profile-popup/add-project-to-profile-popup.component';
 import { AddSkillPopupComponent } from './components/popups/add-skill-popup/add-skill-popup.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { SkillsAdminComponent } from './components/skills-admin/skills-admin.component';
@@ -41,7 +40,6 @@ const components = [
   SettingsComponent,
   SkillsAdminComponent,
   AddSkillPopupComponent,
-  AddProjectToProfilePopupComponent,
 ];
 
 const pieps = [HolidaysYearFilterPipe];

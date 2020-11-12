@@ -18,13 +18,16 @@ td {
   border-right: 1px solid lightgray;
 }
 
+.fa-icon {
+  position: absolute;
+  cursor: pointer;
+}
+
 .date {
   position: relative;
   .fa-icon {
-    position: absolute;
     top: -6px;
     right: 1px;
-    cursor: pointer;
   }
 }
 
@@ -40,10 +43,8 @@ td {
   padding: 0 10px;
 
   .fa-icon {
-    position: absolute;
     top: 12px;
     right: 9px;
-    cursor: pointer;
   }
 }
 
@@ -57,6 +58,10 @@ input {
   }
 }
 
-button {
-  margin-top: 20px;
+table {
+  position: relative;
+  .fa-icon {
+    top: 0;
+    right: 0;
+  }
 }

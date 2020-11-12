@@ -5,5 +5,8 @@
   [projects]="projects"
   [projectsMaxPeriod]="projectsMaxPeriod"
   [isAdmin]="isAdmin"
+  [projectDict]="projectDict"
   (updateValue)="updateValue.emit($event)"
 ></app-profile-projects-table>
+<button mat-raised-button color="primary" (click)="addProjectDialog()">Добавить проект</button>
+<button mat-raised-button color="primary" (click)="addDateDialog()">Добавить месяц</button>

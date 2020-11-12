@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 import { combineLatest, Observable, Subscription } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
-import { ProfileProjectsService } from 'src/app/shared/services/profile-projects.service';
 
 import { environment } from '../../../environments/environment';
 import { EmployeeApiService } from '../../core/services/employee-api.service';
@@ -50,8 +49,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private followApi: FollowApiService,
-    private breakpointObserver: BreakpointObserver,
-    private profileProjectsService: ProfileProjectsService
+    private breakpointObserver: BreakpointObserver
   ) {}
 
   ngOnInit() {
@@ -150,9 +148,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   public onUpdateValue(value: { project: ProjectNewModel; date: moment.Moment; value: number }) {
     const currentProject = this.selectedUser.projectsNew.find((p) => p.project_id === value.project.project_id);
-    const metadata = currentProject.metadata.find((m) =>
-      NewProjectUtils.mapMetadataToDate(m).isSame(value.date, 'month')
-    );
+    const metadata = currentProject.metadata.find((m) => {
+      return NewProjectUtils.mapMetadataToDate(m).isSame(value.date, 'month');
+    });
 
     if (metadata?.percent === value.value) {
       return;

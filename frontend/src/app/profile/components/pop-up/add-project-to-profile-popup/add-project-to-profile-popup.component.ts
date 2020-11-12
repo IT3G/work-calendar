@@ -1,12 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Module } from 'module';
 
 import { DictionaryModel } from '../../../../shared/models/dictionary.model';
 
 @Component({
-  selector: 'app-add-popup',
+  selector: 'app-add-project-to-profile-popup',
   templateUrl: './add-project-to-profile-popup.component.html',
   styleUrls: ['./add-project-to-profile-popup.component.scss'],
 })
@@ -22,10 +21,8 @@ export class AddProjectToProfilePopupComponent implements OnInit {
 
   ngOnInit() {
     if (this.data.value) {
-      console.log(this.projectList);
       this.projectList = this.data.value;
     }
-    console.log(this.projectList);
   }
 
   public onNoClick(): void {
@@ -33,10 +30,7 @@ export class AddProjectToProfilePopupComponent implements OnInit {
   }
 
   public onEnter(): void {
-    if (this.data.value) {
-      this.dialogRef.close({ ...this.projectControl.value });
-    } else {
-      this.dialogRef.close(null);
-    }
+    const selectedProject = this.data.value.find((project) => project._id === this.projectControl.value);
+    this.dialogRef.close(selectedProject);
   }
 }

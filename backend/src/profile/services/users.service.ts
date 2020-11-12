@@ -5,12 +5,13 @@ import { Model } from 'mongoose';
 import { FollowEntity } from 'src/entity/entities/follow.entity.model';
 import { UserEntity } from '../../entity/entities/user.entity';
 import { UserDto } from '../dto/user.dto';
-import { FollowService } from './follow.service';
-import { UserFollow } from './follow.service';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel('Users') private readonly userModel: Model<UserEntity>) {}
+  constructor(
+    @InjectModel('Users') private readonly userModel: Model<UserEntity>,
+    @InjectModel('Follow') private readonly followModel: Model<FollowEntity>
+  ) {}
   async getUsers(): Promise<UserEntity[]> {
     return await this.userModel
       .find()
@@ -44,7 +45,9 @@ export class UsersService {
   }
 
   async deleteUser(id: string): Promise<void> {
-    await this.userModel.deleteOne({ mailNickname: id });
+    await this.userModel.deleteOne({ _id: id });
+    await this.followModel.deleteMany({ followerId: id });
+    await this.followModel.deleteMany({ followingId: id });
   }
 
   async addUser(userInfo: UserDto): Promise<UserEntity> {
