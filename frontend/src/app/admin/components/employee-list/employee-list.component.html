@@ -15,7 +15,7 @@
 
   <table mat-table [dataSource]="employees | filterEmployeePipe: filter.value" class="mat-elevation-z6">
     <ng-container matColumnDef="username">
-      <th mat-header-cell *matHeaderCellDef>Фамилия, имя</th>
+      <th mat-header-cell *matHeaderCellDef data-column-name="username">Фамилия, имя</th>
       <td mat-cell *matCellDef="let employee">
         <a [routerLink]="['/profile', employee.mailNickname]">{{ employee.username }}</a>
       </td>

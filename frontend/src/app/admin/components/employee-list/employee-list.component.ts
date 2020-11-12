@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostBinding, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
@@ -27,6 +27,11 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
   public login: string;
 
   private subscription = new Subscription();
+
+  @HostListener('click', ['$event.target'])
+  public onClickTh(btn: HTMLElement) {
+    console.log(btn.attributes.getNamedItem('data-column-name').value);
+  }
 
   constructor(
     private dictionaryApi: DictionaryApiService,
