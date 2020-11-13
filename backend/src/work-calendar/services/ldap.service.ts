@@ -73,6 +73,8 @@ export class LdapService implements OnApplicationShutdown {
       birthday: moment(whenCreated.substr(0, 8)).format(),
       remoteWork: null,
       lastTimeOnline: moment().toISOString(),
+      mattermost: null,
+      birthdayHideYear: null,
     };
   }
 

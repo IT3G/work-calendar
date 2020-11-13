@@ -28,4 +28,6 @@ export interface UserEntity extends Document {
   birthday: string;
   remoteWork: boolean;
   lastTimeOnline: string;
+  mattermost: string;
+  birthdayHideYear: boolean;
 }

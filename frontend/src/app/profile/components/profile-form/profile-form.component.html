@@ -3,11 +3,18 @@
     <input matInput placeholder="фамилия, имя" autocomplete="off" formControlName="username" />
   </mat-form-field>
 
-  <mat-form-field class="form-group">
-    <input placeholder="email" matInput autocomplete="off" formControlName="email" />
+  <mat-form-field
+    class="form-group"
+    [class.other-disabled-color]="!isEdit"
+    (click)="linkToCommunication(communicationTypesEnum.mail)"
+  >
+    <input placeholder="email" [class.clickable-field]="!isEdit" matInput autocomplete="off" formControlName="email" />
   </mat-form-field>
 
-  <mat-form-field class="form-group control control-date">
+  <mat-form-field
+    class="form-group control control-date"
+    *ngIf="isAdmin || !birthdayWithHideYear; else birthdayWithHideYearBlock"
+  >
     <input
       placeholder="день рождения"
       matInput
@@ -19,22 +26,63 @@
     <mat-datepicker #birthday></mat-datepicker>
   </mat-form-field>
 
+  <ng-template #birthdayWithHideYearBlock>
+    <mat-form-field class="form-group">
+      <input
+        placeholder="день рождения"
+        [class.clickable-field]="!isEdit"
+        matInput
+        autocomplete="off"
+        [value]="birthdayWithHideYear"
+        [disabled]="true"
+      />
+    </mat-form-field>
+  </ng-template>
+
+  <mat-checkbox class="form-group checkbox" color="primary" formControlName="birthdayHideYear">
+    скрыть год рождения
+  </mat-checkbox>
+
   <mat-form-field class="form-group">
     <mat-select placeholder="позиция" formControlName="jobPosition">
-      <mat-option *ngFor="let jobPosition of jobPositions" [value]="jobPosition">{{ jobPosition?.name }}</mat-option>
+      <mat-option *ngFor="let jobPosition of jobPositions" [value]="jobPosition">
+        {{ jobPosition?.name }}
+      </mat-option>
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field class="form-group">
-    <input placeholder="телефон" matInput autocomplete="off" formControlName="telNumber" />
+  <mat-form-field
+    class="form-group other-disabled-color"
+    (click)="linkToCommunication(communicationTypesEnum.telephone)"
+  >
+    <input
+      placeholder="телефон"
+      [class.clickable-field]="!isEdit"
+      matInput
+      autocomplete="off"
+      formControlName="telNumber"
+    />
+  </mat-form-field>
+
+  <mat-form-field
+    class="form-group other-disabled-color"
+    (click)="linkToCommunication(communicationTypesEnum.mattermost)"
+  >
+    <input
+      placeholder="mattermost"
+      [class.clickable-field]="!isEdit"
+      matInput
+      autocomplete="off"
+      formControlName="mattermost"
+    />
   </mat-form-field>
 
   <mat-form-field class="form-group">
     <input placeholder="город" matInput autocomplete="off" formControlName="location" />
   </mat-form-field>
 
-  <mat-form-field class="form-group">
-    <input placeholder="skype" matInput autocomplete="off" formControlName="skype" />
+  <mat-form-field class="form-group other-disabled-color" (click)="linkToCommunication(communicationTypesEnum.skype)">
+    <input placeholder="skype" matInput [class.clickable-field]="!isEdit" autocomplete="off" formControlName="skype" />
   </mat-form-field>
 
   <mat-form-field class="form-group">
@@ -45,7 +93,7 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field class="form-group">
+  <mat-form-field class="form-group" (click)="linkToCommunication(communicationTypesEnum.telegram)">
     <input placeholder="telegram" matInput autocomplete="off" formControlName="telegram" />
   </mat-form-field>
 

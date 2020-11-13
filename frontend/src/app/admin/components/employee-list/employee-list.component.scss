@@ -2,6 +2,10 @@ table {
   margin-top: 20px;
   width: 100%;
 }
+
+th {
+  cursor: pointer;
+}
 .container {
   max-width: 1400px !important;
   padding: 20px 0;

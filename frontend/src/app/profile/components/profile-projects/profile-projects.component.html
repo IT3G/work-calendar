@@ -8,5 +8,5 @@
   [projectDict]="projectDict"
   (updateValue)="updateValue.emit($event)"
 ></app-profile-projects-table>
-<button mat-raised-button color="primary" (click)="addProjectDialog()">Добавить проект</button>
-<button mat-raised-button color="primary" (click)="addDateDialog()">Добавить месяц</button>
+<button mat-raised-button color="primary" (click)="addProjectDialog()" *ngIf="isAdmin">Добавить проект</button>
+<button mat-raised-button color="primary" (click)="addDateDialog()" *ngIf="isAdmin">Добавить месяц</button>

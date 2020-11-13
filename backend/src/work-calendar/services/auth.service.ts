@@ -81,6 +81,8 @@ export class AuthService {
       birthday: moment().toISOString(),
       remoteWork: null,
       lastTimeOnline: moment().toISOString(),
+      mattermost: null,
+      birthdayHideYear: null,
     };
 
     return this.usersService.addUser(data);

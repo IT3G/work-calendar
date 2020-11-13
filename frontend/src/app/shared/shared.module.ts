@@ -2,9 +2,11 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SpringSpinnerModule } from 'angular-epic-spinners';
 import { AvatarModule } from 'ngx-avatar';
+
 import { MaterialModule } from '../material.module';
 import { AgendaComponent } from './components/agenda/agenda.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
@@ -18,6 +20,7 @@ import { SingleSelectComponent } from './components/single-select/single-select.
 import { UserCardComponent } from './components/user-card/user-card.component';
 import { ClickOutsideDirective } from './directives/click-outside.directive';
 import { pipes } from './pipes';
+import { DeleteConfrimPopupComponent } from './pop-up/delete-confirm-pop-up/delete-confrim-popup.component';
 
 const modules = [
   CommonModule,
@@ -27,7 +30,7 @@ const modules = [
   AvatarModule,
   NgbModule,
   RouterModule,
-  SpringSpinnerModule
+  SpringSpinnerModule,
 ];
 
 const components = [
@@ -39,7 +42,8 @@ const components = [
   SingleSelectComponent,
   DropdownComponent,
   UserCardComponent,
-  ProjectTeamsFilterComponent
+  ProjectTeamsFilterComponent,
+  DeleteConfrimPopupComponent,
 ];
 
 const directives = [ClickOutsideDirective];
@@ -51,6 +55,6 @@ const privateComponents = [ConfirmDialogComponent];
   declarations: [...pipes, ...components, ...privateComponents, ...directives],
   imports: [...modules],
   entryComponents: [...privateComponents],
-  exports: [...pipes, ...modules, ...components]
+  exports: [...pipes, ...modules, ...components],
 })
 export class SharedModule {}

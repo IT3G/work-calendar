@@ -113,6 +113,14 @@ export class UserDto {
   @Transform(lastProjectsMapper)
   @ApiModelProperty()
   lastProjects: LastProjectDto[];
+
+  @Expose()
+  @ApiModelProperty()
+  mattermost: string;
+
+  @Expose()
+  @ApiModelProperty()
+  birthdayHideYear: boolean;
 }
 
 /** Получение последних активных проектов */

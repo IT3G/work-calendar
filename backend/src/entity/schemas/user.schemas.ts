@@ -43,4 +43,6 @@ export const UserSchema = new Schema({
   birthday: String,
   remoteWork: Boolean,
   lastTimeOnline: String,
+  mattermost: String,
+  birthdayHideYear: Boolean,
 });

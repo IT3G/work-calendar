@@ -4,15 +4,22 @@ import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 
+import * as moment from 'moment';
 import { Observable, Subscription } from 'rxjs';
-import { first, share, switchMap, take, tap } from 'rxjs/operators';
+import { filter, first, share, switchMap, take, tap } from 'rxjs/operators';
 import { EmployeeApiService } from 'src/app/core/services/employee-api.service';
+import { DeleteConfrimPopupComponent } from 'src/app/shared/pop-up/delete-confirm-pop-up/delete-confrim-popup.component';
 import { SnackbarService } from 'src/app/shared/services/snackbar.service';
 
 import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
 import { DictionaryModel } from '../../../shared/models/dictionary.model';
 import { Employee } from '../../../shared/models/employee.model';
 import { EmployeeAddComponent } from './employee-add/employee-add.component';
+
+enum SortOrder {
+  asc = 'asc',
+  desc = 'desc',
+}
 
 @Component({
   selector: 'app-employee-list',
@@ -26,11 +33,31 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
   public displayedColumns: string[];
   public login: string;
 
-  private subscription = new Subscription();
+  private prevAttribute: string;
+
+  private currentSortOrder = SortOrder.asc;
+  subscription = new Subscription();
 
   @HostListener('click', ['$event.target'])
-  public onClickTh(btn: HTMLElement) {
-    console.log(btn.attributes.getNamedItem('data-column-name').value);
+  public onClickTable(element: HTMLElement): void {
+    const attrDateAttributes = ['whenCreated', 'birthday', 'terminationDate'];
+
+    const dataColumnNameAttr = element.attributes.getNamedItem('data-column-name');
+    if (!dataColumnNameAttr) {
+      return;
+    }
+
+    const attrValue = dataColumnNameAttr.value;
+
+    if (attrDateAttributes.includes(attrValue)) {
+      this.sortByDate(attrValue);
+      this.prevAttribute = attrValue;
+      return;
+    }
+
+    this.sortByOtherFields(attrValue);
+    this.prevAttribute = attrValue;
+    return;
   }
 
   constructor(
@@ -78,9 +105,15 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
   }
 
   public delete(user: Employee) {
-    this.employeeApi
-      .deleteUser(user._id)
+    const dialogRef = this.dialog.open(DeleteConfrimPopupComponent, {
+      width: '400px',
+    });
+
+    dialogRef
+      .afterClosed()
       .pipe(
+        filter((res) => !!res),
+        switchMap(() => this.employeeApi.deleteUser(user._id)),
         first(),
         switchMap(() => this.employeeApi.loadAllEmployees())
       )
@@ -119,5 +152,42 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
       this.snackbar.showErrorSnackBar('Пользователь уже существует');
       return;
     }
+  }
+
+  private sortByDate(attrValue: string): void {
+    console.log(this.employees[0][attrValue]);
+    if (this.prevAttribute === attrValue && this.currentSortOrder === SortOrder.asc) {
+      this.employees = [...this.employees]
+        .map((employee) => ({ ...employee, terminationDate: employee.terminationDate ?? undefined }))
+        .sort((a, b) => moment(b[attrValue]).valueOf() - moment(a[attrValue]).valueOf());
+      this.currentSortOrder = SortOrder.desc;
+      return;
+    }
+    this.employees = [...this.employees]
+      .map((employee) => ({ ...employee, terminationDate: employee.terminationDate ?? undefined }))
+      .sort((a, b) => {
+        // console.log(moment(a[attrValue]).valueOf(), new Date(b[attrValue]).valueOf());
+        return moment(a[attrValue]).valueOf() - moment(b[attrValue]).valueOf();
+      });
+    this.currentSortOrder = SortOrder.asc;
+  }
+
+  private sortByOtherFields(attrValue: string): void {
+    if (this.prevAttribute === attrValue && this.currentSortOrder === SortOrder.asc) {
+      this.employees = [...this.employees].reverse();
+      this.currentSortOrder = SortOrder.desc;
+      return;
+    }
+
+    this.employees = [...this.employees].sort((a, b) => {
+      if (a[attrValue] < b[attrValue]) {
+        return -1;
+      }
+      if (a[attrValue] > b[attrValue]) {
+        return 1;
+      }
+      return 0;
+    });
+    this.currentSortOrder = SortOrder.asc;
   }
 }

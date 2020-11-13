@@ -1,8 +1,11 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
-import { forkJoin } from 'rxjs';
 import * as moment from 'moment';
+import { forkJoin, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { CommunicationTypesEnum } from 'src/app/shared/enums/communication-types.enum';
+
 import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
 import { DictionaryModel } from '../../../shared/models/dictionary.model';
 import { Employee } from '../../../shared/models/employee.model';
@@ -12,7 +15,7 @@ import { Employee } from '../../../shared/models/employee.model';
   templateUrl: './profile-form.component.html',
   styleUrls: ['./profile-form.component.scss'],
 })
-export class ProfileFormComponent implements OnChanges {
+export class ProfileFormComponent implements OnChanges, OnDestroy {
   @Input()
   selectedUser: Employee;
 
@@ -25,10 +28,16 @@ export class ProfileFormComponent implements OnChanges {
   @Output()
   updateProfile = new EventEmitter<Employee>();
 
+  public communicationTypesEnum = CommunicationTypesEnum;
+
+  public birthdayWithHideYear: string;
+
   public profileForm: FormGroup;
   public jobPositions: DictionaryModel[];
   public subdivisions: DictionaryModel[];
   public isEdit = false;
+
+  private unsubscriber$ = new Subject();
 
   constructor(private fb: FormBuilder, private dictionaryApi: DictionaryApiService) {}
 
@@ -36,7 +45,33 @@ export class ProfileFormComponent implements OnChanges {
     if (changes.selectedUser && changes.selectedUser.currentValue) {
       this.initForm(this.selectedUser);
       this.getUserInfo();
+
+      this.birthdayWithHideYearSetter();
+
+      this.subscribeToHideYearControl();
     }
+  }
+
+  public ngOnDestroy(): void {
+    this.unsubscriber$.next();
+    this.unsubscriber$.complete();
+  }
+
+  private birthdayWithHideYearSetter(): void {
+    if (this.selectedUser.birthdayHideYear) {
+      this.birthdayWithHideYear = moment(this.selectedUser.birthday).format('DD.MM');
+    }
+  }
+
+  /** динамически менять значение года при выбранном чекбоксе */
+  private subscribeToHideYearControl(): void {
+    this.profileForm.controls.birthdayHideYear.valueChanges.pipe(takeUntil(this.unsubscriber$)).subscribe((value) => {
+      if (value) {
+        this.birthdayWithHideYear = moment(this.selectedUser.birthday).format('DD.MM');
+        return;
+      }
+      this.birthdayWithHideYear = null;
+    });
   }
 
   public editStart(): void {
@@ -45,6 +80,8 @@ export class ProfileFormComponent implements OnChanges {
     this.profileForm.get('skype').enable();
     this.profileForm.get('telegram').enable();
     this.profileForm.get('hasMailing').enable();
+    this.profileForm.get('mattermost').enable();
+    this.profileForm.get('birthdayHideYear').enable();
 
     if (this.isAdmin) {
       this.profileForm.get('whenCreated').enable();
@@ -69,6 +106,33 @@ export class ProfileFormComponent implements OnChanges {
     this.cancelEdit();
   }
 
+  public linkToCommunication(type: CommunicationTypesEnum): void {
+    if (this.isEdit) {
+      return;
+    }
+    let url = '';
+
+    switch (type) {
+      case 'telegram':
+        url = `https://t.me/${this.selectedUser.telegram}`;
+        break;
+      case 'skype':
+        url = `skype:/${this.selectedUser.telegram}`;
+        break;
+      case 'telephone':
+        url = `tel:${this.selectedUser.telNumber}`;
+        break;
+      case 'mail':
+        url = `mailto:${this.selectedUser.telNumber}`;
+        break;
+      case 'mattermost':
+        url = `https://mattermost.it2g.ru/zeroline/messages//${this.selectedUser.mattermost}`;
+        break;
+    }
+
+    window.open(url);
+  }
+
   private initForm(user: Employee): void {
     this.profileForm = this.fb.group({
       id: [user._id],
@@ -86,6 +150,8 @@ export class ProfileFormComponent implements OnChanges {
       terminationDate: [user.terminationDate],
       birthday: [user.birthday],
       remoteWork: [user.remoteWork],
+      mattermost: [user.mattermost],
+      birthdayHideYear: [user.birthdayHideYear],
     });
     this.profileForm.disable();
   }

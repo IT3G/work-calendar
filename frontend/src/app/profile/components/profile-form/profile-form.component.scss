@@ -45,6 +45,15 @@ button {
   margin-top: 20px;
 }
 
+.other-disabled-color {
+  .clickable-field {
+    cursor: pointer;
+  }
+
+  .mat-input-element:disabled {
+    color: #000000de !important;
+  }
+}
 .text-right {
   color: rgb(148, 148, 148);
 }

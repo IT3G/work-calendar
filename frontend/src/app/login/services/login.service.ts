@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { TokensPayload } from 'src/app/shared/models/tokens-payload.model';
+
 import { ContextStoreService } from '../../core/store/context-store.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LoginService {
   constructor(
@@ -15,6 +17,7 @@ export class LoginService {
   ) {}
 
   onSuccessedLogin(res: TokensPayload): void {
+    console.log(123);
     localStorage.setItem('Authorization', res.accessToken);
     localStorage.setItem('RefreshToken', res.refreshToken);
     this.contextStoreService.setCurrentUser(res.user);

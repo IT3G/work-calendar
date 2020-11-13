@@ -27,4 +27,6 @@ export class Employee {
   birthday: string;
   remoteWork: boolean;
   lastTimeOnline: string;
+  mattermost: string;
+  birthdayHideYear: boolean;
 }

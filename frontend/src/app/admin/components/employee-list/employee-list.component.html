@@ -22,60 +22,60 @@
     </ng-container>
 
     <ng-container matColumnDef="login">
-      <th mat-header-cell *matHeaderCellDef>Логин</th>
+      <th mat-header-cell *matHeaderCellDef data-column-name="mailNickname">Логин</th>
       <td mat-cell *matCellDef="let employee">
         {{ employee.mailNickname }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="birthday">
-      <th mat-header-cell *matHeaderCellDef>Дата рождения</th>
+      <th mat-header-cell *matHeaderCellDef data-column-name="birthday">Дата рождения</th>
       <td mat-cell *matCellDef="let employee">
         {{ employee.birthday ? (employee.birthday | date: 'dd MMMM yyyy') : '-' }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="projects">
-      <th mat-header-cell *matHeaderCellDef>Проекты</th>
+      <th mat-header-cell *matHeaderCellDef data-column-name="currentProject">Проекты</th>
       <td mat-cell *matCellDef="let employee">{{ employee | currentProjectsPipe }}</td>
     </ng-container>
 
     <ng-container matColumnDef="jobPosition">
-      <th mat-header-cell *matHeaderCellDef>Дата выхода</th>
+      <th mat-header-cell *matHeaderCellDef data-column-name="whenCreated">Дата выхода</th>
       <td mat-cell *matCellDef="let employee">
         {{ employee.whenCreated ? (employee.whenCreated | date: 'dd MMMM yyyy') : '-' }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="releaseDate">
-      <th mat-header-cell *matHeaderCellDef>Дата увольнения</th>
+      <th mat-header-cell *matHeaderCellDef data-column-name="terminationDate">Дата увольнения</th>
       <td mat-cell *matCellDef="let employee">
         {{ employee.terminationDate ? (employee.terminationDate | date: 'dd MMMM yyyy') : '-' }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="terminationDate">
-      <th mat-header-cell *matHeaderCellDef>Позиция</th>
+      <th mat-header-cell *matHeaderCellDef data-column-name="jobPosition">Позиция</th>
       <td mat-cell *matCellDef="let employee">{{ employee.jobPosition ? employee.jobPosition?.name : '-' }}</td>
     </ng-container>
 
     <ng-container matColumnDef="subdivision">
-      <th mat-header-cell *matHeaderCellDef>Подразделение</th>
+      <th mat-header-cell *matHeaderCellDef data-column-name="subdivision">Подразделение</th>
       <td mat-cell *matCellDef="let employee">{{ employee.subdivision ? employee.subdivision?.name : '-' }}</td>
     </ng-container>
 
     <ng-container matColumnDef="location">
-      <th mat-header-cell *matHeaderCellDef>Город</th>
+      <th mat-header-cell *matHeaderCellDef data-column-name="location">Город</th>
       <td mat-cell *matCellDef="let employee">{{ employee.location }}</td>
     </ng-container>
 
     <ng-container matColumnDef="telNumber">
-      <th mat-header-cell *matHeaderCellDef>Номер</th>
+      <th mat-header-cell *matHeaderCellDef data-column-name="telNumber">Номер</th>
       <td mat-cell *matCellDef="let employee">{{ employee.telNumber ? employee.telNumber : '-' }}</td>
     </ng-container>
 
     <ng-container matColumnDef="isAdmin">
-      <th mat-header-cell *matHeaderCellDef>Админ</th>
+      <th mat-header-cell *matHeaderCellDef data-column-name="isAdmin">Админ</th>
       <td mat-cell *matCellDef="let employee">{{ employee.isAdmin ? 'Да' : 'Нет' }}</td>
     </ng-container>
 

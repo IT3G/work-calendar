@@ -4,23 +4,20 @@ import {
   EventEmitter,
   Input,
   OnChanges,
-  OnInit,
   Output,
   SimpleChanges,
 } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import * as moment from 'moment';
-import { filter, first, switchMap } from 'rxjs/operators';
-import { DICTIONARIES } from 'src/app/admin/components/dictionary-admin/dictionaries.cont';
-import { DictionaryApiService } from 'src/app/core/services/dictionary-api.service';
+import { filter, first } from 'rxjs/operators';
 import { EmployeeApiService } from 'src/app/core/services/employee-api.service';
 import { ContextStoreService } from 'src/app/core/store/context-store.service';
 import { DictionaryModel } from 'src/app/shared/models/dictionary.model';
+import { DeleteConfrimPopupComponent } from 'src/app/shared/pop-up/delete-confirm-pop-up/delete-confrim-popup.component';
 
 import { ProjectNewModel } from '../../../../shared/models/project-new.model';
 import { NewProjectUtils } from '../../../../shared/utils/new-project.utils';
-import { AddProjectToProfilePopupComponent } from '../../pop-up/add-project-to-profile-popup/add-project-to-profile-popup.component';
 
 @Component({
   selector: 'app-profile-projects-table',
@@ -44,7 +41,11 @@ export class ProfileProjectsTableComponent implements OnChanges {
   @Output()
   updateValue = new EventEmitter<{ project: ProjectNewModel; date: moment.Moment; value: number }>();
 
-  constructor(private employeeApiService: EmployeeApiService, private contextStoreService: ContextStoreService) {}
+  constructor(
+    private employeeApiService: EmployeeApiService,
+    private contextStoreService: ContextStoreService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes?.projectsMaxPeriod?.currentValue) {
@@ -63,40 +64,64 @@ export class ProfileProjectsTableComponent implements OnChanges {
   }
 
   public deleteProject(project: ProjectNewModel): void {
-    const selectedUser = this.contextStoreService.getSelectedUserValue();
-
-    const deletableProjectIndex = selectedUser.projectsNew.findIndex((p) => p.project_id === project.project_id);
-    const filteredProjects = selectedUser.projectsNew.filter((p, index) => {
-      return index !== deletableProjectIndex;
+    const dialogRef = this.dialog.open(DeleteConfrimPopupComponent, {
+      width: '400px',
     });
 
-    this.employeeApiService
-      .updateUserInfo(selectedUser.mailNickname, { ...selectedUser, projectsNew: [...filteredProjects] })
-      .pipe(first())
-      .subscribe((user) => {
-        this.contextStoreService.setSelectedUser(user);
+    dialogRef
+      .afterClosed()
+      .pipe(
+        first(),
+        filter((res) => !!res)
+      )
+      .subscribe(() => {
+        const selectedUser = this.contextStoreService.getSelectedUserValue();
+
+        const deletableProjectIndex = selectedUser.projectsNew.findIndex((p) => p.project_id === project.project_id);
+        const filteredProjects = selectedUser.projectsNew.filter((p, index) => {
+          return index !== deletableProjectIndex;
+        });
+
+        this.employeeApiService
+          .updateUserInfo(selectedUser.mailNickname, { ...selectedUser, projectsNew: [...filteredProjects] })
+          .pipe(first())
+          .subscribe((user) => {
+            this.contextStoreService.setSelectedUser(user);
+          });
       });
   }
 
   public deleteMonth(date: moment.Moment) {
-    const month = date.month() + 1;
-    const year = date.year();
-    const selectedUser = this.contextStoreService.getSelectedUserValue();
+    const dialogRef = this.dialog.open(DeleteConfrimPopupComponent, {
+      width: '400px',
+    });
 
-    const filteredProjects = selectedUser.projectsNew
-      .map((p, index) => {
-        const newMetadata = p.metadata.filter((metadata) => {
-          return metadata.month !== month || metadata.year !== year;
-        });
-        return { ...p, metadata: newMetadata };
-      })
-      .filter((p) => (p.metadata.length ? true : false));
+    dialogRef
+      .afterClosed()
+      .pipe(
+        first(),
+        filter((res) => !!res)
+      )
+      .subscribe(() => {
+        const month = date.month() + 1;
+        const year = date.year();
+        const selectedUser = this.contextStoreService.getSelectedUserValue();
 
-    this.employeeApiService
-      .updateUserInfo(selectedUser.mailNickname, { ...selectedUser, projectsNew: [...filteredProjects] })
-      .pipe(first())
-      .subscribe((user) => {
-        this.contextStoreService.setSelectedUser(user);
+        const filteredProjects = selectedUser.projectsNew
+          .map((p) => {
+            const newMetadata = p.metadata.filter((metadata) => {
+              return metadata.month !== month || metadata.year !== year;
+            });
+            return { ...p, metadata: newMetadata };
+          })
+          .filter((p) => (p.metadata.length ? true : false));
+
+        this.employeeApiService
+          .updateUserInfo(selectedUser.mailNickname, { ...selectedUser, projectsNew: [...filteredProjects] })
+          .pipe(first())
+          .subscribe((user) => {
+            this.contextStoreService.setSelectedUser(user);
+          });
       });
   }
 }
