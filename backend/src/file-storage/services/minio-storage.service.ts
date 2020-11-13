@@ -53,7 +53,7 @@ export class MinioStorageService implements FileStorage {
   private async init(): Promise<void> {
     try {
       this.minioClient = new Minio.Client({
-        endPoint: 'localhost',
+        endPoint: this.config.MINIO_END_POINT,
         port: +this.config.MINIO_PORT,
         useSSL: this.config.MINIO_USE_SSL === 'YES',
         accessKey: this.config.MINIO_ACCESS_KEY,
