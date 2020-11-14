@@ -155,7 +155,6 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
   }
 
   private sortByDate(attrValue: string): void {
-    console.log(this.employees[0][attrValue]);
     if (this.prevAttribute === attrValue && this.currentSortOrder === SortOrder.asc) {
       this.employees = [...this.employees]
         .map((employee) => ({ ...employee, terminationDate: employee.terminationDate ?? undefined }))
@@ -166,7 +165,6 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
     this.employees = [...this.employees]
       .map((employee) => ({ ...employee, terminationDate: employee.terminationDate ?? undefined }))
       .sort((a, b) => {
-        // console.log(moment(a[attrValue]).valueOf(), new Date(b[attrValue]).valueOf());
         return moment(a[attrValue]).valueOf() - moment(b[attrValue]).valueOf();
       });
     this.currentSortOrder = SortOrder.asc;
@@ -174,7 +172,15 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
 
   private sortByOtherFields(attrValue: string): void {
     if (this.prevAttribute === attrValue && this.currentSortOrder === SortOrder.asc) {
-      this.employees = [...this.employees].reverse();
+      this.employees = [...this.employees].sort((a, b) => {
+        if (a[attrValue] < b[attrValue]) {
+          return 1;
+        }
+        if (a[attrValue] > b[attrValue]) {
+          return -1;
+        }
+        return 0;
+      });
       this.currentSortOrder = SortOrder.desc;
       return;
     }

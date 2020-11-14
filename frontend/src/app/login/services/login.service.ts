@@ -17,7 +17,6 @@ export class LoginService {
   ) {}
 
   onSuccessedLogin(res: TokensPayload): void {
-    console.log(123);
     localStorage.setItem('Authorization', res.accessToken);
     localStorage.setItem('RefreshToken', res.refreshToken);
     this.contextStoreService.setCurrentUser(res.user);

@@ -78,14 +78,6 @@ export class FollowService {
     return this.followModel.findByIdAndDelete(id);
   }
 
-  async deleteFollowByFollowingId(id: string): Promise<void> {
-    await this.followModel.deleteMany({ followingId: id });
-  }
-
-  async deleteFollowByFollowerId(id: string): Promise<void> {
-    await this.followModel.deleteMany({ followerId: id });
-  }
-
   /** Получение людей подписанных на пользователя */
   async getUserFollowers(userId: string): Promise<UserEntity[]> {
     const allUsers = await this.userService.getUsers();
