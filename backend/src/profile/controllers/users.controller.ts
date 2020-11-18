@@ -38,7 +38,7 @@ export class UsersController {
     if (!user) {
       throw new NotFoundException('User does not exist!');
     }
-
+    await this.userService.updateLastTimeOnline(login);
     return this.mapper.map(UserDto, user);
   }
 
@@ -51,17 +51,6 @@ export class UsersController {
     }
 
     return this.mapper.map(UserDto, editedUser);
-  }
-
-  @Post('/login/time/:login')
-  async updateLastTimeOnline(@Param('login') login: string): Promise<void> {
-    const editedUser = await this.userService.getUserByLogin(login);
-
-    if (!editedUser) {
-      throw new NotFoundException('User does not exist!');
-    }
-
-    await this.userService.updateLastTimeOnline(login);
   }
 
   @Post('/patronymic/:login')
@@ -80,13 +69,6 @@ export class UsersController {
 
   @Delete('/delete/:id')
   async deleteUser(@Param('id') id: string): Promise<void> {
-    /**FIX: фикснауть как фронт фиксанет задваиваемые запросы **/
-    // const editedUser = await this.userService.getUserByLogin(login);
-
-    // if (!editedUser) {
-    //   throw new NotFoundException('User does not exist!');
-    // }
-
     return await this.userService.deleteUser(id);
   }
 }

@@ -1,6 +1,6 @@
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { NavigationStart, Router } from '@angular/router';
 import { SwPush } from '@angular/service-worker';
 
 import * as moment from 'moment';
@@ -8,7 +8,6 @@ import { combineLatest, EMPTY, from, Subscription } from 'rxjs';
 import { catchError, filter, switchMap } from 'rxjs/operators';
 
 import { ConfigurationApiService } from './core/services/configuration-api.service';
-import { EmployeeApiService } from './core/services/employee-api.service';
 import { GitInfoService } from './core/services/git-info.service';
 import { PushApiService } from './core/services/push-api.service';
 import { ContextStoreService } from './core/store/context-store.service';
@@ -25,7 +24,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   public currentUser: Employee;
   constructor(
-    private employeeApi: EmployeeApiService,
     private title: Title,
     private gitInfo: GitInfoService,
     private contextStoreService: ContextStoreService,
@@ -42,22 +40,10 @@ export class AppComponent implements OnInit, OnDestroy {
     this.initWebPush();
     this.thirdSeptemberAnimations();
 
-    this.sendLastOnlineTime();
-
     this.contextStoreService.settings$.subscribe((s) => this.addGitVersionToPageTitle(s?.TITLE));
   }
 
   /** отправить на бэк последнее время онлайна */
-  private sendLastOnlineTime() {
-    this.route.events.subscribe((val) => {
-      this.contextStoreService.getCurrentUser$().subscribe((user) => {
-        this.currentUser = user;
-      });
-      if (val instanceof NavigationEnd && this.currentUser) {
-        this.employeeApi.sendLastTimeOnline(this.currentUser.mailNickname).subscribe();
-      }
-    });
-  }
 
   private thirdSeptemberAnimations() {
     const now = moment();

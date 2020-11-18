@@ -43,8 +43,4 @@ export class EmployeeApiService {
   public deleteUser(id: string): Observable<void> {
     return this.http.delete<void>(`${environment.baseUrl}/users/delete/${id}`);
   }
-
-  public sendLastTimeOnline(login: string): Observable<void> {
-    return this.http.post<void>(`${environment.baseUrl}/users/login/time/${login}`, {});
-  }
 }

@@ -86,6 +86,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   public updateSelectedUser(employee: Employee): void {
     this.selectedUser = employee;
+    this.contextStoreService.setSelectedUser(employee);
   }
 
   public addFollow(data: FollowModel): void {
@@ -167,8 +168,11 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       currentProject.metadata = [...currentProject.metadata, newMeta];
     }
 
-    this.employeeApiService
-      .updateUserInfo(this.selectedUser.mailNickname, this.selectedUser)
-      .subscribe((user) => (this.selectedUser = user));
+    this.employeeApiService.updateUserInfo(this.selectedUser.mailNickname, this.selectedUser).subscribe((user) => {
+      console.log(user.projectsNew);
+
+      this.selectedUser = user;
+      this.contextStoreService.setSelectedUser(user);
+    });
   }
 }

@@ -10,7 +10,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 
 import * as moment from 'moment';
-import { filter, first } from 'rxjs/operators';
+import { filter, first, switchMap } from 'rxjs/operators';
 import { EmployeeApiService } from 'src/app/core/services/employee-api.service';
 import { ContextStoreService } from 'src/app/core/store/context-store.service';
 import { DictionaryModel } from 'src/app/shared/models/dictionary.model';
@@ -72,22 +72,23 @@ export class ProfileProjectsTableComponent implements OnChanges {
       .afterClosed()
       .pipe(
         first(),
-        filter((res) => !!res)
-      )
-      .subscribe(() => {
-        const selectedUser = this.contextStoreService.getSelectedUserValue();
+        filter((res) => !!res),
+        switchMap(() => {
+          const selectedUser = this.contextStoreService.getSelectedUserValue();
 
-        const deletableProjectIndex = selectedUser.projectsNew.findIndex((p) => p.project_id === project.project_id);
-        const filteredProjects = selectedUser.projectsNew.filter((p, index) => {
-          return index !== deletableProjectIndex;
-        });
-
-        this.employeeApiService
-          .updateUserInfo(selectedUser.mailNickname, { ...selectedUser, projectsNew: [...filteredProjects] })
-          .pipe(first())
-          .subscribe((user) => {
-            this.contextStoreService.setSelectedUser(user);
+          const deletableProjectIndex = selectedUser.projectsNew.findIndex((p) => p.project_id === project.project_id);
+          const filteredProjects = selectedUser.projectsNew.filter((p, index) => {
+            return index !== deletableProjectIndex;
           });
+
+          return this.employeeApiService.updateUserInfo(selectedUser.mailNickname, {
+            ...selectedUser,
+            projectsNew: [...filteredProjects],
+          });
+        })
+      )
+      .subscribe((user) => {
+        this.contextStoreService.setSelectedUser(user);
       });
   }
 
@@ -100,28 +101,28 @@ export class ProfileProjectsTableComponent implements OnChanges {
       .afterClosed()
       .pipe(
         first(),
-        filter((res) => !!res)
-      )
-      .subscribe(() => {
-        const month = date.month() + 1;
-        const year = date.year();
-        const selectedUser = this.contextStoreService.getSelectedUserValue();
+        filter((res) => !!res),
+        switchMap(() => {
+          const month = date.month() + 1;
+          const year = date.year();
+          const selectedUser = this.contextStoreService.getSelectedUserValue();
+          const filteredProjects = selectedUser.projectsNew
+            .map((p) => {
+              const newMetadata = p.metadata.filter((metadata) => {
+                return !(metadata.month === month && metadata.year === year);
+              });
+              return { ...p, metadata: newMetadata };
+            })
+            .filter((p) => (p.metadata.length ? true : false));
 
-        const filteredProjects = selectedUser.projectsNew
-          .map((p) => {
-            const newMetadata = p.metadata.filter((metadata) => {
-              return metadata.month !== month || metadata.year !== year;
-            });
-            return { ...p, metadata: newMetadata };
-          })
-          .filter((p) => (p.metadata.length ? true : false));
-
-        this.employeeApiService
-          .updateUserInfo(selectedUser.mailNickname, { ...selectedUser, projectsNew: [...filteredProjects] })
-          .pipe(first())
-          .subscribe((user) => {
-            this.contextStoreService.setSelectedUser(user);
+          return this.employeeApiService.updateUserInfo(selectedUser.mailNickname, {
+            ...selectedUser,
+            projectsNew: [...filteredProjects],
           });
+        })
+      )
+      .subscribe((user) => {
+        this.contextStoreService.setSelectedUser(user);
       });
   }
 }

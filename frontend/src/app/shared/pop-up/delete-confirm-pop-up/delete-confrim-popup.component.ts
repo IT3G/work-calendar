@@ -11,7 +11,7 @@ export class DeleteConfrimPopupComponent {
   constructor(public dialogRef: MatDialogRef<DeleteConfrimPopupComponent>) {}
 
   public onNoClick(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 
   public onEnter(): void {

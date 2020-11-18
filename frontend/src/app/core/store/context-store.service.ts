@@ -70,7 +70,7 @@ export class ContextStoreService {
   }
 
   public getSelectedUser(): Observable<Employee> {
-    return this.selectedUser$.asObservable();
+    return this.selectedUser$;
   }
 
   public getSelectedUserValue(): Employee {

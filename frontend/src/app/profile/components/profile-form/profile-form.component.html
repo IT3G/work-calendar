@@ -93,7 +93,11 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field class="form-group" (click)="linkToCommunication(communicationTypesEnum.telegram)">
+  <mat-form-field
+    class="form-group"
+    [class.other-disabled-color]="!isEdit"
+    (click)="linkToCommunication(communicationTypesEnum.telegram)"
+  >
     <input placeholder="telegram" matInput autocomplete="off" formControlName="telegram" />
   </mat-form-field>
 

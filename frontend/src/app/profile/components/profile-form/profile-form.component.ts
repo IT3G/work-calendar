@@ -59,7 +59,7 @@ export class ProfileFormComponent implements OnChanges, OnDestroy {
 
   private birthdayWithHideYearSetter(): void {
     if (this.selectedUser.birthdayHideYear) {
-      this.birthdayWithHideYear = moment(this.selectedUser.birthday).format('DD.MM');
+      this.birthdayWithHideYear = this.formatFieldToDayAndMonth(this.selectedUser.birthday);
     }
   }
 
@@ -67,11 +67,15 @@ export class ProfileFormComponent implements OnChanges, OnDestroy {
   private subscribeToHideYearControl(): void {
     this.profileForm.controls.birthdayHideYear.valueChanges.pipe(takeUntil(this.unsubscriber$)).subscribe((value) => {
       if (value) {
-        this.birthdayWithHideYear = moment(this.selectedUser.birthday).format('DD.MM');
+        this.birthdayWithHideYear = this.formatFieldToDayAndMonth(this.selectedUser.birthday);
         return;
       }
       this.birthdayWithHideYear = null;
     });
+  }
+
+  private formatFieldToDayAndMonth(date: string): string {
+    return moment(date).format('DD.MM');
   }
 
   public editStart(): void {

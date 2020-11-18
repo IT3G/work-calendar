@@ -8,6 +8,7 @@ import * as moment from 'moment';
 import { Observable, Subscription } from 'rxjs';
 import { filter, first, share, switchMap, take, tap } from 'rxjs/operators';
 import { EmployeeApiService } from 'src/app/core/services/employee-api.service';
+import { SortOrder } from 'src/app/shared/enums/sort-order.enum';
 import { DeleteConfrimPopupComponent } from 'src/app/shared/pop-up/delete-confirm-pop-up/delete-confrim-popup.component';
 import { SnackbarService } from 'src/app/shared/services/snackbar.service';
 
@@ -15,11 +16,6 @@ import { DictionaryApiService } from '../../../core/services/dictionary-api.serv
 import { DictionaryModel } from '../../../shared/models/dictionary.model';
 import { Employee } from '../../../shared/models/employee.model';
 import { EmployeeAddComponent } from './employee-add/employee-add.component';
-
-enum SortOrder {
-  asc = 'asc',
-  desc = 'desc',
-}
 
 @Component({
   selector: 'app-employee-list',
@@ -156,16 +152,16 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
 
   private sortByDate(attrValue: string): void {
     if (this.prevAttribute === attrValue && this.currentSortOrder === SortOrder.asc) {
-      this.employees = [...this.employees]
-        .map((employee) => ({ ...employee, terminationDate: employee.terminationDate ?? undefined }))
-        .sort((a, b) => moment(b[attrValue]).valueOf() - moment(a[attrValue]).valueOf());
       this.currentSortOrder = SortOrder.desc;
+      this.employees = this.employees
+        .map((employee) => ({ ...employee, terminationDate: employee.terminationDate ?? undefined }))
+        .sort((a, b) => moment(b[attrValue]).diff(moment(a[attrValue])));
       return;
     }
-    this.employees = [...this.employees]
+    this.employees = this.employees
       .map((employee) => ({ ...employee, terminationDate: employee.terminationDate ?? undefined }))
       .sort((a, b) => {
-        return moment(a[attrValue]).valueOf() - moment(b[attrValue]).valueOf();
+        return moment(a[attrValue]).diff(moment(b[attrValue]));
       });
     this.currentSortOrder = SortOrder.asc;
   }

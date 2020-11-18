@@ -33,5 +33,5 @@ export const pipes = [
   SortTasksByDateStartPipe,
   CanDeleteTaskPipe,
   ColorSubdivisionPipe,
-  UserForLocationPipe
+  UserForLocationPipe,
 ];
