@@ -63,11 +63,19 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     this.subscription = this.breakpointObserver
       .observe(['(max-width: 767px)'])
       .subscribe((result) => (this.isMobile = result.matches));
+
+    this.subscribeToSelectedUserChange();
   }
 
   ngOnDestroy() {
     this.userSubscriptions.unsubscribe();
     this.subscription.unsubscribe();
+  }
+
+  private subscribeToSelectedUserChange() {
+    this.contextStoreService.getSelectedUser().subscribe((user) => {
+      this.selectedUser = user;
+    });
   }
 
   public onUpdateProfile(employee: Employee): void {
@@ -78,6 +86,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   public updateSelectedUser(employee: Employee): void {
     this.selectedUser = employee;
+    this.contextStoreService.setSelectedUser(employee);
   }
 
   public addFollow(data: FollowModel): void {
@@ -103,6 +112,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       this.route.params
         .pipe(switchMap((params: { id?: string }) => (params.id ? this.getUserFromApi(params.id) : this.currentUser$)))
         .subscribe((user) => {
+          this.contextStoreService.setSelectedUser(user);
           this.selectedUser = user;
           this.login = user.mailNickname;
           this.loadFollow(user._id);
@@ -139,9 +149,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   public onUpdateValue(value: { project: ProjectNewModel; date: moment.Moment; value: number }) {
     const currentProject = this.selectedUser.projectsNew.find((p) => p.project_id === value.project.project_id);
-    const metadata = currentProject.metadata.find((m) =>
-      NewProjectUtils.mapMetadataToDate(m).isSame(value.date, 'month')
-    );
+    const metadata = currentProject.metadata.find((m) => {
+      return NewProjectUtils.mapMetadataToDate(m).isSame(value.date, 'month');
+    });
 
     if (metadata?.percent === value.value) {
       return;
@@ -158,8 +168,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       currentProject.metadata = [...currentProject.metadata, newMeta];
     }
 
-    this.employeeApiService
-      .updateUserInfo(this.selectedUser.mailNickname, this.selectedUser)
-      .subscribe((user) => (this.selectedUser = user));
+    this.employeeApiService.updateUserInfo(this.selectedUser.mailNickname, this.selectedUser).subscribe((user) => {
+      this.selectedUser = user;
+      this.contextStoreService.setSelectedUser(user);
+    });
   }
 }

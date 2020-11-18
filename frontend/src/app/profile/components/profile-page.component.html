@@ -32,6 +32,10 @@
   >
     Присутствие
   </button>
+  <div class="online-time">
+    Был(а) в сети:
+    <span class="time">{{ selectedUser.lastTimeOnline | date: 'dd - MM - h:mm' }}</span>
+  </div>
 
   <mat-tab-group
     class="tabs"

@@ -70,6 +70,11 @@ export class LdapService implements OnApplicationShutdown {
       terminationDate: null,
       lastProjects: null,
       skills: null,
+      birthday: null,
+      remoteWork: null,
+      lastTimeOnline: moment().toISOString(),
+      mattermost: null,
+      birthdayHideYear: null,
     };
   }
 

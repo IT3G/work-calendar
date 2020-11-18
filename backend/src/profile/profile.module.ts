@@ -8,6 +8,7 @@ import { TokenService } from '../work-calendar/services/token.service';
 import { AvatarsController } from './controllers/avatars.controller';
 import { FollowController } from './controllers/follow.controller';
 import { UsersController } from './controllers/users.controller';
+import { UserFollowDto } from './dto/user-follow.dto';
 import { guards } from './guards';
 import { AdminActionGuard } from './guards/admin-action.guard';
 import { AvatarsService } from './services/avatars/avatars.service';
@@ -27,7 +28,7 @@ const avatarServiceProvider = {
       return new DefaultAvatarsService(http);
     }
   },
-  inject: [HttpService, Config]
+  inject: [HttpService, Config],
 };
 
 @Module({
@@ -37,8 +38,8 @@ const avatarServiceProvider = {
     HttpModule,
     JwtModule.register({
       secret: config.JWT_SECRET_KEY,
-      signOptions: { expiresIn: config.JWT_EXPIRES }
-    })
+      signOptions: { expiresIn: config.JWT_EXPIRES },
+    }),
   ],
   controllers: [UsersController, AvatarsController, FollowController],
   providers: [
@@ -50,10 +51,10 @@ const avatarServiceProvider = {
     avatarServiceProvider,
     {
       provide: Config,
-      useValue: config
+      useValue: config,
     },
-    ...guards
+    ...guards,
   ],
-  exports: [UsersService, FollowService, AdminActionGuard]
+  exports: [UsersService, FollowService, AdminActionGuard],
 })
 export class ProfileModule {}

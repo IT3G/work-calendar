@@ -1,0 +1,17 @@
+<div mat-dialog-content>
+  <mat-form-field class="dictionary-control">
+    <mat-label>Проект</mat-label>
+    <mat-select [formControl]="projectControl">
+      <mat-option>Сбросить</mat-option>
+      <mat-option *ngFor="let project of projectList" [value]="project._id">
+        {{ project.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<div class="buttons">
+  <button mat-button (click)="onEnter()" [disabled]>Добавить</button>
+
+  <button mat-button (click)="onNoClick()">Закрыть</button>
+</div>

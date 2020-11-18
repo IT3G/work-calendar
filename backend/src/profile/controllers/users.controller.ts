@@ -1,4 +1,4 @@
-import { Body, Controller, Get, NotFoundException, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post } from '@nestjs/common';
 import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
 import { CustomMapper } from '../../shared/services/custom-mapper.service';
 import { UserDto } from '../dto/user.dto';
@@ -38,7 +38,7 @@ export class UsersController {
     if (!user) {
       throw new NotFoundException('User does not exist!');
     }
-
+    await this.userService.updateLastTimeOnline(login);
     return this.mapper.map(UserDto, user);
   }
 
@@ -65,5 +65,10 @@ export class UsersController {
     await editedUser.save();
 
     return this.mapper.map(UserDto, editedUser);
+  }
+
+  @Delete('/delete/:id')
+  async deleteUser(@Param('id') id: string): Promise<void> {
+    return await this.userService.deleteUser(id);
   }
 }

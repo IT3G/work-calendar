@@ -40,4 +40,9 @@ export const UserSchema = new Schema({
   authType: String,
   hashPassword: String,
   terminationDate: String,
+  birthday: String,
+  remoteWork: Boolean,
+  lastTimeOnline: String,
+  mattermost: String,
+  birthdayHideYear: Boolean,
 });

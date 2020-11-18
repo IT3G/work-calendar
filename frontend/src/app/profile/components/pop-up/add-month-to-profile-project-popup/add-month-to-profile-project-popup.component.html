@@ -1,0 +1,17 @@
+<div mat-dialog-content>
+  <div class="profile-form" [formGroup]="projectControl">
+    <mat-form-field class="form-group">
+      <input matInput placeholder="месяц" autocomplete="off" type="number" min="1" max="12" formControlName="month" />
+    </mat-form-field>
+
+    <mat-form-field class="form-group">
+      <input matInput placeholder="год" autocomplete="off" type="number" min="2015" formControlName="year" />
+    </mat-form-field>
+  </div>
+</div>
+
+<div class="buttons">
+  <button mat-button (click)="onEnter()" [disabled]="!projectControl.valid">Добавить</button>
+
+  <button mat-button (click)="onNoClick()">Закрыть</button>
+</div>

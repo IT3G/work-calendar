@@ -5,12 +5,13 @@
   box-sizing: border-box;
   display: grid;
   grid-template-columns: 160px minmax(auto, 1040px);
-  grid-template-rows: 160px minmax(min-content, max-content) 50px 1fr;
+  grid-template-rows: 160px minmax(min-content, max-content) 50px 50px 1fr;
   grid-template-areas:
     'avatar tabs'
     'skills tabs'
     'name tabs'
-    'presence tabs';
+    'presence tabs'
+    'last-online tabs';
   gap: 20px;
 }
 
@@ -47,6 +48,15 @@
     height: 30px;
     width: 30px;
     object-fit: contain;
+  }
+}
+
+.online-time {
+  text-align: center;
+  font-weight: 500;
+  color: rgba($color: #000000, $alpha: 0.5);
+  .time {
+    display: block;
   }
 }
 

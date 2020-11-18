@@ -97,10 +97,30 @@ export class UserDto {
   terminationDate: string;
 
   @Expose()
+  @ApiModelProperty()
+  birthday: string;
+
+  @Expose()
+  @ApiModelProperty()
+  remoteWork: boolean;
+
+  @Expose()
+  @ApiModelProperty()
+  lastTimeOnline: string;
+
+  @Expose()
   @Type(() => LastProjectDto)
   @Transform(lastProjectsMapper)
   @ApiModelProperty()
   lastProjects: LastProjectDto[];
+
+  @Expose()
+  @ApiModelProperty()
+  mattermost: string;
+
+  @Expose()
+  @ApiModelProperty()
+  birthdayHideYear: boolean;
 }
 
 /** Получение последних активных проектов */

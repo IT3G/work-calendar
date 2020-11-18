@@ -4,17 +4,7 @@
 
 <app-user-search *ngIf="currentUser$ | async" class="search"></app-user-search>
 
-<app-navigation-menu class="nav-menu" [isMobile]="isMobile"></app-navigation-menu>
-
-<a
-  class="my-presence"
-  *ngIf="currentUser$ | async as user"
-  matTooltip="Моё присутствие"
-  [routerLink]="['/presence', user.mailNickname]"
-  routerLinkActive="active"
->
-  <i class="fa fa-calendar-check-o" aria-hidden="true"></i>
-</a>
+<app-navigation-menu class="nav-menu" [isMobile]="isMobile" [currentUser]="currentUser$ | async"></app-navigation-menu>
 
 <app-personal-menu
   class="personal-menu"

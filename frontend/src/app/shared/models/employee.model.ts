@@ -24,4 +24,9 @@ export class Employee {
   terminationDate: string;
   lastProjects: LastProjectModel[];
   skills: SkillsModel[];
+  birthday: string;
+  remoteWork: boolean;
+  lastTimeOnline: string;
+  mattermost: string;
+  birthdayHideYear: boolean;
 }

@@ -9,7 +9,7 @@ import { AuthRequestModel } from '../../shared/models/auth.request.model';
 import { Employee } from '../../shared/models/employee.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthApiService {
   private readonly url = `${environment.baseUrl}/auth`;

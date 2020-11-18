@@ -25,7 +25,7 @@ const routes: Routes = [
   { path: 'login', component: LoginPageComponent },
   { path: 'registration', component: RegistrationComponent },
   { path: 'admin', loadChildren: '../admin/admin.module#AdminModule', canActivate: [AuthGuard, IsAdminGuardService] },
-  { path: '', redirectTo: 'team-presence', pathMatch: 'full' },
+  { path: '', redirectTo: 'people', pathMatch: 'full' },
 ];
 
 @NgModule({

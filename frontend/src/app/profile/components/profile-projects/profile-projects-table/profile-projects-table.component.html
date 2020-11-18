@@ -1,11 +1,17 @@
 <table>
-  <tr>
+  <tr class="table-header">
     <th class="name">Название проекта</th>
-    <th *ngFor="let date of projectsMaxPeriod">{{ date.format('MM YYYY') }}</th>
+    <th *ngFor="let date of projectsMaxPeriod" class="date">
+      <i class="fa fa-minus fa-icon" (click)="deleteMonth(date)" *ngIf="isAdmin"></i>
+      {{ date.format('MM YYYY') }}
+    </th>
   </tr>
 
   <tr *ngFor="let project of projects">
-    <td class="name">{{ project.project_name }}</td>
+    <td class="name">
+      {{ project.project_name }}
+      <i class="fa fa-minus-square fa-icon" (click)="deleteProject(project)" *ngIf="isAdmin"></i>
+    </td>
     <td *ngFor="let date of projectsMaxPeriod">
       <input
         #el
