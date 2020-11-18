@@ -169,8 +169,6 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
     }
 
     this.employeeApiService.updateUserInfo(this.selectedUser.mailNickname, this.selectedUser).subscribe((user) => {
-      console.log(user.projectsNew);
-
       this.selectedUser = user;
       this.contextStoreService.setSelectedUser(user);
     });
