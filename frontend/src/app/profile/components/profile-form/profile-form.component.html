@@ -7,6 +7,7 @@
     class="form-group"
     [class.other-disabled-color]="!isEdit"
     (click)="linkToCommunication(communicationTypesEnum.mail)"
+    *ngIf="profileForm.value.email || isEdit"
   >
     <input placeholder="email" [class.clickable-field]="!isEdit" matInput autocomplete="off" formControlName="email" />
   </mat-form-field>
@@ -39,7 +40,7 @@
     </mat-form-field>
   </ng-template>
 
-  <mat-checkbox class="form-group checkbox" color="primary" formControlName="birthdayHideYear">
+  <mat-checkbox class="form-group checkbox" color="primary" formControlName="birthdayHideYear" *ngIf="isEdit">
     скрыть год рождения
   </mat-checkbox>
 
@@ -54,6 +55,7 @@
   <mat-form-field
     class="form-group other-disabled-color"
     (click)="linkToCommunication(communicationTypesEnum.telephone)"
+    *ngIf="profileForm.value.telNumber || isEdit"
   >
     <input
       placeholder="телефон"
@@ -67,6 +69,7 @@
   <mat-form-field
     class="form-group other-disabled-color"
     (click)="linkToCommunication(communicationTypesEnum.mattermost)"
+    *ngIf="profileForm.value.mattermost || isEdit"
   >
     <input
       placeholder="mattermost"
@@ -81,7 +84,11 @@
     <input placeholder="город" matInput autocomplete="off" formControlName="location" />
   </mat-form-field>
 
-  <mat-form-field class="form-group other-disabled-color" (click)="linkToCommunication(communicationTypesEnum.skype)">
+  <mat-form-field
+    class="form-group other-disabled-color"
+    (click)="linkToCommunication(communicationTypesEnum.skype)"
+    *ngIf="profileForm.value.skype || isEdit"
+  >
     <input placeholder="skype" matInput [class.clickable-field]="!isEdit" autocomplete="off" formControlName="skype" />
   </mat-form-field>
 
@@ -97,8 +104,15 @@
     class="form-group"
     [class.other-disabled-color]="!isEdit"
     (click)="linkToCommunication(communicationTypesEnum.telegram)"
+    *ngIf="profileForm.value.telegram || isEdit"
   >
-    <input placeholder="telegram" matInput autocomplete="off" formControlName="telegram" />
+    <input
+      placeholder="telegram"
+      [class.clickable-field]="!isEdit"
+      matInput
+      autocomplete="off"
+      formControlName="telegram"
+    />
   </mat-form-field>
 
   <mat-form-field class="form-group control control-date">
@@ -129,7 +143,14 @@
     админ
   </mat-checkbox>
 
-  <mat-checkbox class="form-group checkbox" color="primary" formControlName="remoteWork">удаленная работа</mat-checkbox>
+  <mat-checkbox
+    class="form-group checkbox"
+    color="primary"
+    formControlName="remoteWork"
+    *ngIf="profileForm.value.remoteWork || (isAdmin && isEdit)"
+  >
+    удаленная работа
+  </mat-checkbox>
 
   <div class="form-footer">
     <button type="submit" mat-raised-button color="primary" *ngIf="!isEdit && canEdit" (click)="editStart()">
