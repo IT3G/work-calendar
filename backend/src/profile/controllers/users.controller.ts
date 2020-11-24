@@ -38,7 +38,7 @@ export class UsersController {
     if (!user) {
       throw new NotFoundException('User does not exist!');
     }
-    await this.userService.updateLastTimeOnline(login);
+
     return this.mapper.map(UserDto, user);
   }
 
