@@ -59,6 +59,9 @@ export class AuthController {
   async getCurrentUser(@Req() req: Request): Promise<UserDto> {
     try {
       const user = await this.tokenService.verifyByRequesAndGetUser(req);
+
+      await this.usersService.updateLastTimeOnline(user.username);
+
       return this.mapper.map(UserDto, user);
     } catch (e) {
       throw new NotAcceptableException('user not found');
