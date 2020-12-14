@@ -29,6 +29,8 @@ import { LocationUserModel } from '../../models/location-user.model';
 export class PeoplePageComponent implements OnInit, OnDestroy {
   public isMobileVersion: boolean;
 
+  public users: Employee[];
+
   /** уникальные города пользователей */
   public location: Set<string> = new Set();
 
@@ -101,8 +103,20 @@ export class PeoplePageComponent implements OnInit, OnDestroy {
   /** подписаться на изменение роута */
   private subscribeToRouteChange(): void {
     this.route.queryParams.pipe(takeUntil(this.unsubscriber$)).subscribe((res) => {
-      return this.filtersForm.patchValue(res, { emitEvent: false });
+      this.filtersForm.patchValue(res, { emitEvent: false });
+      this.setTotalUsers();
     });
+  }
+
+  private setTotalUsers(): void {
+    this.totalUsers = this.users
+      ?.filter((user) => !!user.location)
+      .filter((user) => {
+        if (this.filtersForm.value['subdivision'] === 'all-items') {
+          return true;
+        }
+        return user?.subdivision?.name === this.filtersForm.value['subdivision'];
+      }).length;
   }
 
   private getData() {
@@ -113,6 +127,7 @@ export class PeoplePageComponent implements OnInit, OnDestroy {
         users.filter((user) => (user.terminationDate ? new Date(user.terminationDate) > new Date() : true))
       ),
       tap((users) => {
+        this.users = users;
         const preCalculatedPeoplesLocation: Map<string, number> = new Map();
         users
           .filter((user) => !!user.location)
@@ -126,7 +141,7 @@ export class PeoplePageComponent implements OnInit, OnDestroy {
           new Map([...preCalculatedPeoplesLocation.entries()].sort((a, b) => b[1] - a[1])).keys()
         );
 
-        this.totalUsers = users.filter((user) => !!user.location).length;
+        this.setTotalUsers();
       })
     );
     const subdivision$ = this.dictionaryApi.getAll('subdivision');
