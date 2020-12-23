@@ -77,7 +77,6 @@ export class PeoplePageComponent implements OnInit, OnDestroy {
     this.unsubscriber$.next();
     this.unsubscriber$.complete();
   }
-
   /** инициализировать форму */
   private initFilterForm(filters?: Params): void {
     this.filtersForm = this.fb.group({

@@ -8,28 +8,36 @@
 </div>
 
 <div class="location-grid" *ngIf="!loadInProgress">
-  <div class="location-row" *ngFor="let loc of location">
-    <div class="location">
-      {{ loc }}
-      <div class="location-count">
-        <ng-container *ngFor="let subdivision of allSubdivisions">
-          <span
-            *ngIf="
-              (locationUser[loc] | peopleSudivisionFilter: subdivision).length &&
-              filtersForm.value['subdivision'] === 'all-items'
-            "
-          >
-            {{ subdivision + ': ' + (locationUser[loc] | peopleSudivisionFilter: subdivision).length + ' чел.' }}
+  <div *ngFor="let loc of location | sortLocationBySubdivision: locationUser:filtersForm.value['subdivision']">
+    <div
+      class="location-row"
+      *ngIf="(locationUser[loc] | peopleSudivisionFilter: filtersForm.value['subdivision']).length"
+    >
+      <div
+        class="location"
+        *ngIf="(locationUser[loc] | peopleSudivisionFilter: filtersForm.value['subdivision']).length"
+      >
+        {{ loc }}
+        <div class="location-count">
+          <ng-container *ngFor="let subdivision of allSubdivisions">
+            <span
+              *ngIf="
+                (locationUser[loc] | peopleSudivisionFilter: subdivision).length &&
+                filtersForm.value['subdivision'] === 'all-items'
+              "
+            >
+              {{ subdivision + ': ' + (locationUser[loc] | peopleSudivisionFilter: subdivision).length + ' чел.' }}
+            </span>
+          </ng-container>
+          <span>
+            Итого: {{ (locationUser[loc] | peopleSudivisionFilter: filtersForm.value['subdivision']).length + ' чел.' }}
           </span>
-        </ng-container>
-        <span>
-          Итого: {{ (locationUser[loc] | peopleSudivisionFilter: filtersForm.value['subdivision']).length + ' чел.' }}
-        </span>
+        </div>
       </div>
-    </div>
-    <div class="user-grid" *ngIf="locationUser">
-      <div *ngFor="let user of locationUser[loc] | peopleSudivisionFilter: filtersForm.value['subdivision']">
-        <app-user-card [user]="user" [date]="filtersForm.get('month').value" theme="peoples-page"></app-user-card>
+      <div class="user-grid" *ngIf="locationUser">
+        <div *ngFor="let user of locationUser[loc] | peopleSudivisionFilter: filtersForm.value['subdivision']">
+          <app-user-card [user]="user" [date]="filtersForm.get('month').value" theme="peoples-page"></app-user-card>
+        </div>
       </div>
     </div>
   </div>
