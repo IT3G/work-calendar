@@ -4,7 +4,16 @@
       Подписан я:
       <div class="counter">{{ following?.length }}</div>
     </div>
-
+    <div *ngIf="following?.length">
+      <i
+        class="fa fa-ban icon-btn red"
+        (click)="removeAllFollowing()"
+        title="Исключить всех из подписки"
+        aria-hidden="true"
+      ></i>
+      Исключить всех из подписки
+      <hr />
+    </div>
     <div *ngIf="following?.length; else emptyFollow">
       <div *ngFor="let user of following" class="follow-item">
         <a [routerLink]="['/profile', user.mailNickname]" [queryParams]="{ tab: 0 }">{{ user?.username }}</a>
