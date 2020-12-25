@@ -6,7 +6,13 @@ export const environment = {
   envName: 'dev',
   production: false,
   baseUrl: '/backend',
-  pageTitle: ''
+  pageTitle: '',
+  winterSnowPageEffect: {
+    startMonth: 'December',
+    startDate: 15,
+    endMonth: 'February',
+    endDate: 15,
+  },
 };
 
 /*

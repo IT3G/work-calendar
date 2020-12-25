@@ -6,7 +6,13 @@ export const environment = {
   envName: 'test',
   production: false,
   baseUrl: 'https://work-cal.herokuapp.com',
-  pageTitle: ''
+  pageTitle: '',
+  winterSnowPageEffect: {
+    startMonth: 'December',
+    startDate: 15,
+    endMonth: 'February',
+    endDate: 15,
+  },
 };
 
 /*
