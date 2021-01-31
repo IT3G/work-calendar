@@ -11,7 +11,7 @@ export class PresenceController {
   constructor(private presenceService: PresenceSerivce) {}
 
   @Get()
-  async getPresence(@Query('since') dateStart: string, @Query('till') dateEnd: string): Promise<PresenseRequestDto[]> {
+  async getPresence(@Query('since') dateStart: string, @Query('till') dateEnd: string): Promise<any[]> {
     return await this.presenceService.getPresenceByDate(dateStart, dateEnd);
   }
 }
