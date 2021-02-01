@@ -53,33 +53,88 @@ export class TaskService {
   }
 
   async getTasksByMonth(date: string): Promise<PresenceModel[]> {
-    const startOfMonth = moment(date)
-      .startOf('month')
-      .format('YYYY-MM-DD');
-    const endOfMonth = moment(date)
-      .endOf('month')
-      .format('YYYY-MM-DD');
+    const startOfMonth = moment(date).startOf('month').format('YYYY-MM-DD');
+    const endOfMonth = moment(date).endOf('month').format('YYYY-MM-DD');
 
     const users = await this.userService.getUsers();
     const tasks = await this.getTasksInPeriod(startOfMonth, endOfMonth);
 
     const day = moment(date).startOf('month');
 
-    const monthDays = Array.from(Array(day.daysInMonth()).keys()).map(i => day.clone().add(i, 'day'));
+    const monthDays = Array.from(Array(day.daysInMonth()).keys()).map((i) => day.clone().add(i, 'day'));
 
     const result = users
       /** Отсеять сотрудников, уволившихся до начала выбранного месяца */
-      .filter(user => this.filterTerminatedEmployeesByStartOfMonth(user, date))
-      .map(employee => {
-        const currentUserTasks = tasks.filter(i => i.employee === employee.mailNickname);
+      .filter((user) => this.filterTerminatedEmployeesByStartOfMonth(user, date))
+      .map((employee) => {
+        const currentUserTasks = tasks.filter((i) => i.employee === employee.mailNickname);
 
         return {
           employee,
-          tasks: monthDays.map(d => this.getLastTaskInCurrentDay(currentUserTasks, d))
+          tasks: monthDays.map((d) => this.getLastTaskInCurrentDay(currentUserTasks, d)),
         };
       });
 
     return result;
+  }
+
+  public getTaskTypeName(type: TaskType): string {
+    const taskTypeMap = Object.freeze({
+      [TaskType.COMMON]: 'Стандартно',
+      [TaskType.CUSTOM]: 'Особое',
+      [TaskType.LEFT]: 'Отсутствие',
+      [TaskType.VACATION]: 'Отпуск',
+      [TaskType.SICK]: 'Болезнь',
+    });
+
+    if (taskTypeMap[type]) {
+      return taskTypeMap[type];
+    }
+
+    return 'Статус не определен';
+  }
+
+  public async getTasksInPeriod(dateStart: string, dateEnd: string): Promise<TaskEntity[]> {
+    // a >= start <= b  || a >= end <= b || start < a && end > b
+    return await this.taskModel.find({
+      $or: [
+        {
+          dateStart: {
+            $gte: dateStart,
+            $lte: dateEnd,
+          },
+        },
+        {
+          dateEnd: {
+            $gte: dateStart,
+            $lte: dateEnd,
+          },
+        },
+        {
+          $and: [
+            {
+              dateStart: {
+                $lte: dateStart,
+              },
+            },
+            {
+              dateEnd: {
+                $gte: dateEnd,
+              },
+            },
+          ],
+        },
+      ],
+    });
+  }
+
+  async addTask(task: TaskDto): Promise<TaskEntity> {
+    this.sendMail(task);
+    this.sendPush(task);
+
+    const { _id = null, ...newTask } = task;
+
+    return await this.taskModel.create(newTask);
   }
 
   private filterTerminatedEmployeesByStartOfMonth(user: UserEntity, date: string): boolean {
@@ -93,7 +148,7 @@ export class TaskService {
 
   private getLastTaskInCurrentDay(currentUserTasks: TaskEntity[], currentDay: moment.Moment): TaskEntity {
     const currentDayTasks = currentUserTasks
-      .filter(i => {
+      .filter((i) => {
         if (i.dateEnd) {
           return currentDay.isBetween(moment(i.dateStart, 'YYYY-MM-DD'), moment(i.dateEnd, 'YYYY-MM-DD'), 'day', '[]');
         }
@@ -105,49 +160,6 @@ export class TaskService {
     const lastTask = currentDayTasks[0] || ({ dateStart: currentDay.format('YYYY-MM-DD') } as TaskEntity);
 
     return lastTask;
-  }
-
-  private async getTasksInPeriod(dateStart: string, dateEnd: string) {
-    // a >= start <= b  || a >= end <= b || start < a && end > b
-    return await this.taskModel.find({
-      $or: [
-        {
-          dateStart: {
-            $gte: dateStart,
-            $lte: dateEnd
-          }
-        },
-        {
-          dateEnd: {
-            $gte: dateStart,
-            $lte: dateEnd
-          }
-        },
-        {
-          $and: [
-            {
-              dateStart: {
-                $lte: dateStart
-              }
-            },
-            {
-              dateEnd: {
-                $gte: dateEnd
-              }
-            }
-          ]
-        }
-      ]
-    });
-  }
-
-  async addTask(task: TaskDto): Promise<TaskEntity> {
-    this.sendMail(task);
-    this.sendPush(task);
-
-    const { _id = null, ...newTask } = task;
-
-    return await this.taskModel.create(newTask);
   }
 
   private async generateAddressArray(userSubject: UserEntity, userCreated: UserEntity): Promise<UserEntity[]> {
@@ -165,7 +177,9 @@ export class TaskService {
     try {
       const userSubject = await this.userService.getUserByLogin(task.employee);
       const userCreated = await this.userService.getUserByLogin(task.employeeCreated);
-      const addressesArray = (await this.generateAddressArray(userSubject, userCreated)).map(user => user.mailNickname);
+      const addressesArray = (await this.generateAddressArray(userSubject, userCreated)).map(
+        (user) => user.mailNickname
+      );
 
       if (!addressesArray.length) {
         return;
@@ -192,18 +206,18 @@ export class TaskService {
           vibrate: [100, 50, 100],
           data: {
             dateOfArrival: Date.now().toLocaleString(),
-            primaryKey: 1
+            primaryKey: 1,
           },
           actions: [
             {
               action: 'explore',
-              title: 'подробности'
-            }
-          ]
-        }
+              title: 'подробности',
+            },
+          ],
+        },
       };
 
-      const notifications = addressesArray.map(address =>
+      const notifications = addressesArray.map((address) =>
         this.webPushService.sendPushNotification(address, notification)
       );
 
@@ -218,8 +232,8 @@ export class TaskService {
       const userSubject = await this.userService.getUserByLogin(task.employee);
       const userCreated = await this.userService.getUserByLogin(task.employeeCreated);
       const addressesArray = (await this.generateAddressArray(userSubject, userCreated))
-        .filter(user => !user.terminationDate)
-        .map(user => user.email);
+        .filter((user) => !user.terminationDate)
+        .map((user) => user.email);
 
       if (!addressesArray.length) {
         return;
@@ -232,28 +246,12 @@ export class TaskService {
         user: userSubject.username,
         status: this.getTaskTypeName(task.type as TaskType),
         comment: task.comment,
-        dateEnd: task.dateEnd
+        dateEnd: task.dateEnd,
       };
 
       await this.sendMailService.sendMail(mailData);
     } catch (e) {
       this.logger.error('Ошибка при отправке почты', e.stack);
     }
-  }
-
-  private getTaskTypeName(type: TaskType): string {
-    const taskTypeMap = Object.freeze({
-      [TaskType.COMMON]: 'Стандартно',
-      [TaskType.CUSTOM]: 'Особое',
-      [TaskType.LEFT]: 'Отсутствие',
-      [TaskType.VACATION]: 'Отпуск',
-      [TaskType.SICK]: 'Болезнь'
-    });
-
-    if (taskTypeMap[type]) {
-      return taskTypeMap[type];
-    }
-
-    return 'Статус не определен';
   }
 }
