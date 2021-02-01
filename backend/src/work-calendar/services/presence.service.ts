@@ -5,7 +5,7 @@ import * as moment from 'moment';
 import { Model } from 'mongoose';
 import { UsersService } from 'src/profile/services/users.service';
 import { TaskEntity } from '../../entity/entities/task.entity';
-import { PresenseRequestDto } from '../dto/presence-request.dto';
+import { PresenceRequestDto } from '../dto/presence-request.dto';
 import { TaskType } from '../models/task-type.enum';
 import { TaskService } from './task.service';
 
@@ -17,49 +17,35 @@ export class PresenceSerivce {
     private userService: UsersService
   ) {}
 
-  async getPresenceByDate(dateStart: string, dateEnd: string): Promise<any[]> {
+  async getPresenceByDate(dateStart: string, dateEnd: string): Promise<PresenceRequestDto[]> {
     const start = moment(dateStart).format('YYYY-MM-DD');
     const end = moment(dateEnd).format('YYYY-MM-DD');
 
     const rangeOfDate = this.getRangeOfDate(dateStart, dateEnd);
 
-    const users = await this.userService.getUsers();
+    const users = await (await this.userService.getUsers()).sort((a, b) => b.email.localeCompare(a.email));
     const tasks = await this.taskService.getTasksInPeriod(start, end);
 
-    console.log(moment('2020-01-15').isBetween('2020-01-10', '2020-01-20'));
+    const result = tasks
+      .sort((a, b) => {
+        return moment(a.dateStart).diff(moment(b.dateStart));
+      })
 
-    // const result = tasks
-    //   .sort((a, b) => {
-    //     return moment(a.dateStart).diff(moment(b.dateStart));
-    //   })
-    //   .map(t => {
-    //     const response = [];
-    //     rangeOfDate.forEach(date => {
-    //       if (moment(date).isBetween(t.dateStart, t.dateEnd, null, '[]')) {
-    //         response.push({
-    //           date,
-    //           type: this.taskService.getTaskTypeName(TaskType[t.type]),
-    //           email: users.find(user => user.mailNickname === t.employee).email
-    //         });
-    //       }
-    //     });
-    //     return response;
-    //   });
-    const result = rangeOfDate.map((date) => {
-      const response = [];
-      tasks.forEach((task) => {
-        if (moment(date).isBetween(task.dateStart, task.dateEnd, null, '[]')) {
-          response.push({
-            date,
-            type: this.taskService.getTaskTypeName(TaskType[task.type]),
-            email: users.find((user) => user.mailNickname === task.employee).email,
-          });
-        }
+      .map((task) => {
+        const response = [];
+        rangeOfDate.forEach((date) => {
+          if (moment(date).isBetween(task.dateStart, task.dateEnd, null, '[]')) {
+            response.push({
+              date,
+              type: this.taskService.getTaskTypeName(TaskType[task.type]),
+              email: users.find((user) => user.mailNickname === task.employee).email,
+            });
+          }
+        });
+        return response;
       });
-      return response;
-    });
 
-    return result;
+    return this.flat(result);
   }
 
   private getRangeOfDate(startDate: string, stopDate: string): any[] {
@@ -74,5 +60,9 @@ export class PresenceSerivce {
     }
 
     return dateArray;
+  }
+
+  private flat(array: PresenceRequestDto[][]): PresenceRequestDto[] {
+    return array.reduce((acc, val) => acc.concat(val), []);
   }
 }

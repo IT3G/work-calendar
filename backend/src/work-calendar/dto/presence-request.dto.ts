@@ -1,14 +1,14 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 
-export class PresenseRequestDto {
+export class PresenceRequestDto {
   @Expose()
   @ApiModelProperty()
   date: string;
 
   @Expose()
   @ApiModelProperty()
-  name: string;
+  email: string;
 
   @Expose()
   @ApiModelProperty()

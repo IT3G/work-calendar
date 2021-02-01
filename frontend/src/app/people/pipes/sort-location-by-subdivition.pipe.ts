@@ -8,8 +8,6 @@ import { LocationUserModel } from '../models/location-user.model';
 })
 export class SortLocationBySubdivisionPipe implements PipeTransform {
   transform(location: Set<string>, locationUser: LocationUserModel[], currentSubdivision: string): Set<string> {
-    console.log(location, locationUser);
-
     const locationArray = new Set(
       Array.from(location).sort((a, b) => {
         return (
