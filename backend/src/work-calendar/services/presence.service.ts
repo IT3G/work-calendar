@@ -67,7 +67,7 @@ export class PresenceSerivce {
 
     let currentDate = moment(startDate);
 
-    while (currentDate < endDate) {
+    while (currentDate <= endDate) {
       dateArray.push(currentDate.format('YYYY-MM-DD'));
       currentDate = currentDate.add(1, 'days');
     }
