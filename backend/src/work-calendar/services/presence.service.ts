@@ -45,7 +45,20 @@ export class PresenceSerivce {
         return response;
       });
 
-    return this.flat(result);
+    const flatResult = this.flat(result);
+
+    return this.removeRepeatedWrongInfo(flatResult);
+  }
+
+  private removeRepeatedWrongInfo(result: PresenceRequestDto[]): PresenceRequestDto[] {
+    const newResult = [];
+    result.reverse().forEach((task) => {
+      !newResult.find((innerTask) => {
+        return innerTask.date === task.date && innerTask.email === task.email;
+      }) && newResult.push(task);
+    });
+
+    return newResult.reverse();
   }
 
   private getRangeOfDate(startDate: string, stopDate: string): any[] {
