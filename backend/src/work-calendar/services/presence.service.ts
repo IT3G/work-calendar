@@ -45,7 +45,20 @@ export class PresenceSerivce {
         return response;
       });
 
-    return this.flat(result);
+    const flatResult = this.flat(result);
+
+    return this.removeRepeatedWrongInfo(flatResult);
+  }
+
+  private removeRepeatedWrongInfo(result: PresenceRequestDto[]): PresenceRequestDto[] {
+    const newResult = [];
+    result.reverse().forEach((task) => {
+      !newResult.find((innerTask) => {
+        return innerTask.date === task.date && innerTask.email === task.email;
+      }) && newResult.push(task);
+    });
+
+    return newResult.reverse();
   }
 
   private getRangeOfDate(startDate: string, stopDate: string): any[] {
@@ -54,7 +67,7 @@ export class PresenceSerivce {
 
     let currentDate = moment(startDate);
 
-    while (currentDate < endDate) {
+    while (currentDate <= endDate) {
       dateArray.push(currentDate.format('YYYY-MM-DD'));
       currentDate = currentDate.add(1, 'days');
     }
