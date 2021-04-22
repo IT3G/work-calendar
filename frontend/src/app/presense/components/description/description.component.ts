@@ -48,9 +48,10 @@ export class DescriptionComponent implements OnInit {
   }
 
   private initForm(): void {
+    const today = new Date();
     this.form = this.fb.group({
-      dateStart: [null, Validators.required],
-      dateEnd: [null],
+      dateStart: [today, Validators.required],
+      dateEnd: [today],
       type: [null, Validators.required],
       comment: [null],
     });
