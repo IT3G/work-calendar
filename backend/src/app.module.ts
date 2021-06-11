@@ -26,10 +26,10 @@ const url = `${config.DATABASE_URL}`;
     MongooseModule.forRoot(url, {
       useNewUrlParser: true,
       useCreateIndex: true,
-      useFindAndModify: false,
+      useFindAndModify: false
     }),
-    SkillsModule,
+    SkillsModule
   ],
-  providers: [{ provide: Config, useValue: config }],
+  providers: [{ provide: Config, useValue: config }]
 })
 export class AppModule {}
