@@ -19,6 +19,13 @@ export class BirthdayController {
     return this.mapper.mapArray(UserBirthdayDto, users);
   }
 
+  @Get('/empty')
+  async findUsersWithEmptyBirthday(): Promise<UserBirthdayDto[]> {
+    const users = await this.birthdayService.findUsersWithEmptyBirthday();
+
+    return this.mapper.mapArray(UserBirthdayDto, users);
+  }
+
   @Get(':id')
   async getBirthdaysByMonth(@Param('id') id): Promise<UserBirthdayDto[]> {
     if (id < 1 || id > 12) {

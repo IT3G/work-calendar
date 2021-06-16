@@ -10,13 +10,17 @@ import { BirthdayRepository } from '../repositories/birthday.repository';
 export class BirthdayService {
   constructor(private repository: BirthdayRepository) {}
 
-  public async getBirthdaysByCurrentMonth(): Promise<UserBirthdayDto[]> {
+  async getBirthdaysByCurrentMonth(): Promise<UserBirthdayDto[]> {
     const currentMonth = +moment().format('M');
 
     return await this.repository.findUsersByBirthdayMonthId(currentMonth);
   }
 
-  public async getBirthdaysByMonth(monthId: number): Promise<UserBirthdayDto[]> {
+  async getBirthdaysByMonth(monthId: number): Promise<UserBirthdayDto[]> {
     return await this.repository.findUsersByBirthdayMonthId(monthId);
+  }
+
+  async findUsersWithEmptyBirthday(): Promise<UserBirthdayDto[]> {
+    return await this.repository.findUsersWithEmptyBirthday();
   }
 }
