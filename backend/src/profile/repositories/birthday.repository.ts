@@ -49,6 +49,13 @@ export class BirthdayRepository {
             location: '$location',
             subdivision: '$sd',
             jobPosition: '$jp',
+            day: {
+              $dayOfMonth: {
+                $dateFromString: {
+                  dateString: '$birthday'
+                }
+              }
+            },
             month: {
               $month: {
                 $dateFromString: {
@@ -63,6 +70,10 @@ export class BirthdayRepository {
           $match: {
             month: monthId
           }
+        },
+
+        {
+          $sort: { day: 1 }
         }
       ])
       .exec();
