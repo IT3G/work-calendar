@@ -13,6 +13,7 @@ import { TaskDto } from '../dto/task.dto';
 import { PresenceModel } from '../models/presence.model';
 import { TaskType } from '../models/task-type.enum';
 import { DateFormatter } from '../../shared/services/date-formatter.service';
+import { TaskRepository } from '../repositories/task.repository';
 
 @Injectable()
 export class TaskService {
@@ -20,6 +21,8 @@ export class TaskService {
 
   constructor(
     @InjectModel('Tasks') private readonly taskModel: Model<TaskEntity>,
+    @InjectModel('Users') private readonly userModel: Model<UserEntity>,
+    private taskRepository: TaskRepository,
     private sendMailService: SendMailService,
     private userService: UsersService,
     private followService: FollowService,
@@ -53,29 +56,18 @@ export class TaskService {
   }
 
   async getTasksByMonth(date: string): Promise<PresenceModel[]> {
-    const startOfMonth = moment(date).startOf('month').format('YYYY-MM-DD');
-    const endOfMonth = moment(date).endOf('month').format('YYYY-MM-DD');
+    const startOfMonth = moment(date).startOf('month').toISOString();
+    const endOfMonth = moment(date).endOf('month').toISOString();
 
-    const users = await this.userService.getUsers();
-    const tasks = await this.getTasksInPeriod(startOfMonth, endOfMonth);
+    const result: PresenceModel[] = await this.taskRepository.getTasksByMonth(startOfMonth, endOfMonth);
 
     const day = moment(date).startOf('month');
-
     const monthDays = Array.from(Array(day.daysInMonth()).keys()).map((i) => day.clone().add(i, 'day'));
 
-    const result = users
-      /** Отсеять сотрудников, уволившихся до начала выбранного месяца */
-      .filter((user) => this.filterTerminatedEmployeesByStartOfMonth(user, date))
-      .map((employee) => {
-        const currentUserTasks = tasks.filter((i) => i.employee === employee.mailNickname);
-
-        return {
-          employee,
-          tasks: monthDays.map((d) => this.getLastTaskInCurrentDay(currentUserTasks, d)),
-        };
-      });
-
-    return result;
+    return result.map((i) => ({
+      employee: i.employee,
+      tasks: monthDays.map((d) => this.getLastTaskInCurrentDay(i.tasks, d)),
+    }));
   }
 
   public getTaskTypeName(type: TaskType): string {
@@ -95,37 +87,7 @@ export class TaskService {
   }
 
   public async getTasksInPeriod(dateStart: string, dateEnd: string): Promise<TaskEntity[]> {
-    // a >= start <= b  || a >= end <= b || start < a && end > b
-    return await this.taskModel.find({
-      $or: [
-        {
-          dateStart: {
-            $gte: dateStart,
-            $lte: dateEnd,
-          },
-        },
-        {
-          dateEnd: {
-            $gte: dateStart,
-            $lte: dateEnd,
-          },
-        },
-        {
-          $and: [
-            {
-              dateStart: {
-                $lte: dateStart,
-              },
-            },
-            {
-              dateEnd: {
-                $gte: dateEnd,
-              },
-            },
-          ],
-        },
-      ],
-    });
+    return await this.taskRepository.getTasksInPeriod(dateStart, dateEnd);
   }
 
   async addTask(task: TaskDto): Promise<TaskEntity> {
@@ -135,15 +97,6 @@ export class TaskService {
     const { _id = null, ...newTask } = task;
 
     return await this.taskModel.create(newTask);
-  }
-
-  private filterTerminatedEmployeesByStartOfMonth(user: UserEntity, date: string): boolean {
-    if (!user.terminationDate) {
-      return true;
-    }
-    const startOfMonth = moment(date).startOf('month');
-    const employeeTerminationDate = moment(user.terminationDate);
-    return startOfMonth.isBefore(employeeTerminationDate);
   }
 
   private getLastTaskInCurrentDay(currentUserTasks: TaskEntity[], currentDay: moment.Moment): TaskEntity {

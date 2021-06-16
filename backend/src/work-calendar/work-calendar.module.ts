@@ -12,6 +12,7 @@ import { PresenceController } from './controllers/presence.controller';
 import { TasksController } from './controllers/tasks.controller';
 import { guards } from './guards';
 import { AuthMiddleware } from './middleware/auth.middleware';
+import { TaskRepository } from './repositories/task.repository';
 import { AuthService } from './services/auth.service';
 import { LdapService } from './services/ldap.service';
 import { PresenceSerivce } from './services/presence.service';
@@ -41,6 +42,7 @@ const config = getConfig();
     LdapService,
     AuthService,
     TaskService,
+    TaskRepository,
     PresenceSerivce,
     VacationResolutionService,
     { provide: Config, useValue: config },
