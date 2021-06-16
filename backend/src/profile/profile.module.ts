@@ -6,14 +6,17 @@ import { SharedModule } from '../shared/shared.module';
 import { LdapService } from '../work-calendar/services/ldap.service';
 import { TokenService } from '../work-calendar/services/token.service';
 import { AvatarsController } from './controllers/avatars.controller';
+import { BirthdayController } from './controllers/birthday.controller';
 import { FollowController } from './controllers/follow.controller';
 import { UsersController } from './controllers/users.controller';
 import { UserFollowDto } from './dto/user-follow.dto';
 import { guards } from './guards';
 import { AdminActionGuard } from './guards/admin-action.guard';
+import { BirthdayRepository } from './repositories/birthday.repository';
 import { AvatarsService } from './services/avatars/avatars.service';
 import { ConfluenceAvatarService } from './services/avatars/confluence-avatars.service';
 import { DefaultAvatarsService } from './services/avatars/default-avatars.service';
+import { BirthdayService } from './services/birthday.service';
 import { FollowService } from './services/follow.service';
 import { UsersService } from './services/users.service';
 
@@ -28,7 +31,7 @@ const avatarServiceProvider = {
       return new DefaultAvatarsService(http);
     }
   },
-  inject: [HttpService, Config],
+  inject: [HttpService, Config]
 };
 
 @Module({
@@ -38,23 +41,25 @@ const avatarServiceProvider = {
     HttpModule,
     JwtModule.register({
       secret: config.JWT_SECRET_KEY,
-      signOptions: { expiresIn: config.JWT_EXPIRES },
-    }),
+      signOptions: { expiresIn: config.JWT_EXPIRES }
+    })
   ],
-  controllers: [UsersController, AvatarsController, FollowController],
+  controllers: [UsersController, AvatarsController, FollowController, BirthdayController],
   providers: [
     UsersService,
     LdapService,
     TokenService,
     FollowService,
+    BirthdayService,
+    BirthdayRepository,
     AdminActionGuard,
     avatarServiceProvider,
     {
       provide: Config,
-      useValue: config,
+      useValue: config
     },
-    ...guards,
+    ...guards
   ],
-  exports: [UsersService, FollowService, AdminActionGuard],
+  exports: [UsersService, FollowService, AdminActionGuard]
 })
 export class ProfileModule {}
