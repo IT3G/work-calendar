@@ -12,6 +12,7 @@ import { UsersController } from './controllers/users.controller';
 import { UserFollowDto } from './dto/user-follow.dto';
 import { guards } from './guards';
 import { AdminActionGuard } from './guards/admin-action.guard';
+import { BirthdayRepository } from './repositories/birthday.repository';
 import { AvatarsService } from './services/avatars/avatars.service';
 import { ConfluenceAvatarService } from './services/avatars/confluence-avatars.service';
 import { DefaultAvatarsService } from './services/avatars/default-avatars.service';
@@ -50,6 +51,7 @@ const avatarServiceProvider = {
     TokenService,
     FollowService,
     BirthdayService,
+    BirthdayRepository,
     AdminActionGuard,
     avatarServiceProvider,
     {
