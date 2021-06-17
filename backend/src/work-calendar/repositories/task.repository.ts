@@ -97,8 +97,16 @@ export class TaskRepository {
           },
         }
       : null;
+    const nameFilter = taskRequest.name?.length
+      ? {
+          username: {
+            $regex: taskRequest.name,
+            $options: '$i',
+          },
+        }
+      : null;
 
-    return [locationFilter, subdivisionFilter, jobPositionFilter, projectsFilter].filter((val) => !!val);
+    return [locationFilter, subdivisionFilter, jobPositionFilter, projectsFilter, nameFilter].filter((val) => !!val);
   }
 
   private getTasksInPeriodQuery(dateStart: string, dateEnd: string): Object {
