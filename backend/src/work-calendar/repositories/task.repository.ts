@@ -20,6 +20,9 @@ export class TaskRepository {
           },
         },
         {
+          $sort: { username: 1 },
+        },
+        {
           $lookup: {
             from: 'tasks',
             localField: 'mailNickname',
