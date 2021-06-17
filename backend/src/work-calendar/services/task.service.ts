@@ -60,12 +60,16 @@ export class TaskService {
     const result: PresenceModel[] = await this.taskRepository.getTasksByMonth(taskRequest);
 
     const day = moment(taskRequest.date).startOf('month');
-    const monthDays = Array.from(Array(day.daysInMonth()).keys()).map((i) => day.clone().add(i, 'day'));
+    const monthDays = Array.from(Array(day.daysInMonth()).keys()).map((i) =>
+      day.clone().add(i, 'day').format('YYYY-MM-DD')
+    );
 
-    return result.map((i) => ({
+    const res = result.map((i) => ({
       employee: i.employee,
       tasks: monthDays.map((d) => this.getLastTaskInCurrentDay(i.tasks, d)),
     }));
+
+    return res;
   }
 
   public getTaskTypeName(type: TaskType): string {
@@ -97,18 +101,21 @@ export class TaskService {
     return await this.taskModel.create(newTask);
   }
 
-  private getLastTaskInCurrentDay(currentUserTasks: TaskEntity[], currentDay: moment.Moment): TaskEntity {
-    const currentDayTasks = currentUserTasks
-      .filter((i) => {
-        if (i.dateEnd) {
-          return currentDay.isBetween(moment(i.dateStart, 'YYYY-MM-DD'), moment(i.dateEnd, 'YYYY-MM-DD'), 'day', '[]');
-        }
+  private getLastTaskInCurrentDay(currentUserTasks: TaskEntity[], currentDay: string): TaskEntity {
+    const currentDayD = new Date(currentDay);
 
-        return currentDay.isSame(moment(i.dateStart, 'YYYY-MM-DD'), 'day');
-      })
-      .sort((a, b) => (moment(a.dtCreated).isAfter(moment(b.dtCreated)) ? -1 : 1));
+    const currentDayTasks = currentUserTasks.filter((i) => {
+      const startDateD = new Date(i.dateStart);
+      const endDateD = i?.dateEnd ? new Date(i.dateEnd) : null;
 
-    const lastTask = currentDayTasks[0] || ({ dateStart: currentDay.format('YYYY-MM-DD') } as TaskEntity);
+      if (!endDateD) {
+        return currentDayD === startDateD;
+      }
+
+      return currentDayD >= startDateD && currentDayD <= endDateD;
+    });
+
+    const lastTask = currentDayTasks[0] || ({ dateStart: currentDay } as TaskEntity);
 
     return lastTask;
   }
