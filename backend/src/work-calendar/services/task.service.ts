@@ -14,6 +14,7 @@ import { PresenceModel } from '../models/presence.model';
 import { TaskType } from '../models/task-type.enum';
 import { DateFormatter } from '../../shared/services/date-formatter.service';
 import { TaskRepository } from '../repositories/task.repository';
+import { TaskRequestDto } from '../dto/task-request.dto';
 
 @Injectable()
 export class TaskService {
@@ -55,13 +56,13 @@ export class TaskService {
     return await this.taskModel.findByIdAndDelete(id);
   }
 
-  async getTasksByMonth(date: string): Promise<PresenceModel[]> {
-    const startOfMonth = moment(date).startOf('month').toISOString();
-    const endOfMonth = moment(date).endOf('month').toISOString();
+  async getTasksByMonth(taskRequest: TaskRequestDto): Promise<PresenceModel[]> {
+    const startOfMonth = moment(taskRequest.date).startOf('month').toISOString();
+    const endOfMonth = moment(taskRequest.date).endOf('month').toISOString();
 
     const result: PresenceModel[] = await this.taskRepository.getTasksByMonth(startOfMonth, endOfMonth);
 
-    const day = moment(date).startOf('month');
+    const day = moment(taskRequest.date).startOf('month');
     const monthDays = Array.from(Array(day.daysInMonth()).keys()).map((i) => day.clone().add(i, 'day'));
 
     return result.map((i) => ({
