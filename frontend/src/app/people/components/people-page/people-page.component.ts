@@ -2,12 +2,9 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-
 import * as moment from 'moment';
-import { forkJoin, Subject, Subscription } from 'rxjs';
+import { forkJoin, Subject } from 'rxjs';
 import { map, takeUntil, tap } from 'rxjs/operators';
-import { AllSubdivisions } from 'src/app/shared/const/all-subdivisions.const';
-
 import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
 import { EmployeeApiService } from '../../../core/services/employee-api.service';
 import { ProjectDataModel } from '../../../projects-teams/models/project-data.model';
@@ -185,6 +182,7 @@ export class PeoplePageComponent implements OnInit, OnDestroy {
         hasMailing,
         subdivision,
         jobPosition,
+        projectOffice,
         projectsNew,
         terminationDate,
         lastProjects,
@@ -210,6 +208,7 @@ export class PeoplePageComponent implements OnInit, OnDestroy {
           hasMailing,
           subdivision,
           jobPosition,
+          projectOffice,
           projectsNew,
           terminationDate,
           lastProjects,

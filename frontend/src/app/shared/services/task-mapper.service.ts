@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { DayType } from '../const/day-type.const';
 import { TaskModel } from '../models/tasks.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TaskMapperService {
   constructor() {}
@@ -13,7 +12,7 @@ export class TaskMapperService {
   public mapTasksToCalendar(tasks: TaskModel[]): TaskModel[] {
     const result = [];
 
-    tasks.forEach(task => {
+    tasks.forEach((task) => {
       if (task.dateStart !== task.dateEnd) {
         const lastDay = moment(task.dateEnd);
         let nextDate = moment(task.dateStart);
@@ -21,7 +20,7 @@ export class TaskMapperService {
         while (nextDate.isSameOrBefore(lastDay, 'day')) {
           result.push({
             ...task,
-            dateStart: nextDate
+            dateStart: nextDate,
           });
           nextDate = nextDate.clone().add(1, 'd');
         }

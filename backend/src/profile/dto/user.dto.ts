@@ -77,6 +77,11 @@ export class UserDto {
   jobPosition: DictionaryDto;
 
   @Expose()
+  @Type(() => DictionaryDto)
+  @ApiModelProperty()
+  projectOffice: DictionaryDto;
+
+  @Expose()
   @Type(() => ProjectNewDto)
   @ApiModelProperty()
   projectsNew: ProjectNewDto[];

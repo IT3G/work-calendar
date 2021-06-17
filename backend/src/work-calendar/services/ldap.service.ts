@@ -63,6 +63,7 @@ export class LdapService implements OnApplicationShutdown {
       isAdmin: false,
       subdivision: null,
       jobPosition: null,
+      projectOffice: null,
       projectsNew: null,
       skype: null,
       telegram: null,

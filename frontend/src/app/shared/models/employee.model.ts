@@ -20,6 +20,7 @@ export class Employee {
   hasMailing: boolean;
   subdivision: DictionaryModel;
   jobPosition: DictionaryModel;
+  projectOffice: DictionaryModel;
   projectsNew: ProjectNewModel[];
   terminationDate: string;
   lastProjects: LastProjectModel[];

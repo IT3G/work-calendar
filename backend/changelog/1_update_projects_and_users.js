@@ -8,15 +8,19 @@ const Schema = mongoose.Schema;
 const ProjectSchema = new Schema({
   id: Number,
   name: String,
-  title: String
+  title: String,
 });
 
 const SubdivisionSchema = new Schema({
-  name: String
+  name: String,
 });
 
 const JobPositionSchema = new Schema({
-  name: String
+  name: String,
+});
+
+const ProjectOfficeSchema = new Schema({
+  name: String,
 });
 
 const UserSchema = new Schema({
@@ -28,8 +32,8 @@ const UserSchema = new Schema({
       dateStart: String,
       dateEnd: String,
       project: { type: Schema.Types.ObjectId, ref: 'Project' },
-      title: String
-    }
+      title: String,
+    },
   ],
   whenCreated: String,
   email: String,
@@ -40,31 +44,33 @@ const UserSchema = new Schema({
   hasMailing: Boolean,
   subdivision: { type: Schema.Types.ObjectId, ref: 'Subdivision' },
   jobPosition: { type: Schema.Types.ObjectId, ref: 'JobPosition' },
+  projectOffice: { type: Schema.Types.ObjectId, ref: 'ProjectOffice' },
   authType: String,
-  hashPassword: String
+  hashPassword: String,
 });
 
 const ProjectModel = mongoose.model('Project', ProjectSchema);
 const UserModel = mongoose.model('User', UserSchema);
 const SubdivisionModel = mongoose.model('Subdivision', SubdivisionSchema);
 const JobPositionModel = mongoose.model('JobPosition', JobPositionSchema);
+const ProjectOfficeModel = mongoose.model('ProjectOffice', ProjectOfficeSchema);
 
 async function updateUsers() {
   await ProjectModel.updateMany({}, { $rename: { title: 'name' } }, { multi: true }, callback);
-  
+
   const projects = await ProjectModel.find().sort({ username: 'asc' });
   const users = await UserModel.find()
     .populate('jobPosition')
     .populate('subdivision')
+    .populate('projectOffice')
     .sort({ username: 'asc' });
 
-
-  users.forEach(async u => {
-    u.projects = u.projects.map(p => {
+  users.forEach(async (u) => {
+    u.projects = u.projects.map((p) => {
       const res = {
         dateStart: p.dateStart,
         dateEnd: p.dateEnd,
-        project: projects.find(pr => pr.name === p.title)
+        project: projects.find((pr) => pr.name === p.title),
       };
 
       return res;

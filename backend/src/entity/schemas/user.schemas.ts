@@ -36,6 +36,7 @@ export const UserSchema = new Schema({
   hasMailing: Boolean,
   subdivision: { type: Schema.Types.ObjectId, ref: 'Subdivision' },
   jobPosition: { type: Schema.Types.ObjectId, ref: 'JobPosition' },
+  projectOffice: { type: Schema.Types.ObjectId, ref: 'ProjectOffice' },
   skills: [{ type: Schema.Types.ObjectId, ref: 'Skills' }],
   authType: String,
   hashPassword: String,

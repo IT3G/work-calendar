@@ -1,18 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-
 import * as moment from 'moment';
 import { BehaviorSubject, forkJoin, Observable, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, first, map, share, switchMap, tap } from 'rxjs/operators';
 import { EmployeeApiService } from 'src/app/core/services/employee-api.service';
-
 import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
 import { HolidaysApiService } from '../../../core/services/holidays-api.service';
 import { TaskApiService } from '../../../core/services/task-api.service';
 import { ContextStoreService } from '../../../core/store/context-store.service';
 import { SelectInputDataModel } from '../../../shared/components/single-select/single-select.component';
-import { locationsDictionary } from '../../../shared/const/locations-dictionary.const';
 import { DictionaryModel } from '../../../shared/models/dictionary.model';
 import { HolidaysModel } from '../../../shared/models/holidays.model';
 import { PresenceModel } from '../../../shared/models/presence.page.model';
@@ -36,6 +33,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
   public projects: SelectInputDataModel[];
   public jobPositions: SelectInputDataModel[];
   public subdivisions: SelectInputDataModel[];
+  public projectOffices: SelectInputDataModel[];
   public locations: SelectInputDataModel[];
   public loadInProgress;
 
@@ -82,17 +80,19 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     const holidays$ = this.holidaysApi.getAllHolidays();
     const projects$ = this.dictionaryApi.getAll('project');
     const jobPositions$ = this.dictionaryApi.getAll('jobPosition');
+    const projectOffices$ = this.dictionaryApi.getAll('projectOffice');
     const subdivisions$ = this.dictionaryApi.getAll('subdivision');
 
     this.subscription.add(
-      forkJoin([holidays$, projects$, jobPositions$, subdivisions$, locations$]).subscribe((res) => {
-        const [holidays, projects, jobPositions, subdivisions, location] = res;
+      forkJoin([holidays$, projects$, jobPositions$, subdivisions$, locations$, projectOffices$]).subscribe((res) => {
+        const [holidays, projects, jobPositions, subdivisions, location, projectOffices] = res;
 
         this.holidays = holidays;
         this.projects = projects.map((item) => this.mapperToSelectInputDataModel(item));
         this.jobPositions = jobPositions.map((item) => this.mapperToSelectInputDataModel(item));
         this.subdivisions = subdivisions.map((item) => ({ value: item.name, name: item.name }));
         this.locations = location.filter((value) => !!value).map((item) => ({ value: item, name: item }));
+        this.projectOffices = projectOffices.map((item) => ({ value: item.name, name: item.name }));
       })
     );
   }
@@ -154,6 +154,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
       jobPosition: [null],
       project: [null],
       location: [null],
+      projectOffice: [null],
     });
 
     if (filters) {
