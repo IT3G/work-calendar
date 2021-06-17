@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import * as moment from 'moment';
+import { Model, Types } from 'mongoose';
 import { TaskEntity } from '../../entity/entities/task.entity';
 import { UserEntity } from '../../entity/entities/user.entity';
+import { TaskRequestDto } from '../dto/task-request.dto';
 import { PresenceModel } from '../models/presence.model';
 
 @Injectable()
@@ -11,12 +13,18 @@ export class TaskRepository {
     @InjectModel('Tasks') private readonly taskModel: Model<TaskEntity>,
     @InjectModel('Users') private readonly userModel: Model<UserEntity>
   ) {}
-  async getTasksByMonth(startOfMonth: string, endOfMonth: string): Promise<PresenceModel[]> {
+  async getTasksByMonth(taskRequest: TaskRequestDto): Promise<PresenceModel[]> {
+    const startOfMonth = moment(taskRequest.date).startOf('month').toISOString();
+    const endOfMonth = moment(taskRequest.date).endOf('month').toISOString();
+
     return await this.userModel
       .aggregate([
         {
           $match: {
-            $or: [{ terminationDate: null }, { terminationDate: { $gte: startOfMonth } }],
+            $and: [
+              { $or: [{ terminationDate: null }, { terminationDate: { $gte: startOfMonth } }] },
+              ...this.getTaskFilters(taskRequest),
+            ],
           },
         },
         {
@@ -66,6 +74,31 @@ export class TaskRepository {
 
   public async getTasksInPeriod(dateStart: string, dateEnd: string): Promise<TaskEntity[]> {
     return await this.taskModel.aggregate([{ $filter: this.getTasksInPeriodQuery(dateStart, dateEnd) }]).exec();
+  }
+
+  private getTaskFilters(taskRequest: TaskRequestDto) {
+    const year = +moment(taskRequest.date).format('YYYY');
+    const month = +moment(taskRequest.date).format('M');
+
+    const locationFilter = taskRequest.location ? { location: taskRequest.location } : null;
+    const subdivisionFilter = taskRequest.subdivision
+      ? { subdivision: new Types.ObjectId(taskRequest.subdivision) }
+      : null;
+    const jobPositionFilter = taskRequest.jobPosition
+      ? { jobPosition: new Types.ObjectId(taskRequest.jobPosition) }
+      : null;
+    const projectsFilter = taskRequest.project
+      ? {
+          projectsNew: {
+            $elemMatch: {
+              project_id: new Types.ObjectId(taskRequest.project),
+              metadata: { $elemMatch: { year, month } },
+            },
+          },
+        }
+      : null;
+
+    return [locationFilter, subdivisionFilter, jobPositionFilter, projectsFilter].filter((val) => !!val);
   }
 
   private getTasksInPeriodQuery(dateStart: string, dateEnd: string): Object {

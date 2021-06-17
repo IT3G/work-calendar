@@ -57,10 +57,7 @@ export class TaskService {
   }
 
   async getTasksByMonth(taskRequest: TaskRequestDto): Promise<PresenceModel[]> {
-    const startOfMonth = moment(taskRequest.date).startOf('month').toISOString();
-    const endOfMonth = moment(taskRequest.date).endOf('month').toISOString();
-
-    const result: PresenceModel[] = await this.taskRepository.getTasksByMonth(startOfMonth, endOfMonth);
+    const result: PresenceModel[] = await this.taskRepository.getTasksByMonth(taskRequest);
 
     const day = moment(taskRequest.date).startOf('month');
     const monthDays = Array.from(Array(day.daysInMonth()).keys()).map((i) => day.clone().add(i, 'day'));

@@ -93,7 +93,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
         this.holidays = holidays;
         this.projects = projects.map((item) => this.mapperToSelectInputDataModel(item));
         this.jobPositions = jobPositions.map((item) => this.mapperToSelectInputDataModel(item));
-        this.subdivisions = subdivisions.map((item) => ({ value: item.name, name: item.name }));
+        this.subdivisions = subdivisions.map((item) => this.mapperToSelectInputDataModel(item));
         this.locations = location.filter((value) => !!value).map((item) => ({ value: item, name: item }));
       })
     );
