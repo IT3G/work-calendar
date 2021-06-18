@@ -73,7 +73,25 @@ export class TaskRepository {
   }
 
   public async getTasksInPeriod(dateStart: string, dateEnd: string): Promise<TaskEntity[]> {
-    return await this.taskModel.aggregate([{ $filter: this.getTasksInPeriodQuery(dateStart, dateEnd) }]).exec();
+    return await this.taskModel
+      .aggregate([
+        {
+          $match: {
+            $or: [
+              {
+                dateStart: { $gte: dateStart, $lte: dateEnd },
+              },
+              {
+                dateEnd: { $gte: dateStart, $lte: dateEnd },
+              },
+              {
+                $or: [{ dateEnd: { $gte: dateEnd } }, { dateStart: { $lte: dateStart } }],
+              },
+            ],
+          },
+        },
+      ])
+      .exec();
   }
 
   private getTaskFilters(taskRequest: TaskRequestDto) {
@@ -114,13 +132,13 @@ export class TaskRepository {
     return {
       $or: [
         {
-          $or: [{ $gte: ['$$t.dateStart', dateStart] }, { $lte: ['$$t.dateStart', dateEnd] }],
+          $or: [{ $gte: ['$dateStart', dateStart] }, { $lte: ['$dateStart', dateEnd] }],
         },
         {
-          $or: [{ $gte: ['$tt.dateEnd', dateStart] }, { $lte: ['$tt.dateEnd', dateEnd] }],
+          $or: [{ $gte: ['$dateEnd', dateStart] }, { $lte: ['$dateEnd', dateEnd] }],
         },
         {
-          $or: [{ $gte: ['$t.dateEnd', dateEnd] }, { $lte: ['$t.dateStart', dateStart] }],
+          $or: [{ $gte: ['$dateEnd', dateEnd] }, { $lte: ['$dateStart', dateStart] }],
         },
       ],
     };

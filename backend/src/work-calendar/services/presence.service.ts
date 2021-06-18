@@ -23,7 +23,7 @@ export class PresenceSerivce {
 
     const rangeOfDate = this.getRangeOfDate(dateStart, dateEnd);
 
-    const users = await (await this.userService.getUsers()).sort((a, b) => b.email.localeCompare(a.email));
+    const users = (await this.userService.getUsers()).sort((a, b) => b.email.localeCompare(a.email));
     const tasks = await this.taskService.getTasksInPeriod(start, end);
 
     const result = tasks
