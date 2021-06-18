@@ -2,7 +2,7 @@
 @import 'src/app/shared/styles/scroll';
 
 @function getGridColumnsByDaysInMonth($days) {
-  @return 240px repeat($days, minmax(25px, 1fr));
+  @return 250px repeat($days, minmax(25px, 1fr));
 }
 
 :host {
@@ -86,6 +86,9 @@
 
   .fio-n-position {
     margin-left: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .numbering {

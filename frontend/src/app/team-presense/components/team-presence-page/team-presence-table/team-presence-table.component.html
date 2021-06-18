@@ -15,7 +15,7 @@
     <div class="title">
       <span class="numbering" [class.numbering-more]="i > 8">{{ i + 1 }}.</span>
       <div class="fio-n-position">
-        <a [routerLink]="['/presence', data.employee.mailNickname]">
+        <a [routerLink]="['/presence', data.employee.mailNickname]" [title]="data.employee?.username">
           {{ data.employee?.username }}
         </a>
 
