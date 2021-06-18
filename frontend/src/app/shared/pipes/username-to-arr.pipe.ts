@@ -1,13 +1,20 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'usernameToArr'
+  name: 'usernameToArr',
 })
 export class UsernameToArrPipe implements PipeTransform {
-  transform(value: string): string[] {
+  transform(value: string, withPatronymic = false): string[] {
     if (!value) {
       return;
     }
-    return value.split(' ');
+
+    if (withPatronymic) {
+      return value.split('');
+    }
+
+    const [lastName, firstName, patronymik] = value.split(' ');
+
+    return [lastName, firstName];
   }
 }

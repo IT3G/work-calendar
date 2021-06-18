@@ -1,6 +1,6 @@
 .form {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: auto repeat(3, 1fr);
   column-gap: 20px;
   margin-top: 20px;
 }
