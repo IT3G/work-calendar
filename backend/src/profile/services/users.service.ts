@@ -68,7 +68,7 @@ export class UsersService {
       {
         mailNickname: login,
       },
-      { lastTimeOnline: moment().toString() }
+      { $set: { lastTimeOnline: moment().toString() } }
     );
   }
 

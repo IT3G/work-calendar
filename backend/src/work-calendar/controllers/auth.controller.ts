@@ -60,7 +60,7 @@ export class AuthController {
     try {
       const user = await this.tokenService.verifyByRequesAndGetUser(req);
 
-      await this.usersService.updateLastTimeOnline(user.username);
+      await this.usersService.updateLastTimeOnline(user.mailNickname);
 
       return this.mapper.map(UserDto, user);
     } catch (e) {
