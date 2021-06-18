@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-
 import * as moment from 'moment';
 import { BehaviorSubject } from 'rxjs';
 import { SelectInputDataModel } from 'src/app/shared/components/single-select/single-select.component';
@@ -30,6 +29,9 @@ export class TeamsFiltersComponent {
 
   @Input()
   subdivisions: SelectInputDataModel[];
+
+  @Input()
+  projectOffices: SelectInputDataModel[];
 
   @Input()
   locations: SelectInputDataModel[];

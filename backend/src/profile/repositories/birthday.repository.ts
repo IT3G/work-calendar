@@ -14,7 +14,7 @@ export class BirthdayRepository {
         ...this.aggregateInnerFields(),
         ...this.aggregateProject(),
         { $match: { month: monthId } },
-        { $sort: { day: 1 } }
+        { $sort: { day: 1 } },
       ])
       .exec();
   }
@@ -25,7 +25,7 @@ export class BirthdayRepository {
         ...this.aggregateInnerFields(),
         ...this.aggregateProject(),
         { $match: { birthday: null } },
-        { $sort: { day: 1 } }
+        { $sort: { day: 1 } },
       ])
       .exec();
   }
@@ -42,22 +42,23 @@ export class BirthdayRepository {
           location: '$location',
           subdivision: '$sd',
           jobPosition: '$jp',
+          projectOffice: '$po',
           day: {
             $dayOfMonth: {
               $dateFromString: {
-                dateString: '$birthday'
-              }
-            }
+                dateString: '$birthday',
+              },
+            },
           },
           month: {
             $month: {
               $dateFromString: {
-                dateString: '$birthday'
-              }
-            }
-          }
-        }
-      }
+                dateString: '$birthday',
+              },
+            },
+          },
+        },
+      },
     ];
   }
 
@@ -68,29 +69,43 @@ export class BirthdayRepository {
           from: 'subdivisions',
           localField: 'subdivision',
           foreignField: '_id',
-          as: 'sd'
-        }
+          as: 'sd',
+        },
       },
       {
         $unwind: {
           path: '$sd',
-          preserveNullAndEmptyArrays: true
-        }
+          preserveNullAndEmptyArrays: true,
+        },
       },
       {
         $lookup: {
           from: 'jobpositions',
           localField: 'jobPosition',
           foreignField: '_id',
-          as: 'jp'
-        }
+          as: 'jp',
+        },
       },
       {
         $unwind: {
           path: '$jp',
-          preserveNullAndEmptyArrays: true
-        }
-      }
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $lookup: {
+          from: 'projectoffice',
+          localField: 'projectOffice',
+          foreignField: '_id',
+          as: 'po',
+        },
+      },
+      {
+        $unwind: {
+          path: '$po',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
     ];
   }
 }

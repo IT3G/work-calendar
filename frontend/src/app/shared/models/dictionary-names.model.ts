@@ -1,1 +1,1 @@
-export type DictionaryNames = 'jobPosition' | 'project' | 'subdivision';
+export type DictionaryNames = 'jobPosition' | 'project' | 'subdivision' | 'projectOffice';

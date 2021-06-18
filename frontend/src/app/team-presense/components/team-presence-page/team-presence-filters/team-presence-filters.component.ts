@@ -6,7 +6,7 @@ import { SelectInputDataModel } from '../../../../shared/components/single-selec
   selector: 'app-team-presence-filters',
   templateUrl: './team-presence-filters.component.html',
   styleUrls: ['./team-presence-filters.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TeamPresenceFiltersComponent {
   @Input()
@@ -23,4 +23,7 @@ export class TeamPresenceFiltersComponent {
 
   @Input()
   locations: SelectInputDataModel[];
+
+  @Input()
+  projectOffices: SelectInputDataModel[];
 }

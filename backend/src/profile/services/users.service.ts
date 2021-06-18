@@ -17,6 +17,7 @@ export class UsersService {
       .find()
       .populate('jobPosition')
       .populate('subdivision')
+      .populate('projectOffice')
       .populate('skills')
       .sort({ username: 'asc' })
       .exec();
@@ -36,12 +37,19 @@ export class UsersService {
       .findOne({ mailNickname: employeeRegex })
       .populate('jobPosition')
       .populate('subdivision')
+      .populate('projectOffice')
       .populate('skills')
       .exec();
   }
 
   async getUserById(id: string): Promise<UserEntity> {
-    return await this.userModel.findById(id).populate('jobPosition').populate('subdivision').populate('skills').exec();
+    return await this.userModel
+      .findById(id)
+      .populate('jobPosition')
+      .populate('subdivision')
+      .populate('projectOffice')
+      .populate('skills')
+      .exec();
   }
 
   async deleteUser(id: string): Promise<void> {

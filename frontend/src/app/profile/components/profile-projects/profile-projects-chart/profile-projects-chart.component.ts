@@ -7,10 +7,8 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-
 import { Chart, ChartDataSets } from 'chart.js';
 import * as moment from 'moment';
-
 import { ProjectNewModel } from '../../../../shared/models/project-new.model';
 import { NewProjectUtils } from '../../../../shared/utils/new-project.utils';
 

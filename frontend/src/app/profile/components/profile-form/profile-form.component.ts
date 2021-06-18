@@ -1,11 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-
 import * as moment from 'moment';
 import { forkJoin, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { CommunicationTypesEnum } from 'src/app/shared/enums/communication-types.enum';
-
 import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
 import { DictionaryModel } from '../../../shared/models/dictionary.model';
 import { Employee } from '../../../shared/models/employee.model';
@@ -35,6 +33,7 @@ export class ProfileFormComponent implements OnChanges, OnDestroy {
   public profileForm: FormGroup;
   public jobPositions: DictionaryModel[];
   public subdivisions: DictionaryModel[];
+  public projectOffices: DictionaryModel[];
   public isEdit = false;
 
   private unsubscriber$ = new Subject();
@@ -94,6 +93,7 @@ export class ProfileFormComponent implements OnChanges, OnDestroy {
       this.profileForm.get('remoteWork').enable();
       this.profileForm.get('subdivision').enable();
       this.profileForm.get('jobPosition').enable();
+      this.profileForm.get('projectOffice').enable();
       this.profileForm.get('isAdmin').enable();
       this.profileForm.get('terminationDate').enable();
     }
@@ -150,6 +150,7 @@ export class ProfileFormComponent implements OnChanges, OnDestroy {
       hasMailing: [user.hasMailing],
       jobPosition: [null],
       subdivision: [null],
+      projectOffice: [null],
       whenCreated: [user.whenCreated],
       terminationDate: [user.terminationDate],
       birthday: [user.birthday],
@@ -163,11 +164,13 @@ export class ProfileFormComponent implements OnChanges, OnDestroy {
   private getUserInfo(): void {
     const jobPositions$ = this.dictionaryApi.getAll('jobPosition');
     const subdivisions$ = this.dictionaryApi.getAll('subdivision');
+    const projectOffices$ = this.dictionaryApi.getAll('projectOffice');
 
-    forkJoin([jobPositions$, subdivisions$]).subscribe((res) => {
-      const [jobPositions, subdivisions] = res;
+    forkJoin([jobPositions$, subdivisions$, projectOffices$]).subscribe((res) => {
+      const [jobPositions, subdivisions, projectOffices] = res;
       this.jobPositions = jobPositions;
       this.subdivisions = subdivisions;
+      this.projectOffices = projectOffices;
 
       if (!this.profileForm) {
         return;
@@ -179,8 +182,11 @@ export class ProfileFormComponent implements OnChanges, OnDestroy {
       const subdivision = this.subdivisions.find(
         (sd) => this.selectedUser.subdivision && sd._id === this.selectedUser.subdivision._id
       );
+      const projectOffice = this.projectOffices.find(
+        (po) => this.selectedUser.projectOffice && po._id === this.selectedUser.projectOffice._id
+      );
 
-      this.profileForm.patchValue({ jobPosition, subdivision });
+      this.profileForm.patchValue({ jobPosition, subdivision, projectOffice });
     });
   }
 }

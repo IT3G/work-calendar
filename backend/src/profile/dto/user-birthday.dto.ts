@@ -17,7 +17,7 @@ export class UserBirthdayDto {
   mailNickname: string;
 
   @Expose()
-  @Transform(val => moment(val).format('DD.MM'))
+  @Transform((val) => moment(val).format('DD.MM'))
   @ApiModelProperty()
   birthday: string;
 
@@ -36,12 +36,17 @@ export class UserBirthdayDto {
   month: number;
 
   @Expose()
-  @Transform(val => val?.name)
+  @Transform((val) => val?.name)
   @ApiModelProperty()
   subdivision: DictionaryDto;
 
   @Expose()
-  @Transform(val => val?.name)
+  @Transform((val) => val?.name)
   @ApiModelProperty()
   jobPosition: DictionaryDto;
+
+  @Expose()
+  @Transform((val) => val?.name)
+  @ApiModelProperty()
+  projectOffice: DictionaryDto;
 }

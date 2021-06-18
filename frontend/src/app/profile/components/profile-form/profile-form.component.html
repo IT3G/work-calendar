@@ -100,6 +100,14 @@
     </mat-select>
   </mat-form-field>
 
+  <mat-form-field class="form-group">
+    <mat-select placeholder="прикреплён к офису" formControlName="projectOffice">
+      <mat-option *ngFor="let projectOffice of projectOffices" [value]="projectOffice">
+        {{ projectOffice?.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
   <mat-form-field
     class="form-group"
     [class.other-disabled-color]="!isEdit"

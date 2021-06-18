@@ -4,6 +4,7 @@ export class PresenceFiltersFormModel {
   name: string;
   jobPosition: string;
   subdivision: string;
+  projectOffice: string;
   project: string;
   location: LocationEnum;
 }

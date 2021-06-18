@@ -1,17 +1,15 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, HostBinding, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-
 import * as moment from 'moment';
 import { Observable, Subscription } from 'rxjs';
-import { filter, first, share, switchMap, take, tap } from 'rxjs/operators';
+import { filter, first, switchMap } from 'rxjs/operators';
 import { EmployeeApiService } from 'src/app/core/services/employee-api.service';
 import { SortOrder } from 'src/app/shared/enums/sort-order.enum';
 import { DeleteConfrimPopupComponent } from 'src/app/shared/pop-up/delete-confirm-pop-up/delete-confrim-popup.component';
 import { SnackbarService } from 'src/app/shared/services/snackbar.service';
-
 import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
 import { DictionaryModel } from '../../../shared/models/dictionary.model';
 import { Employee } from '../../../shared/models/employee.model';
@@ -125,6 +123,7 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
       'login',
       'birthday',
       'jobPosition',
+      'projectOffice',
       'releaseDate',
       'terminationDate',
       'subdivision',
