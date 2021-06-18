@@ -4,5 +4,5 @@ export const DICTIONARIES: { id: DictionaryNames; name: string }[] = [
   { id: 'jobPosition', name: 'Должность' },
   { id: 'project', name: 'Проект' },
   { id: 'subdivision', name: 'Подразделение' },
-  { id: 'projectOffice', name: 'Проектный офис' },
+  { id: 'projectOffice', name: 'Прикреплён к офису' },
 ];

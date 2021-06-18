@@ -101,7 +101,7 @@
   </mat-form-field>
 
   <mat-form-field class="form-group">
-    <mat-select placeholder="проектный офис" formControlName="projectOffice">
+    <mat-select placeholder="прикреплён к офису" formControlName="projectOffice">
       <mat-option *ngFor="let projectOffice of projectOffices" [value]="projectOffice">
         {{ projectOffice?.name }}
       </mat-option>
