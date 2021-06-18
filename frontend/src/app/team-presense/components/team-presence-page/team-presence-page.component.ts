@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import * as moment from 'moment';
-import { BehaviorSubject, forkJoin, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, combineLatest, forkJoin, Observable, Subscription } from 'rxjs';
 import { distinctUntilChanged, filter, first, map, share, switchMap, tap } from 'rxjs/operators';
 import { EmployeeApiService } from 'src/app/core/services/employee-api.service';
 import { DictionaryApiService } from '../../../core/services/dictionary-api.service';
@@ -51,24 +51,26 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.initFilterForm(this.route.snapshot.queryParams);
+    this.initFilterForm();
 
     this.monthDays$ = this.getMonthDays();
 
     this.getCommonData();
 
-    this.monthData$ = this.date$.pipe(
-      map((date) => date.format('YYYY-MM-DD')),
+    const formValueToRequest$ = this.filtersForm.valueChanges;
+    const dateTorequest$ = this.date$.pipe(map((date) => date.format('YYYY-MM-DD')));
+
+    this.monthData$ = combineLatest([formValueToRequest$, dateTorequest$]).pipe(
       distinctUntilChanged(),
       tap(() => (this.loadInProgress = true)),
-      switchMap((date) => this.tasksApi.loadTasksByMonth(date)),
-      tap(() => (this.loadInProgress = false)),
-      share()
+      switchMap(([formValue, date]) => this.tasksApi.loadTasksByMonth({ ...formValue, date })),
+      tap(() => (this.loadInProgress = false))
     );
 
     this.updateQueryParamsOnChange();
 
     this.setUserCurrentProjectToFilter();
+    setTimeout(() => this.filtersForm.patchValue({}));
   }
 
   ngOnDestroy() {
@@ -90,7 +92,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
         this.holidays = holidays;
         this.projects = projects.map((item) => this.mapperToSelectInputDataModel(item));
         this.jobPositions = jobPositions.map((item) => this.mapperToSelectInputDataModel(item));
-        this.subdivisions = subdivisions.map((item) => ({ value: item.name, name: item.name }));
+        this.subdivisions = subdivisions.map((item) => this.mapperToSelectInputDataModel(item));
         this.locations = location.filter((value) => !!value).map((item) => ({ value: item, name: item }));
         this.projectOffices = projectOffices.map((item) => ({ value: item.name, name: item.name }));
       })
@@ -131,7 +133,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
 
     this.subscription.add(
       this.route.queryParams.subscribe((res) => {
-        return this.filtersForm.patchValue(res);
+        return this.filtersForm.patchValue(res, { emitEvent: false });
       })
     );
   }
@@ -147,7 +149,7 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
     );
   }
 
-  private initFilterForm(filters?: Params): void {
+  private initFilterForm(): void {
     this.filtersForm = this.fb.group({
       name: [''],
       subdivision: [null],
@@ -156,10 +158,6 @@ export class TeamPresencePageComponent implements OnInit, OnDestroy {
       location: [null],
       projectOffice: [null],
     });
-
-    if (filters) {
-      this.filtersForm.patchValue(filters);
-    }
   }
 
   // выставляем текущий проект как основной у пользователя.
