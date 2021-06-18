@@ -4,10 +4,11 @@ import { InputFile } from 'ngx-input-file';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { PresenceModel } from '../../shared/models/presence.page.model';
+import { TaskRequestModel } from '../../shared/models/task-request.model';
 import { TaskModel } from '../../shared/models/tasks.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TaskApiService {
   private readonly baseUrl = `${environment.baseUrl}/tasks`;
@@ -30,8 +31,8 @@ export class TaskApiService {
     return this.http.get<TaskModel[]>(`${this.baseUrl}/tasks-employee/${employee}`);
   }
 
-  public loadTasksByMonth(date: string): Observable<PresenceModel[]> {
-    return this.http.get<PresenceModel[]>(`${this.baseUrl}/tasks-month/${date}`);
+  public loadTasksByMonth(data: TaskRequestModel): Observable<PresenceModel[]> {
+    return this.http.post<PresenceModel[]>(`${this.baseUrl}/tasks-month`, data);
   }
 
   public update(id: string, task: Partial<TaskModel>): Observable<TaskModel> {

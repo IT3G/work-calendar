@@ -9,13 +9,14 @@ import {
   Res,
   UploadedFile,
   UseGuards,
-  UseInterceptors
+  UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { CustomMapper } from '../../shared/services/custom-mapper.service';
 import { PresenceDto } from '../dto/presence.dto';
+import { TaskRequestDto } from '../dto/task-request.dto';
 import { TaskDto } from '../dto/task.dto';
 import { TaskDeleteGuard } from '../guards/task-delete.guard';
 import { TaskService } from '../services/task.service';
@@ -54,9 +55,9 @@ export class TasksController {
     return this.mapper.mapArray(TaskDto, tasks);
   }
 
-  @Get('/tasks-month/:date')
-  async getTasksByMonth(@Param('date') date): Promise<PresenceDto[]> {
-    const presence = await this.taskService.getTasksByMonth(date);
+  @Post('/tasks-month')
+  async getTasksByMonth(@Body() taskRequest: TaskRequestDto): Promise<PresenceDto[]> {
+    const presence = await this.taskService.getTasksByMonth(taskRequest);
 
     return this.mapper.mapArray(PresenceDto, presence);
   }
