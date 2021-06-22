@@ -1,1 +1,0 @@
-cross-env NODE_ENV=preprod node 2_update_tasks.js
