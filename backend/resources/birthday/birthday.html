@@ -1,0 +1,69 @@
+<html>
+  <head>
+    <style>
+      * {
+        margin: 0;
+      }
+
+      body {
+        width: 100%;
+        font-family: Geneva, Arial, Helvetica, sans-serif;
+        background: #f9f9f9;
+        color: #476e90;
+        padding: 40px;
+      }
+
+      .content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .flex {
+        display: flex;
+        gap: 15px;
+      }
+
+      .mb-10 {
+        margin-bottom: 10px;
+      }
+
+      .orange {
+        color: #ed7b2c;
+      }
+
+      .day {
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+      }
+
+      .img-container {
+        width: 60px;
+      }
+
+      .img-container img {
+        width: 100%;
+      }
+
+      .user-name {
+        font-weight: bold;
+        font-size: 16px;
+      }
+
+      .user-location {
+        font-size: 14px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="content">
+      <h1>Добрый день</h1>
+      <h2 class="mb-10">На этой неделе празднуют день Рождения:</h2>
+      <div class="users">{users}</div>
+      <h2>Коллеги!</h2>
+      <h2 class="orange">Поздравляем Вас!</h2>
+    </div>
+  </body>
+</html>
