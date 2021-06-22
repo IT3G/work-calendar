@@ -1,10 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
 import * as moment from 'moment';
-import { Model } from 'mongoose';
-import { UserEntity } from '../../entity/entities/user.entity';
-import { UserBirthdayDto } from '../dto/user-birthday.dto';
-import { BirthdayRepository } from '../repositories/birthday.repository';
+import { UserBirthdayDto } from '../../dto/user-birthday.dto';
+import { BirthdayRepository } from '../../repositories/birthday.repository';
 
 @Injectable()
 export class BirthdayService {
@@ -14,6 +11,14 @@ export class BirthdayService {
     const currentMonth = +moment().format('M');
 
     return await this.repository.findUsersByBirthdayMonthId(currentMonth);
+  }
+
+  async findUsersByWeek(): Promise<UserBirthdayDto[]> {
+    const currentMonth = +moment().format('M');
+    const startOfWeek = +moment().startOf('isoWeek').format('D');
+    const endOfWeek = +moment().endOf('isoWeek').format('D');
+
+    return await this.repository.findUsersByWeek(currentMonth, startOfWeek, endOfWeek);
   }
 
   async getBirthdaysByMonth(monthId: number): Promise<UserBirthdayDto[]> {

@@ -1,22 +1,38 @@
-import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
+import { Controller, Get, Header, NotFoundException, Param, Res } from '@nestjs/common';
 import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
-import { UserEntity } from '../../entity/entities/user.entity';
 import { CustomMapper } from '../../shared/services/custom-mapper.service';
 import { UserBirthdayDto } from '../dto/user-birthday.dto';
-import { UserDto } from '../dto/user.dto';
-import { BirthdayService } from '../services/birthday.service';
+import { BirthdayImgService } from '../services/birthday/birthday-img.service';
+import { BirthdayService } from '../services/birthday/birthday.service';
 
 @ApiBearerAuth()
 @ApiUseTags('Birthday')
 @Controller('birthday')
 export class BirthdayController {
-  constructor(private birthdayService: BirthdayService, private mapper: CustomMapper) {}
+  constructor(
+    private birthdayService: BirthdayService,
+    private birthdayImgService: BirthdayImgService,
+    private mapper: CustomMapper
+  ) {}
 
   @Get('/current')
   async getBirthdaysByCurrentMonth(): Promise<UserBirthdayDto[]> {
     const users = await this.birthdayService.getBirthdaysByCurrentMonth();
 
     return this.mapper.mapArray(UserBirthdayDto, users);
+  }
+
+  @Get('/current/img')
+  @Header('Content-disposition', 'inline')
+  async getBirthdaysByCurrentMonthImg(@Res() res) {
+    try {
+      const img = await this.birthdayImgService.getCurrentMonthImg();
+      res.set('Content-Type', 'image/png');
+      res.send(img);
+      res.end();
+    } catch (err) {
+      res.sendStatus(404);
+    }
   }
 
   @Get('/empty')

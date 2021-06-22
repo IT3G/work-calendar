@@ -19,6 +19,17 @@ export class BirthdayRepository {
       .exec();
   }
 
+  async findUsersByWeek(monthId: number, weekStart: number, weekEnd: number): Promise<UserBirthdayDto[]> {
+    return await this.userModel
+      .aggregate([
+        ...this.aggregateInnerFields(),
+        ...this.aggregateProject(),
+        { $match: { $and: [{ month: monthId }, { day: { $gte: weekStart, $lte: weekEnd } }] } },
+        { $sort: { day: 1 } },
+      ])
+      .exec();
+  }
+
   async findUsersWithEmptyBirthday(): Promise<UserBirthdayDto[]> {
     return await this.userModel
       .aggregate([

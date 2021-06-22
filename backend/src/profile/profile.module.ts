@@ -16,7 +16,8 @@ import { BirthdayRepository } from './repositories/birthday.repository';
 import { AvatarsService } from './services/avatars/avatars.service';
 import { ConfluenceAvatarService } from './services/avatars/confluence-avatars.service';
 import { DefaultAvatarsService } from './services/avatars/default-avatars.service';
-import { BirthdayService } from './services/birthday.service';
+import { BirthdayImgService } from './services/birthday/birthday-img.service';
+import { BirthdayService } from './services/birthday/birthday.service';
 import { FollowService } from './services/follow.service';
 import { UsersService } from './services/users.service';
 
@@ -31,7 +32,7 @@ const avatarServiceProvider = {
       return new DefaultAvatarsService(http);
     }
   },
-  inject: [HttpService, Config]
+  inject: [HttpService, Config],
 };
 
 @Module({
@@ -41,8 +42,8 @@ const avatarServiceProvider = {
     HttpModule,
     JwtModule.register({
       secret: config.JWT_SECRET_KEY,
-      signOptions: { expiresIn: config.JWT_EXPIRES }
-    })
+      signOptions: { expiresIn: config.JWT_EXPIRES },
+    }),
   ],
   controllers: [UsersController, AvatarsController, FollowController, BirthdayController],
   providers: [
@@ -51,15 +52,16 @@ const avatarServiceProvider = {
     TokenService,
     FollowService,
     BirthdayService,
+    BirthdayImgService,
     BirthdayRepository,
     AdminActionGuard,
     avatarServiceProvider,
     {
       provide: Config,
-      useValue: config
+      useValue: config,
     },
-    ...guards
+    ...guards,
   ],
-  exports: [UsersService, FollowService, AdminActionGuard]
+  exports: [UsersService, FollowService, AdminActionGuard],
 })
 export class ProfileModule {}
