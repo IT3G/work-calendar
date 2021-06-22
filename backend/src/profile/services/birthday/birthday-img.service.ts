@@ -22,12 +22,12 @@ export class BirthdayImgService {
     const page = await browser.newPage();
     await page.setViewport({
       width: 960,
-      height: 760,
+      height: 300,
       deviceScaleFactor: 1,
     });
     await page.setContent(htmlWithContent);
 
-    const result = (await page.screenshot({ encoding: 'binary' })) as Buffer;
+    const result = (await page.screenshot({ encoding: 'binary', fullPage: true })) as Buffer;
     await browser.close();
 
     return result;
@@ -38,7 +38,6 @@ export class BirthdayImgService {
 
     for (let index = 0; index < users.length; index++) {
       const u = users[index];
-      console.log(u.birthday);
       const currentDayIndex = usersToMap.findIndex((i) => i.birthday === moment(u.birthday).format('DD.MM'));
 
       if (currentDayIndex < 0) {
@@ -73,8 +72,6 @@ export class BirthdayImgService {
       console.log(error);
       avatar = '';
     }
-
-    console.log(avatar);
 
     return `<div class="user mb-10 flex">
             <div class="img-container">${avatar}</div>

@@ -82,10 +82,14 @@ export class UsersService {
       skillsId.add(skill._id);
       return true;
     });
+
+    const birthday = data.birthday && moment(data.birthday).format('YYYY-MM-DD');
+
     await this.userModel.updateOne(
       { mailNickname: login },
       {
         ...data,
+        birthday,
         skills: newSkills ?? currentUser.skills,
       }
     );
