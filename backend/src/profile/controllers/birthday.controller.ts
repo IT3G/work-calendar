@@ -1,4 +1,4 @@
-import { Controller, Get, Header, NotFoundException, Param, Res } from '@nestjs/common';
+import { Controller, Get, Header, Logger, NotFoundException, Param, Res } from '@nestjs/common';
 import { ApiBearerAuth, ApiUseTags } from '@nestjs/swagger';
 import { CustomMapper } from '../../shared/services/custom-mapper.service';
 import { UserBirthdayDto } from '../dto/user-birthday.dto';
@@ -9,6 +9,8 @@ import { BirthdayService } from '../services/birthday/birthday.service';
 @ApiUseTags('Birthday')
 @Controller('birthday')
 export class BirthdayController {
+  private readonly logger = new Logger('BirthdayController');
+
   constructor(
     private birthdayService: BirthdayService,
     private birthdayImgService: BirthdayImgService,
@@ -31,6 +33,7 @@ export class BirthdayController {
       res.send(img);
       res.end();
     } catch (err) {
+      this.logger.error(err);
       res.sendStatus(404);
     }
   }
