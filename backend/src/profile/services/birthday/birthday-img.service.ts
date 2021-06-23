@@ -7,6 +7,7 @@ import * as fileType from 'file-type';
 import { UserBirthdayDto } from '../../dto/user-birthday.dto';
 import { ProfileUtils } from '../../utils/profile.utils';
 import { AvatarsService } from '../avatars/avatars.service';
+import * as path from 'path';
 
 @Injectable()
 export class BirthdayImgService {
@@ -18,8 +19,14 @@ export class BirthdayImgService {
 
     const htmlWithContent = html.toString().replace('{users}', await this.generateHtmlFromUsers(users));
 
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+      headless: false,
+      executablePath: './node_modules/puppeteer/.local-chromium/linux-884014/chrome-linux/chrome',
+      args: ['--no-sandbox'],
+    });
+
     const page = await browser.newPage();
+
     await page.setViewport({
       width: 960,
       height: 300,

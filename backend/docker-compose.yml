@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  calendar_backend:
+    image: node:14.17
+    build:
+      dockerfile: Dockerfile
+      context: .
+
+    restart: always
+    ports:
+      - 3000:3000
