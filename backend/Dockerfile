@@ -15,11 +15,8 @@ ENV DISPLAY :99
 ARG DEBIAN_FRONTEND="noninteractive"
 
 RUN apt-get update
-RUN apt-get install -y --no-install-recommends xvfb firefox-esr libgconf-2-4 libatk1.0-0 libatk-bridge2.0-0 libgdk-pixbuf2.0-0 libgtk-3-0 libgbm-dev libnss3-dev libxss-dev libasound2
+RUN apt-get install -y --no-install-recommends xvfb chromium
 RUN rm -rf /var/lib/apt/lists/*
-
-RUN npm i
-RUN npm run build:prod
 
 EXPOSE 3000
 

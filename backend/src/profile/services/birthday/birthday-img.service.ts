@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { BirthdayService } from './birthday.service';
 import * as puppeteer from 'puppeteer';
 import * as fs from 'fs';
@@ -8,9 +8,12 @@ import { UserBirthdayDto } from '../../dto/user-birthday.dto';
 import { ProfileUtils } from '../../utils/profile.utils';
 import { AvatarsService } from '../avatars/avatars.service';
 import * as path from 'path';
+import { getConfig } from '../../../config/config';
 
 @Injectable()
 export class BirthdayImgService {
+  private readonly logger = new Logger('BirthdayImgService');
+
   constructor(private birthdayService: BirthdayService, private avatarService: AvatarsService) {}
 
   async getCurrentMonthImg(): Promise<Buffer> {
@@ -19,25 +22,41 @@ export class BirthdayImgService {
 
     const htmlWithContent = html.toString().replace('{users}', await this.generateHtmlFromUsers(users));
 
-    const browser = await puppeteer.launch({
-      headless: false,
-      executablePath: './node_modules/puppeteer/.local-chromium/linux-884014/chrome-linux/chrome',
-      args: ['--no-sandbox'],
-    });
+    try {
+      const pConfig = this.getPuppeteerConfig();
+      const browser = await puppeteer.launch(pConfig);
 
-    const page = await browser.newPage();
+      const page = await browser.newPage();
 
-    await page.setViewport({
-      width: 960,
-      height: 300,
-      deviceScaleFactor: 1,
-    });
-    await page.setContent(htmlWithContent);
+      await page.setViewport({
+        width: 960,
+        height: 300,
+        deviceScaleFactor: 1,
+      });
+      await page.setContent(htmlWithContent);
 
-    const result = (await page.screenshot({ encoding: 'binary', fullPage: true })) as Buffer;
-    await browser.close();
+      const result = (await page.screenshot({ encoding: 'binary', fullPage: true })) as Buffer;
+      await browser.close();
 
-    return result;
+      return result;
+    } catch (e) {
+      this.logger.error(e);
+      throw new Error(e);
+    }
+  }
+
+  private getPuppeteerConfig() {
+    const config = getConfig();
+
+    if (config?.PUPPETEER_IN_DOCCKER === 'YES') {
+      return {
+        headless: false,
+        executablePath: '/usr/bin/chromium',
+        args: ['--no-sandbox'],
+      };
+    }
+
+    return {};
   }
 
   private async generateHtmlFromUsers(users: UserBirthdayDto[]): Promise<string> {
