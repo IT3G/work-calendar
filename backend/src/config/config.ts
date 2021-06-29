@@ -37,6 +37,7 @@ export class Config {
   MINIO_ACCESS_KEY: string;
   MINIO_SECRET_KEY: string;
   MINIO_BUCKET_NAME: string;
+  PUPPETEER_IN_DOCCKER?: 'YES' | 'NO';
 }
 
 let config;

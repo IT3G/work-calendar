@@ -11,6 +11,15 @@ RUN ls -la
 
 COPY . .
 
+ENV DISPLAY :99
+ARG DEBIAN_FRONTEND="noninteractive"
+
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends xvfb chromium
+RUN rm -rf /var/lib/apt/lists/*
+
 EXPOSE 3000
 
-CMD [ "npm", "run", "start:nodeserver" ]
+RUN chmod 755 entrypoint.sh
+ENTRYPOINT ["./entrypoint.sh"]
+
