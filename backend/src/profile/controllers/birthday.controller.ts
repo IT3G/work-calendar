@@ -17,9 +17,23 @@ export class BirthdayController {
     private mapper: CustomMapper
   ) {}
 
-  @Get('/current')
+  @Get('/current/month')
   async getBirthdaysByCurrentMonth(): Promise<UserBirthdayDto[]> {
     const users = await this.birthdayService.getBirthdaysByCurrentMonth();
+
+    return this.mapper.mapArray(UserBirthdayDto, users);
+  }
+
+  @Get('/current/week')
+  async getBirthdaysByCurrentWeek(): Promise<UserBirthdayDto[]> {
+    const users = await this.birthdayService.findUsersByWeek();
+
+    return this.mapper.mapArray(UserBirthdayDto, users);
+  }
+
+  @Get('/current/today')
+  async getBirthdaysToday(): Promise<UserBirthdayDto[]> {
+    const users = await this.birthdayService.findUsersToday();
 
     return this.mapper.mapArray(UserBirthdayDto, users);
   }

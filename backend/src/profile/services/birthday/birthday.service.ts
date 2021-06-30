@@ -13,12 +13,17 @@ export class BirthdayService {
     return await this.repository.findUsersByBirthdayMonthId(currentMonth);
   }
 
-  async findUsersByWeek(): Promise<UserBirthdayDto[]> {
-    const currentMonth = +moment().format('M');
-    const startOfWeek = +moment().startOf('isoWeek').format('D');
-    const endOfWeek = +moment().endOf('isoWeek').format('D');
+  async findUsersToday(): Promise<UserBirthdayDto[]> {
+    const today = moment();
 
-    return await this.repository.findUsersByWeek(currentMonth, startOfWeek, endOfWeek);
+    return await this.repository.findUsersByPeriod(today, today);
+  }
+
+  async findUsersByWeek(): Promise<UserBirthdayDto[]> {
+    const startMonth = moment().startOf('isoWeek');
+    const endMonth = moment().endOf('isoWeek');
+
+    return await this.repository.findUsersByPeriod(startMonth, endMonth);
   }
 
   async getBirthdaysByMonth(monthId: number): Promise<UserBirthdayDto[]> {

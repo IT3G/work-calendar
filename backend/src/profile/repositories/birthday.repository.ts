@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserEntity } from '../../entity/entities/user.entity';
 import { UserBirthdayDto } from '../dto/user-birthday.dto';
+import { Moment } from 'moment';
 
 @Injectable()
 export class BirthdayRepository {
@@ -19,13 +20,13 @@ export class BirthdayRepository {
       .exec();
   }
 
-  async findUsersByWeek(monthId: number, weekStart: number, weekEnd: number): Promise<UserBirthdayDto[]> {
+  async findUsersByPeriod(startDate: Moment, endDate: Moment): Promise<UserBirthdayDto[]> {
     return await this.userModel
       .aggregate([
         ...this.aggregateInnerFields(),
         ...this.aggregateProject(),
-        { $match: { $and: [{ month: monthId }, { day: { $gte: weekStart, $lte: weekEnd } }] } },
-        { $sort: { day: 1 } },
+        this.aggregateRequestPeriod(startDate, endDate),
+        { $sort: { month: 1, day: 1 } },
       ])
       .exec();
   }
@@ -39,6 +40,34 @@ export class BirthdayRepository {
         { $sort: { day: 1 } },
       ])
       .exec();
+  }
+
+  private aggregateRequestPeriod(startDate: Moment, endDate: Moment) {
+    const startMonth = +startDate.format('M');
+    const endMonth = +endDate.format('M');
+    const startDay = +startDate.format('D');
+    const endDay = +endDate.format('D');
+
+    if (startMonth === endMonth) {
+      return {
+        $match: {
+          $and: [{ month: startMonth }, { day: { $gte: startDay, $lte: endDay } }],
+        },
+      };
+    }
+
+    return {
+      $match: {
+        $or: [
+          {
+            $and: [{ month: startMonth }, { day: { $gte: startDay, $lte: +startDate.endOf('month').format('D') } }],
+          },
+          {
+            $and: [{ month: endMonth }, { day: { $gte: 1, $lte: endDay } }],
+          },
+        ],
+      },
+    };
   }
 
   private aggregateProject() {
