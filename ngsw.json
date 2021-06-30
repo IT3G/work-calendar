@@ -1,0 +1,118 @@
+{
+  "configVersion": 1,
+  "timestamp": 1625034728333,
+  "index": "/work-calendar/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/work-calendar/5.3dd62f2f4904200712b7.js",
+        "/work-calendar/6.98da95a4d25f86115042.js",
+        "/work-calendar/favicon.ico",
+        "/work-calendar/index.html",
+        "/work-calendar/main.12ab80f3328f11beaf8a.js",
+        "/work-calendar/manifest.webmanifest",
+        "/work-calendar/polyfills-es5.94785d0e93f3f50df1b1.js",
+        "/work-calendar/polyfills.a251fd01dbd4baab5985.js",
+        "/work-calendar/runtime.9bdf0e1ad1f60a7f9247.js",
+        "/work-calendar/styles.990d27326c806ecdfdf9.css"
+      ],
+      "patterns": []
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "cacheQueryOptions": {
+        "ignoreVary": true
+      },
+      "urls": [
+        "/work-calendar/MaterialIcons-Regular.4674f8ded773cb03e824.eot",
+        "/work-calendar/MaterialIcons-Regular.5e7382c63da0098d634a.ttf",
+        "/work-calendar/MaterialIcons-Regular.83bebaf37c09c7e1c3ee.woff",
+        "/work-calendar/MaterialIcons-Regular.cff684e59ffb052d72cb.woff2",
+        "/work-calendar/assets/git-info.json",
+        "/work-calendar/assets/html/print-vacation.html",
+        "/work-calendar/assets/icons/add.svg",
+        "/work-calendar/assets/icons/icon-128x128.png",
+        "/work-calendar/assets/icons/icon-144x144.png",
+        "/work-calendar/assets/icons/icon-152x152.png",
+        "/work-calendar/assets/icons/icon-192x192.png",
+        "/work-calendar/assets/icons/icon-384x384.png",
+        "/work-calendar/assets/icons/icon-512x512.png",
+        "/work-calendar/assets/icons/icon-72x72.png",
+        "/work-calendar/assets/icons/icon-96x96.png",
+        "/work-calendar/assets/icons/remove.svg",
+        "/work-calendar/assets/images/logo_it2g.png",
+        "/work-calendar/fontawesome-webfont.1e59d2330b4c6deb84b3.ttf",
+        "/work-calendar/fontawesome-webfont.20fd1704ea223900efa9.woff2",
+        "/work-calendar/fontawesome-webfont.8b43027f47b20503057d.eot",
+        "/work-calendar/fontawesome-webfont.c1e38fd9e0e74ba58f7a.svg",
+        "/work-calendar/fontawesome-webfont.f691f37e57f04c152e23.woff"
+      ],
+      "patterns": []
+    }
+  ],
+  "dataGroups": [],
+  "hashTable": {
+    "/work-calendar/5.3dd62f2f4904200712b7.js": "72073190e6f0c19cb4557ff011147381fbd61549",
+    "/work-calendar/6.98da95a4d25f86115042.js": "7dea34fb5eb3095bc8a155b9f859ffb7a7285716",
+    "/work-calendar/MaterialIcons-Regular.4674f8ded773cb03e824.eot": "26fb8cecb5512223277b4d290a24492a0f09ede1",
+    "/work-calendar/MaterialIcons-Regular.5e7382c63da0098d634a.ttf": "fc05de31234e0090f7ddc28ce1b23af4026cb1da",
+    "/work-calendar/MaterialIcons-Regular.83bebaf37c09c7e1c3ee.woff": "c6c953c2ccb2ca9abb21db8dbf473b5a435f0082",
+    "/work-calendar/MaterialIcons-Regular.cff684e59ffb052d72cb.woff2": "09963592e8c953cc7e14e3fb0a5b05d5042e8435",
+    "/work-calendar/assets/git-info.json": "c6b54d33cdeddd4a627cfc90b021b5701be1abc3",
+    "/work-calendar/assets/html/print-vacation.html": "5c2a6acf8fe5363ae19609779134fff0eea16fcc",
+    "/work-calendar/assets/icons/add.svg": "ce57aeedc03bd6580e059c32baaa80a8969c9071",
+    "/work-calendar/assets/icons/icon-128x128.png": "0783275ef171a43e452732adb217db9bc2364c58",
+    "/work-calendar/assets/icons/icon-144x144.png": "aa7285f030d43c4798a3a21c20d9480ce1ac666e",
+    "/work-calendar/assets/icons/icon-152x152.png": "1f69de9c6bb57294d5fc9d1cb55bae075d670f7e",
+    "/work-calendar/assets/icons/icon-192x192.png": "d9f096634feb4f36c5db1ffe4a1e6bdd42c21c24",
+    "/work-calendar/assets/icons/icon-384x384.png": "cebf8cf73aba8bf2a3aa228b4fce8188420faab9",
+    "/work-calendar/assets/icons/icon-512x512.png": "7d09313b86a889e59e602fb012c10dff132156a4",
+    "/work-calendar/assets/icons/icon-72x72.png": "8588489a973d255c2e42b6c1d00561786565cac0",
+    "/work-calendar/assets/icons/icon-96x96.png": "b32f19f2ce7b5e5b218bd8d9cad0a81113d0bcde",
+    "/work-calendar/assets/icons/remove.svg": "b602beca1e473f8a1576bfbd4ae6e357685331de",
+    "/work-calendar/assets/images/logo_it2g.png": "9c1d23aff8e32ac4dc8637203ba3f294f077a237",
+    "/work-calendar/favicon.ico": "011d56f0d6a8693893ddf74f23c5a5894b098ca0",
+    "/work-calendar/fontawesome-webfont.1e59d2330b4c6deb84b3.ttf": "13b1eab65a983c7a73bc7997c479d66943f7c6cb",
+    "/work-calendar/fontawesome-webfont.20fd1704ea223900efa9.woff2": "d6f48cba7d076fb6f2fd6ba993a75b9dc1ecbf0c",
+    "/work-calendar/fontawesome-webfont.8b43027f47b20503057d.eot": "d980c2ce873dc43af460d4d572d441304499f400",
+    "/work-calendar/fontawesome-webfont.c1e38fd9e0e74ba58f7a.svg": "98a8aa5cf7d62c2eff5f07ede8d844b874ef06ed",
+    "/work-calendar/fontawesome-webfont.f691f37e57f04c152e23.woff": "28b782240b3e76db824e12c02754a9731a167527",
+    "/work-calendar/index.html": "6a6f2727aa14a15ad08ed9a1f48e14139a2afb24",
+    "/work-calendar/main.12ab80f3328f11beaf8a.js": "dba7e4efe06be80f3ad9b528bf7a4289c3af3351",
+    "/work-calendar/manifest.webmanifest": "ae5e7c73fa00275611e88d05bf21ee807c2caaa3",
+    "/work-calendar/polyfills-es5.94785d0e93f3f50df1b1.js": "fef93e6cc73d661b20ab0f878b9e7374c8c2f017",
+    "/work-calendar/polyfills.a251fd01dbd4baab5985.js": "5b52ad41483d0cb0d0fb4f8ab7ccb1dc99e28845",
+    "/work-calendar/runtime.9bdf0e1ad1f60a7f9247.js": "ea8a15e55aafaadc8869acdbffe74402d79103d9",
+    "/work-calendar/styles.990d27326c806ecdfdf9.css": "c491244c17d64140e9e953b817595343f3a6a87c"
+  },
+  "navigationUrls": [
+    {
+      "positive": true,
+      "regex": "^\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*\\.[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/(?:.+\\/)?[^/]*__[^/]*\\/.*$"
+    },
+    {
+      "positive": false,
+      "regex": "^\\/backend\\/.*$"
+    }
+  ]
+}
