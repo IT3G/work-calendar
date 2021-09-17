@@ -9,6 +9,7 @@ import { SettingsModule } from './settings/settings.module';
 import { WebPushModule } from './web-push/web-push.module';
 import { WorkCalendarModule } from './work-calendar/work-calendar.module';
 import { SkillsModule } from './skills/skills.module';
+import { QuizzesModule } from './quizzes/quizzes.module';
 
 const config = getConfig();
 
@@ -28,7 +29,8 @@ const url = `${config.DATABASE_URL}`;
       useCreateIndex: true,
       useFindAndModify: false
     }),
-    SkillsModule
+    SkillsModule,
+    QuizzesModule
   ],
   providers: [{ provide: Config, useValue: config }]
 })
