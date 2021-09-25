@@ -5,7 +5,7 @@ import { QuizzesService } from './quizzes.service';
 import { CreateAnswerDto } from '../dto/create-answer.dto';
 import { USER_QUIZ_ALREADY_EXIST_ERROR, USER_QUIZ_NOT_EXIST_ERROR } from '../constants/user-quizzes.constants';
 import { UserQuizzesEntity } from '../../entity/entities/user-quizzes.entity';
-import { QUESTION_NOT_FOUND_ERROR } from '../constants/quizzes.constants';
+import { QUESTION_NOT_FOUND_ERROR, QUIZ_NAME_NOT_EXIST_ERROR } from '../constants/quizzes.constants';
 
 @Injectable()
 export class UserQuizzesService {
@@ -20,11 +20,18 @@ export class UserQuizzesService {
 
   async findByName(userId: string, quizName: string) {
     const quiz = await this.quizzesService.getByName(quizName);
+    if (!quiz) {
+      throw new NotFoundException(QUIZ_NAME_NOT_EXIST_ERROR);
+    }
     return this.userQuizzesModel.findOne({ userId, quizId: quiz._id }).exec();
   }
 
   async create(userId: string, quizName: string) {
     const quiz = await this.quizzesService.getByName(quizName);
+    if (!quiz) {
+      throw new NotFoundException(QUIZ_NAME_NOT_EXIST_ERROR);
+    }
+
     const userQuiz = await this.userQuizzesModel.findOne({ userId, quizId: quiz._id });
     if (userQuiz) {
       throw new BadRequestException(USER_QUIZ_ALREADY_EXIST_ERROR);
