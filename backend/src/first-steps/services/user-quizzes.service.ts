@@ -6,6 +6,8 @@ import { CreateAnswerDto } from '../dto/create-answer.dto';
 import { USER_QUIZ_ALREADY_EXIST_ERROR, USER_QUIZ_NOT_EXIST_ERROR } from '../constants/user-quizzes.constants';
 import { UserQuizzesEntity } from '../../entity/entities/user-quizzes.entity';
 import { QUESTION_NOT_FOUND_ERROR, QUIZ_NAME_NOT_EXIST_ERROR } from '../constants/quizzes.constants';
+import { UserQuizWithQuizModel } from '../models/user-quiz-with-quiz.model';
+import { getIsUserQuizFinished } from '../utils/user-quiz.utils';
 
 @Injectable()
 export class UserQuizzesService {
@@ -15,7 +17,15 @@ export class UserQuizzesService {
   ) {}
 
   async findAllByUser(userId: string) {
-    return this.userQuizzesModel.find({ userId }).exec();
+    const userQuizzes = await this.userQuizzesModel.aggregate<UserQuizWithQuizModel>([
+      { $match: { userId } },
+      { $lookup: { from: 'quizzes', localField: 'quizId', foreignField: '_id', as: 'quiz' } },
+      {
+        $unwind: { path: '$quiz' }
+      }
+    ]);
+
+    return userQuizzes.map(userQuiz => ({ ...userQuiz, isFinished: getIsUserQuizFinished(userQuiz) }));
   }
 
   async findByName(userId: string, quizName: string) {
@@ -23,7 +33,19 @@ export class UserQuizzesService {
     if (!quiz) {
       throw new NotFoundException(QUIZ_NAME_NOT_EXIST_ERROR);
     }
-    return this.userQuizzesModel.findOne({ userId, quizId: quiz._id }).exec();
+    const [userQuiz] = await this.userQuizzesModel
+      .aggregate<UserQuizWithQuizModel>([
+        { $match: { userId, quizId: quiz._id } },
+        { $lookup: { from: 'quizzes', localField: 'quizId', foreignField: '_id', as: 'quiz' } },
+        {
+          $unwind: { path: '$quiz' }
+        }
+      ])
+      .exec();
+    return {
+      ...userQuiz,
+      isFinished: getIsUserQuizFinished(userQuiz)
+    };
   }
 
   async create(userId: string, quizName: string) {
@@ -37,12 +59,14 @@ export class UserQuizzesService {
       throw new BadRequestException(USER_QUIZ_ALREADY_EXIST_ERROR);
     }
 
-    return this.userQuizzesModel.create({ userId, quizId: quiz._id });
+    await this.userQuizzesModel.create({ userId, quizId: quiz._id });
+    return this.findByName(userId, quizName);
   }
 
   async delete(userId: string, quizName: string) {
     const quiz = await this.quizzesService.getByName(quizName);
-    return this.userQuizzesModel.findOneAndRemove({ userId, quizId: quiz._id });
+    await this.userQuizzesModel.findOneAndRemove({ userId, quizId: quiz._id });
+    return this.findByName(userId, quizName);
   }
 
   async createAnswer(userId: string, dto: CreateAnswerDto) {
@@ -61,18 +85,18 @@ export class UserQuizzesService {
       answer => answer.questionId.toHexString() === question._id.toHexString()
     );
     if (!existedAnswer) {
-      return this.userQuizzesModel
+      await this.userQuizzesModel
         .findOneAndUpdate(
           { _id: userQuiz._id },
           {
             $push: { answers: { questionId: dto.questionId, value: dto.check } }
-          },
-          { new: true }
+          }
         )
         .exec();
+      return this.findByName(userId, dto.quizName);
     }
 
-    return this.userQuizzesModel
+    await this.userQuizzesModel
       .findOneAndUpdate(
         { _id: userQuiz._id },
         {
@@ -85,5 +109,6 @@ export class UserQuizzesService {
         { new: true }
       )
       .exec();
+    return this.findByName(userId, dto.quizName);
   }
 }

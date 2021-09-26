@@ -5,6 +5,7 @@ import { IsObjectId } from '../validators/is-object-id.validator';
 import { QuestionDto } from './question.dto';
 
 export class QuizDto {
+  @ApiModelProperty()
   @Expose()
   @Transform((_, src) => src._id)
   @IsObjectId()

@@ -5,6 +5,7 @@ import { IsArray, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
 import { LinkDto } from './link.dto';
 
 export class QuestionDto {
+  @ApiModelProperty()
   @Expose()
   @Transform((_, src) => src._id)
   @IsObjectId()
