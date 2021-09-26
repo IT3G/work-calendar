@@ -83,11 +83,3 @@ export class UserQuizzesController {
     return this.customMapper.map(UserQuizDto, updatedUserQuiz);
   }
 }
-
-// Авторизоваться | userId=614f27dba021bf4a348f1491
-// Создать квиз с именем string
-// Создать второй квиз с именем string1
-// Привязать string к пользователю
-// Привязать string1 к пользователю
-// Получить опрос string | questionId=[614df5a18009f9575416c0c2]
-// Ответить на вопросы string
