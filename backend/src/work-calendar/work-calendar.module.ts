@@ -33,8 +33,8 @@ const config = getConfig();
     FileStorageModule,
     JwtModule.register({
       secret: config.JWT_SECRET_KEY,
-      signOptions: { expiresIn: config.JWT_EXPIRES },
-    }),
+      signOptions: { expiresIn: config.JWT_EXPIRES }
+    })
   ],
   controllers: [AuthController, TasksController, PresenceController],
   providers: [
@@ -46,8 +46,9 @@ const config = getConfig();
     PresenceSerivce,
     VacationResolutionService,
     { provide: Config, useValue: config },
-    ...guards,
+    ...guards
   ],
+  exports: [TokenService]
 })
 export class WorkCalendarModule {
   configure(consumer: MiddlewareConsumer) {

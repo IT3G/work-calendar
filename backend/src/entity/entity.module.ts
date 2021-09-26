@@ -11,6 +11,8 @@ import { SkillsSchema } from './schemas/skills.schemas';
 import { SubdivisionSchema } from './schemas/subdivision.schemas';
 import { TaskSchema } from './schemas/task.schemas';
 import { UserSchema } from './schemas/user.schemas';
+import { QuizzesSchema } from './schemas/quizzes.schemas';
+import { UserQuizzesSchema } from './schemas/user-quizzes.schemas';
 
 const mongoModule = MongooseModule.forFeature([
   { name: 'Users', schema: UserSchema },
@@ -24,10 +26,12 @@ const mongoModule = MongooseModule.forFeature([
   { name: 'Settings', schema: SettingsSchema },
   { name: 'RefreshToken', schema: RefreshTokenSchema },
   { name: 'Skills', schema: SkillsSchema },
+  { name: 'Quizzes', schema: QuizzesSchema },
+  { name: 'UserQuizzes', schema: UserQuizzesSchema }
 ]);
 
 @Module({
   imports: [mongoModule],
-  exports: [mongoModule],
+  exports: [mongoModule]
 })
 export class EntityModule {}
